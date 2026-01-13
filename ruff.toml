@@ -1,0 +1,16 @@
+line-length = 120
+target-version = "py313"
+extend-exclude = ["**/migrations/*", "**/.venv/*", "frontend"]
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "DJ", "SIM", "RUF", "PT", "N", "C4"]
+ignore = ["S101", "RUF012", "S105", "S106", "N818", "RUF001", "RUF002", "RUF003"]
+
+[lint.per-file-ignores]
+"backend/tests/**" = ["S", "N802", "N812", "PT011", "PT018", "E501"]
+"scripts/**" = ["S310", "S603", "S607", "T201", "E501", "N806"]
+"eval/**" = ["S", "T201", "E501"]
+"backend/tariffcompass/settings.py" = ["E402"]
+
+[lint.isort]
+known-first-party = ["tariffcompass"]

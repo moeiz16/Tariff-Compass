@@ -1,0 +1,38 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Node / SolidStart
+node_modules/
+.output/
+.vinxi/
+dist/
+*.tsbuildinfo
+.vite/
+
+# Local data, stores, models and tools (never commit)
+/data/
+.tools/
+mlruns/
+mlartifacts/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite3
+eval/out/
+
+# Secrets and editor noise
+.env
+.env.*
+!.env.example
+.DS_Store
+.idea/
+.vscode/
