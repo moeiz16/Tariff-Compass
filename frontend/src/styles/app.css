@@ -1,0 +1,68 @@
+/* Design tokens from frontend/DESIGN.md §7 and §13. Components and recipes build on these. */
+@import "tailwindcss";
+@import "@fontsource-variable/bitter";
+@import "@fontsource-variable/source-serif-4";
+@import "@fontsource-variable/spline-sans-mono";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  --font-voice: "Bitter Variable", ui-serif, Georgia, serif;
+  --font-law: "Source Serif 4 Variable", ui-serif, Georgia, serif;
+  --font-code: "Spline Sans Mono Variable", ui-monospace, monospace;
+  --color-paper: #ffffff;
+  --color-paper-2: #f4f4ef;
+  --color-paper-3: #eaeae3;
+  --color-ink: #111111;
+  --color-ink-2: #3a3a36;
+  --color-muted: #62625b;
+  --color-rule: #d9d9d0;
+  --color-hi: #ffe14d;
+  --color-hi-soft: #fff3a6;
+  --color-ok: #1f7a4d;
+  --color-warn: #8f5207;
+  --color-bad: #b42318;
+  --color-seg-301: #5a5a54;
+  --color-seg-fee: #8c8c83;
+  --radius-box: 6px;
+  --radius-btn: 4px;
+  --radius-chip: 3px;
+  --shadow-hard: 4px 4px 0 var(--color-ink);
+  --spacing-gutter: 280px;
+  --spacing-measure: 820px;
+  --ease-dock: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-mark: cubic-bezier(0.3, 0, 0.2, 1);
+  --ease-lock: cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+[data-theme="dark"] {
+  --color-paper: #131312;
+  --color-paper-2: #1c1c1a;
+  --color-paper-3: #262624;
+  --color-ink: #ededE8;
+  --color-ink-2: #c9c9c2;
+  --color-muted: #a1a199;
+  --color-rule: #34342f;
+  --color-hi: #e8c800;
+  --color-hi-soft: #4a4210;
+  --color-ok: #6ccb97;
+  --color-warn: #e8b25c;
+  --color-bad: #ff7b72;
+  --color-seg-301: #8e8e86;
+  --color-seg-fee: #727269;
+}
+
+html {
+  font-family: var(--font-voice);
+  color: var(--color-ink);
+  background: var(--color-paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
