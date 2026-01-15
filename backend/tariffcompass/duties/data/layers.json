@@ -1,0 +1,908 @@
+{
+ "asOf": "2026-02-19",
+ "scope": "US and Canadian import duty layers for China, Vietnam, Mexico and EU origins; outdoor gear, small electronics, apparel ch.61/62, kitchenware 9617/7323/7615/3924, bags 4202",
+ "usHtsEditionInForce": "2026 HTSUS Revision 3 (in force 2026-02-12 to 2026-02-25)",
+ "caTariffInForce": "Customs Tariff T2026 (January 1, 2026 departmental consolidation)",
+ "layers": [
+  {
+   "id": "US-MFN",
+   "country": "US",
+   "kind": "base",
+   "name": "Normal (column 1 General) duty from the HTSUS",
+   "legalAuthority": "HTSUS 2026 edition; Revision 3 was the edition in force on 2026-02-19 (in force 2026-02-12 to 2026-02-25)",
+   "chapter99": null,
+   "rate": "Per 8/10-digit line, ad valorem on customs (transaction) value. Sample lines: 9617.00.10 7.2%; 8512.10.20 Free; 8512.10.40 2.7%; 6110.20.20 16.5%; 7323.93.00 2%; 7615.10.xx 3.1%; 3924.10.40 3.4%; 8507.60.00 3.4%; 8504.40.xx Free; 8518.22.00 Free; 4202.92.31 17.6%.",
+   "scope": "All origins. Column 1 Special rates apply for FTA/GSP claims (e.g. MX via USMCA 'S/S+').",
+   "effectiveFrom": "2026-01-01",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "sources": [
+    "https://hts.usitc.gov/reststop/exportList?from=9617&to=9618&format=JSON&styles=false",
+    "https://hts.usitc.gov/reststop/releaseList"
+   ]
+  },
+  {
+   "id": "US-IEEPA-CN-FENTANYL",
+   "country": "US",
+   "kind": "emergency",
+   "name": "IEEPA synthetic-opioid ('fentanyl') duty on China and Hong Kong",
+   "legalAuthority": "EO 14195 (90 FR 9121); raised to 20% by EO 14228 (90 FR 11463); cut to 10% by EO 14357 of 2025-11-04 (90 FR 50725)",
+   "chapter99": [
+    "9903.01.24"
+   ],
+   "rate": "+10% ad valorem on full customs value (was 20% from 2025-03-04 to 2025-11-09; 10% from 2025-02-04 under 9903.01.20).",
+   "stacking": "Stacks on MFN, Section 301 and Section 232 (EO 14289 non-stacking rule does not exempt it). Exceptions: 9903.01.21-.23 (donations, informational materials, old in-transit).",
+   "scope": "Products of China and Hong Kong (HTS heading text: 'product of China and Hong Kong').",
+   "effectiveFrom": "2025-11-10",
+   "effectiveTo": null,
+   "legalStatus": "In force on 2026-02-19. Legality pending before the US Supreme Court in Learning Resources, Inc. v. Trump (No. 24-1287) consolidated with Trump v. V.O.S. Selections, Inc. (No. 25-250); argued 2025-11-05; no decision as of 2026-02-19.",
+   "verified": true,
+   "sources": [
+    "https://www.federalregister.gov/documents/2025/11/07/2025-19825/modifying-duties-addressing-the-synthetic-opioid-supply-chain-in-the-peoples-republic-of-china",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099",
+    "https://www.federalregister.gov/documents/2025/05/02/2025-07835/addressing-certain-tariffs-on-imported-articles"
+   ]
+  },
+  {
+   "id": "US-IEEPA-RECIP-CN",
+   "country": "US",
+   "kind": "emergency",
+   "name": "IEEPA reciprocal duty on China (34% country rate suspended; 10% applies)",
+   "legalAuthority": "EO 14257 (90 FR 15041); EO 14298 (90 FR 21831) suspended 24 points from 2025-05-14; extended by EO 14334 (90 FR 39305) and EO 14358 of 2025-11-04 (90 FR 50729)",
+   "chapter99": [
+    "9903.01.25 (10%, applied)",
+    "9903.01.63 (34%, suspended)"
+   ],
+   "rate": "+10% ad valorem on customs value.",
+   "stacking": "Not applied to Annex II goods (9903.01.32), Section 232 steel/aluminium/copper/auto/wood/semiconductor articles (9903.01.33), or the US-content portion where US content >= 20% (9903.01.34). For 232 derivatives where 232 is charged on metal content only, the non-metal content remains subject to the reciprocal duty.",
+   "scope": "Products of China, including Hong Kong and Macau.",
+   "effectiveFrom": "2025-05-14",
+   "effectiveTo": "Scheduled: EO 14358 suspends 9903.01.63 for one year from 10 Nov 2025; the 34% would then apply unless extended.",
+   "legalStatus": "In force on 2026-02-19. Legality pending before the US Supreme Court in Learning Resources, Inc. v. Trump (No. 24-1287) consolidated with Trump v. V.O.S. Selections, Inc. (No. 25-250); argued 2025-11-05; no decision as of 2026-02-19.",
+   "verified": true,
+   "sources": [
+    "https://www.federalregister.gov/documents/2025/11/07/2025-19826/modifying-reciprocal-tariff-rates-consistent-with-the-economic-and-trade-arrangement-between-the",
+    "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/3ec7b5e",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-IEEPA-RECIP-VN",
+   "country": "US",
+   "kind": "emergency",
+   "name": "IEEPA reciprocal duty on Vietnam",
+   "legalAuthority": "EO 14257 as modified by EO 14326 of 2025-07-31 (90 FR 37963)",
+   "chapter99": [
+    "9903.02.69"
+   ],
+   "rate": "+20% ad valorem on customs value.",
+   "stacking": "Same exclusions as other reciprocal headings (9903.01.30-.33 incl. Annex II and 232 goods; 9903.01.34 US content). Goods found transshipped to evade duties: 40% instead of the country rate (EO 14326 s.3), plus penalties.",
+   "scope": "Products of Vietnam.",
+   "effectiveFrom": "2025-08-07",
+   "effectiveTo": null,
+   "legalStatus": "In force on 2026-02-19. Legality pending before the US Supreme Court in Learning Resources, Inc. v. Trump (No. 24-1287) consolidated with Trump v. V.O.S. Selections, Inc. (No. 25-250); argued 2025-11-05; no decision as of 2026-02-19.",
+   "verified": true,
+   "sources": [
+    "https://www.govinfo.gov/content/pkg/FR-2025-08-06/html/2025-15010.htm",
+    "https://hts.usitc.gov/reststop/exportList?from=9903.02.60&to=9903.02.72&format=JSON&styles=false",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-IEEPA-RECIP-EU",
+   "country": "US",
+   "kind": "emergency",
+   "name": "IEEPA reciprocal duty on the EU (15% all-in floor)",
+   "legalAuthority": "EO 14257 as modified by EO 14326 (90 FR 37963), Annex I",
+   "chapter99": [
+    "9903.02.19 (MFN >= 15%: 0 extra)",
+    "9903.02.20 (MFN < 15%: top-up to 15%)"
+   ],
+   "rate": "If column 1 General ad valorem (or AVE) rate < 15%: additional = 15% minus MFN, so MFN + reciprocal = 15%. If MFN >= 15%: reciprocal = 0.",
+   "stacking": "Excludes 9903.01.30-.33 (Annex II, 232 goods) and EU product carve-outs 9903.02.74-.78; 9903.01.34 US content rule applies.",
+   "scope": "Products of EU member states (e.g. Germany, Italy).",
+   "effectiveFrom": "2025-08-07",
+   "effectiveTo": null,
+   "legalStatus": "In force on 2026-02-19. Legality pending before the US Supreme Court in Learning Resources, Inc. v. Trump (No. 24-1287) consolidated with Trump v. V.O.S. Selections, Inc. (No. 25-250); argued 2025-11-05; no decision as of 2026-02-19.",
+   "verified": true,
+   "sources": [
+    "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/3ec7b5e",
+    "https://www.govinfo.gov/content/pkg/FR-2025-08-06/html/2025-15010.htm",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-IEEPA-RECIP-BASE",
+   "country": "US",
+   "kind": "emergency",
+   "name": "IEEPA reciprocal baseline duty (countries without a specific rate)",
+   "legalAuthority": "EO 14257 (90 FR 15041); EO 14326 s.2(d)",
+   "chapter99": [
+    "9903.01.25"
+   ],
+   "rate": "+10% ad valorem.",
+   "stacking": "Excludes Canada (9903.01.26) and Mexico (9903.01.27) products, Annex II (9903.01.32), 232 goods (9903.01.33); US content >= 20% rule (9903.01.34).",
+   "scope": "Any country not listed in EO 14326 Annex I (and China, see US-IEEPA-RECIP-CN). Canada and Mexico are NOT subject to reciprocal duties.",
+   "effectiveFrom": "2025-04-05",
+   "effectiveTo": null,
+   "legalStatus": "In force on 2026-02-19. Legality pending before the US Supreme Court in Learning Resources, Inc. v. Trump (No. 24-1287) consolidated with Trump v. V.O.S. Selections, Inc. (No. 25-250); argued 2025-11-05; no decision as of 2026-02-19.",
+   "verified": true,
+   "sources": [
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099",
+    "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/3ec7b5e"
+   ]
+  },
+  {
+   "id": "US-IEEPA-MX",
+   "country": "US",
+   "kind": "emergency",
+   "name": "IEEPA border/drug duty on Mexico (non-USMCA goods)",
+   "legalAuthority": "EO 14194 (90 FR 9117), amended by EO 14227 (90 FR 11371) and EO 14232 (90 FR 11787, USMCA exemption)",
+   "chapter99": [
+    "9903.01.01 (+25%)",
+    "9903.01.04 (USMCA-qualifying, no additional duty)",
+    "9903.01.05 (potash +10%)"
+   ],
+   "rate": "+25% ad valorem on non-USMCA-qualifying goods; 0 for goods entered free under USMCA (General Note 11).",
+   "stacking": "Not applied to goods subject to 232 steel/aluminium/autos (EO 14289; HTS note 16(k), 19(h)). Mexico is not subject to reciprocal duties (9903.01.27).",
+   "scope": "Products of Mexico.",
+   "effectiveFrom": "2025-03-04",
+   "effectiveTo": null,
+   "legalStatus": "In force on 2026-02-19. Legality pending before the US Supreme Court in Learning Resources, Inc. v. Trump (No. 24-1287) consolidated with Trump v. V.O.S. Selections, Inc. (No. 25-250); argued 2025-11-05; no decision as of 2026-02-19.",
+   "verified": true,
+   "sources": [
+    "https://hts.usitc.gov/reststop/exportList?from=9903.01.01&to=9903.01.35&format=JSON&styles=false",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099",
+    "https://www.federalregister.gov/documents/2025/03/11/2025-03991/amendment-to-duties-to-address-the-flow-of-illicit-drugs-across-our-southern-border",
+    "https://www.federalregister.gov/documents/2025/02/07/2025-02407/imposing-duties-to-address-the-situation-at-our-southern-border"
+   ]
+  },
+  {
+   "id": "US-IEEPA-CA",
+   "country": "US",
+   "kind": "emergency",
+   "name": "IEEPA border/drug duty on Canada (non-USMCA goods)",
+   "legalAuthority": "EO 14193 (90 FR 9113), amended by EO 14231 (90 FR 11785) and raised to 35% by EO 14325 (90 FR 37957)",
+   "chapter99": [
+    "9903.01.10 (+35%)",
+    "9903.01.14 (USMCA-qualifying, no additional duty)",
+    "9903.01.13 (energy/critical minerals +10%)",
+    "9903.01.15 (potash +10%)",
+    "9903.01.16 (transshipment +40%)"
+   ],
+   "rate": "+35% ad valorem on non-USMCA-qualifying goods (25% before 2025-08-01).",
+   "stacking": "Not applied to 232 steel/aluminium/auto goods; Canada not subject to reciprocal duties (9903.01.26).",
+   "scope": "Products of Canada (relevant only if the brand re-imports Canadian-origin goods into the US).",
+   "effectiveFrom": "2025-08-01",
+   "effectiveTo": null,
+   "legalStatus": "In force on 2026-02-19. Legality pending before the US Supreme Court in Learning Resources, Inc. v. Trump (No. 24-1287) consolidated with Trump v. V.O.S. Selections, Inc. (No. 25-250); argued 2025-11-05; no decision as of 2026-02-19.",
+   "verified": true,
+   "sources": [
+    "https://www.govinfo.gov/content/pkg/FR-2025-08-06/html/2025-14999.htm",
+    "https://www.federalregister.gov/documents/2025/02/07/2025-02406/imposing-duties-to-address-the-flow-of-illicit-drugs-across-our-northern-border",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-SCOTUS-IEEPA",
+   "country": "US",
+   "kind": "emergency",
+   "name": "Legal status flag for all IEEPA layers",
+   "legalAuthority": "Learning Resources, Inc. v. Trump (No. 24-1287); Trump v. V.O.S. Selections, Inc. (No. 25-250)",
+   "chapter99": [
+    "9903.01.xx",
+    "9903.02.xx (IEEPA headings)"
+   ],
+   "rate": "n/a",
+   "scope": "All IEEPA layers above (China fentanyl, reciprocal, Mexico, Canada); and the IEEPA-based de minimis postal rates.",
+   "effectiveFrom": "2025-11-05",
+   "effectiveTo": null,
+   "legalStatus": "Pending, argued 5 Nov 2025.",
+   "verified": true,
+   "sources": [
+    "https://www.kelleydrye.com/viewpoints/client-advisories/supreme-court-hears-oral-arguments-in-trump-v-v-o-s-selections-inc-and-learning-resources-inc-v-trump-concerning-trafficking-and-reciprocal-tariffs",
+    "https://www.lawfaremedia.org/article/oral-argument-summary--learning-resources--inc.-v.-trump-(tariffs)"
+   ]
+  },
+  {
+   "id": "US-301-L1-L3",
+   "country": "US",
+   "kind": "remedy",
+   "name": "Section 301 China duties, Lists 1, 2 and 3",
+   "legalAuthority": "Trade Act of 1974 s.301; USTR notices 83 FR 28710, 83 FR 40823, 83 FR 47974 (as modified)",
+   "chapter99": [
+    "9903.88.01 (List 1)",
+    "9903.88.02 (List 2)",
+    "9903.88.03 (List 3)"
+   ],
+   "rate": "+25% ad valorem.",
+   "scope": "Products of China in subheadings listed in HTS ch.99 subch. III note 20(b), (d), (f). Product set: 8504.40.70/.85/.95 (USB chargers, power supplies) List 3; 4202 bags (e.g. 4202.12.21/.81, 4202.22.15/.81, 4202.92.08/.31/.45/.91) List 3; 7323.99.90 List 3.",
+   "exclusions": "Product-specific exclusions under 9903.88.69 (note 20(vvv)), e.g. MMF textile backpacks 35-75 cm H x 19-34 cm W x 5-26 cm D (4202.92.3120) excluded from List 3 duty.",
+   "effectiveFrom": "2018-07-06",
+   "effectiveTo": null,
+   "exclusionsEffectiveTo": "Scheduled: the 9903.88.69 exclusions were extended for one year from 10 Nov 2025.",
+   "legalStatus": "In force; not affected by the IEEPA litigation.",
+   "verified": true,
+   "sources": [
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-301-L4A",
+   "country": "US",
+   "kind": "remedy",
+   "name": "Section 301 China duty, List 4A",
+   "legalAuthority": "Trade Act of 1974 s.301; USTR notice 84 FR 43304 (Aug 2019) as reduced by 85 FR 3741 (Jan 2020)",
+   "chapter99": [
+    "9903.88.15"
+   ],
+   "rate": "+7.5% ad valorem.",
+   "scope": "Products of China in note 20(s). Product set: 8512.10.20 and 8512.10.40 (bicycle lighting/signalling), 8518.21.00 and 8518.22.00 (loudspeakers incl. Bluetooth speakers), 6110.20.20 and most ch.61/62 apparel (e.g. 6109.10.00, 6110.30.30, 6205.20.20), 9617.00.40 (vacuum vessels > 2 L), 7323.94.00, 7615.10.30, 7615.10.91, 3924.10.20.",
+   "effectiveFrom": "2020-02-14",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "notes": "USTR FR citations for List 4A were not re-checked in this session; list membership was verified line by line in HTS 2026 Rev 3 note 20.",
+   "sources": [
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-301-L4B-NOT-APPLIED",
+   "country": "US",
+   "kind": "remedy",
+   "name": "Section 301 List 4B (suspended, no duty collected)",
+   "legalAuthority": "USTR List 4B (9903.88.16) suspended indefinitely (Dec 2019)",
+   "chapter99": [
+    "9903.88.16"
+   ],
+   "rate": "0 (suspended).",
+   "scope": "Product set lines that are ONLY on List 4B, so pay no 301 duty: 9617.00.10, 9617.00.30, 9617.00.60 (vacuum flasks/tumblers <= 2 L and parts), 8513.10.20 and 8513.10.40 (torches/portable lamps), 7323.93.00 (stainless steel kitchen articles), 7323.99.30, 7615.10.71 (aluminium cookware, uncoated, not cast), 3924.10.40 (other plastic kitchenware).",
+   "effectiveFrom": "2019-12-15",
+   "effectiveTo": null,
+   "legalStatus": "Suspended; HTS compiler's note retains the list.",
+   "verified": true,
+   "sources": [
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-301-4YR-BATTERY",
+   "country": "US",
+   "kind": "remedy",
+   "name": "Section 301 four-year-review increase: lithium-ion batteries (non-EV) incl. power banks",
+   "legalAuthority": "USTR Notice of Modification, 89 FR 76581 (2024-09-18)",
+   "chapter99": [
+    "9903.91.06"
+   ],
+   "rate": "+25% ad valorem (replaces the former List 4A 7.5% on 8507.60.0020).",
+   "scope": "Products of China classified in 8507.60.00 (HTS note 31(g)); covers power banks with Li-ion cells classified in 8507.60.",
+   "effectiveFrom": "2026-01-01",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "otherFourYearReviewHeadings": "9903.91.01 (+25%, from 2024-09-27, e.g. EV Li-ion 8507.60.0010), 9903.91.02 (+50%), 9903.91.03 (+100%), 9903.91.05 (+50% from 2025-01-01), 9903.91.07 (+50% textile face masks/respirators from 2026-01-01), 9903.91.08 (+100% 4015.12.10 from 2026-01-01), 9903.91.11 (+25% from 2025-01-01). None besides 9903.91.06 hits the product set.",
+   "verified": true,
+   "sources": [
+    "https://www.federalregister.gov/documents/2024/09/18/2024-21217/notice-of-modification-chinas-acts-policies-and-practices-related-to-technology-transfer",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-232-STEEL",
+   "country": "US",
+   "kind": "remedy",
+   "name": "Section 232 steel and steel derivatives",
+   "legalAuthority": "Proclamation 10947 of 2025-06-03 (90 FR 24199), raising 25% to 50%; derivative inclusions by BIS, 90 FR 40326 (2025-08-19)",
+   "chapter99": [
+    "9903.81.87 (steel articles, 50%)",
+    "9903.81.89 (listed derivatives, 50%)",
+    "9903.81.90 (ch.73 derivatives incl. 7323, 50%)",
+    "9903.81.91 (non-ch.73 derivatives, 50% on steel content)",
+    "9903.81.92 (US melted-and-poured, 0)",
+    "9903.81.94-.99 (UK, 25%)"
+   ],
+   "rate": "50% ad valorem. For ch.73 goods (9903.81.89/.90/.93) and for 9903.81.91 goods, the duty is charged only on the declared value of the steel content; steel content weight reported in kg. UK: 25%.",
+   "stacking": "Excluded from IEEPA reciprocal (9903.01.33) for the steel content; non-steel content reported on a separate line and stays subject to reciprocal/IEEPA. Not subject to IEEPA Mexico/Canada duties (note 16(k)). China fentanyl duty and Section 301 still stack. FTA/GSP special rates do not relieve 232.",
+   "scope": "All countries (UK at 25%). Product set: 7323.10-7323.99 kitchen/household articles of steel (incl. 7323.93.00 stainless) ARE derivatives under 9903.81.90. Heading 9617 (vacuum tumblers) is NOT on any steel or aluminium derivative list.",
+   "effectiveFrom": "2025-06-04",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "sources": [
+    "https://www.govinfo.gov/content/pkg/FR-2025-06-09/html/2025-10524.htm",
+    "https://www.govinfo.gov/content/pkg/FR-2025-08-19/html/2025-15819.htm",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-232-ALUMINIUM",
+   "country": "US",
+   "kind": "remedy",
+   "name": "Section 232 aluminium and aluminium derivatives",
+   "legalAuthority": "Proclamation 10947 (90 FR 24199); BIS inclusions 90 FR 40326",
+   "chapter99": [
+    "9903.85.02 (aluminium articles, 50%)",
+    "9903.85.04 (listed derivatives, 50%)",
+    "9903.85.07 (ch.76 derivatives incl. 7615.10, 50%)",
+    "9903.85.08 (non-ch.76 derivatives, 50% on aluminium content)",
+    "9903.85.09 (US smelted-and-cast, 0)",
+    "9903.85.12-.15 (UK, 25%)"
+   ],
+   "rate": "50% ad valorem; for ch.76 goods (9903.85.04/.07) and 9903.85.08 goods, charged on the value of the aluminium content only. UK: 25%.",
+   "stacking": "As for steel: aluminium content excluded from reciprocal (9903.01.33); not subject to IEEPA Mexico/Canada; China fentanyl and 301 still stack.",
+   "scope": "All countries (UK 25%). Product set: 7615.10.2015-.9100 aluminium kitchen/table articles are derivatives under 9903.85.07.",
+   "effectiveFrom": "2025-06-04",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "sources": [
+    "https://www.govinfo.gov/content/pkg/FR-2025-06-09/html/2025-10524.htm",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-232-COPPER",
+   "country": "US",
+   "kind": "remedy",
+   "name": "Section 232 copper (semi-finished and intensive copper derivatives)",
+   "legalAuthority": "Proclamation 10962 (90 FR 37727)",
+   "chapter99": [
+    "9903.78.01"
+   ],
+   "rate": "50% ad valorem.",
+   "scope": "Semi-finished copper and intensive copper derivatives; none in the product set.",
+   "effectiveFrom": "2025-08-01",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "notes": "Whether 50% is charged on copper content for derivatives was not re-verified in this session.",
+   "sources": [
+    "https://www.govinfo.gov/content/pkg/FR-2025-08-05/html/2025-14893.htm",
+    "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%2099"
+   ]
+  },
+  {
+   "id": "US-DE-MINIMIS",
+   "country": "US",
+   "kind": "fee",
+   "name": "Suspension of duty-free de minimis ($800) for all countries",
+   "legalAuthority": "EO 14324 of 2025-07-30 (90 FR 37775)",
+   "chapter99": null,
+   "rate": "No duty-free de minimis; all duties, taxes and fees apply regardless of value. Postal shipments: carrier pays either the IEEPA ad valorem rate for the origin country, or (for 6 months from 2025-08-29) a specific duty of $80 / $160 / $200 per item for country IEEPA rates <16% / 16-25% / >25%.",
+   "scope": "All countries, all modes.",
+   "effectiveFrom": "2025-08-29",
+   "effectiveTo": null,
+   "legalStatus": "In force (IEEPA-based; see US-SCOTUS-IEEPA).",
+   "verified": true,
+   "sources": [
+    "https://www.govinfo.gov/content/pkg/FR-2025-08-05/html/2025-14897.htm"
+   ]
+  },
+  {
+   "id": "US-MPF",
+   "country": "US",
+   "kind": "fee",
+   "name": "Merchandise Processing Fee, FY2026 (formal entries)",
+   "legalAuthority": "19 U.S.C. 58c; CBP Dec. 25-10, 90 FR 34665 (2025-07-23)",
+   "chapter99": null,
+   "rate": "0.3464% of customs value; minimum $33.58, maximum $651.50 per formal entry.",
+   "scope": "All formal entries (any origin); USMCA-originating goods are exempt from MPF.",
+   "effectiveFrom": "2025-10-01",
+   "effectiveTo": "2026-09-30 (end of FY2026; amounts adjusted annually)",
+   "legalStatus": "In force.",
+   "verified": true,
+   "notes": "USMCA MPF exemption stated from general knowledge; not re-verified in this session.",
+   "sources": [
+    "https://www.federalregister.gov/documents/2025/07/23/2025-13869/customs-user-fees-to-be-adjusted-for-inflation-in-fiscal-year-2026-cbp-dec-25-10"
+   ]
+  },
+  {
+   "id": "US-HMF",
+   "country": "US",
+   "kind": "fee",
+   "name": "Harbor Maintenance Fee",
+   "legalAuthority": "26 U.S.C. 4461; 19 CFR 24.24",
+   "chapter99": null,
+   "rate": "0.125% of value; ocean (port use) shipments only, no cap.",
+   "scope": "Commercial cargo unloaded from vessels at covered US ports.",
+   "effectiveFrom": "1998-07-01",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "notes": "effectiveFrom is the long-standing rate date (not re-verified); rate verified in eCFR.",
+   "sources": [
+    "https://www.ecfr.gov/current/title-19/chapter-I/part-24/section-24.24"
+   ]
+  },
+  {
+   "id": "US-USMCA-PREF",
+   "country": "US",
+   "kind": "preference",
+   "name": "USMCA preference for Mexican-origin goods",
+   "legalAuthority": "USMCA Implementation Act; HTSUS General Note 11; 19 CFR Part 182",
+   "chapter99": [
+    "9903.01.04 (exempts USMCA goods from Mexico IEEPA duty)"
+   ],
+   "rate": "Column 1 Special 'S'/'S+' (generally Free) and no Mexico IEEPA 25%.",
+   "scope": "Goods that originate under USMCA rules of origin and are claimed at entry. Not a relief from Section 232 or 301.",
+   "requirements": "Importer must hold a certification of origin (any format, e.g. on the invoice) with the minimum data elements: certifier role; certifier, exporter, producer and importer name/address/contact; description and 6-digit HS of the good; origin criterion; blanket period (max 12 months); authorised signature and date. Certification may be completed by the importer, exporter or producer.",
+   "effectiveFrom": "2020-07-01",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "notes": "Data elements per CBP/CBSA summaries of USMCA Annex 5-A; regulation text 19 CFR 182.12 not opened line by line.",
+   "sources": [
+    "https://www.ecfr.gov/current/title-19/chapter-I/part-182/subpart-B/section-182.12",
+    "https://cbp.gov/trade/priority-issues/trade-agreements/free-trade-agreements/USMCA/FAQs",
+    "https://cbsa-asfc.gc.ca/services/cusma-aceum/cog-com-eng.html"
+   ]
+  },
+  {
+   "id": "CA-MFN-T2026",
+   "country": "CA",
+   "kind": "base",
+   "name": "Canadian Customs Tariff, January 1 2026 consolidation (T2026), MFN rates",
+   "legalAuthority": "Customs Tariff (S.C. 1997, c. 36); CBSA Customs Notice 25-31 (T2026)",
+   "tariffItems": {
+    "9617.00.00": "MFN 7.5%",
+    "8512.10.00": "MFN 5.5%",
+    "8513.10.10 (flashlights)": "Free",
+    "8513.10.90": "MFN 7%",
+    "8518.22.00": "Free",
+    "8504.40.90.41/.42 (USB chargers)": "Free",
+    "8507.60.90 (Li-ion, other)": "MFN 7%",
+    "6110.20.00": "MFN 18%",
+    "7323.93.90": "MFN 6.5%",
+    "7615.10.00": "MFN 6.5%",
+    "3924.10.00": "MFN 6.5%",
+    "4202.92.20 (rucksacks, tool bags)": "MFN 10%",
+    "4202.92.90": "MFN 7%"
+   },
+   "rate": "Ad valorem on value for duty (VFD).",
+   "scope": "China gets MFN (no GPT). Vietnam gets MFN unless CPTPP origin is claimed.",
+   "effectiveFrom": "2026-01-01",
+   "effectiveTo": null,
+   "legalStatus": "In force (T2026-1 and later amendments came after 2026-02-19).",
+   "verified": true,
+   "sources": [
+    "https://www.cbsa-asfc.gc.ca/publications/cn-ad/cn25-31-eng.html",
+    "https://www.cbsa-asfc.gc.ca/trade-commerce/tariff-tarif/2026/html/00/ch61-eng.html",
+    "https://www.cbsa-asfc.gc.ca/trade-commerce/tariff-tarif/2026/html/00/ch85-eng.html"
+   ]
+  },
+  {
+   "id": "CA-PREF-CUSMA-MXT",
+   "country": "CA",
+   "kind": "preference",
+   "name": "CUSMA Mexico Tariff (MXT)",
+   "legalAuthority": "Customs Tariff; CUSMA",
+   "tariffItems": "MXT column of T2026",
+   "rate": "Free for all sample tariff items listed above.",
+   "scope": "Goods originating in Mexico under CUSMA rules of origin, with a certification of origin (same minimum data elements as US).",
+   "effectiveFrom": "2020-07-01",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "sources": [
+    "https://www.cbsa-asfc.gc.ca/trade-commerce/tariff-tarif/2026/html/00/ch96-eng.html",
+    "https://cbsa-asfc.gc.ca/services/cusma-aceum/cog-com-eng.html"
+   ]
+  },
+  {
+   "id": "CA-PREF-CETA-CEUT",
+   "country": "CA",
+   "kind": "preference",
+   "name": "CETA EU Tariff (CEUT)",
+   "legalAuthority": "Customs Tariff; CETA",
+   "tariffItems": "CEUT column of T2026",
+   "rate": "Free for all sample tariff items listed above.",
+   "scope": "Goods originating in the EU (e.g. Germany, Italy) under CETA rules, with an origin declaration.",
+   "effectiveFrom": "2017-09-21",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "notes": "Free rates verified in T2026; CETA in-force date from general knowledge.",
+   "sources": [
+    "https://www.cbsa-asfc.gc.ca/trade-commerce/tariff-tarif/2026/html/00/ch61-eng.html"
+   ]
+  },
+  {
+   "id": "CA-PREF-CPTPP-CPTPT",
+   "country": "CA",
+   "kind": "preference",
+   "name": "CPTPP Tariff (CPTPT) for Vietnam",
+   "legalAuthority": "Customs Tariff; CPTPP",
+   "tariffItems": "CPTPT column of T2026",
+   "rate": "Free for all sample tariff items listed above (e.g. 6110.20.00 Free vs MFN 18%).",
+   "scope": "Goods originating in Vietnam under CPTPP rules of origin (apparel: yarn-forward rules), with proof of origin.",
+   "effectiveFrom": "2019-01-14",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "notes": "Vietnam lost GPT eligibility on 2025-01-01 (CBSA CN 24-41), so CPTPT or MFN only. CPTPP in-force date for Canada-Vietnam from general knowledge.",
+   "sources": [
+    "https://www.cbsa-asfc.gc.ca/trade-commerce/tariff-tarif/2026/html/00/ch61-eng.html",
+    "https://www.cbsa-asfc.gc.ca/publications/cn-ad/cn24-41-eng.html"
+   ]
+  },
+  {
+   "id": "CA-SURTAX-CN-2024-EV",
+   "country": "CA",
+   "kind": "surtax",
+   "name": "China Surtax Order (2024): electric vehicles",
+   "legalAuthority": "China Surtax Order (2024), SOR/2024-187, s.3 and Schedule 1",
+   "tariffItems": "Schedule 1 (Chinese-origin EVs and certain hybrids)",
+   "rate": "100% of value for duty, on top of 6.1% MFN.",
+   "scope": "China-origin EVs; not in the product set.",
+   "effectiveFrom": "2024-10-01",
+   "effectiveTo": null,
+   "legalStatus": "In force on 2026-02-19.",
+   "verified": true,
+   "sources": [
+    "https://gazette.gc.ca/rp-pr/p2/2024/2024-10-09/html/sor-dors187-eng.html",
+    "https://laws-lois.justice.gc.ca/eng/regulations/SOR-2024-187/FullText.html"
+   ]
+  },
+  {
+   "id": "CA-SURTAX-CN-2024-STEEL-ALU",
+   "country": "CA",
+   "kind": "surtax",
+   "name": "China Surtax Order (2024): steel and aluminium products",
+   "legalAuthority": "China Surtax Order (2024), SOR/2024-187, s.3.1 and Schedule 2, as amended by SOR/2024-202",
+   "tariffItems": "Ch.72 headings 7206-7229; ch.73 only 7301.10, 7302.10/.40/.90, 7304, 7305, 7306; ch.76 headings 7601, 7604-7609",
+   "rate": "25% of value for duty.",
+   "scope": "China-origin goods. 7323, 7615, 9617, 8507 are NOT covered, so no surtax on the brand's Chinese kitchenware or batteries.",
+   "effectiveFrom": "2024-10-22",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "sources": [
+    "https://laws-lois.justice.gc.ca/eng/regulations/SOR-2024-187/FullText.html",
+    "https://gazette.gc.ca/rp-pr/p2/2024/2024-10-09/html/sor-dors187-eng.html"
+   ]
+  },
+  {
+   "id": "CA-SURTAX-CN-MELT-POUR",
+   "country": "CA",
+   "kind": "surtax",
+   "name": "Steel Goods and Aluminum Goods Surtax Order (China melted-and-poured / smelted-and-cast content)",
+   "legalAuthority": "SOR/2025-154",
+   "tariffItems": "Part 1 steel goods 7206-7229, 7301-7306; Part 2 aluminium goods 7601, 7604-7609",
+   "rate": "25% of value for duty.",
+   "scope": "Any origin except US-origin, if the goods contain steel melted and poured in China or aluminium smelted and cast in China. Exempt: declarations of $5,000 or less, casual goods, goods already under the China Surtax Order (2024). Not 7323/7615/9617.",
+   "effectiveFrom": "2025-07-31",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "sources": [
+    "https://laws-lois.justice.gc.ca/eng/regulations/SOR-2025-154/FullText.html",
+    "https://gazette.gc.ca/rp-pr/p2/2025/2025-08-13/html/sor-dors154-eng.html"
+   ]
+  },
+  {
+   "id": "CA-SURTAX-STEEL-TRQ",
+   "country": "CA",
+   "kind": "surtax",
+   "name": "Surtax on over-quota steel goods (tariff rate quotas)",
+   "legalAuthority": "Order Imposing a Surtax on the Importation of Certain Steel Goods, SOR/2025-148; amended SOR/2025-155 (FTA partners from 2025-08-01) and SOR/2025-266 (quota cuts from 2025-12-26)",
+   "tariffItems": "Schedule 1: flat, long, pipe and tube, semi-finished and stainless primary steel products",
+   "rate": "50% of value for duty on imports above country quota.",
+   "scope": "Non-FTA countries (from 2025-06-27) and FTA partners other than CUSMA (from 2025-08-01); US and Mexico excluded. Primary steel only; not the product set.",
+   "effectiveFrom": "2025-06-27",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "notes": "Quota levels and SOR/2025-155/-266 details from EY and Gazette remission order summaries.",
+   "sources": [
+    "https://laws-lois.justice.gc.ca/eng/regulations/SOR-2025-148/20250627/P1TT3xt3.html",
+    "https://taxnews.ey.com/news/2025-2576",
+    "https://www.canada.ca/en/department-finance/news/2025/06/canada-acts-to-support-its-steel-producers-and-workers.html"
+   ]
+  },
+  {
+   "id": "CA-SURTAX-STEEL-DERIV",
+   "country": "CA",
+   "kind": "surtax",
+   "name": "Steel Derivative Goods Surtax Order",
+   "legalAuthority": "SOR/2025-267; CBSA Customs Notice 25-33",
+   "tariffItems": "3925.20.00, 7216.91.00, 7308, 7312, 7313, 7314, 7315, 7317, 7318, 7320, 7325, 7326, 7614.10.00, 8302, 9401, 9403, 9405, 9406 (listed items)",
+   "rate": "25% of value for duty.",
+   "scope": "All origins except Canadian-origin goods. Not stacked on goods already subject to the China Surtax Order (2024), US surtax orders, the steel TRQ surtax or SOR/2025-154. 7323, 7615 and 9617 are NOT listed; bike lights in 8512 are not 9405.",
+   "effectiveFrom": "2025-12-26",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "sources": [
+    "https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors267-eng.html",
+    "https://laws-lois.justice.gc.ca/eng/regulations/SOR-2025-267/FullText.html"
+   ]
+  },
+  {
+   "id": "CA-COUNTER-US",
+   "country": "CA",
+   "kind": "surtax",
+   "name": "Counter-tariffs on US-origin steel, aluminium and motor vehicles",
+   "legalAuthority": "United States Surtax Order (Steel and Aluminum 2025) [SOR number not verified]; United States Surtax Order (Motor Vehicles 2025), SOR/2025-118. United States Surtax Order (2025-1), SOR/2025-66, repealed 2025-09-01",
+   "tariffItems": "US-origin steel and aluminium products; non-CUSMA US vehicles",
+   "rate": "25% of value for duty.",
+   "scope": "US-origin goods only; irrelevant for China, Vietnam, Mexico or EU origin. Non-steel/aluminium goods on the steel and aluminium list were relieved from 2025-09-01.",
+   "effectiveFrom": "2025-03-13",
+   "effectiveTo": null,
+   "legalStatus": "Steel, aluminium and auto surtaxes in force; others removed 2025-09-01.",
+   "verified": false,
+   "notes": "Steel/aluminium order effective date (2025-03-13) and SOR number not verified in this session; removal of other counter-tariffs on 2025-09-01 verified via Blakes and EY.",
+   "sources": [
+    "https://www.blakes.com/insights/canada-removes-tariffs-on-u-s-goods/",
+    "https://gazette.gc.ca/rp-pr/p2/2025/2025-04-23/html/sor-dors118-eng.html"
+   ]
+  },
+  {
+   "id": "CA-CN-2025-COUNTER",
+   "country": "CA",
+   "kind": "surtax",
+   "name": "Canadian 2025 counter-measures against China",
+   "legalAuthority": "None found",
+   "tariffItems": null,
+   "rate": "n/a",
+   "scope": "No new Canadian surtax specifically on Chinese-origin goods was found for 2025 beyond SOR/2025-154 (China-melted steel / smelted aluminium content, any origin).",
+   "effectiveFrom": null,
+   "effectiveTo": null,
+   "legalStatus": "n/a",
+   "verified": false,
+   "sources": []
+  },
+  {
+   "id": "CA-GST",
+   "country": "CA",
+   "kind": "tax",
+   "name": "GST on imported goods",
+   "legalAuthority": "Excise Tax Act, Part IX, Division III (s.212, s.215); CBSA Memorandum D13-2-5",
+   "tariffItems": null,
+   "rate": "5% of (value for duty + customs duties + other duties/surtaxes payable). Provincial sales tax is not collected by CBSA on commercial imports for resale (not verified for BC).",
+   "scope": "All commercial imports (GST registrants can claim input tax credits).",
+   "effectiveFrom": "2008-01-01",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "notes": "Base and 5% rate verified via CBSA; effectiveFrom is the date GST became 5% (general knowledge).",
+   "sources": [
+    "https://www.cbsa-asfc.gc.ca/publications/dm-md/d13/d13-2-5-eng.html",
+    "https://www.cbsa-asfc.gc.ca/import/guide-3-eng.html"
+   ]
+  },
+  {
+   "id": "CA-LVS-DE-MINIMIS",
+   "country": "CA",
+   "kind": "tax",
+   "name": "Courier low-value shipment relief",
+   "legalAuthority": "Courier Imports Remission Order; CUSMA Art. 7.8(1)(f); CBSA Customs Notice 20-18",
+   "tariffItems": null,
+   "rate": "Any origin: duties and taxes waived if VFD <= CAD 20. US or Mexico origin (CUSMA) by courier: duties waived if VFD <= CAD 150; taxes waived if VFD <= CAD 40.",
+   "scope": "Matters only for parcel/B2C shipments; bulk commercial entries pay full duty and GST. Splitting shipments is not allowed.",
+   "effectiveFrom": "2020-07-01",
+   "effectiveTo": null,
+   "legalStatus": "In force.",
+   "verified": true,
+   "sources": [
+    "https://www.cbsa-asfc.gc.ca/services/cusma-aceum/lvs-efv-eng.html",
+    "https://cbsa-asfc.gc.ca/publications/cn-ad/cn20-18-eng.html"
+   ]
+  }
+ ],
+ "usSampleStacks": [
+  {
+   "id": "S1",
+   "product": "20 oz (0.59 L) stainless-steel vacuum tumbler",
+   "hts": "9617.00.10.00",
+   "origin": "CN",
+   "destination": "US",
+   "customsValueUSD": 12500,
+   "mode": "ocean, formal entry",
+   "lines": [
+    {
+     "layer": "US-MFN",
+     "rate": "7.2%",
+     "amountUSD": 900.0
+    },
+    {
+     "layer": "Section 301",
+     "rate": "0% (9617.00.10 is on List 4B only, suspended)",
+     "amountUSD": 0.0
+    },
+    {
+     "layer": "US-IEEPA-CN-FENTANYL 9903.01.24",
+     "rate": "10%",
+     "amountUSD": 1250.0
+    },
+    {
+     "layer": "US-IEEPA-RECIP-CN 9903.01.25",
+     "rate": "10%",
+     "amountUSD": 1250.0
+    },
+    {
+     "layer": "Section 232",
+     "rate": "n/a (heading 9617 not a listed steel derivative)",
+     "amountUSD": 0.0
+    },
+    {
+     "layer": "US-MPF",
+     "rate": "0.3464% (between min 33.58 and max 651.50)",
+     "amountUSD": 43.3
+    },
+    {
+     "layer": "US-HMF",
+     "rate": "0.125%",
+     "amountUSD": 15.63
+    }
+   ],
+   "totalDutiesUSD": 3400.0,
+   "totalFeesUSD": 58.93,
+   "totalUSD": 3458.93,
+   "effectiveDutyRate": "27.2%",
+   "notes": "Capacity > 1 L but <= 2 L: 9617.00.30 (6.9%, also List 4B). > 2 L: 9617.00.40 (6.9% + List 4A 7.5%).",
+   "verified": true
+  },
+  {
+   "id": "S2",
+   "product": "Bicycle light (front/rear lighting, own battery)",
+   "hts": "8512.10.20.00",
+   "origin": "CN",
+   "destination": "US",
+   "customsValueUSD": 10000,
+   "mode": "ocean, formal entry (illustrative value)",
+   "classification": "8512.10.20 'Lighting equipment' of a kind used on bicycles. Heading 8513 expressly excludes lighting equipment of heading 8512, so a battery bike light stays in 8512.10. Reflective/visual signalling only: 8512.10.40 (2.7%).",
+   "lines": [
+    {
+     "layer": "US-MFN",
+     "rate": "Free",
+     "amountUSD": 0.0
+    },
+    {
+     "layer": "US-301-L4A 9903.88.15",
+     "rate": "7.5%",
+     "amountUSD": 750.0
+    },
+    {
+     "layer": "US-IEEPA-CN-FENTANYL 9903.01.24",
+     "rate": "10%",
+     "amountUSD": 1000.0
+    },
+    {
+     "layer": "US-IEEPA-RECIP-CN 9903.01.25",
+     "rate": "10%",
+     "amountUSD": 1000.0
+    },
+    {
+     "layer": "US-MPF",
+     "rate": "0.3464%",
+     "amountUSD": 34.64
+    },
+    {
+     "layer": "US-HMF",
+     "rate": "0.125%",
+     "amountUSD": 12.5
+    }
+   ],
+   "totalDutiesUSD": 2750.0,
+   "totalFeesUSD": 47.14,
+   "totalUSD": 2797.14,
+   "effectiveDutyRate": "27.5%",
+   "notes": "If the light ships with a separately classifiable Li-ion battery, check 8507.60 (9903.91.06, 25%).",
+   "verified": true
+  },
+  {
+   "id": "S3",
+   "product": "Knitted cotton pullover",
+   "hts": "6110.20.20 (stat suffix by gender/type, e.g. .2010 men's sweaters, .2079 women's other)",
+   "origin": "VN",
+   "destination": "US",
+   "customsValueUSD": 10000,
+   "mode": "ocean, formal entry (illustrative value)",
+   "lines": [
+    {
+     "layer": "US-MFN",
+     "rate": "16.5%",
+     "amountUSD": 1650.0
+    },
+    {
+     "layer": "US-IEEPA-RECIP-VN 9903.02.69",
+     "rate": "20%",
+     "amountUSD": 2000.0
+    },
+    {
+     "layer": "US-MPF",
+     "rate": "0.3464%",
+     "amountUSD": 34.64
+    },
+    {
+     "layer": "US-HMF",
+     "rate": "0.125%",
+     "amountUSD": 12.5
+    }
+   ],
+   "totalDutiesUSD": 3650.0,
+   "totalFeesUSD": 47.14,
+   "totalUSD": 3697.14,
+   "effectiveDutyRate": "36.5%",
+   "notes": "No Section 301 (China only). If CBP finds transshipment to evade duties, 40% replaces 20%. Same item from China would add 7.5% (List 4A) + 10% + 10%.",
+   "verified": true
+  }
+ ],
+ "caSampleStacks": [
+  {
+   "product": "Vacuum tumbler",
+   "tariffItem": "9617.00.00",
+   "origin": "CN",
+   "layers": "MFN 7.5% + GST 5% on (VFD + duty). No China surtax, no steel derivative surtax.",
+   "verified": true
+  },
+  {
+   "product": "Bike light",
+   "tariffItem": "8512.10.00",
+   "origin": "CN",
+   "layers": "MFN 5.5% + GST 5%.",
+   "verified": true
+  },
+  {
+   "product": "Knitted cotton pullover",
+   "tariffItem": "6110.20.00",
+   "origin": "VN",
+   "layers": "CPTPT Free with CPTPP origin (else MFN 18%) + GST 5%. No GPT for Vietnam since 2025-01-01.",
+   "verified": true
+  }
+ ],
+ "cbsaMemoranda": [
+  {
+   "id": "D11-11-3",
+   "title": "Advance rulings for tariff classification",
+   "revised": "2024-10-21",
+   "verified": true,
+   "url": "https://www.cbsa-asfc.gc.ca/publications/dm-md/d11/d11-11-3-eng.html"
+  },
+  {
+   "id": "D10-0-1",
+   "title": "Classification of Parts and Accessories in the Customs Tariff",
+   "revised": "2023-01-31",
+   "verified": true,
+   "url": "https://www.cbsa-asfc.gc.ca/publications/dm-md/d10/d10-0-1-eng.html"
+  },
+  {
+   "id": "D11-6-6",
+   "title": "Reason to believe and corrections to the declaration of origin, tariff classification or value for duty",
+   "revised": "2024-10-21",
+   "keyRule": "Correct within 90 days of having reason to believe (para 24); obligation ends 4 years after accounting (para 27).",
+   "verified": true,
+   "url": "https://www.cbsa-asfc.gc.ca/publications/dm-md/d11/d11-6-6-eng.html"
+  },
+  {
+   "id": "D17-1-21",
+   "title": "Maintenance of Records in Canada by Importers",
+   "revised": "2024-05",
+   "keyRule": "Keep records 6 years following importation (para 2).",
+   "verified": true,
+   "url": "https://www.cbsa-asfc.gc.ca/publications/dm-md/d17/d17-1-21-eng.html"
+  },
+  {
+   "id": "D10-14-64",
+   "title": "Tariff classification of goods using Bluetooth technology",
+   "verified": true,
+   "url": "https://www.cbsa-asfc.gc.ca/publications/dm-md/d10-eng.html",
+   "note": "Relevant to Bluetooth speakers; listed on the D10 index."
+  },
+  {
+   "id": "D10-15-29",
+   "title": "Tariff Classification of suitcases, travelling bags, backpack (rucksacks) and handbags of heading 42.02",
+   "verified": true,
+   "url": "https://www.cbsa-asfc.gc.ca/publications/dm-md/d10-eng.html",
+   "note": "Relevant to 4202 bags."
+  },
+  {
+   "id": "D10-14-1",
+   "title": null,
+   "verified": true,
+   "note": "Not on CBSA's D10 index; do not cite.",
+   "url": "https://www.cbsa-asfc.gc.ca/publications/dm-md/d10-eng.html"
+  }
+ ]
+}
