@@ -1,4 +1,4 @@
-"""manage.py build_index (classification workstream; see the Makefile)."""
+"""manage.py build_index (Classification core; see the Makefile)."""
 
 from __future__ import annotations
 

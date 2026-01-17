@@ -1,4 +1,4 @@
-"""Lab tables (owner: platform/API workstream persists; classification workstream produces the reports).
+"""Lab tables (owner: the platform layer persists; the classification core produces the reports).
 
 - TrainingRound: n, status (training|waiting_signoff|live|not_made_live|retired), trained_at, lm_label,
   reflection_lm_label, data_snapshot (sha256 of the train/val/test ruling ids), test_window (from, to),

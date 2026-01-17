@@ -1,7 +1,7 @@
 """Auth and session (API_CONTRACT §1.2). `GET /auth/session` is always 200.
 
-Sign-in, demo sign-in, sign-out, refresh, switch-org and password change are completed by the platform
-workstream; the session endpoint is here first so the web shell can render public pages.
+Sign-in, demo sign-in, sign-out, refresh, switch-org and password change join this router; the session
+endpoint comes first so the web shell can render public pages.
 """
 
 from __future__ import annotations

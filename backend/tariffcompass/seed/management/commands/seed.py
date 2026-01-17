@@ -1,4 +1,4 @@
-"""manage.py seed (platform workstream; see docs/DATA.md for the seed plan)."""
+"""manage.py seed (Platform & API; see docs/DATA.md for the seed plan)."""
 
 from __future__ import annotations
 

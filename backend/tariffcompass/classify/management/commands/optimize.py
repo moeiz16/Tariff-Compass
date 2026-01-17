@@ -1,4 +1,4 @@
-"""manage.py optimize (classification workstream; see the Makefile)."""
+"""manage.py optimize (Classification core; see the Makefile)."""
 
 from __future__ import annotations
 

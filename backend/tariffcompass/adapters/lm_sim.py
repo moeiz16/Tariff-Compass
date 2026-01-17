@@ -9,7 +9,7 @@ format the prompt asked for. Behaviour: a `Policy` decides each signature's outp
 current instructions. The task policy follows only what the instructions actually say (GEPA's proposed
 instructions change its behaviour); the reflection policy writes new instructions from the metric's feedback.
 Both are pure functions of the prompt text, so runs are reproducible: same data, seed and budget give the same
-optimised program. The classification workstream supplies the tariff-specific policies.
+optimised program. The classification core supplies the tariff-specific policies.
 
 Honesty rule: numbers produced with this simulator are labelled "offline simulator" everywhere (answers, Lab,
 eval/RESULTS.md); they measure the pipeline, not a language model's reasoning.

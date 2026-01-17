@@ -19,6 +19,6 @@ errors.install(api)
 
 api.add_router("", meta.router, tags=["meta"])
 api.add_router("/auth", auth.router, tags=["auth"])
-# Mounted by the platform workstream as they land (API_CONTRACT Part 1):
+# Mounted by the platform layer as each area lands (API_CONTRACT Part 1):
 #   /org, /roles, /classify, /evidence, /answers, /public, /rulings, /tariff, /landed-cost, /duty-layers,
 #   /products, /review, /rules, /watch, /home, /lab, /settings, /audit, /jobs

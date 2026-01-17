@@ -1,4 +1,4 @@
-"""Review tables (owner: platform/API workstream). Planned per docs/API_CONTRACT.md Part 2:
+"""Review tables (Platform & API). Planned per docs/API_CONTRACT.md Part 2:
 
 - ReviewItem: org, product, answer, kind (unsure|differs|ruling_changed|always_review|requested),
   reason_detail, into (US|CA|both), proposed_us, proposed_ca, value_usd, status (waiting|approved|corrected|

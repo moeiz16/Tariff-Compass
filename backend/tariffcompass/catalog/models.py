@@ -1,4 +1,4 @@
-"""Catalog tables (owner: platform/API workstream). Planned per docs/API_CONTRACT.md Part 2:
+"""Catalog tables (Platform & API). Planned per docs/API_CONTRACT.md Part 2:
 
 - Product: org, sku, title, category, made_in (ISO-3166 alpha-2), ships_to (US/CA), unit_value, currency,
   listing_text, status, current codes (us_code, ca_code), created_at.

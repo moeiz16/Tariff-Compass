@@ -30,6 +30,8 @@ TITLES: dict[str, str] = {
     "csrf_failed": "Security check failed",
     "no_active_org": "Choose an organisation first",
     "not_found": "Not found",
+    "not_in_demo": "The public demo only knows the sample products",
+    "last_admin": "An organisation needs at least one administrator",
     "conflict": "That changed while you were looking",
     "already_decided": "Someone already decided this item",
     "stale_version": "This record has a newer version",

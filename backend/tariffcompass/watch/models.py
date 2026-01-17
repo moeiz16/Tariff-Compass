@@ -1,4 +1,4 @@
-"""Watch tables (owner: platform/API workstream). Planned per docs/API_CONTRACT.md Part 2:
+"""Watch tables (Platform & API). Planned per docs/API_CONTRACT.md Part 2:
 
 - Change: kind (legal_pending|duty_layer|ruling_modified|ruling_revoked|new_rulings|schedule_revision),
   dated (date) or pending_label ("argued 5 Nov 2025"), headline, body, knows[], unknowns[], source_url,

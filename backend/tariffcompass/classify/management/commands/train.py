@@ -1,4 +1,4 @@
-"""manage.py train (classification workstream; see the Makefile)."""
+"""manage.py train (Classification core; see the Makefile)."""
 
 from __future__ import annotations
 
