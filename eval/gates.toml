@@ -1,0 +1,30 @@
+# Evaluation gates (docs/adr/0006). `eval/run.py` reads these, measures each on the held-out (newest) rulings or
+# the named set, writes eval/RESULTS.md and exits non-zero if any gate fails. Thresholds apply to the offline
+# simulator runs in CI; live-LM runs are reported in their own table with the same thresholds shown for reference.
+
+[accuracy]
+# The optimised program must beat word matching and the unoptimised program at the heading and full code.
+optimised_beats_word_matching = ["heading", "full_code"]
+optimised_beats_unoptimised = ["heading", "full_code"]
+first_stage_top5_heading_min = 0.80     # the right heading is among the first stage's top 5
+first_stage_top3_chapter_min = 0.90
+
+[calibration]
+strong_match_right_min = 0.90           # when it says "Strong match", right at least 90 times in 100
+broker_catches_wrong_min = 0.25         # when it says "Needs a broker", its first guess was wrong at least 25 in 100
+
+[citations]
+precision_min = 0.95                    # cited rulings share the answer's heading (contrast citations excluded)
+revoked_as_support_max = 0              # never cite a revoked ruling as support
+
+[landed_cost]
+hand_checked_set = "eval/sets/landed_cost_20.json"
+exact_match_min = 1.0                   # all 20 to the cent
+
+[drift]
+simulated_revision_detected = true      # a simulated HTS revision flags every affected product
+psi_reported = true
+
+[latency]
+first_stage_p95_ms_max = 150
+answer_p95_ms_max_offline = 1000
