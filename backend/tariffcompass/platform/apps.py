@@ -11,6 +11,11 @@ class PlatformConfig(AppConfig):
 
     def ready(self) -> None:
         # One switch for "now" across the API, the worker and management commands (tariffcompass/clock.py).
+        # Not while generating migrations: Django's own `default=timezone.now` fields would look changed.
+        import sys
+
+        if "makemigrations" in sys.argv:
+            return
         from django.conf import settings
 
         from tariffcompass import clock
