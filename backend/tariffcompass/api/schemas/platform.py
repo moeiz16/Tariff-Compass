@@ -42,7 +42,9 @@ class OrgSettingsOut(Wire):
     made_in: str
     ports: list[str]  # "Seattle (3001)", "Vancouver (809)"
     always_send_to_broker: bool
-    retention_years: int
+    retention_years: int  # US: five years from the date of entry (19 CFR 163.4)
+    retention_years_ca: int = 6  # Canada: six years following importation (CBSA Memorandum D17-1-21)
+    retention_note: str = ""  # both rules in one sentence
     deleting_note: str  # "Deleting hides a record; it is kept until its retention date."
     broker_name: str | None
 

@@ -1,12 +1,17 @@
-"""The NinjaAPI instance. Routers are mounted here; every error is RFC 7807 (core.errors)."""
+"""The NinjaAPI instance. Routers are mounted here; every error is RFC 7807 (core.errors).
+
+Signed-in is the default (`platform.context.session_auth`, which also enforces CSRF on unsafe methods);
+public endpoints say `auth=None`. Each view declares its permission with `@requires(...)`.
+"""
 
 from __future__ import annotations
 
 from ninja import NinjaAPI
 
 from tariffcompass import __version__
-from tariffcompass.api.routers import auth, meta
+from tariffcompass.api.routers import audit, auth, jobs, meta, org, settings
 from tariffcompass.core import errors
+from tariffcompass.platform.context import session_auth
 
 api = NinjaAPI(
     title="Tariff Compass API",
@@ -14,11 +19,15 @@ api = NinjaAPI(
     description="Tariff classification for US and Canadian imports. Contract: docs/API_CONTRACT.md.",
     urls_namespace="api",
     docs_url="/docs",
+    auth=session_auth,
 )
 errors.install(api)
 
 api.add_router("", meta.router, tags=["meta"])
 api.add_router("/auth", auth.router, tags=["auth"])
-# Mounted by the platform layer as each area lands (API_CONTRACT Part 1):
-#   /org, /roles, /classify, /evidence, /answers, /public, /rulings, /tariff, /landed-cost, /duty-layers,
-#   /products, /review, /rules, /watch, /home, /lab, /settings, /audit, /jobs
+api.add_router("/org", org.router, tags=["organisation"])
+api.add_router("/roles", org.roles_router, tags=["organisation"])
+api.add_router("/invitations", org.invitations_router, tags=["organisation"])
+api.add_router("/settings", settings.router, tags=["settings"])
+api.add_router("/audit", audit.router, tags=["activity"])
+api.add_router("/jobs", jobs.router, tags=["jobs"])
