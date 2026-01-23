@@ -123,8 +123,8 @@ export function binderFor(p: ProductSummary): BinderOut {
   return {
     product: p,
     openedOn: hero ? "2026-01-12" : ago(30).slice(0, 10),
-    keptUntil: hero ? "2031-02-19" : "2031-01-20",
-    retentionNote: "Kept five years after the latest entry (19 CFR 163.4).",
+    keptUntil: hero ? "2032-02-10" : "2031-01-20",
+    retentionNote: "Kept five years after the latest US entry (19 CFR 163.4) and six years after the latest Canadian import (CBSA D17-1-21), whichever is later.",
     versions,
     approval: hero
       ? { by: dana, at: "2026-02-17T18:12:00Z", version: 4, sentence: "Approved by Dana Whitlock, licensed customs broker, Driftwood · 17 Feb 2026, 10:12 PT · version 4" }
@@ -139,7 +139,7 @@ export function binderFor(p: ProductSummary): BinderOut {
       ? [
           { entryNumber: "NBX-0118842-6", country: "US", enteredOn: "2026-02-09", code: "9617.00.10.00", dutyPaid: usd("3400.00") },
           { entryNumber: "NBX-0117301-2", country: "US", enteredOn: "2026-01-22", code: "9617.00.10.00", dutyPaid: usd("2720.00") },
-          { entryNumber: "26-0044817", country: "CA", enteredOn: "2026-01-29", code: "9617.00.00.00", dutyPaid: { amount: "1275.00", currency: "CAD" } },
+          { entryNumber: "26-0044817", country: "CA", enteredOn: "2026-01-29", code: "9617.00.00.00", dutyPaid: { amount: "937.50", currency: "CAD" } },
         ]
       : [],
     record: { chainVerified: true, checkedAt: "2026-02-19T18:30:00Z", events: hero ? 11 : 3, fingerprint: hero ? "3f9a 71c0 e2d4" : "b20c 33d4 9e01" },
@@ -162,9 +162,9 @@ const KIND_LABELS: Record<ReviewRow["kind"], string> = {
 };
 
 const ROWS: [string, string, string, ReviewRow["kind"], string, string, number, ReviewRow["into"]][] = [
-  ["NB-KT-0388", "Ridgeline double-wall camp mug, 350 ml", "9617001000", "differs", "Proposed 9617; the last approved mug of this type went to 7323", "7440.00", 1, "US"],
+  ["NB-KT-0388", "Ridgeline double-wall camp mug, 350 ml", "9617001000", "differs", "Proposed 9617; the last approved mug of this type went to 7323 (NY N297165); HQ H303684 moved vacuum vessels to 9617", "7440.00", 1, "US"],
   ["NB-EL-0217", "Bluetooth bike light, 800 lumen, USB-C", "8512102000", "unsure", "Northbound answered: sold in the cycling range", "14100.00", 2, "US"],
-  ["NB-KT-0402", "Trail food jar, 500 ml, with folding spoon", "9617001000", "ruling_changed", "Relied on NY N297169, revoked by HQ H303684", "5180.00", 3, "US"],
+  ["NB-OD-0734", "Collapsible LED lantern", "8513104000", "ruling_changed", "Relied on NY N284187, revoked by HQ H289250", "5180.00", 3, "US"],
   ["NB-EL-0241", "Power bank, 10,000 mAh", "8507600020", "always_review", "Rule: anything with lithium cells", "26800.00", 3, "both"],
   ["NB-EL-0249", "LED camp lantern with power-bank port", "8513104000", "unsure", "Lantern or power bank: which gives the essential character?", "9300.00", 2, "US"],
   ["NB-KT-0311", "Stainless camp pot, 1.2 litre", "7323930080", "always_review", "Rule: steel or aluminium content", "4120.00", 1, "US"],
@@ -245,7 +245,7 @@ export function decisionRecord(row: ReviewRow): DecisionRecord {
     misread: mug ? "The classifier read “double-wall” as vacuum-insulated. The listing never says vacuum." : null,
     previousUs: mug ? "7323.93.00.80" : null,
     rulingsRelied: mug ? [{ id: "NY N321985", key: "ny-n321985", statusLabel: "In force" }] : [],
-    rulingChange: row.kind === "ruling_changed" ? { kind: "revoked", kindLabel: "Revoked", text: "NY N297169 was revoked by HQ H303684, 7 Jul 2021", byId: "HQ H303684", date: "2021-07-07" } : null,
+    rulingChange: row.kind === "ruling_changed" ? { kind: "revoked", kindLabel: "Revoked", text: "NY N284187 was revoked by HQ H289250, 7 Oct 2021", byId: "HQ H289250", date: "2021-10-07" } : null,
     rule: row.kind === "always_review" ? row.detail.replace("Rule: ", "") : null,
     answerId: mug ? "ans-tumbler" : "ans-bikelight",
     questions:
@@ -286,7 +286,7 @@ export const RULINGS: RulingDetail[] = RAW_RULINGS.map((r) => {
     codes: [group(r.code.padEnd(10, "0"))],
     text,
     paragraphs,
-    related: r.id === "HQ H303684" ? [{ id: "NY N297169", key: "ny-n297169", relation: "revokes", relationLabel: "Revokes" }] : [],
+    related: [],
     alsoCitedIn: r.code.startsWith("9617") ? [{ productId: "p-NB-KT-0412", sku: "NB-KT-0412", title: "Trailhead insulated tumbler, 20 oz" }] : [],
     sourceUrl: `https://rulings.cbp.gov/ruling/${r.id.split(" ").pop()}`,
     ...(hold >= 0 ? {} : {}),

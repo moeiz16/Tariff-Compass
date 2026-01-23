@@ -106,7 +106,7 @@ export function tumblerLandedUS(): LandedCostOut {
     questions: [],
     whatCouldChange: [
       { label: "If the pending emergency duties end", landedTotal: usd("13458.93"), chargesTotal: usd("958.93") },
-      { label: "If it were made in Vietnam", landedTotal: usd("15958.93"), chargesTotal: usd("3458.93") },
+      { label: "If made in Vietnam", landedTotal: usd("15958.93"), chargesTotal: usd("3458.93") },
     ],
     tariffsAsOf: "2026-02-19",
     snapshotLabel: "HTSUS 2026 Revision 3 · duty layers as of 19 Feb 2026",
@@ -120,23 +120,23 @@ export function tumblerLandedCA(): LandedCostOut {
     code: "9617.00.00.00",
     madeIn: "CN",
     madeInLabel: "China",
-    value: cad("17000.00"),
+    value: cad("12500.00"),
     quantity: 2000,
     transport: "ocean",
     transportLabel: "Ocean freight",
     lines: [
-      line({ letter: "a", layerId: "CA-MFN-T2026", kind: "base", kindLabel: "Normal duty", name: "Most-favoured-nation duty", rate: "7.5%", amount: cad("1275.00"), plain: "Canada's general rate for tariff item 9617.00.00.", source: "Customs Tariff T2026, 9617.00.00", sourceUrl: "https://www.cbsa-asfc.gc.ca/trade-commerce/tariff-tarif/2026/html/00/ch96-eng.html", effectiveFrom: "2026-01-01" }),
-      line({ letter: "b", layerId: "CA-GST", kind: "tax", kindLabel: "Tax", name: "GST on imported goods", rate: "5% of value plus duty", amount: cad("913.75"), plain: "Charged on the value for duty plus the duty itself.", source: "Excise Tax Act s. 212 · CBSA Memorandum D13-2-5", sourceUrl: "https://www.cbsa-asfc.gc.ca/publications/dm-md/d13/d13-2-5-eng.html", effectiveFrom: "2008-01-01" }),
+      line({ letter: "a", layerId: "CA-MFN-T2026", kind: "base", kindLabel: "Normal duty", name: "Most-favoured-nation duty", rate: "7.5%", amount: cad("937.50"), plain: "Canada's general rate for tariff item 9617.00.00.", source: "Customs Tariff T2026, 9617.00.00", sourceUrl: "https://www.cbsa-asfc.gc.ca/trade-commerce/tariff-tarif/2026/html/00/ch96-eng.html", effectiveFrom: "2026-01-01" }),
+      line({ letter: "b", layerId: "CA-GST", kind: "tax", kindLabel: "Tax", name: "GST on imported goods", rate: "5% of value plus duty", amount: cad("671.88"), plain: "Charged on the value for duty plus the duty itself.", source: "Excise Tax Act s. 212 · CBSA Memorandum D13-2-5", sourceUrl: "https://www.cbsa-asfc.gc.ca/publications/dm-md/d13/d13-2-5-eng.html", effectiveFrom: "2008-01-01" }),
     ],
     notApplied: [
       { name: "China surtax (2024)", why: "Applies to electric vehicles, steel and aluminium; a vacuum vessel isn't covered." },
       { name: "Steel derivative goods surtax", why: "Tariff item 9617.00.00 is not on the derivative goods list." },
       { name: "Courier low-value relief", why: "The shipment is well over CAD 20." },
     ],
-    chargesTotal: cad("2188.75"),
-    landedTotal: cad("19188.75"),
-    perUnit: cad("9.59"),
-    effectiveRate: "+12.9%",
+    chargesTotal: cad("1609.38"),
+    landedTotal: cad("14109.38"),
+    perUnit: cad("7.05"),
+    effectiveRate: "+7.5%",
     questions: [],
     whatCouldChange: [],
     tariffsAsOf: "2026-02-19",
@@ -169,7 +169,7 @@ export function tumblerLandedMexico(answers: Record<string, boolean>): LandedCos
       perUnit: usd("6.26"),
       effectiveRate: "+0.1%",
       questions,
-      whatCouldChange: [{ label: "If the goods don't qualify under USMCA", landedTotal: usd("16483.93"), chargesTotal: usd("3983.93") }],
+      whatCouldChange: [{ label: "If made in Mexico without a USMCA claim", landedTotal: usd("16483.93"), chargesTotal: usd("3983.93") }],
     };
   }
   return {
@@ -187,7 +187,7 @@ export function tumblerLandedMexico(answers: Record<string, boolean>): LandedCos
     perUnit: usd("8.24"),
     effectiveRate: "+32.2%",
     questions,
-    whatCouldChange: [{ label: "If the goods qualify under USMCA", landedTotal: usd("12515.63"), chargesTotal: usd("15.63") }],
+    whatCouldChange: [{ label: "If made in Mexico and it qualifies under USMCA", landedTotal: usd("12515.63"), chargesTotal: usd("15.63") }],
   };
 }
 
@@ -389,5 +389,5 @@ export function bikelightAnswer(id = "ans-bikelight", sample = false): AnswerOut
 
 export const SAMPLES = [
   { key: "tumbler", title: "stainless insulated tumbler, 20 oz", madeIn: "CN", query: TUMBLER_TEXT },
-  { key: "bikelight", title: "Bluetooth bike light, USB-C", madeIn: "CN", query: "Bluetooth bike light, 800 lumen, USB-C rechargeable, handlebar mount, with a torch mode." },
+  { key: "bike-light", title: "Bluetooth bike light, USB-C", madeIn: "CN", query: "Bluetooth bike light, 800 lumen, USB-C rechargeable, handlebar mount, with a torch mode." },
 ];

@@ -113,7 +113,7 @@ const routes: [string, RegExp, Handler][] = [
   ["GET", /^\/public\/samples$/, () => json(SAMPLES)],
   ["GET", /^\/public\/samples\/([\w-]+)$/, (m) => {
     if (m[1] === "tumbler") return json(tumblerAnswer("sample-tumbler", true));
-    if (m[1] === "bikelight") return json(bikelightAnswer("sample-bikelight", true));
+    if (m[1] === "bike-light") return json(bikelightAnswer("sample-bike-light", true));
     return problem(404, "not_found", "No such sample.");
   }],
   ["POST", /^\/public\/classify$/, (_m, _q, b) => {
@@ -173,7 +173,7 @@ const routes: [string, RegExp, Handler][] = [
       citedAs: cited?.n ?? null,
       productTitle: "Trailhead insulated tumbler, 20 oz · NB-KT-0412",
       madeInLabel: "Ningbo, China",
-      ruleQuote: "“…subject to the verification of the facts incorporated in the ruling letter, a comparison of the transaction described therein to the actual transaction…”",
+      ruleQuote: "“…will be applied only with respect to transactions involving articles identical to the sample submitted with the ruling request or to articles whose description is identical to the description set forth in the ruling letter.”",
       alignment: cited?.factCompare ?? [],
       evidence: [
         { kind: "listing", label: "Listing", text: listing, marked: at(listing, "vacuum-insulated") },

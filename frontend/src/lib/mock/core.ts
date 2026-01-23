@@ -52,11 +52,11 @@ interface Person {
 }
 
 export const PEOPLE: Person[] = [
-  { id: "u-maya", fullName: "Maya Lindqvist", email: "maya@northbound.example", role: "compliance", title: "Compliance lead", licence: "", via: null, color: "#111111", joined: "2025-09-02T16:00:00Z" },
-  { id: "u-jordan", fullName: "Jordan Tse", email: "jordan@northbound.example", role: "importer", title: "Imports, Seattle", licence: "", via: null, color: "#3a3a36", joined: "2025-09-03T16:00:00Z" },
-  { id: "u-dana", fullName: "Dana Whitlock", email: "dana@driftwood.example", role: "broker", title: "Licensed customs broker, US entries", licence: "Sample licence US-0001", via: "Driftwood Customs Brokers", color: "#5a5a54", joined: "2025-09-10T16:00:00Z" },
-  { id: "u-rafael", fullName: "Rafael Ouellet", email: "rafael@driftwood.example", role: "broker", title: "Licensed customs broker, Canadian entries", licence: "Sample licence CA-0001", via: "Driftwood Customs Brokers", color: "#5a5a54", joined: "2025-09-10T16:00:00Z" },
-  { id: "u-priscilla", fullName: "Priscilla Mensah", email: "priscilla@northbound.example", role: "admin", title: "Operations and administration", licence: "", via: null, color: "#62625b", joined: "2025-09-01T16:00:00Z" },
+  { id: "u-maya", fullName: "Maya Lindqvist", email: "maya.lindqvist@northbound.example", role: "compliance", title: "Compliance lead", licence: "", via: null, color: "#111111", joined: "2025-09-02T16:00:00Z" },
+  { id: "u-jordan", fullName: "Jordan Tse", email: "jordan.tse@northbound.example", role: "importer", title: "Imports, Seattle", licence: "", via: null, color: "#3a3a36", joined: "2025-09-03T16:00:00Z" },
+  { id: "u-dana", fullName: "Dana Whitlock", email: "dana.whitlock@driftwood.example", role: "broker", title: "Licensed customs broker, US entries", licence: "Sample licence US-0001", via: "Driftwood Customs Brokers", color: "#5a5a54", joined: "2025-09-10T16:00:00Z" },
+  { id: "u-rafael", fullName: "Rafael Ouellet", email: "rafael.ouellet@driftwood.example", role: "broker", title: "Licensed customs broker, Canadian entries", licence: "Sample licence CA-0001", via: "Driftwood Customs Brokers", color: "#5a5a54", joined: "2025-09-10T16:00:00Z" },
+  { id: "u-priscilla", fullName: "Priscilla Mensah", email: "priscilla.mensah@northbound.example", role: "admin", title: "Operations and administration", licence: "", via: null, color: "#62625b", joined: "2025-09-01T16:00:00Z" },
 ];
 
 export const DEMO_BY_ROLE: Record<Role, string> = { importer: "u-jordan", broker: "u-dana", compliance: "u-maya", admin: "u-priscilla" };
