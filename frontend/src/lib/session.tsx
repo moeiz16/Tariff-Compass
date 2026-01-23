@@ -20,6 +20,9 @@ interface SessionCtx {
 }
 
 const Ctx = createContext<SessionCtx>();
+/** Exposed for tests that need a signed-in person without the API. */
+export const SessionContext = Ctx;
+export type { SessionCtx };
 
 export function SessionProvider(props: ParentProps) {
   const navigate = useNavigate();
