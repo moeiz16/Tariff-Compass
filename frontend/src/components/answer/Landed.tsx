@@ -91,9 +91,11 @@ export function Receipt(props: { cost: LandedCostOut }) {
       <hr class="my-2 border-0 border-t-[1.5px] border-dashed border-ink" />
       <div class="flex justify-between text-[16px] font-[700]">
         <span>Charges</span>
-        <span>
-          {money(c().chargesTotal)} <span class="text-[12.5px] font-[500] text-muted">({c().effectiveRate})</span>
-        </span>
+        <span>{money(c().chargesTotal)}</span>
+      </div>
+      <div class="flex justify-between text-ink-2">
+        <span>Duties alone</span>
+        <span>{c().effectiveRate} of value</span>
       </div>
       <div class="flex justify-between text-ink-2">
         <span>Landed</span>

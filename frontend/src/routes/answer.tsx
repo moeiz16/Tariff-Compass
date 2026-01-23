@@ -82,10 +82,10 @@ export default function AnswerPage() {
         <Match when={answer.error}>
           <AnswerError error={answer.error} retry={() => void refetch()} brokerName={broker()} />
         </Match>
-        <Match when={current()}>
+        <Match when={current()} keyed>
           {(a) => (
             <AnswerMemo
-              answer={a()}
+              answer={a}
               openCites={params.cite ? params.cite.split(",").map(Number) : undefined}
               caps={{ live: true, canConfirm: can("classify:run"), canSend: can("review:submit"), canFlag: can("review:decide"), brokerName: broker() }}
               onAnswer={(next) => {
@@ -106,8 +106,8 @@ export default function AnswerPage() {
                       Send to {broker()} for review
                     </button>
                   </Show>
-                  <Show when={can("review:decide") && a().reviewItemId}>
-                    <A href={`/review?open=${a().reviewItemId}`} class={button({ size: "lg" })}>
+                  <Show when={can("review:decide") && a.reviewItemId}>
+                    <A href={`/review?open=${a.reviewItemId}`} class={button({ size: "lg" })}>
                       Open it in the review docket
                     </A>
                   </Show>

@@ -77,7 +77,13 @@ export default function Landing() {
     setNarrow({ phase: "dim", losers: [] });
     setCaption("Reading the tariff…");
     try {
-      const a = kind === "sample" ? await publicApi.sample(value) : await publicApi.classify(value);
+      const a =
+        kind === "sample"
+          ? await publicApi.sample(value).catch((e) => {
+              if (e instanceof ApiProblem && e.status === 404) return publicApi.classify(value);
+              throw e;
+            })
+          : await publicApi.classify(value);
       const { winner, losers } = narrowFrom(a);
       setNarrow({ phase: "candidates", winner, losers });
       setCaption(`${losers.length + 1} chapters could hold it…`);
@@ -102,7 +108,8 @@ export default function Landing() {
 
   onMount(() => {
     const key = params.q;
-    if (key) void run(["tumbler", "bikelight"].includes(key) ? "sample" : "text", key);
+    // A sample key ("tumbler", "bike-light") opens that sample; anything else is classified as text.
+    if (key) void run(/^[a-z][a-z-]*$/.test(key) ? "sample" : "text", key);
   });
 
   const reset = () => {
@@ -134,7 +141,8 @@ export default function Landing() {
   );
 
   return (
-    <Show when={!(session() && me())} fallback={<Navigate href="/home" />}>
+    <Show when={!session.loading || session.latest} fallback={<div class="min-h-dvh" />}>
+    <Show when={!me()} fallback={<Navigate href="/home" />}>
       <Title>Tariff Compass · US and Canadian tariff codes with the rulings behind them</Title>
       <div id="top" />
       <Show
@@ -237,6 +245,7 @@ export default function Landing() {
         </main>
         <PublicFooter />
       </Show>
+    </Show>
     </Show>
   );
 }

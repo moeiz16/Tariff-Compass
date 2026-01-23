@@ -242,6 +242,9 @@ body {
   background: repeating-linear-gradient(90deg, var(--color-seg-301) 0 3px, transparent 3px 5px);
   border: 1.5px solid var(--color-seg-301);
 }
+.seg-preference {
+  border: 1.5px dashed var(--color-ink);
+}
 .seg-value {
   background: var(--color-paper-3);
   border: 1.5px dashed var(--color-muted);

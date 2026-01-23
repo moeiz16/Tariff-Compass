@@ -248,10 +248,10 @@ export default function ReviewPage() {
                             <Show when={selected()}>
                               <tr class="max-md:block">
                                 <td colSpan={7} class="p-0 max-md:block">
-                                  <Show when={record()} fallback={<div class="bg-paper-2 px-6 py-6"><Show when={record.error} fallback={<SkeletonLines lines={4} />}><ErrorSlip error={record.error} retry={refetchRecord} /></Show></div>}>
+                                  <Show when={record()?.row.id === r.id ? record() : undefined} keyed fallback={<div class="bg-paper-2 px-6 py-6"><Show when={record.error} fallback={<SkeletonLines lines={4} />}><ErrorSlip error={record.error} retry={refetchRecord} /></Show></div>}>
                                     {(rec) => (
                                       <DecisionRecordView
-                                        record={rec()}
+                                        record={rec}
                                         canDecide={canDecide()}
                                         canAnswer={can("review:answer")}
                                         importerName={importerName()}
