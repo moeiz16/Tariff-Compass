@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import datetime as dt
 from datetime import date, datetime
 from typing import Literal
 
@@ -128,7 +129,7 @@ class RulingStatusOut(Wire):
     kind_label: str  # "In force" | "Modified" | "Revoked" | "Cited for contrast"
     text: str  # "Revoked by HQ H303684, 7 Jul 2021"
     by_id: str | None = None
-    date: date | None = None
+    date: dt.date | None = None
 
 
 class FactCompareOut(Wire):
@@ -143,7 +144,7 @@ class CitedRulingOut(Wire):
     n: int
     id: str  # "NY N321134"
     key: str  # "ny-n338211" (path segment)
-    date: date
+    date: dt.date
     subject: str
     status: RulingStatusOut
     holding: str
@@ -231,3 +232,14 @@ class CitationFeedbackIn(Wire):
 
 ClassifyIn.model_rebuild()
 SaveToBinderIn.model_rebuild()
+
+
+class PublicClassifyIn(Wire):
+    text: str = Field(min_length=3, max_length=8000)
+
+
+class SampleOut(Wire):
+    key: str  # "tumbler"
+    title: str
+    made_in: str
+    query: str

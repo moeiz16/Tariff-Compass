@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime
+import datetime as dt
+from datetime import datetime
 from typing import Literal
 
 from tariffcompass.api.schemas.common import Money
@@ -26,7 +27,7 @@ class AffectedOut(Wire):
 
 class WatchItemOut(Wire):
     id: str
-    date: date | None  # None while pending
+    date: dt.date | None  # None while pending
     date_label: str  # "PENDING" | "16 FEB 2026"
     date_note: str | None  # "argued 5 Nov 2025"
     kind: ChangeKind
