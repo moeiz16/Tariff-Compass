@@ -16,9 +16,8 @@ class PlatformConfig(AppConfig):
 
         if "makemigrations" in sys.argv:
             return
-        from django.conf import settings
-
         from tariffcompass import clock
+        from tariffcompass.platform.config import tc
 
-        cfg = settings.TARIFF_COMPASS
+        cfg = tc()
         clock.install(cfg["DEMO_TODAY"], cfg["DEMO_TIME"] or None, anchor_file=cfg["CLOCK_ANCHOR"])

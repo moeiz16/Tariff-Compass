@@ -87,10 +87,10 @@ def list_audit(
     action: str | None = None,
     actor: str | None = None,
     to: str | None = None,
-    targetType: str | None = None,  # noqa: N803 - query names are camelCase on the wire
-    targetId: str | None = None,  # noqa: N803
+    targetType: str | None = None,
+    targetId: str | None = None,
     page: int = 1,
-    pageSize: int = 25,  # noqa: N803
+    pageSize: int = 25,
 ) -> dict:
     org = ctx_of(request).need_org()
     qs = filtered(
@@ -137,8 +137,8 @@ def export_csv(
     action: str | None = None,
     actor: str | None = None,
     to: str | None = None,
-    targetType: str | None = None,  # noqa: N803
-    targetId: str | None = None,  # noqa: N803
+    targetType: str | None = None,
+    targetId: str | None = None,
 ) -> HttpResponse:
     org = ctx_of(request).need_org()
     qs = filtered(

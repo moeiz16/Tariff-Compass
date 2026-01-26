@@ -14,7 +14,6 @@ from collections.abc import AsyncIterator
 from typing import Any
 
 from asgiref.sync import sync_to_async
-from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpRequest, StreamingHttpResponse
 from pydantic.alias_generators import to_camel
@@ -23,6 +22,7 @@ from tariffcompass.api import labels
 from tariffcompass.api.schemas.platform import JobOut
 from tariffcompass.core.errors import Problem
 from tariffcompass.core.wire import WireRouter
+from tariffcompass.platform.config import tc
 from tariffcompass.platform.context import Ctx, ctx_of, is_uuid, signed_in
 from tariffcompass.platform.models import Job
 
@@ -69,7 +69,7 @@ def get_job(request: HttpRequest, job_id: str) -> dict:
 
 
 async def _events(job_id: str, last_seen: str) -> AsyncIterator[str]:
-    cfg = settings.TARIFF_COMPASS
+    cfg = tc()
     poll = float(cfg["SSE_POLL_SECONDS"])
     beat = float(cfg["SSE_HEARTBEAT_SECONDS"])
     limit = float(cfg["SSE_MAX_SECONDS"])

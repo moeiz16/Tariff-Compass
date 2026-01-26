@@ -7,9 +7,9 @@ sample organisation is seeded and `DEMO_SIGN_IN` is on.
 
 from __future__ import annotations
 
+import uuid
 from functools import cache
 
-from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.sessions.models import Session
 from django.db import transaction
@@ -33,6 +33,7 @@ from tariffcompass.api.schemas.common import ClockOut
 from tariffcompass.core.errors import Problem
 from tariffcompass.core.wire import WireRouter
 from tariffcompass.platform import audit, limits, roles
+from tariffcompass.platform.config import tc
 from tariffcompass.platform.context import (
     SESSION_ORG,
     SESSION_USER,
@@ -64,8 +65,7 @@ def _dummy_hash() -> str:
 
 def _demo_on() -> bool:
     return (
-        bool(settings.TARIFF_COMPASS["DEMO_SIGN_IN"])
-        and Organisation.objects.filter(slug=SAMPLE_IMPORTER_SLUG, is_sample=True).exists()
+        bool(tc()["DEMO_SIGN_IN"]) and Organisation.objects.filter(slug=SAMPLE_IMPORTER_SLUG, is_sample=True).exists()
     )
 
 
@@ -109,7 +109,7 @@ def session(request: HttpRequest) -> dict:
                         "org_name": o.name,
                     }
                 )
-    return {"me": me, "clock": ClockOut(**clock.describe()), "demo_sign_in": demo, "demo_people": people}
+    return {"me": me, "clock": ClockOut.model_validate(clock.describe()), "demo_sign_in": demo, "demo_people": people}
 
 
 @router.post("/login", response=Me, auth=None)
@@ -211,7 +211,9 @@ def refresh(request: HttpRequest) -> dict:
 def switch_org(request: HttpRequest, body: SwitchOrgIn) -> dict:
     ctx = ctx_of(request)
     m = (
-        Membership.objects.filter(user=ctx.user, org_id=body.org_id).select_related("org", "engagement").first()
+        Membership.objects.filter(user=ctx.user, org__pk=uuid.UUID(body.org_id))
+        .select_related("org", "engagement")
+        .first()
         if is_uuid(body.org_id)
         else None
     )

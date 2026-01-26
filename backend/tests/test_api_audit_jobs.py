@@ -59,6 +59,16 @@ def test_verify_detects_tampering(world):
     assert not bad["ok"] and bad["brokenAt"] == second.pk
 
 
+def test_back_dated_events_still_verify(world):
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    when = datetime(2026, 1, 12, 9, 14, 0, 123456, tzinfo=ZoneInfo("America/Vancouver"))
+    ev = audit.record(world.north, "binder.proposed", "Proposed v1", at=when)
+    ev.refresh_from_db()
+    assert ev.created_at == when and audit.verify(world.north).ok
+
+
 def test_every_write_extends_the_chain(world):
     api = world.api("compliance")
     api.patch("settings", {"madeIn": "VN"})

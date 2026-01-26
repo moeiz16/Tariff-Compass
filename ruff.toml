@@ -11,6 +11,8 @@ ignore = ["S101", "RUF012", "S105", "S106", "N818", "RUF001", "RUF002", "RUF003"
 "scripts/**" = ["S310", "S603", "S607", "T201", "E501", "N806"]
 "eval/**" = ["S", "T201", "E501"]
 "backend/tariffcompass/settings.py" = ["E402"]
+# query parameters keep their camelCase wire names (pageSize, madeIn, targetType)
+"backend/tariffcompass/api/routers/**" = ["N803"]
 
 [lint.isort]
 known-first-party = ["tariffcompass"]

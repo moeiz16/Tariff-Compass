@@ -86,14 +86,18 @@ def client_ip(request: HttpRequest) -> str:
     return str(request.META.get("REMOTE_ADDR", ""))[:64]
 
 
+def _no_view(request: HttpRequest) -> Any:
+    return None
+
+
 def enforce_csrf(request: HttpRequest) -> None:
     """Django's own CSRF check (Ninja views are exempt from the middleware): header must match the cookie."""
     if request.method not in UNSAFE:
         return
-    mw = CsrfViewMiddleware(lambda r: None)  # type: ignore[arg-type, return-value]
+    mw = CsrfViewMiddleware(_no_view)
     request.csrf_processing_done = False  # type: ignore[attr-defined]
     mw.process_request(request)
-    if mw.process_view(request, lambda r: None, (), {}) is not None:
+    if mw.process_view(request, _no_view, (), {}) is not None:
         raise Problem(403, "csrf_failed", "Refresh the page and try again.")
 
 
@@ -159,9 +163,11 @@ def default_org(user: User) -> Organisation | None:
 def build_ctx(request: HttpRequest, user: User, org_id: str | None) -> Ctx:
     membership = None
     org = None
-    if org_id:
+    if org_id and is_uuid(org_id):
         membership = (
-            Membership.objects.filter(user=user, org_id=org_id).select_related("org", "engagement__broker_org").first()
+            Membership.objects.filter(user=user, org__pk=uuid.UUID(org_id))
+            .select_related("org", "engagement__broker_org")
+            .first()
         )
         if membership is not None and (membership.engagement is None or membership.engagement.active):
             org = membership.org

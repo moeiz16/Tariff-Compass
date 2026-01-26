@@ -4,13 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from django.conf import settings as dj
 from django.http import HttpRequest
 
 from tariffcompass.api.schemas.platform import OrgSettingsOut, OrgSettingsPatch
 from tariffcompass.catalog.retention import CA_YEARS, US_YEARS, policy_sentence
 from tariffcompass.core.errors import Problem
 from tariffcompass.core.wire import WireRouter
+from tariffcompass.platform.config import tc
 from tariffcompass.platform.context import ctx_of, requires
 from tariffcompass.platform.models import Engagement, Organisation
 
@@ -35,7 +35,7 @@ def settings_out(org: Organisation) -> dict[str, Any]:
         "made_in": s["made_in"],
         "ports": s["ports"],
         "always_send_to_broker": bool(s["always_send_to_broker"]),
-        "retention_years": int(dj.TARIFF_COMPASS.get("RETENTION_YEARS", US_YEARS)),
+        "retention_years": int(tc().get("RETENTION_YEARS", US_YEARS)),
         "retention_years_ca": CA_YEARS,
         "retention_note": policy_sentence(),
         "deleting_note": "Deleting hides a record; it is kept until its retention date, never destroyed early.",

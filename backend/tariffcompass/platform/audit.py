@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from typing import Any
 
 from django.db import transaction
@@ -55,8 +56,12 @@ def record(
     target_id: str = "",
     details: dict[str, Any] | None = None,
     ip: str = "",
+    at: datetime | None = None,
 ) -> AuditEvent:
-    """Append one event to the organisation's chain (atomic; SQLite runs it as BEGIN IMMEDIATE)."""
+    """Append one event to the organisation's chain (atomic; SQLite runs it as BEGIN IMMEDIATE).
+
+    `at` back-dates the event (the sample seed replays its history in order); it defaults to the demo clock.
+    """
     with transaction.atomic():
         last = AuditEvent.objects.filter(org=org).order_by("-id").only("hash").first()
         event = AuditEvent(
@@ -71,7 +76,7 @@ def record(
             details=details or {},
             ip=ip,
             prev_hash=last.hash if last else GENESIS,
-            created_at=clock.now(),
+            created_at=(at or clock.now()).astimezone(UTC),  # hashed as stored: UTC
         )
         event.hash = compute_hash(event.prev_hash, event)
         event.save(force_insert=True)

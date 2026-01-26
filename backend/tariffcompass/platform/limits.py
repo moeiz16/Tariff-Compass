@@ -10,12 +10,12 @@ from __future__ import annotations
 import time
 from datetime import timedelta
 
-from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpRequest
 
 from tariffcompass import clock
 from tariffcompass.core.errors import Problem
+from tariffcompass.platform.config import tc
 from tariffcompass.platform.models import LoginFailure
 
 PAUSE_AFTER = 5
@@ -26,7 +26,7 @@ _DEFAULTS = {"auth": 10, "public": 20, "classify": 30, "api": 300}
 
 def _limit(bucket: str) -> int:
     key = _BUCKETS.get(bucket)
-    raw = str(settings.TARIFF_COMPASS.get(key, "")) if key else ""
+    raw = str(tc().get(key, "")) if key else ""
     try:
         return int(raw.split("/")[0]) if raw else _DEFAULTS[bucket]
     except ValueError:
