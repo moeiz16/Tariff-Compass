@@ -12,12 +12,15 @@ from tariffcompass import __version__
 from tariffcompass.api.routers import (
     audit,
     auth,
+    classify,
     jobs,
     meta,
     org,
     products,
     review,
+    rulings,
     settings,
+    tariff,
 )
 from tariffcompass.core import errors
 from tariffcompass.platform.context import session_auth
@@ -40,6 +43,14 @@ api.add_router("/invitations", org.invitations_router, tags=["organisation"])
 api.add_router("/settings", settings.router, tags=["settings"])
 api.add_router("/audit", audit.router, tags=["activity"])
 api.add_router("/jobs", jobs.router, tags=["jobs"])
+api.add_router("/classify", classify.router, tags=["classify"])
+api.add_router("/answers", classify.answers_router, tags=["classify"])
+api.add_router("/evidence", classify.evidence_router, tags=["classify"])
+api.add_router("/public", classify.public_router, tags=["public"])
+api.add_router("/rulings", rulings.router, tags=["rulings"])
+api.add_router("/tariff", tariff.router, tags=["tariff"])
+api.add_router("/landed-cost", tariff.landed_router, tags=["landed cost"])
+api.add_router("/duty-layers", tariff.layers_router, tags=["landed cost"])
 api.add_router("/products", products.router, tags=["products"])
 api.add_router("/exports", products.exports_router, tags=["products"])
 api.add_router("/review", review.router, tags=["review"])
