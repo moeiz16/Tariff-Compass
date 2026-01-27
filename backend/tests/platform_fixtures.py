@@ -123,3 +123,72 @@ def world(db, fast_hasher) -> World:
     Membership.objects.create(org=other, user=outsider, role="admin")
     Membership.objects.create(org=other, user=make_user("kim@hh.example", "Kim Park"), role="compliance")
     return World(north, other, drift, importer, compliance, admin, broker, broker2, outsider)
+
+
+@pytest.fixture
+def fake_core(monkeypatch, settings, tmp_path):
+    """The deterministic core fakes (tariffcompass.fakes), with uploads and exports in a temp folder."""
+    from tariffcompass import services
+    from tariffcompass.catalog import rulings
+
+    monkeypatch.setenv("CORE_BACKEND", "fake")
+    settings.MEDIA_ROOT = tmp_path / "uploads"
+    services.reset()
+    rulings.clear()
+    yield
+    services.reset()
+    rulings.clear()
+
+
+def make_product(
+    org: Organisation,
+    sku: str = "NB-KT-0412",
+    *,
+    us: str = "9617001000",
+    ca: str = "9617000000",
+    title: str = "20 oz vacuum tumbler",
+    made_in: str = "CN",
+    material: str = "stainless steel",
+    value: str = "12500.00",
+    category: str = "kitchen",
+):
+    from tariffcompass.catalog.models import Product
+
+    return Product.objects.create(
+        org=org,
+        sku=sku,
+        title=title,
+        category=category,
+        made_in=made_in,
+        into=["US", "CA"],
+        listing_text="20 oz double-wall stainless steel tumbler, vacuum insulated, sliding lid.",
+        material=material,
+        shipment={"value": value, "currency": "USD", "quantity": 1000, "transport": "ocean"},
+        us_code="",
+        ca_code="",
+    )
+
+
+@pytest.fixture
+def catalogue(world, fake_core):
+    """A proposed tumbler in Northbound (v1) and a product in the other importer."""
+    from tariffcompass.catalog import binder
+
+    p = make_product(world.north)
+    binder.append(
+        p,
+        "proposed",
+        actor=world.importer,
+        actor_role="importer",
+        us_code="9617001000",
+        ca_code="9617000000",
+        rulings_relied=["NY N321134"],
+        deciding_fact={
+            "key": "between_walls",
+            "label": "Between the walls",
+            "value": "A vacuum",
+            "source_note": "read from 'insulated'",
+        },
+    )
+    foreign = make_product(world.other, "HH-0001", title="Foreign kettle")
+    return {"tumbler": p, "foreign": foreign}

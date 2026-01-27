@@ -9,7 +9,15 @@ from __future__ import annotations
 from ninja import NinjaAPI
 
 from tariffcompass import __version__
-from tariffcompass.api.routers import audit, auth, jobs, meta, org, settings
+from tariffcompass.api.routers import (
+    audit,
+    auth,
+    jobs,
+    meta,
+    org,
+    products,
+    settings,
+)
 from tariffcompass.core import errors
 from tariffcompass.platform.context import session_auth
 
@@ -31,3 +39,5 @@ api.add_router("/invitations", org.invitations_router, tags=["organisation"])
 api.add_router("/settings", settings.router, tags=["settings"])
 api.add_router("/audit", audit.router, tags=["activity"])
 api.add_router("/jobs", jobs.router, tags=["jobs"])
+api.add_router("/products", products.router, tags=["products"])
+api.add_router("/exports", products.exports_router, tags=["products"])
