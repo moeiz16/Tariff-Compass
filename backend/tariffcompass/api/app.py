@@ -16,6 +16,7 @@ from tariffcompass.api.routers import (
     meta,
     org,
     products,
+    review,
     settings,
 )
 from tariffcompass.core import errors
@@ -41,3 +42,5 @@ api.add_router("/audit", audit.router, tags=["activity"])
 api.add_router("/jobs", jobs.router, tags=["jobs"])
 api.add_router("/products", products.router, tags=["products"])
 api.add_router("/exports", products.exports_router, tags=["products"])
+api.add_router("/review", review.router, tags=["review"])
+api.add_router("/rules", review.rules_router, tags=["review"])
