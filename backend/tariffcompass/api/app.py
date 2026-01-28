@@ -14,6 +14,7 @@ from tariffcompass.api.routers import (
     auth,
     classify,
     jobs,
+    lab,
     meta,
     org,
     products,
@@ -58,3 +59,4 @@ api.add_router("/exports", products.exports_router, tags=["products"])
 api.add_router("/review", review.router, tags=["review"])
 api.add_router("/rules", review.rules_router, tags=["review"])
 api.add_router("/watch", watch.router, tags=["watch"])
+api.add_router("/lab", lab.router, tags=["lab"])
