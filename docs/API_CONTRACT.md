@@ -82,13 +82,13 @@ Every error is `application/problem+json` (`core/errors.py`):
 | Status | `code` | When |
 |---|---|---|
 | 400 | `bad_request` | malformed JSON or query |
-| 401 | `not_authenticated`, `session_expired`, `invalid_credentials` | no or ended session; wrong email/password (generic) |
+| 401 | `not_authenticated`, `session_expired`, `invalid_credentials` | no or ended session; wrong email/password (generic, with `triesLeft`) |
 | 403 | `forbidden` | permission missing |
 | 403 | `csrf_failed` | unsafe method without a valid `X-CSRFToken` |
 | 403 | `no_active_org` | signed in but no active organisation |
 | 404 | `not_found` | unknown id **or another organisation's id** (never 403 for cross-tenant ids) |
 | 404 | `not_in_demo` | `POST /public/classify` for a product the public demo doesn't know |
-| 409 | `already_decided`, `stale_version` | a review item decided by someone else; a binder or setting changed meanwhile |
+| 409 | `already_decided`, `stale_version` | a review item decided by someone else (with `current`, the row as it is now); a binder or setting changed meanwhile |
 | 409 | `needs_second_signature`, `same_person`, `gates_failed` | training-round promotion rules |
 | 410 | `expired` | invitation past its expiry |
 | 413 | `payload_too_large` | JSON body over 256 KB; file over 10 MB |
@@ -211,7 +211,7 @@ review item opens.
 | POST | `/answers/{id}/citations/{n}/feedback` | `review:decide` | `CitationFeedbackIn { reason }` | `204` ("This ruling doesn't apply": recorded as a correction signal for the next round) |
 | GET | `/public/samples` | public | – | `{ key, title, madeIn, query }[]` (the landing's "Try a sample") |
 | GET | `/public/samples/{key}` | public | – | `AnswerOut` with `sample: true` |
-| POST | `/public/classify` | public | `{ text }` | `AnswerOut` (`sample: true`) when the text matches a sample product, else `404 not_in_demo` |
+| POST | `/public/classify` | public | `PublicClassifyIn { text }` | `AnswerOut` (`sample: true`) when the text matches a sample product, else `404 not_in_demo` |
 
 ```text
 ClassifyIn = { text (3–8000), madeIn: "CN", into: ["US","CA"], productId?, evidenceIds: [], confirmedFacts: ConfirmedFact[],
@@ -265,7 +265,7 @@ RulingSummary = { id, key, issued, subject, code, codeAsQuoted, heading, status:
 RulingDetail  = RulingSummary + { category, codes[], text, paragraphs: Span[], related: { id, key, relation, relationLabel }[],
                                   alsoCitedIn: { productId, sku, title }[], sourceUrl }
 CompareOut    = { ruling: RulingDetail, citedAs, productTitle, madeInLabel,
-                  ruleQuote,                       # 19 CFR 177.9(b)(1)
+                  ruleQuote,                       # 19 CFR 177.9(b)(2): rulings apply only to identical articles
                   alignment: FactCompareOut[],     # Fact · yours · match · the ruling's
                   evidence: { kind, label, text, marked: Span[] }[],   # left pane
                   rulingMarked: Span[] }           # right pane: supporting passages in reading order
@@ -314,8 +314,9 @@ verdict is "Needs a broker", the total under the alternative code.
 ## 1.9 Products and the binder
 
 The binder is the product's reasonable-care record: one version per decision, append-only, each linked to its
-audit event. Records are kept five years after the latest entry (19 CFR 163.4); deleting a product hides it and
-keeps the record until then.
+audit event. Records are kept five years from the latest US entry (19 CFR 163.4) and six years from the latest
+Canadian import (CBSA Memorandum D17-1-21); `keptUntil` is the later of the two that apply (a product with no
+entries yet counts from its latest decision). Deleting a product hides it and keeps the record until then.
 
 | Method | Path | Permission | Body / query | Response |
 |---|---|---|---|---|
@@ -392,7 +393,7 @@ Every decision is audited with the broker's name and licence and lands in the bi
 | POST | `/watch/scan` | `watch:manage` | – | `202 JobAccepted` (re-checks binders against the layers, rulings and tariff edition in force) |
 
 ```text
-WatchItemOut = { id, date|null, dateLabel ("PENDING" | "16 FEB 2026"), dateNote ("argued 5 Nov 2025"), kind, kindLabel,
+WatchItemOut = { id (the change's key, e.g. "scotus-ieepa"), date|null, dateLabel ("PENDING" | "16 FEB 2026"), dateNote ("argued 5 Nov 2025"), kind, kindLabel,
                  headline, body, knows[], unknowns[], affectedCount, affected: AffectedOut[] (top 5), sourceLabel, sourceUrl }
 AffectedOut  = { productId, sku, title, effect, recheck: unchanged|needs_review|re_approved, recheckLabel, dutyBefore?, dutyAfter? }
 ```
@@ -431,7 +432,7 @@ citation precision at least 0.95.
 
 | Method | Path | Permission | Body | Response |
 |---|---|---|---|---|
-| GET | `/settings` | `settings:read` | – | `OrgSettingsOut { into[], madeIn, ports[], alwaysSendToBroker, retentionYears, deletingNote, brokerName }` |
+| GET | `/settings` | `settings:read` | – | `OrgSettingsOut { into[], madeIn, ports[], alwaysSendToBroker, retentionYears (US: 5, 19 CFR 163.4), retentionYearsCa (6, CBSA D17-1-21), retentionNote, deletingNote, brokerName }` |
 | PATCH | `/settings` | `settings:manage` | `OrgSettingsPatch` | `OrgSettingsOut` |
 
 ## 1.14 Activity record (audit)
@@ -456,6 +457,7 @@ Start endpoints return `202 JobAccepted { jobId, statusUrl, eventsUrl }`.
 | GET | `/jobs/{id}` | `JobOut { id, kind, kindLabel, status: queued\|running\|succeeded\|failed, statusLabel, progress (0..1), stage, message, result, error, createdAt, finishedAt }` |
 | GET | `/jobs/{id}/events` | SSE. Events: `progress` (`JobOut`), `done` (`JobOut`), `failed` (`JobOut`); a comment heartbeat every 15 s; the stream closes after `done`/`failed` or 300 s (reconnect with `Last-Event-ID`) |
 
+Job `result` maps are camelCase like the rest of the wire (`ExportResult` → `downloadUrl`, `fileName`, …).
 Polling fallback: `GET /jobs/{id}` every second. `message` is plain words for the UI ("Testing on 1,240 rulings it
 hasn't seen…").
 
