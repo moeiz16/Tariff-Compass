@@ -4,7 +4,8 @@ import { A, useNavigate, useSearchParams } from "@solidjs/router";
 import { For, Show, createResource, createSignal, type JSX } from "solid-js";
 import { Portal } from "solid-js/web";
 import { AppPage } from "~/components/shell/AppPage";
-import { auth, org, rules } from "~/lib/endpoints";
+import { auth, meta, org, rules } from "~/lib/endpoints";
+import { now } from "~/lib/clock";
 import { dateShort } from "~/lib/format";
 import { plainProblem } from "~/lib/problem";
 import { useSession } from "~/lib/session";
@@ -88,6 +89,12 @@ export default function SettingsPage() {
   const [invitations, { refetch: refetchInv }] = createResource(() => (can("members:manage") ? true : null), () => org.invitations());
   const [brokers] = createResource(() => org.brokers().catch(() => []));
   const [ruleList, { refetch: refetchRules }] = createResource(() => rules.list().catch(() => []));
+  const [m] = createResource(() => meta.get().catch(() => null));
+  const originLabel = (code: string) => m()?.origins.find((o) => o.key === code)?.label ?? code;
+  const expiresIn = (iso: string) => {
+    const days = Math.ceil((Date.parse(iso) - now().getTime()) / 86_400_000);
+    return days <= 0 ? "expired" : days === 1 ? "expires tomorrow" : `expires in ${days} days`;
+  };
   const [inviting, setInviting] = createSignal(false);
   const [email, setEmail] = createSignal("");
   const [inviteRole, setInviteRole] = createSignal<Role>("importer");
@@ -230,7 +237,7 @@ export default function SettingsPage() {
                     <dt class="text-muted">Importing into</dt>
                     <dd>{s().into.map((c) => (c === "US" ? "United States" : "Canada")).join(" and ")}</dd>
                     <dt class="text-muted">Usually made in</dt>
-                    <dd>{s().madeIn}</dd>
+                    <dd>{originLabel(s().madeIn)}</dd>
                     <dt class="text-muted">Ports</dt>
                     <dd>{s().ports.join(", ")}</dd>
                     <dt class="text-muted">Always send to a broker</dt>
@@ -305,7 +312,7 @@ export default function SettingsPage() {
                   {(i) => (
                     <li class="flex flex-wrap items-center justify-between gap-2 border-b border-rule py-2 text-[15px]">
                       <span>
-                        {i.email} · {i.roleLabel} <span class="text-muted">· expires {dateShort(i.expiresAt)}</span>
+                        {i.email} · {i.roleLabel} <span class="text-muted">· {expiresIn(i.expiresAt)}</span>
                       </span>
                       <button
                         type="button"

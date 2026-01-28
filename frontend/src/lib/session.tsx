@@ -81,18 +81,4 @@ export function useSession(): SessionCtx {
   return ctx;
 }
 
-/** Pure check used by components and tests: does this permission list allow the action? */
-export function allows(permissions: readonly string[] | undefined | null, permission: string): boolean {
-  return !!permissions?.includes(permission);
-}
-
-/** The scopes each permission opens in the query strip. */
-export const SCOPE_PERMISSION: Record<string, string> = {
-  answer: "classify:read",
-  rulings: "rulings:read",
-  tariff: "tariff:read",
-  products: "products:read",
-  review: "review:read",
-  watch: "watch:read",
-  lab: "lab:read",
-};
+export { SCOPE_PERMISSION, allows } from "./roles";

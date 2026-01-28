@@ -14,14 +14,14 @@ export function CodePins(props: { proposed: string; value: string[]; onChange: (
   const cells = () => redline(props.proposed, props.value);
   return (
     <div class="space-y-2">
-      <div class="flex items-center gap-3">
-        <span class="w-[72px] shrink-0 text-[13px] font-[650] text-ink-2">Proposed</span>
+      <div class="flex items-center gap-3 max-sm:flex-col max-sm:items-start max-sm:gap-1">
+        <span class="w-[64px] shrink-0 text-[13px] font-[650] text-ink-2 max-sm:w-auto">Proposed</span>
         <div class={p.root()} aria-label={`Proposed code ${props.proposed}`} role="img">
           <For each={cells()}>
             {(c) => (
               <>
                 <span
-                  class="grid h-[38px] w-[30px] place-items-center rounded-[3px] border border-rule bg-paper font-code text-[19px] text-ink-2 max-sm:h-[34px] max-sm:w-[25px] max-sm:text-[16px]"
+                  class="grid h-[38px] w-[30px] shrink-0 place-items-center rounded-[3px] border border-rule bg-paper font-code text-[19px] text-ink-2 max-sm:h-[32px] max-sm:w-[24px] max-sm:text-[15px]"
                   classList={{ "strike-bad": c.changed }}
                   aria-hidden="true"
                 >
@@ -46,9 +46,9 @@ export function CodePins(props: { proposed: string; value: string[]; onChange: (
         value={props.value}
         onValueChange={(d) => props.onChange(d.value)}
         invalid={props.invalid}
-        class="flex items-center gap-3"
+        class="flex items-center gap-3 max-sm:flex-col max-sm:items-start max-sm:gap-1"
       >
-        <PinInput.Label class="w-[72px] shrink-0 text-[13px] font-[650] text-ink-2">Yours</PinInput.Label>
+        <PinInput.Label class="w-[64px] shrink-0 text-[13px] font-[650] text-ink-2 max-sm:w-auto">Yours</PinInput.Label>
         <PinInput.Control
           class={p.root()}
           aria-describedby={props.describedBy}

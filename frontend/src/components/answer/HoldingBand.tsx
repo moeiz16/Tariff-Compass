@@ -73,7 +73,7 @@ export function HoldingBand(props: { answer: AnswerOut; actions?: JSX.Element; l
                 </div>
                 <p class="mt-1.5 flex justify-between gap-3 text-[14px] text-muted">
                   Rulings reaching the same heading
-                  <span class="font-code font-[650] text-ink">
+                  <span class="whitespace-nowrap font-code font-[650] text-ink">
                     {a().verdict.agreeing} of {a().verdict.cited}
                   </span>
                 </p>

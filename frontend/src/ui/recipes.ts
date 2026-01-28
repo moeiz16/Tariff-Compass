@@ -121,8 +121,8 @@ export const sheet = tv({
 
 export const pin = tv({
   slots: {
-    root: "flex flex-wrap items-center gap-1",
-    cell: "h-[38px] w-[30px] rounded-[3px] border-[1.5px] border-ink bg-paper text-center font-code text-[19px] font-[600] text-ink outline-none data-[changed=true]:bg-hi data-[changed=true]:text-hi-ink focus:ring-[3px] focus:ring-hi max-sm:h-[34px] max-sm:w-[25px] max-sm:text-[16px]",
-    dot: "px-[1px] font-code text-[18px] text-muted",
+    root: "flex flex-nowrap items-center gap-[3px]",
+    cell: "h-[38px] w-[30px] shrink-0 rounded-[3px] border-[1.5px] border-ink bg-paper text-center font-code text-[19px] font-[600] text-ink outline-none data-[changed=true]:bg-hi data-[changed=true]:text-hi-ink focus:ring-[3px] focus:ring-hi max-sm:h-[32px] max-sm:w-[24px] max-sm:text-[15px]",
+    dot: "font-code text-[18px] text-muted max-sm:text-[14px]",
   },
 });

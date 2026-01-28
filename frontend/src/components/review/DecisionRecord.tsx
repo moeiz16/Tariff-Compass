@@ -135,7 +135,7 @@ export function DecisionRecordView(props: {
 
   return (
     <div class="border-y border-rule bg-paper-2 anim-drawer" role="region" aria-label={`Decision record for ${r().row.productTitle}`}>
-      <div class="grid grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1fr)] max-xl:grid-cols-2 max-md:grid-cols-1">
+      <div class="grid grid-cols-[minmax(0,0.9fr)_minmax(470px,1.2fr)_minmax(0,0.9fr)] max-xl:grid-cols-2 max-md:grid-cols-1">
         <section class="border-r border-rule px-6 py-5 max-md:border-r-0 max-md:border-b max-md:px-4" aria-label="Facts">
           <h3 class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">Facts</h3>
           <p class="mt-3 text-[14px] text-muted">Listing says</p>

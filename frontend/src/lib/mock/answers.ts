@@ -214,7 +214,7 @@ const TUMBLER_TEXT = "Stainless insulated tumbler, 20 oz, double wall, slide lid
 export function tumblerAnswer(id = "ans-tumbler", sample = false): AnswerOut {
   const reason = [
     { text: "The space between the two steel walls is a vacuum, so this is a vacuum vessel, and heading 9617 names vacuum vessels outright.", cites: [1, 2], marked: [] },
-    { text: "Steel kitchenware (7323) is the obvious second guess; CBP moved insulated stainless containers out of 7323 and into 9617 in 2021.", cites: [2, 3], marked: [] },
+    { text: "Steel kitchenware (7323) is the obvious second guess, but HQ H303684 puts insulated stainless containers in 9617.", cites: [2, 3], marked: [] },
     { text: "At 20 oz it sits under the one-litre line that splits the US subheadings.", cites: [1], marked: [] },
     { text: "If the walls were not vacuum-sealed, it would be steel tableware instead.", cites: [3], marked: [] },
   ];
@@ -262,7 +262,7 @@ export function tumblerAnswer(id = "ans-tumbler", sample = false): AnswerOut {
         why: "The heading text names the article. A tumbler with a sealed vacuum between its walls is a vacuum vessel, and the lid makes it complete.",
         cites: [1, 2],
         notNeighbours: [
-          { code: "7323", text: "Table, kitchen or other household articles of iron or steel", reason: "Set aside: CBP moved insulated stainless containers to 9617 in 2021", cite: 2 },
+          { code: "7323", text: "Table, kitchen or other household articles of iron or steel", reason: "Set aside: HQ H303684 puts insulated stainless containers in 9617", cite: 2 },
           { code: "3924", text: "Tableware and kitchenware, of plastics", reason: "Set aside: only the lid is plastic; the vessel is steel", cite: null },
         ],
       },

@@ -195,7 +195,7 @@ export default function BinderPage() {
                   <b>Reasonable-care record</b>
                 </div>
                 <div class="gm-wide flex flex-wrap items-end justify-between gap-6">
-                  <div>
+                  <div class="min-w-0 max-w-[760px] flex-1">
                     <p class="text-[15px] text-ink-2">
                       <A href="/products" class="underline decoration-rule underline-offset-4">
                         My products
@@ -207,9 +207,10 @@ export default function BinderPage() {
                       <span>Opened {dateShort(b().openedOn)}</span>
                       <span>{b().versions.length} versions</span>
                       <span>
-                        Kept until <b class="text-ink">{dateShort(b().keptUntil)}</b>, {b().retentionNote.charAt(0).toLowerCase() + b().retentionNote.slice(1)}
+                        Kept until <b class="text-ink">{dateShort(b().keptUntil)}</b>
                       </span>
                     </p>
+                    <p class="mt-1 text-[14px] text-muted">{b().retentionNote}</p>
                   </div>
                   <div class="flex flex-col items-end gap-3 max-lg:items-start">
                     <Show when={b().approval}>
