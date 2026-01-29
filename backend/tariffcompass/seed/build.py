@@ -9,7 +9,6 @@ reports, never from invented figures.
 
 from __future__ import annotations
 
-import random
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import date, datetime, time, timedelta
@@ -31,67 +30,13 @@ from tariffcompass.platform.models import Engagement, Job, Membership, Organisat
 from tariffcompass.review import lessons
 from tariffcompass.review.models import AlwaysReviewRule, Decision, Question, ReviewItem, TrainingExample
 from tariffcompass.seed import documents
+from tariffcompass.seed import plan as seed_plan
 from tariffcompass.seed.catalog import BY_SKU, PRODUCTS, Item
 from tariffcompass.seed.people import DEMO_PEOPLE, SAMPLE_BROKER_SLUG, SAMPLE_IMPORTER_SLUG, SAMPLE_PASSWORD
+from tariffcompass.seed.plan import PROPOSED_ONLY, WRONG
 
 log = structlog.get_logger("tariffcompass.seed")
-RNG_SEED = 20260219
 
-
-# ── Corrections: what the classifier first proposed for each family, and the broker's reason ─────────────
-# (family → (proposed US, proposed CA or None to keep, reason kind, reason))
-WRONG: dict[str, tuple[str, str | None, str, str]] = {
-    "vacuum": ("9617003000", None, "facts_differ", "Capacity is 591 ml, so it is a vessel not exceeding one litre"),
-    "double_wall": (
-        "9617001000",
-        "9617000000",
-        "facts_differ",
-        "Air-insulated with no vacuum between the walls, so it is a steel household article of 7323, "
-        "not a vacuum vessel of 9617",
-    ),
-    "ss_cook": ("7323930080", None, "heading_misread", "Saucepans and frying pans are kitchen ware, suffix 60"),
-    "al_cook": ("7615102025", None, "facts_differ", "Pressed and forged aluminium, not cast"),
-    "food": (
-        "3924102000",
-        None,
-        "heading_misread",
-        "Storage containers aren't plates, cups or bowls; they are other tableware and kitchenware",
-    ),
-    "knife": ("8211929060", None, "heading_misread", "Kitchen knives have their own statistical suffix"),
-    "bike": (
-        "8513102000",
-        "8513101000",
-        "facts_differ",
-        "Made to be mounted and used on a bicycle, so it is lighting equipment of 8512, not a portable lamp of 8513",
-    ),
-    "torch": ("8512102000", "8512100000", "facts_differ", "Hand-held with no bicycle mount, so a flashlight of 8513"),
-    "power_bank": ("8507600010", None, "heading_misread", "Not a vehicle's main battery; the other lithium-ion line"),
-    "speaker": ("8518210000", None, "facts_differ", "Two drivers in one enclosure make it multiple loudspeakers"),
-    "speaker1": ("8518220000", None, "facts_differ", "One driver: a single loudspeaker in its enclosure"),
-    "charger": ("8504409520", None, "facts_differ", "The output is 30 W, not over 50 W"),
-    "pullover": ("6110202010", None, "facts_differ", "Cut and sized for women, so the women's suffix"),
-    "tee": ("6109100060", None, "facts_differ", "Men's T-shirt, not women's"),
-    "base": ("6109901065", None, "facts_differ", "Men's top, not women's"),
-    "fleece": (
-        "6110303010",
-        "6110300091",
-        "heading_misread",
-        "Full-zip jacket with pockets: a jacket of heading 6101, not a sweater of 6110",
-    ),
-    "anorak": ("6202402005", None, "facts_differ", "Men's garment: heading 6201"),
-    "rain_w": ("6201402015", None, "facts_differ", "Women's garment: heading 6202"),
-    "sock": ("6115969020", None, "facts_differ", "Cotton is the main fibre by weight"),
-    "sock_syn": ("6115959000", None, "facts_differ", "Nylon and polyester predominate, not cotton"),
-    "glove": ("6116939400", None, "facts_differ", "No fourchettes between the fingers"),
-    "tent": ("6306229030", None, "ruling_elsewhere", "A backpacking tent, as in NY N304023"),
-    "tarp": ("6306221000", None, "heading_misread", "A flat tarp isn't a tent"),
-    "sleeping": ("9404304000", None, "facts_differ", "Synthetic fill; there is no down"),
-    "lantern": ("9405418440", None, "facts_differ", "No solar panel, so not photovoltaic"),
-    "stove": ("7321111060", None, "heading_misread", "It is a stove, not 'other' cooking appliances"),
-    "stake": ("7326200090", None, "facts_differ", "Forged steel, not an article of wire"),
-    "backpack": ("4202923131", None, "heading_misread", "Backpacks have their own suffix"),
-    "duffel": ("4202923120", None, "heading_misread", "A duffel isn't a backpack"),
-}
 
 DOCKET = [  # sku, kind, days waiting, into, with
     ("NB-KT-0388", "differs", 3, "both", "broker"),
@@ -110,7 +55,6 @@ DOCKET = [  # sku, kind, days waiting, into, with
     ("NB-BG-0807", "unsure", 1, "both", "broker"),
     ("NB-AP-0137", "unsure", 4, "both", "broker"),
 ]
-PROPOSED_ONLY = ["NB-EL-0413", "NB-AP-0213", "NB-OD-0797", "NB-KT-0737", "NB-BG-0827"]
 REVOKED_RELIED = ("NY N284187", "HQ H289250", date(2021, 10, 7))  # (relied on, revoked by, on)
 
 
@@ -286,6 +230,10 @@ def run_answer(ctx: Ctx, p: Product, who: str, when: datetime, *, evidence: list
     return a
 
 
+def who_saved(a: Answer) -> str:
+    return a.created_by.full_name if a.created_by else "Northbound"
+
+
 def propose(
     ctx: Ctx,
     p: Product,
@@ -392,28 +340,17 @@ def decide(
             binder_version=v.n,
             created_at=when,
         )
-        ex = TrainingExample(
-            org=ctx.north, product=p, decision=d, lesson=lesson, used_in_round=used_in, created_at=when, payload={}
+        payload = seed_plan.correction(item, clock.local(when).date())  # the same dict the core trains on
+        TrainingExample.objects.create(
+            id=payload["id"],
+            org=ctx.north,
+            product=p,
+            decision=d,
+            lesson=payload["lesson"],
+            used_in_round=used_in,
+            created_at=when,
+            payload=payload,
         )
-        ex.payload = lessons.example_payload(
-            example_id=str(ex.pk),
-            sku=p.sku,
-            text=p.listing_text,
-            made_in=p.made_in,
-            into=list(p.into),
-            proposed_us=proposed_us,
-            proposed_ca=proposed_ca,
-            us_code=final_us,
-            ca_code=final_ca,
-            reason_kind=reason_kind,
-            reason=reason,
-            lesson_text=lesson,
-            ruling_relied=None,
-            deciding_fact=None,
-            decided_by=u.full_name,
-            decided_on=clock.local(when).date().isoformat(),
-        )
-        ex.save()
     else:
         prior = p.versions.filter(kind__in=binder.DECIDED_KINDS).exists()
         v = binder.append(
@@ -622,38 +559,20 @@ def hero_tumbler(ctx: Ctx) -> None:
         del n
 
 
-def history(ctx: Ctx, rng: random.Random) -> None:
+def history(ctx: Ctx) -> None:
     """Every other binder: proposed, then approved or corrected, this week or earlier."""
-    skip = {"NB-KT-0412", *[d[0] for d in DOCKET], *PROPOSED_ONLY}
-    rest = [i for i in PRODUCTS if i.sku not in skip]
-    rng.shuffle(rest)
-    week, earlier = rest[:40], rest[40:]
-    week_corr = [i for i in week if i.family in WRONG][:9]
-    week_ask = [i for i in week if i not in week_corr][:3]
-    early_days = {
-        i.sku: demo_day(1, 12) + timedelta(days=(n * 31) // max(1, len(earlier))) for n, i in enumerate(earlier)
-    }
-    january = [i for i in earlier if i.family in WRONG and early_days[i.sku] < demo_day(2, 1)]
-    february = [i for i in earlier if i.family in WRONG and early_days[i.sku] >= demo_day(2, 1)]
-    early_corr = january[:8] + february[:14]
-    # at least two corrections change the heading (a light read as a torch, an air-insulated tumbler as vacuum)
-    for fam in ("bike", "double_wall"):
-        if not any(i.family == fam for i in early_corr + week_corr):
-            cand = next((i for i in earlier if i.family == fam and i not in early_corr), None)
-            if cand is not None:
-                early_corr[0] = cand
+    the = seed_plan.plan(today())
+    week, earlier = the.week, the.earlier
+    week_corr, week_ask, early_corr = the.week_corrections, the.week_questions, the.early_corrections
+    early_days = the.decided_on
 
     def schedule(
         item: Item, opened: datetime, decided: datetime, *, corrected: bool, used_in: int | None, asked: bool = False
     ) -> None:
         p = ctx.products[item.sku]
         wrong = WRONG.get(item.family)
-        prop_us, prop_ca = (wrong[0], wrong[1] or item.ca) if corrected and wrong else (item.us, item.ca)
-        if item.family == "vacuum" and item.us == "9617003000" and corrected:
-            prop_us = "9617001000"
-        who = (
-            "broker2" if prop_us[:4] == item.us[:4] and item.category == "apparel" and rng.random() < 0.3 else "broker"
-        )
+        prop_us, prop_ca = seed_plan.proposed_for(item, corrected)
+        who = seed_plan.broker_for(item, prop_us)
         ctx.at(opened, lambda: propose(ctx, p, item, opened, us=prop_us, ca=prop_ca, fact=deciding(item)))
         if asked:
             q_at = decided - timedelta(hours=8)
@@ -791,7 +710,7 @@ def history(ctx: Ctx, rng: random.Random) -> None:
         day = early_days[item.sku]
         decided = local_dt(day, 10 + i % 6, (i * 7) % 60)
         opened = decided - timedelta(days=2, hours=1)
-        used = 7 if day < demo_day(2, 1) else None
+        used = the.used_in_round.get(item.sku)
         schedule(item, opened, decided, corrected=item in early_corr, used_in=used)
     for i, sku in enumerate(PROPOSED_ONLY):
         item = BY_SKU[sku]
@@ -858,7 +777,7 @@ def docket(ctx: Ctx) -> None:
                 why=a.payload.get("holding_sentence", ""),
                 answer=a,
                 action="answer.saved",
-                summary=f"{a.created_by.full_name if a.created_by else 'Northbound'} saved the answer to the {p.sku} binder",
+                summary=f"{who_saved(a)} saved the answer to the {p.sku} binder",
                 at=opened - timedelta(minutes=1),
             )
             detail, rule, change, misread, phrases = docket_detail(ctx, item, kind, us, last)
@@ -1176,7 +1095,6 @@ def exists() -> bool:
 
 
 def build() -> dict[str, Any]:
-    rng = random.Random(RNG_SEED)  # noqa: S311 - a reproducible sample, not security
     services.reset()
     with transaction.atomic():
         ctx = people_and_orgs()
@@ -1192,7 +1110,7 @@ def build() -> dict[str, Any]:
         )
         rounds = lab_rounds(ctx)
         ctx.at(local_dt(demo_day(1, 12), 9, 0), partial(hero_tumbler, ctx))
-        history(ctx, rng)
+        history(ctx)
         docket(ctx)
         for _, _, fn in sorted(ctx.timeline, key=lambda t: (t[0], t[1])):
             fn()

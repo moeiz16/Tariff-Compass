@@ -207,3 +207,12 @@ def test_seed_is_idempotent(seeded, capsys):
     call_command("seed")
     assert "already loaded" in capsys.readouterr().out
     assert Organisation.objects.filter(slug="northbound-goods").count() == 1
+
+
+def test_round_corrections_match_the_seeded_examples(seeded):
+    from tariffcompass.seed.plan import corrections_for_round
+
+    seeded_round7 = {e.payload["id"]: e.payload for e in TrainingExample.objects.filter(used_in_round=7)}
+    planned = {c["id"]: c for c in corrections_for_round(7)}
+    assert seeded_round7 == planned and len(planned) == 8
+    assert all(str(e.pk) == e.payload["id"] for e in TrainingExample.objects.filter(signal="correction"))
