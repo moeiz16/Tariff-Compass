@@ -353,6 +353,5 @@ def duty_layers(request: HttpRequest, country: str = "US", asOf: str | None = No
 def _raw_layers() -> dict[str, dict[str, Any]]:
     import json
 
-
     data = json.loads(Path(tc()["DUTY_LAYERS_PATH"]).read_text())
     return {layer["id"]: layer for layer in data["layers"]}
