@@ -252,4 +252,16 @@ def promote(ctx: Ctx, r: TrainingRound) -> None:
         target_id=str(r.n),
         details={"round": r.n, "retired": [p.n for p in previous]},
     )
-    transaction.on_commit(services.reset)
+    transaction.on_commit(lambda: _go_live(r.n))
+
+
+def _go_live(n: int) -> None:
+    """Tell the classification core which round answers from now on, then drop its cached instances."""
+    try:
+        from tariffcompass.classify import program
+    except ImportError:  # the core isn't installed (fakes): nothing to switch
+        program = None  # type: ignore[assignment]
+    set_live = getattr(program, "set_live", None)
+    if callable(set_live):
+        set_live(n)
+    services.reset()

@@ -22,13 +22,25 @@ def health(request: HttpRequest) -> JsonResponse:
     return JsonResponse({"status": "ok", "version": __version__, "now": clock.now_iso(), "checks": {}})
 
 
+def _warm() -> str:
+    """Open the search index, the first stage and the duty layers once, so the first answer is fast."""
+    try:
+        from tariffcompass import services
+
+        services.retriever(), services.first_stage(), services.duties()
+    except Exception:
+        return "unavailable"
+    return "ok"
+
+
 def ready(request: HttpRequest) -> JsonResponse:
     db = _db_ok()
+    core = _warm()
     body = {
         "status": "ok" if db else "degraded",
         "version": __version__,
         "now": clock.now_iso(),
-        "checks": {"database": "ok" if db else "unreachable"},
+        "checks": {"database": "ok" if db else "unreachable", "core": core},
     }
     return JsonResponse(body, status=200 if db else 503)
 

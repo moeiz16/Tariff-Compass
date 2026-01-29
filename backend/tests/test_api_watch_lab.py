@@ -206,3 +206,14 @@ def test_scope_counts(world, catalogue):
     counts = world.api("importer").get("scopes/counts").json()
     assert counts["products"] == 1 and counts["review"] == 0 and counts["rulings"] >= 1
     assert world.api("importer").get("scopes/counts", q="zzzz").json()["products"] == 0
+
+
+def test_promotion_tells_the_core_which_round_is_live(world, rounds, monkeypatch, django_capture_on_commit_callbacks):
+    import tariffcompass.classify.program as program
+
+    seen: list[int | None] = []
+    monkeypatch.setattr(program, "set_live", lambda n: seen.append(n))
+    world.api("compliance").post("lab/rounds/7/sign", {"statement": "Maya Lindqvist"})
+    with django_capture_on_commit_callbacks(execute=True):
+        world.api("broker").post("lab/rounds/7/sign", {"statement": "Dana Whitlock"})
+    assert seen == [7]
