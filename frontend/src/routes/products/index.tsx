@@ -3,6 +3,7 @@ import { createSolidTable, flexRender, getCoreRowModel, type ColumnDef } from "@
 import { A, useSearchParams } from "@solidjs/router";
 import { For, Show, createResource } from "solid-js";
 import { AppPage } from "~/components/shell/AppPage";
+import { useSigned } from "~/lib/session";
 import { products } from "~/lib/endpoints";
 import { dateShort, plural } from "~/lib/format";
 import type { ProductSummary } from "~/lib/types";
@@ -21,9 +22,10 @@ const STANDINGS = [
 ];
 
 export default function ProductsPage() {
+  const signed = useSigned();
   const [params, setParams] = useSearchParams<{ q?: string; standing?: string; page?: string }>();
   const page = () => Number(params.page ?? 1);
-  const [list, { refetch }] = createResource(() => ({ q: params.q ?? "", standing: params.standing ?? "", page: page() }), (k) => products.list({ ...k, pageSize: 25 }));
+  const [list, { refetch }] = createResource(signed(() => ({ q: params.q ?? "", standing: params.standing ?? "", page: page() })), (k) => products.list({ ...k, pageSize: 25 }));
   const columns: ColumnDef<ProductSummary>[] = [
     { id: "product", header: "Product", cell: (c) => c.row.original.title },
     { id: "us", header: "US code" },

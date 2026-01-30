@@ -8,7 +8,7 @@ import { auth, meta, org, rules } from "~/lib/endpoints";
 import { now } from "~/lib/clock";
 import { dateShort } from "~/lib/format";
 import { plainProblem } from "~/lib/problem";
-import { useSession } from "~/lib/session";
+import { useSession, useSigned } from "~/lib/session";
 import type { MemberOut, Role } from "~/lib/types";
 import { ChevronIcon } from "~/ui/Icons";
 import { button, floating } from "~/ui/recipes";
@@ -80,16 +80,17 @@ function Block(props: { id: string; title: string; children: JSX.Element; aside?
 }
 
 export default function SettingsPage() {
+  const signed = useSigned();
   const { can, me, reload } = useSession();
   const navigate = useNavigate();
   const [params] = useSearchParams<{ switch?: string }>();
-  const [settings, { mutate: setSettings, refetch }] = createResource(() => org.settings());
-  const [members, { refetch: refetchMembers }] = createResource(() => org.members());
-  const [roles] = createResource(() => org.roles().catch(() => []));
+  const [settings, { mutate: setSettings, refetch }] = createResource(signed(() => true), () => org.settings());
+  const [members, { refetch: refetchMembers }] = createResource(signed(() => true), () => org.members());
+  const [roles] = createResource(signed(() => true), () => org.roles().catch(() => []));
   const [invitations, { refetch: refetchInv }] = createResource(() => (can("members:manage") ? true : null), () => org.invitations());
-  const [brokers] = createResource(() => org.brokers().catch(() => []));
-  const [ruleList, { refetch: refetchRules }] = createResource(() => rules.list().catch(() => []));
-  const [m] = createResource(() => meta.get().catch(() => null));
+  const [brokers] = createResource(signed(() => true), () => org.brokers().catch(() => []));
+  const [ruleList, { refetch: refetchRules }] = createResource(signed(() => true), () => rules.list().catch(() => []));
+  const [m] = createResource(signed(() => true), () => meta.get().catch(() => null));
   const originLabel = (code: string) => m()?.origins.find((o) => o.key === code)?.label ?? code;
   const expiresIn = (iso: string) => {
     const days = Math.ceil((Date.parse(iso) - now().getTime()) / 86_400_000);

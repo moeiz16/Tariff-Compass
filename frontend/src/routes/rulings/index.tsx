@@ -2,6 +2,7 @@ import { ToggleGroup } from "@ark-ui/solid/toggle-group";
 import { A, useSearchParams } from "@solidjs/router";
 import { For, Show, createResource } from "solid-js";
 import { AppPage } from "~/components/shell/AppPage";
+import { useSigned } from "~/lib/session";
 import { rulings } from "~/lib/endpoints";
 import { dateShort, plural } from "~/lib/format";
 import { Marked } from "~/ui/Marked";
@@ -18,10 +19,11 @@ const STATUS = [
 ];
 
 export default function RulingsPage() {
+  const signed = useSigned();
   const [params, setParams] = useSearchParams<{ q?: string; status?: string; sort?: string; page?: string }>();
   const page = () => Number(params.page ?? 1);
   const [res, { refetch }] = createResource(
-    () => ({ q: params.q ?? "", status: params.status ?? "", sort: params.sort ?? (params.q ? "relevance" : "newest"), page: page() }),
+    signed(() => ({ q: params.q ?? "", status: params.status ?? "", sort: params.sort ?? (params.q ? "relevance" : "newest"), page: page() })),
     (k) => rulings.search({ ...k, pageSize: 20 }),
   );
   return (

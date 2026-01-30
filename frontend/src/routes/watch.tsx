@@ -6,7 +6,7 @@ import { AppPage } from "~/components/shell/AppPage";
 import { waitForJob, watch } from "~/lib/endpoints";
 import { money, timeOfDay, whenLabel } from "~/lib/format";
 import { plainProblem } from "~/lib/problem";
-import { useSession } from "~/lib/session";
+import { useSession, useSigned } from "~/lib/session";
 import type { JobOut, WatchItemOut } from "~/lib/types";
 import { button, chip } from "~/ui/recipes";
 import { EmptyState, ErrorSlip, SkeletonLines } from "~/ui/States";
@@ -136,9 +136,10 @@ function Bulletin(props: { item: WatchItemOut }) {
 }
 
 export default function WatchPage() {
+  const signed = useSigned();
   const { can } = useSession();
   const [params, setParams] = useSearchParams<{ q?: string; group?: string }>();
-  const [data, { refetch }] = createResource(() => ({ q: params.q ?? "" }), (k) => watch.list(k));
+  const [data, { refetch }] = createResource(signed(() => ({ q: params.q ?? "" })), (k) => watch.list(k));
   const [job, setJob] = createSignal<JobOut | null>(null);
   const items = () => {
     const kinds = GROUPS[params.group ?? ""] ?? [];

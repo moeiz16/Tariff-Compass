@@ -14,12 +14,13 @@ import { notify } from "~/ui/Toast";
 
 export default function AnswerPage() {
   const [params, setParams] = useSearchParams<{ id?: string; q?: string; into?: string; from?: string; ev?: string; cite?: string }>();
-  const { can } = useSession();
+  const { can, me } = useSession();
   const broker = useBrokerName();
   const [override, setOverride] = createSignal<AnswerOut | null>(null);
 
   const [answer, { refetch }] = createResource(
-    () => ({ id: params.id, q: params.q, into: params.into, from: params.from, ev: params.ev }),
+    // Wait for the session, so the role check below sees the signed-in person.
+    () => (me() ? { id: params.id, q: params.q, into: params.into, from: params.from, ev: params.ev } : null),
     async (k) => {
       setOverride(null);
       if (k.id) return answerCache.get(k.id) ?? (await answers.get(k.id));

@@ -75,6 +75,14 @@ export function SessionProvider(props: ParentProps) {
   return <Ctx.Provider value={value}>{props.children}</Ctx.Provider>;
 }
 
+/** Wrap a resource source so nothing is requested until someone is signed in (no stray 401s or 403s). */
+export function useSigned() {
+  const { me } = useSession();
+  return <T,>(source: () => T) =>
+    () =>
+      me() ? source() : null;
+}
+
 export function useSession(): SessionCtx {
   const ctx = useContext(Ctx);
   if (!ctx) throw new Error("useSession outside SessionProvider");

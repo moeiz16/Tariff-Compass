@@ -8,7 +8,7 @@ import { docketKeyAction, isTyping } from "~/lib/docket";
 import { review } from "~/lib/endpoints";
 import { money } from "~/lib/format";
 import { plainProblem } from "~/lib/problem";
-import { useSession } from "~/lib/session";
+import { useSession, useSigned } from "~/lib/session";
 import type { DocketFilter, ReviewRow } from "~/lib/types";
 import { CodeDigits } from "~/ui/Code";
 import { Kbd } from "~/ui/Marked";
@@ -36,14 +36,15 @@ const FILTERS: { value: DocketFilter; label: string; count: "all" | "unsure" | "
 ];
 
 export default function ReviewPage() {
+  const signed = useSigned();
   const { can, me } = useSession();
   const [params, setParams] = useSearchParams<{ filter?: string; q?: string; open?: string }>();
   const filter = () => (params.filter as DocketFilter) ?? "all";
-  const [docket, { refetch }] = createResource(() => ({ filter: filter(), q: params.q ?? "" }), (k) => review.docket(k));
+  const [docket, { refetch }] = createResource(signed(() => ({ filter: filter(), q: params.q ?? "" })), (k) => review.docket(k));
   const [sorting, setSorting] = createSignal<SortingState>([{ id: "waiting", desc: false }]);
   const [shown, setShown] = createSignal(15);
   const openId = () => params.open ?? null;
-  const [record, { refetch: refetchRecord }] = createResource(() => openId(), (id) => review.get(id));
+  const [record, { refetch: refetchRecord }] = createResource(signed(() => openId()), (id) => review.get(id));
   const [asking, setAsking] = createSignal(false);
   const [question, setQuestion] = createSignal("");
   const [options, setOptions] = createSignal("");

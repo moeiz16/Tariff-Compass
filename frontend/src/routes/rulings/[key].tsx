@@ -2,6 +2,7 @@ import { Splitter } from "@ark-ui/solid/splitter";
 import { A, useNavigate, useParams, useSearchParams } from "@solidjs/router";
 import { For, Match, Show, Switch, createResource } from "solid-js";
 import { AppPage } from "~/components/shell/AppPage";
+import { useSigned } from "~/lib/session";
 import { rulings } from "~/lib/endpoints";
 import { dateShort } from "~/lib/format";
 import type { CompareOut, RulingDetail } from "~/lib/types";
@@ -202,11 +203,12 @@ function Reader(props: { r: RulingDetail }) {
 }
 
 export default function RulingPage() {
+  const signed = useSigned();
   const params = useParams<{ key: string }>();
   const [search] = useSearchParams<{ answerId?: string; n?: string }>();
   const navigate = useNavigate();
   const [data, { refetch }] = createResource(
-    () => ({ key: params.key, answerId: search.answerId, n: search.n }),
+    signed(() => ({ key: params.key, answerId: search.answerId, n: search.n })),
     async (k) =>
       k.answerId ? { kind: "compare" as const, c: await rulings.compare(k.key, k.answerId, k.n ? Number(k.n) : undefined) } : { kind: "reader" as const, r: await rulings.get(k.key) },
   );

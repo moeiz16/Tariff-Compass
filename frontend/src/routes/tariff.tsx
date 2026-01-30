@@ -3,6 +3,7 @@ import { TreeView, createTreeCollection } from "@ark-ui/solid/tree-view";
 import { useSearchParams } from "@solidjs/router";
 import { For, Show, createMemo, createResource } from "solid-js";
 import { AppPage } from "~/components/shell/AppPage";
+import { useSigned } from "~/lib/session";
 import { tariff } from "~/lib/endpoints";
 import type { Country, TariffLineOut, TariffOutline } from "~/lib/types";
 import { ChevronIcon } from "~/ui/Icons";
@@ -61,10 +62,11 @@ function OutlineNode(props: { node: Node; indexPath: number[]; selected: string 
 }
 
 export default function TariffPage() {
+  const signed = useSigned();
   const [params, setParams] = useSearchParams<{ q?: string; c?: string; line?: string }>();
   const country = () => (params.c === "CA" ? "CA" : "US") as Country;
-  const [hits, { refetch }] = createResource(() => (params.q ? { c: country(), q: params.q } : null), (k) => tariff.search(k.c, k.q));
-  const [outline] = createResource(() => (params.line ? { c: country(), code: params.line } : null), (k) => tariff.line(k.c, k.code));
+  const [hits, { refetch }] = createResource(signed(() => (params.q ? { c: country(), q: params.q } : null)), (k) => tariff.search(k.c, k.q));
+  const [outline] = createResource(signed(() => (params.line ? { c: country(), code: params.line } : null)), (k) => tariff.line(k.c, k.code));
   const tree = createMemo(() => {
     const o = outline();
     if (!o) return null;

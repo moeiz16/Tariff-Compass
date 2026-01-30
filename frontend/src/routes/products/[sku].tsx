@@ -6,7 +6,7 @@ import { download } from "~/lib/api";
 import { products, waitForJob } from "~/lib/endpoints";
 import { dateShort, dateTime, money } from "~/lib/format";
 import { plainProblem } from "~/lib/problem";
-import { useSession } from "~/lib/session";
+import { useSession, useSigned } from "~/lib/session";
 import type { BinderOut, BinderRow, BinderVersion, ExportResult, JobOut } from "~/lib/types";
 import { OkIcon } from "~/ui/Icons";
 import { button } from "~/ui/recipes";
@@ -169,10 +169,11 @@ function ExportButtons(props: { sku: string }) {
 }
 
 export default function BinderPage() {
+  const signed = useSigned();
   const params = useParams<{ sku: string }>();
   const navigate = useNavigate();
   const { can } = useSession();
-  const [binder, { refetch }] = createResource(() => params.sku, (sku) => products.binder(sku));
+  const [binder, { refetch }] = createResource(signed(() => params.sku), (sku) => products.binder(sku));
   return (
     <AppPage
       title={binder()?.product.title ?? "Binder"}
