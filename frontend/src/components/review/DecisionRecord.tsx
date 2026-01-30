@@ -281,7 +281,7 @@ export function DecisionRecordView(props: {
               onInput={(e) => setReason(e.currentTarget.value)}
               aria-invalid={!!errors().reason}
               aria-describedby={errors().reason ? `reason-err-${r().row.id}` : undefined}
-              placeholder="Spec sheet says air-insulated, not vacuum-sealed…"
+              placeholder="What the facts or the ruling show, in a sentence a colleague would accept…"
               class="mt-1 min-h-[96px] w-full rounded-[var(--radius-box)] border-[1.5px] border-ink bg-paper px-3 py-2 text-[15.5px] leading-[1.5]"
             />
             <Show when={errors().reason}>

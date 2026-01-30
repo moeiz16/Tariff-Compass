@@ -15,7 +15,8 @@ import { notify } from "~/ui/Toast";
 export function LabPage(props: { n?: number }) {
   const { me, can } = useSession();
   const navigate = useNavigate();
-  const [overview, { refetch: refetchLab }] = createResource(() => lab.get());
+  // Never ask for what the role can't see: no lab:read, no request.
+  const [overview, { refetch: refetchLab }] = createResource(() => (can("lab:read") ? true : null), () => lab.get());
   const roundN = () => props.n ?? overview()?.candidate ?? overview()?.live ?? null;
   const [round, { mutate, refetch }] = createResource(roundN, (n) => lab.round(n));
   const [job, setJob] = createSignal<JobOut | null>(null);

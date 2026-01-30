@@ -19,6 +19,12 @@ interface MatrixRow {
   cell: (v: BinderVersion) => JSX.Element;
 }
 
+/** The retention sentence without a repeated "Kept until <date>:" lead (the date is already shown above it). */
+function retention(note: string): string {
+  const s = note.replace(/^Kept until [^:]+:\s*/i, "");
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function ditto(v: BinderVersion, key: MatrixRow["key"]): boolean {
   return v.n > 1 && key !== "fingerprint" && !v.changed.includes(key as BinderRow);
 }
@@ -210,7 +216,7 @@ export default function BinderPage() {
                         Kept until <b class="text-ink">{dateShort(b().keptUntil)}</b>
                       </span>
                     </p>
-                    <p class="mt-1 text-[14px] text-muted">{b().retentionNote}</p>
+                    <p class="mt-1 text-[14px] text-muted">{retention(b().retentionNote)}</p>
                   </div>
                   <div class="flex flex-col items-end gap-3 max-lg:items-start">
                     <Show when={b().approval}>

@@ -86,7 +86,7 @@ export const tabs = tv({
 export const segment = tv({
   slots: {
     root: "relative inline-flex rounded-[var(--radius-btn)] border-[1.5px] border-ink bg-paper p-0 overflow-hidden",
-    item: "relative z-[1] cursor-pointer px-3.5 py-1.5 text-[14.5px] font-[600] text-ink data-[state=checked]:text-paper border-l border-rule first:border-l-0 data-[focus-visible]:outline data-[focus-visible]:outline-3 data-[focus-visible]:outline-hi",
+    item: "relative z-[1] cursor-pointer px-3.5 py-1.5 text-[14.5px] font-[600] text-ink data-[state=checked]:bg-ink data-[state=checked]:text-paper border-l border-rule first:border-l-0 data-[focus-visible]:outline data-[focus-visible]:outline-3 data-[focus-visible]:outline-hi",
     indicator: "absolute z-0 bg-ink left-[var(--left)] top-[var(--top)] w-[var(--width)] h-[var(--height)] transition-[left,width] duration-200",
   },
 });

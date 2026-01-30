@@ -1,4 +1,5 @@
 import { useSearchParams } from "@solidjs/router";
+import { useSession } from "~/lib/session";
 import { For, Show, createResource, createSignal } from "solid-js";
 import { AppPage } from "~/components/shell/AppPage";
 import { download } from "~/lib/api";
@@ -16,7 +17,8 @@ import { notify } from "~/ui/Toast";
 export default function ActivityPage() {
   const [params, setParams] = useSearchParams<{ actor?: string; page?: string }>();
   const page = () => Number(params.page ?? 1);
-  const [rows, { refetch }] = createResource(() => ({ actor: params.actor ?? "", page: page() }), (k) => audit.list({ ...k, pageSize: 25 }));
+  const { can } = useSession();
+  const [rows, { refetch }] = createResource(() => (can("audit:read") ? { actor: params.actor ?? "", page: page() } : null), (k) => audit.list({ ...k, pageSize: 25 }));
   const [chain, setChain] = createSignal<ChainOut | null>(null);
   const [checking, setChecking] = createSignal(false);
   const verify = async () => {

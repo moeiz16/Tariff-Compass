@@ -24,6 +24,8 @@ export default function AnswerPage() {
       setOverride(null);
       if (k.id) return answerCache.get(k.id) ?? (await answers.get(k.id));
       if (!k.q && !k.ev) return null;
+      if (!can("classify:run")) return null; // the role reads answers but doesn't classify: no request
+
       const a = await answers.classify({
         text: k.q ?? "",
         madeIn: k.from ?? "CN",
@@ -124,7 +126,7 @@ export default function AnswerPage() {
             </div>
             <div class="gm-body">
               <EmptyState
-                title="Ask about a product"
+                title={params.q && !can("classify:run") ? "Your role reads answers but doesn't classify" : "Ask about a product"}
                 action={
                   <Show when={recent()?.recent.length}>
                     <A href={`/answer?id=${recent()!.recent[0]!.id}`} class={button({ tone: "ghost", size: "sm" })}>

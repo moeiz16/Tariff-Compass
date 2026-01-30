@@ -15,6 +15,13 @@ import { Brand, Wordmark, type NeedleState } from "~/ui/Compass";
 import { button } from "~/ui/recipes";
 import { EmptyState, ErrorSlip } from "~/ui/States";
 
+/** The public demo knows only the sample products; don't send text that shares no word with any of them. */
+function knownToDemo(text: string, samples: { title: string; query: string }[]): boolean {
+  const words = (s: string) => new Set(s.toLowerCase().match(/[a-z]{4,}/g) ?? []);
+  const asked = words(text);
+  return samples.some((s) => [...words(`${s.title} ${s.query}`)].some((w) => asked.has(w)));
+}
+
 const wait = (ms: number) => new Promise((r) => setTimeout(r, reducedMotion() ? 0 : ms));
 
 function TopLinks() {
@@ -66,6 +73,12 @@ export default function Landing() {
     requestAnimationFrame(() => Flip.from(state, { targets: "[data-flip-id=box]", duration: 0.46, ease: "power3.out" }));
   };
 
+  const classifyPublic = async (text: string) => {
+    const known = samples() ?? (await publicApi.samples().catch(() => []));
+    if (known.length && !knownToDemo(text, known)) throw new ApiProblem({ type: "about:blank", title: "Not in the demo", status: 404, code: "not_in_demo", detail: "" });
+    return publicApi.classify(text);
+  };
+
   const run = async (kind: "sample" | "text", value: string) => {
     if (busy()) return;
     setBusy(true);
@@ -80,10 +93,10 @@ export default function Landing() {
       const a =
         kind === "sample"
           ? await publicApi.sample(value).catch((e) => {
-              if (e instanceof ApiProblem && e.status === 404) return publicApi.classify(value);
+              if (e instanceof ApiProblem && e.status === 404) return classifyPublic(value);
               throw e;
             })
-          : await publicApi.classify(value);
+          : await classifyPublic(value);
       const { winner, losers } = narrowFrom(a);
       setNarrow({ phase: "candidates", winner, losers });
       setCaption(`${losers.length + 1} chapters could hold it…`);
@@ -109,7 +122,10 @@ export default function Landing() {
   onMount(() => {
     const key = params.q;
     // A sample key ("tumbler", "bike-light") opens that sample; anything else is classified as text.
-    if (key) void run(/^[a-z][a-z-]*$/.test(key) ? "sample" : "text", key);
+    if (key) void (async () => {
+      const list = await publicApi.samples().catch(() => []);
+      void run(list.some((s) => s.key === key) ? "sample" : "text", key);
+    })();
   });
 
   const reset = () => {
