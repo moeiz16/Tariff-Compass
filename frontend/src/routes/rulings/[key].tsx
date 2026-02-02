@@ -49,7 +49,10 @@ function Compare(props: { c: CompareOut; answerId: string }) {
           </h1>
           <blockquote class="mt-4 border-l-[3px] border-ink pl-4">
             <p class="font-law text-[17px] leading-[1.55]">{props.c.ruleQuote}</p>
-            <p class="mt-1 text-[14px] text-muted">19 CFR 177.9(b)(2): a classification ruling applies only to articles identical to the ones it describes.</p>
+            <p class="mt-1 text-[14px] text-muted">
+              {props.c.ruleQuote.includes("177.9") ? "" : "19 CFR 177.9(b)(2): "}A classification ruling applies only to articles identical to the ones it describes, so the facts below are
+              compared one by one.
+            </p>
           </blockquote>
         </div>
       </section>
