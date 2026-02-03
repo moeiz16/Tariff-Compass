@@ -1,0 +1,86 @@
+{
+ "about": "Machine-readable application rules for the layers in layers.json, as of 2026-02-19. Every list below restates the scope that layers.json records (verified line by line against the 2026 HTSUS Revision 3 Chapter 99 notes, USTR notices and the Canada Gazette); a line not listed is never assumed to be on a list. Rates are fractions of value. 'periods' carry only verified rates; dates outside them are refused.",
+ "us": {
+  "mfnSource": "HTSUS 2026 Revision 3, column 1 General",
+  "usmcaQuestions": [
+   {"key": "usmca_origin", "question": "Does the product meet the USMCA rule of origin for its tariff line (General Note 11)?"},
+   {"key": "usmca_certificate", "question": "Do you hold a certification of origin with the minimum data elements (19 CFR 182.12)?"},
+   {"key": "usmca_claim", "question": "Will the preference be claimed at entry (special program indicator S or S+)?"}
+  ],
+  "usmcaCountries": ["MX", "CA"],
+  "euCountries": ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE"],
+  "chinaCountries": ["CN", "HK", "MO"],
+  "reciprocalCountryRates": {"VN": {"layer": "US-IEEPA-RECIP-VN", "rate": "0.20", "chapter99": "9903.02.69"}},
+  "section301": {
+   "US-301-L1-L3": {"rate": "0.25", "chapter99": "9903.88.03", "lines": ["85044070", "85044085", "85044095", "42021221", "42021281", "42022215", "42022281", "42029208", "42029231", "42029245", "42029291", "73239990"]},
+   "US-301-L4A": {"rate": "0.075", "chapter99": "9903.88.15", "lines": ["85121020", "85121040", "85182100", "85182200", "61102020", "61091000", "61103030", "62052020", "96170040", "73239400", "76151030", "76151091", "39241020"]},
+   "US-301-L4B-NOT-APPLIED": {"rate": "0", "chapter99": "9903.88.16", "lines": ["96170010", "96170030", "96170060", "85131020", "85131040", "73239300", "73239930", "76151071", "39241040"]},
+   "US-301-4YR-BATTERY": {"rate": "0.25", "chapter99": "9903.91.06", "prefixes": ["850760"]}
+  },
+  "section301Exclusions": [
+   {"code": "4202923120", "chapter99": "9903.88.69", "key": "s301_backpack_exclusion", "question": "Is it a backpack of man-made fibres measuring 35–75 cm high, 19–34 cm wide and 5–26 cm deep (the 9903.88.69 exclusion)?", "plain": "Excluded from the List 3 duty under 9903.88.69 (extended for one year from 10 Nov 2025)."}
+  ],
+  "section232": {
+   "US-232-STEEL": {"rate": "0.50", "onContent": true, "prefixes": {"7323": "9903.81.90"}, "material": "steel"},
+   "US-232-ALUMINIUM": {"rate": "0.50", "onContent": true, "prefixes": {"761510": "9903.85.07"}, "material": "aluminium"}
+  },
+  "periods": {
+   "US-IEEPA-CN-FENTANYL": [{"from": "2025-11-10", "to": null, "rate": "0.10", "chapter99": "9903.01.24"}],
+   "US-IEEPA-RECIP-CN": [{"from": "2025-11-10", "to": null, "rate": "0.10", "chapter99": "9903.01.25"}],
+   "US-IEEPA-RECIP-VN": [{"from": "2025-08-07", "to": null, "rate": "0.20", "chapter99": "9903.02.69"}],
+   "US-IEEPA-RECIP-EU": [{"from": "2025-08-07", "to": null, "rate": "0.15", "chapter99": "9903.02.20"}],
+   "US-IEEPA-RECIP-BASE": [{"from": "2025-04-05", "to": null, "rate": "0.10", "chapter99": "9903.01.25"}],
+   "US-IEEPA-MX": [{"from": "2025-03-04", "to": null, "rate": "0.25", "chapter99": "9903.01.01"}],
+   "US-IEEPA-CA": [{"from": "2025-08-01", "to": null, "rate": "0.35", "chapter99": "9903.01.10"}],
+   "US-301-4YR-BATTERY": [{"from": "2026-01-01", "to": null, "rate": "0.25", "chapter99": "9903.91.06"}],
+   "US-MPF": [{"from": "2025-10-01", "to": "2026-09-30", "rate": "0.003464", "min": "33.58", "max": "651.50"}],
+   "US-HMF": [{"from": "1998-07-01", "to": null, "rate": "0.00125"}]
+  },
+  "sources": {
+   "US-MFN": "HTSUS 2026 Revision 3",
+   "US-IEEPA-CN-FENTANYL": "EO 14357 (90 FR 50725); HTSUS 9903.01.24",
+   "US-IEEPA-RECIP-CN": "EO 14358 (90 FR 50729); HTSUS 9903.01.25",
+   "US-IEEPA-RECIP-VN": "EO 14326 (90 FR 37963); HTSUS 9903.02.69",
+   "US-IEEPA-RECIP-EU": "EO 14326 (90 FR 37963), Annex I; HTSUS 9903.02.19/.20",
+   "US-IEEPA-RECIP-BASE": "EO 14257 (90 FR 15041); HTSUS 9903.01.25",
+   "US-IEEPA-MX": "EO 14194 as amended; HTSUS 9903.01.01",
+   "US-IEEPA-CA": "EO 14193 as amended; HTSUS 9903.01.10",
+   "US-301-L1-L3": "USTR Section 301, Lists 1–3; HTSUS Ch. 99 note 20",
+   "US-301-L4A": "USTR Section 301, List 4A (85 FR 3741); HTSUS 9903.88.15",
+   "US-301-L4B-NOT-APPLIED": "USTR Section 301, List 4B (suspended); HTSUS 9903.88.16",
+   "US-301-4YR-BATTERY": "USTR four-year review (89 FR 76581); HTSUS 9903.91.06",
+   "US-232-STEEL": "Proclamation 10947 (90 FR 24199); HTSUS 9903.81.90",
+   "US-232-ALUMINIUM": "Proclamation 10947 (90 FR 24199); HTSUS 9903.85.07",
+   "US-DE-MINIMIS": "EO 14324",
+   "US-MPF": "19 U.S.C. 58c; CBP Dec. 25-10 (90 FR 34665)",
+   "US-HMF": "26 U.S.C. 4461; 19 CFR 24.24",
+   "US-USMCA-PREF": "USMCA; HTSUS General Note 11; 19 CFR Part 182"
+  }
+ },
+ "ca": {
+  "mfnSource": "Customs Tariff T2026, MFN column",
+  "preferences": {
+   "MX": {"layer": "CA-PREF-CUSMA-MXT", "treatment": "MXT", "key": "cusma_origin", "question": "Does the product originate under CUSMA rules of origin, with a certification of origin on file?"},
+   "VN": {"layer": "CA-PREF-CPTPP-CPTPT", "treatment": "CPTPT", "key": "cptpp_origin", "question": "Does the product originate under CPTPP rules of origin (for apparel, the yarn-forward rule), with proof of origin?"},
+   "EU": {"layer": "CA-PREF-CETA-CEUT", "treatment": "CEUT", "key": "ceta_origin", "question": "Does the product originate under CETA rules of origin, with an origin declaration?"}
+  },
+  "surtaxes": {
+   "CA-SURTAX-CN-2024-STEEL-ALU": {"rate": "0.25", "origins": ["CN"], "prefixes": ["7206", "7207", "7208", "7209", "7210", "7211", "7212", "7213", "7214", "7215", "7216", "7217", "7218", "7219", "7220", "7221", "7222", "7223", "7224", "7225", "7226", "7227", "7228", "7229", "730110", "730210", "730240", "730290", "7304", "7305", "7306", "7601", "7604", "7605", "7606", "7607", "7608", "7609"]},
+   "CA-SURTAX-CN-2024-EV": {"rate": "1.00", "origins": ["CN"], "prefixes": ["870380"]},
+   "CA-SURTAX-STEEL-DERIV": {"rate": "0.25", "originsExcept": ["CA"], "prefixes": ["39252000", "72169100", "7308", "7312", "7313", "7314", "7315", "7317", "7318", "7320", "7325", "7326", "76141000", "8302", "9401", "9403", "9405", "9406"], "notStackedOn": ["CA-SURTAX-CN-2024-STEEL-ALU"]}
+  },
+  "periods": {
+   "CA-GST": [{"from": "2008-01-01", "to": null, "rate": "0.05"}]
+  },
+  "sources": {
+   "CA-MFN-T2026": "Customs Tariff T2026 (CBSA Customs Notice 25-31)",
+   "CA-PREF-CUSMA-MXT": "Customs Tariff, Mexico Tariff (CUSMA)",
+   "CA-PREF-CETA-CEUT": "Customs Tariff, CETA EU Tariff",
+   "CA-PREF-CPTPP-CPTPT": "Customs Tariff, CPTPP Tariff",
+   "CA-SURTAX-CN-2024-STEEL-ALU": "China Surtax Order (2024), SOR/2024-187, Schedule 2",
+   "CA-SURTAX-CN-2024-EV": "China Surtax Order (2024), SOR/2024-187, Schedule 1",
+   "CA-SURTAX-STEEL-DERIV": "Steel Derivative Goods Surtax Order, SOR/2025-267",
+   "CA-GST": "Excise Tax Act, Part IX; CBSA Memorandum D13-2-5"
+  }
+ }
+}
