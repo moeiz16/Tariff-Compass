@@ -1,6 +1,6 @@
 """Download the public data into data/ (git-ignored). Stdlib only; polite (one request at a time, pauses).
 
-    python scripts/fetch_data.py [rulings] [hts] [ca] [--since 2014-01-01] [--chapters 39,42,61,...]
+    python scripts/fetch_data.py [rulings] [hts] [rev3] [ca] [--since 2014-01-01] [--chapters 39,42,61,...]
 
 - rulings: CBP CROSS rulings (NY and HQ letters) from a public mirror of CROSS on Hugging Face
   (`orlandowhite/hts-cross-rulings`, ~290 MB JSON). CROSS itself has no bulk export and its search API refuses
@@ -10,6 +10,10 @@
 - hts: the USITC HTS JSON export, chapter by chapter (exportList). USITC serves JSON for the current revision
   only; the release name is recorded so the snapshot is explicit (docs/DATA.md explains how the demo pins
   2026 Revision 3). Output: data/hts/hts_current.jsonl + data/hts/release.json.
+- rev3: the 2026 HTSUS Revision 3 chapter PDFs (archived revisions are PDF only). Every eight-digit line of the
+  current JSON is checked against the Revision 3 text of its chapter: present or not, and whether its column 1
+  General rate is printed beside it. Output: data/hts/hts_2026_rev3.jsonl (the current JSON restricted to lines
+  present in Revision 3) and data/hts/rev3_check.json (every difference, listed).
 - ca: CBSA Customs Tariff T2026 (effective 1 Jan 2026), chapter HTML pages parsed into
   data/ca/customs_tariff_t2026.jsonl (tariff item, suffix, description, unit, MFN, preferential treatments).
 """
@@ -200,6 +204,101 @@ def fetch_hts(chapters: list[int]) -> None:
     print(f"hts: {n} lines from release {current.get('name')} → {out}")
 
 
+REV3_PDF = "https://hts.usitc.gov/reststop/file?release=2026HTSRev3&filename=Chapter%20{ch}"
+PDF_CODE = re.compile(r"\d*(\d{4}\.\d{2}\.\d{2})")
+PDF_RATE = re.compile(r"\d+(?:\.\d+)?%|Free")
+
+
+def _pdf_text(path: Path) -> str:
+    from pypdf import PdfReader  # backend dependency; run with the backend venv
+
+    return "\n".join((page.extract_text() or "") for page in PdfReader(str(path)).pages)
+
+
+def check_rev3(chapters: list[int]) -> None:
+    """Pin the schedule to 2026 Revision 3: keep the current JSON's lines that Revision 3 prints, list the rest."""
+    src = DATA / "hts" / "hts_current.jsonl"
+    rows = [json.loads(line) for line in src.open(encoding="utf-8")]
+    pdf_dir = DATA / "hts" / "rev3"
+    report: dict = {"release": "2026HTSRev3", "chapters": {}, "missingInRev3": [], "onlyInRev3": [], "rateNotSeen": []}
+    rev3_codes: dict[str, dict[str, list[str]]] = {}
+    for ch in chapters:
+        if ch == 77:
+            continue
+        pdf = pdf_dir / f"chapter-{ch:02d}.pdf"
+        if not pdf.exists():
+            get(REV3_PDF.format(ch=ch), pdf, timeout=300)
+            time.sleep(PAUSE)
+        text = _pdf_text(pdf)
+        codes: dict[str, list[str]] = {}
+        matches = list(PDF_CODE.finditer(text))
+        for i, m in enumerate(matches):
+            window = text[m.end() : matches[i + 1].start() if i + 1 < len(matches) else m.end() + 400]
+            codes.setdefault(m.group(1), []).extend(PDF_RATE.findall(window[:400]))
+        rev3_codes[f"{ch:02d}"] = codes
+    kept = 0
+    seen_current: set[str] = set()
+    out = DATA / "hts" / "hts_2026_rev3.jsonl"
+    with out.open("w", encoding="utf-8") as fh:
+        for row in rows:
+            ch = row["chapter"]
+            code = row.get("htsno") or ""
+            eight = code[:10] if len(code) >= 10 else ""
+            if ch not in rev3_codes:
+                continue
+            if eight:
+                seen_current.add(eight)
+                if eight not in rev3_codes[ch]:
+                    report["missingInRev3"].append(code)
+                    continue
+                general = (row.get("general") or "").strip()
+                if len(code) == 10 and general and general not in rev3_codes[ch][eight]:
+                    report["rateNotSeen"].append({"code": code, "general": general})
+            fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+            kept += 1
+    for ch, codes in rev3_codes.items():
+        only = sorted(c for c in codes if c not in seen_current and c[:2] == ch)
+        report["onlyInRev3"].extend(only)
+        report["chapters"][ch] = {"rev3EightDigit": len(codes)}
+    report["kept"] = kept
+    demo = REPO / "eval" / "sets" / "landed_cost_20.json"
+    if demo.exists():
+        codes = sorted({p["code"] for p in json.loads(demo.read_text())["products"] if p["country"] == "US"})
+        report["demoLines"] = check_demo_lines(codes)
+    (DATA / "hts" / "rev3_check.json").write_text(json.dumps(report, indent=1))
+    print(
+        f"rev3: kept {kept} lines; {len(report['missingInRev3'])} current lines not in Rev 3; "
+        f"{len(report['onlyInRev3'])} Rev 3 lines not in the current JSON; "
+        f"{len(report['rateNotSeen'])} rates not seen beside their line → {out}"
+    )
+
+
+def check_demo_lines(codes: list[str]) -> dict:
+    """Each ten-digit line the demo relies on, read in the Revision 3 PDF of its chapter: the eight-digit number,
+    then its statistical suffix before the next eight-digit number (a '00' suffix prints glued to the number)."""
+    out = {}
+    texts: dict[str, str] = {}
+    for code in codes:
+        d = re.sub(r"\D", "", code)
+        ch = d[:2]
+        if ch not in texts:
+            texts[ch] = _pdf_text(DATA / "hts" / "rev3" / f"chapter-{ch}.pdf")
+        t = texts[ch]
+        eight = f"{d[:4]}.{d[4:6]}.{d[6:8]}"
+        found = False
+        for m in re.finditer(re.escape(eight), t):
+            nxt = PDF_CODE.search(t, m.end())
+            window = t[max(m.start() - 2, 0) : nxt.start() if nxt else m.end() + 3000]
+            if (d[8:] == "00" and t[max(m.start() - 2, 0) : m.start()] == "00") or re.search(
+                rf"(?<![\d.]){d[8:]}(?![\d.%])", window[len(eight) + 2 :]
+            ):
+                found = True
+            if found:
+                break
+        out[code] = found
+    return out
+
+
 ROW_RE = re.compile(r"<tr>(.*?)</tr>", re.S)
 CELL_RE = re.compile(r"<td[^>]*>(.*?)</td>", re.S)
 
@@ -244,7 +343,7 @@ def fetch_ca(chapters: list[int]) -> None:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("what", nargs="*", default=["rulings", "hts", "ca"])
+    ap.add_argument("what", nargs="*", default=["rulings", "hts", "rev3", "ca"])
     ap.add_argument("--since", default="2014-01-01")
     ap.add_argument("--chapters", default="", help="comma-separated chapters (default: all 1–97)")
     a = ap.parse_args()
@@ -253,6 +352,8 @@ def main() -> int:
         fetch_rulings(date.fromisoformat(a.since))
     if "hts" in a.what:
         fetch_hts(chapters)
+    if "rev3" in a.what:
+        check_rev3(chapters)
     if "ca" in a.what:
         fetch_ca(chapters)
     return 0

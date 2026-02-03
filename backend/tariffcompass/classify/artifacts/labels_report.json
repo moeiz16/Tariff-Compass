@@ -1,0 +1,63 @@
+{
+ "read": 18136,
+ "duplicates": 0,
+ "with_holding": 13456,
+ "no_holding": 4680,
+ "holding_agrees_heading": 12947,
+ "holding_agrees_six": 12849,
+ "holding_agrees_ten": 10944,
+ "disagree_heading": 509,
+ "multi_subheading": 1422,
+ "file_ref_chapter_disagrees": 383,
+ "rekeyed_from_letterhead": 890,
+ "collection_mismatch": 1137,
+ "letterhead_differs": 493,
+ "letterhead_conflicts": 0,
+ "wrong_letter_under_number": 19,
+ "noted_records": 385,
+ "revoked": 309,
+ "modified": 102,
+ "short_description": 11,
+ "labelled": 10556,
+ "citable": 16020,
+ "kept_searchable": 18135,
+ "examples": {
+  "holding_disagrees_with_mirror": [
+   "NY N267420",
+   "NY N267145",
+   "NY N266909",
+   "NY N265735",
+   "HQ H088427"
+  ],
+  "letterhead_number_differs": [
+   "HQ H262313 (letterhead H261313)",
+   "HQ H202118 (letterhead H201118)",
+   "HQ H253807 (letterhead H243807)",
+   "HQ H250334 (letterhead H247720)",
+   "HQ H286458 (letterhead H286548)"
+  ],
+  "collection_differs_from_letter": [
+   "HQ H305251",
+   "HQ ?H321597",
+   "HQ ?H301814",
+   "HQ H310903",
+   "HQ H309758"
+  ],
+  "rekeyed_from_letterhead": [
+   "NY N323184 → HQ H321597",
+   "NY N322886 → HQ H305251",
+   "NY N312528 → HQ H301814",
+   "NY N312477 → HQ H263912",
+   "NY N311823 → HQ H301903"
+  ],
+  "wrong_letter_under_number": [
+   "NY N257998 (filed letter: The tariff classification of reusable ice packs from China)",
+   "NY N288630 (filed letter: The tariff classification of textile evaporative cooling pro)",
+   "NY N283364 (filed letter: The tariff classification of stainless steel reinforce yarn )",
+   "HQ H262551 (filed letter: Coastwise Transportation; 46 U.S.C)",
+   "HQ H309672 (filed letter: Coastwise Transportation; Wind Turbines; 46 U.S.C)"
+  ]
+ },
+ "snapshot": "746c9c200c701a678a84184d4e12e887170de848d3332264d54598bfc17a6d47",
+ "source": "orlandowhite/hts-cross-rulings (mirror of CBP CROSS), NY and HQ letters since 2014"
+}
