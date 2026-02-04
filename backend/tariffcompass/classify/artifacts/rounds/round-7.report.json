@@ -1,0 +1,767 @@
+{
+ "round_n": 7,
+ "data_snapshot": "03b42515d528b22532c8d9a09c5aadf339803252c9774e0c298ee6f5d9eb7e5b",
+ "test_window": [
+  "2025-01-02",
+  "2025-08-01"
+ ],
+ "by_depth": [
+  {
+   "system": "word_matching",
+   "chapter": 0.7815,
+   "heading": 0.6536,
+   "subheading": 0.4753,
+   "full_code": 0.3205,
+   "n": 1094
+  },
+  {
+   "system": "unoptimised",
+   "chapter": 0.7404,
+   "heading": 0.6152,
+   "subheading": 0.3483,
+   "full_code": 0.1344,
+   "n": 1094
+  },
+  {
+   "system": "optimised",
+   "chapter": 0.7404,
+   "heading": 0.6152,
+   "subheading": 0.4068,
+   "full_code": 0.2425,
+   "n": 1094
+  },
+  {
+   "system": "live",
+   "chapter": 0.7495,
+   "heading": 0.6271,
+   "subheading": 0.4159,
+   "full_code": 0.2528,
+   "n": 1094
+  }
+ ],
+ "by_chapter": [
+  {
+   "chapter": "84",
+   "title": "Nuclear reactors, boilers, machinery and mechanical appliances",
+   "tested": 119,
+   "before": 0.5546,
+   "after": 0.563,
+   "newRulings": 119,
+   "moving": false
+  },
+  {
+   "chapter": "95",
+   "title": "Toys, games and sports equipment",
+   "tested": 117,
+   "before": 0.9402,
+   "after": 0.9402,
+   "newRulings": 117,
+   "moving": false
+  },
+  {
+   "chapter": "85",
+   "title": "Electrical machinery and equipment; sound and television equipment",
+   "tested": 94,
+   "before": 0.7872,
+   "after": 0.7766,
+   "newRulings": 94,
+   "moving": false
+  },
+  {
+   "chapter": "39",
+   "title": "Plastics and articles thereof",
+   "tested": 72,
+   "before": 0.75,
+   "after": 0.6667,
+   "newRulings": 72,
+   "moving": true
+  },
+  {
+   "chapter": "90",
+   "title": "Optical, photographic, measuring, medical or surgical instruments",
+   "tested": 58,
+   "before": 0.5,
+   "after": 0.5,
+   "newRulings": 58,
+   "moving": false
+  },
+  {
+   "chapter": "73",
+   "title": "Articles of iron or steel",
+   "tested": 40,
+   "before": 0.35,
+   "after": 0.325,
+   "newRulings": 40,
+   "moving": false
+  },
+  {
+   "chapter": "87",
+   "title": "Vehicles other than railway or tramway",
+   "tested": 39,
+   "before": 0.4359,
+   "after": 0.4359,
+   "newRulings": 39,
+   "moving": false
+  },
+  {
+   "chapter": "30",
+   "title": "Pharmaceutical products",
+   "tested": 39,
+   "before": 0.8974,
+   "after": 0.8974,
+   "newRulings": 39,
+   "moving": false
+  },
+  {
+   "chapter": "38",
+   "title": "Miscellaneous chemical products",
+   "tested": 35,
+   "before": 0.4857,
+   "after": 0.4571,
+   "newRulings": 35,
+   "moving": false
+  },
+  {
+   "chapter": "64",
+   "title": "Footwear, gaiters and the like",
+   "tested": 33,
+   "before": 0.7576,
+   "after": 0.7576,
+   "newRulings": 33,
+   "moving": false
+  },
+  {
+   "chapter": "44",
+   "title": "Wood and articles of wood",
+   "tested": 27,
+   "before": 0.5185,
+   "after": 0.5185,
+   "newRulings": 27,
+   "moving": false
+  },
+  {
+   "chapter": "94",
+   "title": "Furniture; bedding, mattresses, cushions; lamps and lighting fittings; prefabricated buildings",
+   "tested": 27,
+   "before": 0.7407,
+   "after": 0.7407,
+   "newRulings": 27,
+   "moving": false
+  },
+  {
+   "chapter": "42",
+   "title": "Articles of leather; handbags and travel goods",
+   "tested": 26,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 26,
+   "moving": false
+  },
+  {
+   "chapter": "49",
+   "title": "Printed books, newspapers, pictures",
+   "tested": 25,
+   "before": 0.6,
+   "after": 0.56,
+   "newRulings": 25,
+   "moving": false
+  },
+  {
+   "chapter": "61",
+   "title": "Apparel and clothing accessories, knitted or crocheted",
+   "tested": 24,
+   "before": 0.75,
+   "after": 0.75,
+   "newRulings": 24,
+   "moving": false
+  },
+  {
+   "chapter": "76",
+   "title": "Aluminum and articles thereof",
+   "tested": 23,
+   "before": 0.087,
+   "after": 0.087,
+   "newRulings": 23,
+   "moving": false
+  },
+  {
+   "chapter": "63",
+   "title": "Other made-up textile articles",
+   "tested": 21,
+   "before": 0.6667,
+   "after": 0.619,
+   "newRulings": 21,
+   "moving": false
+  },
+  {
+   "chapter": "83",
+   "title": "Miscellaneous articles of base metal",
+   "tested": 21,
+   "before": 0.5714,
+   "after": 0.5714,
+   "newRulings": 21,
+   "moving": false
+  },
+  {
+   "chapter": "71",
+   "title": "Pearls, precious stones, precious metals; jewelry; coin",
+   "tested": 19,
+   "before": 0.3684,
+   "after": 0.3158,
+   "newRulings": 19,
+   "moving": true
+  },
+  {
+   "chapter": "48",
+   "title": "Paper and paperboard",
+   "tested": 18,
+   "before": 0.7778,
+   "after": 0.7222,
+   "newRulings": 18,
+   "moving": true
+  },
+  {
+   "chapter": "82",
+   "title": "Tools, implements, cutlery, spoons and forks, of base metal",
+   "tested": 15,
+   "before": 0.4,
+   "after": 0.4,
+   "newRulings": 15,
+   "moving": false
+  },
+  {
+   "chapter": "29",
+   "title": "Organic chemicals",
+   "tested": 13,
+   "before": 0.2308,
+   "after": 0.2308,
+   "newRulings": 13,
+   "moving": false
+  },
+  {
+   "chapter": "32",
+   "title": "Tanning or dyeing extracts; paints and varnishes; inks",
+   "tested": 13,
+   "before": 0.6923,
+   "after": 0.6923,
+   "newRulings": 13,
+   "moving": false
+  },
+  {
+   "chapter": "62",
+   "title": "Apparel and clothing accessories, not knitted or crocheted",
+   "tested": 12,
+   "before": 0.4167,
+   "after": 0.4167,
+   "newRulings": 12,
+   "moving": false
+  },
+  {
+   "chapter": "96",
+   "title": "Miscellaneous manufactured articles",
+   "tested": 11,
+   "before": 0.2727,
+   "after": 0.2727,
+   "newRulings": 11,
+   "moving": false
+  },
+  {
+   "chapter": "21",
+   "title": "Miscellaneous edible preparations",
+   "tested": 10,
+   "before": 0.8,
+   "after": 0.8,
+   "newRulings": 10,
+   "moving": false
+  },
+  {
+   "chapter": "59",
+   "title": "Impregnated, coated or laminated textile fabrics",
+   "tested": 10,
+   "before": 0.7,
+   "after": 0.6,
+   "newRulings": 10,
+   "moving": true
+  },
+  {
+   "chapter": "33",
+   "title": "Essential oils; perfumery and cosmetics",
+   "tested": 9,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 9,
+   "moving": false
+  },
+  {
+   "chapter": "19",
+   "title": "Preparations of cereals, flour, starch or milk",
+   "tested": 9,
+   "before": 0.7778,
+   "after": 0.7778,
+   "newRulings": 9,
+   "moving": false
+  },
+  {
+   "chapter": "40",
+   "title": "Rubber and articles thereof",
+   "tested": 8,
+   "before": 0.5,
+   "after": 0.5,
+   "newRulings": 8,
+   "moving": false
+  },
+  {
+   "chapter": "55",
+   "title": "Man-made staple fibers",
+   "tested": 6,
+   "before": 0.6667,
+   "after": 0.6667,
+   "newRulings": 6,
+   "moving": false
+  },
+  {
+   "chapter": "34",
+   "title": "Soap, washing preparations, waxes, candles",
+   "tested": 6,
+   "before": 0.5,
+   "after": 0.5,
+   "newRulings": 6,
+   "moving": false
+  },
+  {
+   "chapter": "69",
+   "title": "Ceramic products",
+   "tested": 5,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 5,
+   "moving": false
+  },
+  {
+   "chapter": "68",
+   "title": "Articles of stone, plaster, cement, asbestos, mica",
+   "tested": 5,
+   "before": 0.6,
+   "after": 0.6,
+   "newRulings": 5,
+   "moving": false
+  },
+  {
+   "chapter": "20",
+   "title": "Preparations of vegetables, fruit or nuts",
+   "tested": 5,
+   "before": 0.4,
+   "after": 0.4,
+   "newRulings": 5,
+   "moving": false
+  },
+  {
+   "chapter": "28",
+   "title": "Inorganic chemicals",
+   "tested": 4,
+   "before": 0.25,
+   "after": 0.25,
+   "newRulings": 4,
+   "moving": false
+  },
+  {
+   "chapter": "70",
+   "title": "Glass and glassware",
+   "tested": 4,
+   "before": 0.75,
+   "after": 0.75,
+   "newRulings": 4,
+   "moving": false
+  },
+  {
+   "chapter": "56",
+   "title": "Wadding, felt and nonwovens; twine and rope",
+   "tested": 4,
+   "before": 0.75,
+   "after": 0.75,
+   "newRulings": 4,
+   "moving": false
+  },
+  {
+   "chapter": "35",
+   "title": "Albuminoidal substances; glues; enzymes",
+   "tested": 4,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 4,
+   "moving": false
+  },
+  {
+   "chapter": "98",
+   "title": "",
+   "tested": 4,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 4,
+   "moving": false
+  },
+  {
+   "chapter": "22",
+   "title": "Beverages, spirits and vinegar",
+   "tested": 3,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "57",
+   "title": "Carpets and other textile floor coverings",
+   "tested": 3,
+   "before": 0.6667,
+   "after": 0.6667,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "67",
+   "title": "Prepared feathers; artificial flowers",
+   "tested": 3,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "72",
+   "title": "Iron and steel",
+   "tested": 3,
+   "before": 0.6667,
+   "after": 0.6667,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "27",
+   "title": "Mineral fuels, mineral oils",
+   "tested": 3,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "66",
+   "title": "Umbrellas, walking sticks, whips",
+   "tested": 3,
+   "before": 0.6667,
+   "after": 0.6667,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "93",
+   "title": "Arms and ammunition",
+   "tested": 3,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "97",
+   "title": "Works of art, collectors' pieces and antiques",
+   "tested": 3,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "74",
+   "title": "Copper and articles thereof",
+   "tested": 3,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "75",
+   "title": "Nickel and articles thereof",
+   "tested": 3,
+   "before": 0.3333,
+   "after": 0.3333,
+   "newRulings": 3,
+   "moving": false
+  },
+  {
+   "chapter": "03",
+   "title": "Fish and crustaceans, molluscs",
+   "tested": 2,
+   "before": 0.5,
+   "after": 0.5,
+   "newRulings": 2,
+   "moving": false
+  },
+  {
+   "chapter": "23",
+   "title": "Residues from the food industries; animal feed",
+   "tested": 2,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 2,
+   "moving": false
+  },
+  {
+   "chapter": "60",
+   "title": "Knitted or crocheted fabrics",
+   "tested": 2,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 2,
+   "moving": false
+  },
+  {
+   "chapter": "06",
+   "title": "Live trees and other plants",
+   "tested": 2,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 2,
+   "moving": false
+  },
+  {
+   "chapter": "65",
+   "title": "Headgear and parts thereof",
+   "tested": 2,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 2,
+   "moving": false
+  },
+  {
+   "chapter": "58",
+   "title": "Special woven fabrics; lace; embroidery",
+   "tested": 2,
+   "before": 0.5,
+   "after": 0.5,
+   "newRulings": 2,
+   "moving": false
+  },
+  {
+   "chapter": "15",
+   "title": "Animal, vegetable or microbial fats and oils",
+   "tested": 2,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 2,
+   "moving": false
+  },
+  {
+   "chapter": "18",
+   "title": "Cocoa and cocoa preparations",
+   "tested": 2,
+   "before": 0.5,
+   "after": 0.5,
+   "newRulings": 2,
+   "moving": false
+  },
+  {
+   "chapter": "17",
+   "title": "Sugars and sugar confectionery",
+   "tested": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "89",
+   "title": "Ships, boats and floating structures",
+   "tested": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "13",
+   "title": "Lac; gums, resins and other vegetable saps",
+   "tested": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "05",
+   "title": "Products of animal origin, not elsewhere specified",
+   "tested": 1,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "46",
+   "title": "Manufactures of straw; basketware",
+   "tested": 1,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "16",
+   "title": "Preparations of meat, fish or crustaceans",
+   "tested": 1,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "52",
+   "title": "Cotton",
+   "tested": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "01",
+   "title": "Live animals",
+   "tested": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "79",
+   "title": "Zinc and articles thereof",
+   "tested": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "92",
+   "title": "Musical instruments",
+   "tested": 1,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "07",
+   "title": "Edible vegetables",
+   "tested": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "88",
+   "title": "Aircraft, spacecraft",
+   "tested": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "02",
+   "title": "Meat and edible meat offal",
+   "tested": 1,
+   "before": 1.0,
+   "after": 1.0,
+   "newRulings": 1,
+   "moving": false
+  },
+  {
+   "chapter": "26",
+   "title": "Ores, slag and ash",
+   "tested": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "newRulings": 1,
+   "moving": false
+  }
+ ],
+ "calibration": {
+  "strong": {
+   "said": 440,
+   "right": 283
+  },
+  "broker": {
+   "said": 654,
+   "firstGuessWrong": 492
+  }
+ },
+ "citation_precision": 0.9972,
+ "latency_ms": {
+  "programP95": 9.99
+ },
+ "drift_psi": {
+  "newRulings": 1094,
+  "mostMoved": [
+   "61",
+   "84",
+   "95"
+  ],
+  "psi": 0.3405,
+  "sentence": "The mix of chapters in the newest rulings shows a large shift against the training rulings (PSI 0.34)."
+ },
+ "learned": [
+  "Read the product facts before the words: synthetic fill; there is no down (9404.30.80.00, not 9404.30.40.00).",
+  "Read the heading text closely: it is a stove, not 'other' cooking appliances (7321.11.10.30, not 7321.11.10.60).",
+  "Read the product facts before the words: cut and sized for women, so the women's suffix."
+ ],
+ "gates": [
+  {
+   "key": "full_code_vs_live",
+   "label": "Full-code accuracy at least the live round's",
+   "passed": false,
+   "value": 0.2425,
+   "threshold": 0.2528,
+   "plain": "Full-code accuracy at least the live round's"
+  },
+  {
+   "key": "heading_vs_live",
+   "label": "Heading accuracy at least the live round's",
+   "passed": false,
+   "value": 0.6152,
+   "threshold": 0.6271,
+   "plain": "Heading accuracy at least the live round's"
+  },
+  {
+   "key": "chapter_regression",
+   "label": "No chapter Northbound imports gets worse by more than 3 points",
+   "passed": false,
+   "value": -0.0833,
+   "threshold": -0.03,
+   "plain": "No chapter Northbound imports gets worse by more than 3 points"
+  },
+  {
+   "key": "strong_right",
+   "label": "\u201cStrong match\u201d right at least 90 times in 100",
+   "passed": false,
+   "value": 0.6432,
+   "threshold": 0.9,
+   "plain": "\u201cStrong match\u201d right at least 90 times in 100"
+  },
+  {
+   "key": "citation_precision",
+   "label": "Cited rulings share the answer's heading at least 95 times in 100",
+   "passed": true,
+   "value": 0.9972,
+   "threshold": 0.95,
+   "plain": "Cited rulings share the answer's heading at least 95 times in 100"
+  }
+ ],
+ "program_path": "tariffcompass/classify/artifacts/rounds/round-7.program.json",
+ "lm_label": "offline simulator",
+ "reflection_lm_label": "offline simulator",
+ "seed": 7
+}

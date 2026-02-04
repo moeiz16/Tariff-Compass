@@ -1,0 +1,7886 @@
+{
+ "systems": {
+  "word_matching": {
+   "accuracy": {
+    "chapter": 0.7815,
+    "heading": 0.6536,
+    "subheading": 0.4753,
+    "full_code": 0.3205
+   },
+   "n": {
+    "chapter": 1094,
+    "heading": 1094,
+    "subheading": 1094,
+    "full_code": 1064
+   },
+   "perChapter": {
+    "01": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "02": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "03": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "05": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "06": {
+     "n": 2,
+     "heading": 0.0
+    },
+    "07": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "13": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "15": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "16": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "17": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "18": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "19": {
+     "n": 9,
+     "heading": 0.7778
+    },
+    "20": {
+     "n": 5,
+     "heading": 0.2
+    },
+    "21": {
+     "n": 10,
+     "heading": 0.8
+    },
+    "22": {
+     "n": 3,
+     "heading": 1.0
+    },
+    "23": {
+     "n": 2,
+     "heading": 0.0
+    },
+    "26": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "27": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "28": {
+     "n": 4,
+     "heading": 0.0
+    },
+    "29": {
+     "n": 13,
+     "heading": 0.3077
+    },
+    "30": {
+     "n": 39,
+     "heading": 0.8974
+    },
+    "32": {
+     "n": 13,
+     "heading": 0.6154
+    },
+    "33": {
+     "n": 9,
+     "heading": 0.0
+    },
+    "34": {
+     "n": 6,
+     "heading": 0.5
+    },
+    "35": {
+     "n": 4,
+     "heading": 0.5
+    },
+    "38": {
+     "n": 35,
+     "heading": 0.5429
+    },
+    "39": {
+     "n": 72,
+     "heading": 0.7778
+    },
+    "40": {
+     "n": 8,
+     "heading": 0.5
+    },
+    "42": {
+     "n": 26,
+     "heading": 1.0
+    },
+    "44": {
+     "n": 27,
+     "heading": 0.5185
+    },
+    "46": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "48": {
+     "n": 18,
+     "heading": 0.7222
+    },
+    "49": {
+     "n": 25,
+     "heading": 0.64
+    },
+    "52": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "55": {
+     "n": 6,
+     "heading": 0.5
+    },
+    "56": {
+     "n": 4,
+     "heading": 0.5
+    },
+    "57": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "58": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "59": {
+     "n": 10,
+     "heading": 0.6
+    },
+    "60": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "61": {
+     "n": 24,
+     "heading": 0.75
+    },
+    "62": {
+     "n": 12,
+     "heading": 0.4167
+    },
+    "63": {
+     "n": 21,
+     "heading": 0.8571
+    },
+    "64": {
+     "n": 33,
+     "heading": 0.6364
+    },
+    "65": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "66": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "67": {
+     "n": 3,
+     "heading": 1.0
+    },
+    "68": {
+     "n": 5,
+     "heading": 0.6
+    },
+    "69": {
+     "n": 5,
+     "heading": 1.0
+    },
+    "70": {
+     "n": 4,
+     "heading": 1.0
+    },
+    "71": {
+     "n": 19,
+     "heading": 0.6316
+    },
+    "72": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "73": {
+     "n": 40,
+     "heading": 0.375
+    },
+    "74": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "75": {
+     "n": 3,
+     "heading": 0.3333
+    },
+    "76": {
+     "n": 23,
+     "heading": 0.2609
+    },
+    "79": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "82": {
+     "n": 15,
+     "heading": 0.4667
+    },
+    "83": {
+     "n": 21,
+     "heading": 0.6667
+    },
+    "84": {
+     "n": 119,
+     "heading": 0.5462
+    },
+    "85": {
+     "n": 94,
+     "heading": 0.7447
+    },
+    "87": {
+     "n": 39,
+     "heading": 0.7179
+    },
+    "88": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "89": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "90": {
+     "n": 58,
+     "heading": 0.5517
+    },
+    "92": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "93": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "94": {
+     "n": 27,
+     "heading": 0.7407
+    },
+    "95": {
+     "n": 117,
+     "heading": 0.9829
+    },
+    "96": {
+     "n": 11,
+     "heading": 0.3636
+    },
+    "97": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "98": {
+     "n": 4,
+     "heading": 0.0
+    }
+   },
+   "calibration": {
+    "strong": {
+     "said": 0,
+     "right": 0
+    },
+    "broker": {
+     "said": 0,
+     "firstGuessWrong": 0
+    }
+   },
+   "citations": {
+    "support": 0,
+    "sameHeading": 0,
+    "precision": 1.0,
+    "revokedAsSupport": 0
+   },
+   "latencyMs": {
+    "p95": 0.0
+   }
+  },
+  "unoptimised": {
+   "accuracy": {
+    "chapter": 0.7404,
+    "heading": 0.6152,
+    "subheading": 0.3483,
+    "full_code": 0.1344
+   },
+   "n": {
+    "chapter": 1094,
+    "heading": 1094,
+    "subheading": 1094,
+    "full_code": 1064
+   },
+   "perChapter": {
+    "01": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "02": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "03": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "05": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "06": {
+     "n": 2,
+     "heading": 0.0
+    },
+    "07": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "13": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "15": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "16": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "17": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "18": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "19": {
+     "n": 9,
+     "heading": 0.7778
+    },
+    "20": {
+     "n": 5,
+     "heading": 0.4
+    },
+    "21": {
+     "n": 10,
+     "heading": 0.8
+    },
+    "22": {
+     "n": 3,
+     "heading": 1.0
+    },
+    "23": {
+     "n": 2,
+     "heading": 0.0
+    },
+    "26": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "27": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "28": {
+     "n": 4,
+     "heading": 0.25
+    },
+    "29": {
+     "n": 13,
+     "heading": 0.2308
+    },
+    "30": {
+     "n": 39,
+     "heading": 0.8974
+    },
+    "32": {
+     "n": 13,
+     "heading": 0.6923
+    },
+    "33": {
+     "n": 9,
+     "heading": 0.0
+    },
+    "34": {
+     "n": 6,
+     "heading": 0.5
+    },
+    "35": {
+     "n": 4,
+     "heading": 0.0
+    },
+    "38": {
+     "n": 35,
+     "heading": 0.4571
+    },
+    "39": {
+     "n": 72,
+     "heading": 0.6667
+    },
+    "40": {
+     "n": 8,
+     "heading": 0.5
+    },
+    "42": {
+     "n": 26,
+     "heading": 1.0
+    },
+    "44": {
+     "n": 27,
+     "heading": 0.5185
+    },
+    "46": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "48": {
+     "n": 18,
+     "heading": 0.7222
+    },
+    "49": {
+     "n": 25,
+     "heading": 0.56
+    },
+    "52": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "55": {
+     "n": 6,
+     "heading": 0.6667
+    },
+    "56": {
+     "n": 4,
+     "heading": 0.75
+    },
+    "57": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "58": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "59": {
+     "n": 10,
+     "heading": 0.6
+    },
+    "60": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "61": {
+     "n": 24,
+     "heading": 0.75
+    },
+    "62": {
+     "n": 12,
+     "heading": 0.4167
+    },
+    "63": {
+     "n": 21,
+     "heading": 0.619
+    },
+    "64": {
+     "n": 33,
+     "heading": 0.7576
+    },
+    "65": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "66": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "67": {
+     "n": 3,
+     "heading": 1.0
+    },
+    "68": {
+     "n": 5,
+     "heading": 0.6
+    },
+    "69": {
+     "n": 5,
+     "heading": 1.0
+    },
+    "70": {
+     "n": 4,
+     "heading": 0.75
+    },
+    "71": {
+     "n": 19,
+     "heading": 0.3158
+    },
+    "72": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "73": {
+     "n": 40,
+     "heading": 0.325
+    },
+    "74": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "75": {
+     "n": 3,
+     "heading": 0.3333
+    },
+    "76": {
+     "n": 23,
+     "heading": 0.087
+    },
+    "79": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "82": {
+     "n": 15,
+     "heading": 0.4
+    },
+    "83": {
+     "n": 21,
+     "heading": 0.5714
+    },
+    "84": {
+     "n": 119,
+     "heading": 0.563
+    },
+    "85": {
+     "n": 94,
+     "heading": 0.7766
+    },
+    "87": {
+     "n": 39,
+     "heading": 0.4359
+    },
+    "88": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "89": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "90": {
+     "n": 58,
+     "heading": 0.5
+    },
+    "92": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "93": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "94": {
+     "n": 27,
+     "heading": 0.7407
+    },
+    "95": {
+     "n": 117,
+     "heading": 0.9402
+    },
+    "96": {
+     "n": 11,
+     "heading": 0.2727
+    },
+    "97": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "98": {
+     "n": 4,
+     "heading": 0.0
+    }
+   },
+   "calibration": {
+    "strong": {
+     "said": 822,
+     "right": 348
+    },
+    "broker": {
+     "said": 272,
+     "firstGuessWrong": 239
+    }
+   },
+   "citations": {
+    "support": 3160,
+    "sameHeading": 3151,
+    "precision": 0.9972,
+    "revokedAsSupport": 0
+   },
+   "latencyMs": {
+    "p95": 11.75
+   }
+  },
+  "optimised": {
+   "accuracy": {
+    "chapter": 0.7404,
+    "heading": 0.6152,
+    "subheading": 0.4068,
+    "full_code": 0.2425
+   },
+   "n": {
+    "chapter": 1094,
+    "heading": 1094,
+    "subheading": 1094,
+    "full_code": 1064
+   },
+   "perChapter": {
+    "01": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "02": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "03": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "05": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "06": {
+     "n": 2,
+     "heading": 0.0
+    },
+    "07": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "13": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "15": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "16": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "17": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "18": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "19": {
+     "n": 9,
+     "heading": 0.7778
+    },
+    "20": {
+     "n": 5,
+     "heading": 0.4
+    },
+    "21": {
+     "n": 10,
+     "heading": 0.8
+    },
+    "22": {
+     "n": 3,
+     "heading": 1.0
+    },
+    "23": {
+     "n": 2,
+     "heading": 0.0
+    },
+    "26": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "27": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "28": {
+     "n": 4,
+     "heading": 0.25
+    },
+    "29": {
+     "n": 13,
+     "heading": 0.2308
+    },
+    "30": {
+     "n": 39,
+     "heading": 0.8974
+    },
+    "32": {
+     "n": 13,
+     "heading": 0.6923
+    },
+    "33": {
+     "n": 9,
+     "heading": 0.0
+    },
+    "34": {
+     "n": 6,
+     "heading": 0.5
+    },
+    "35": {
+     "n": 4,
+     "heading": 0.0
+    },
+    "38": {
+     "n": 35,
+     "heading": 0.4571
+    },
+    "39": {
+     "n": 72,
+     "heading": 0.6667
+    },
+    "40": {
+     "n": 8,
+     "heading": 0.5
+    },
+    "42": {
+     "n": 26,
+     "heading": 1.0
+    },
+    "44": {
+     "n": 27,
+     "heading": 0.5185
+    },
+    "46": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "48": {
+     "n": 18,
+     "heading": 0.7222
+    },
+    "49": {
+     "n": 25,
+     "heading": 0.56
+    },
+    "52": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "55": {
+     "n": 6,
+     "heading": 0.6667
+    },
+    "56": {
+     "n": 4,
+     "heading": 0.75
+    },
+    "57": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "58": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "59": {
+     "n": 10,
+     "heading": 0.6
+    },
+    "60": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "61": {
+     "n": 24,
+     "heading": 0.75
+    },
+    "62": {
+     "n": 12,
+     "heading": 0.4167
+    },
+    "63": {
+     "n": 21,
+     "heading": 0.619
+    },
+    "64": {
+     "n": 33,
+     "heading": 0.7576
+    },
+    "65": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "66": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "67": {
+     "n": 3,
+     "heading": 1.0
+    },
+    "68": {
+     "n": 5,
+     "heading": 0.6
+    },
+    "69": {
+     "n": 5,
+     "heading": 1.0
+    },
+    "70": {
+     "n": 4,
+     "heading": 0.75
+    },
+    "71": {
+     "n": 19,
+     "heading": 0.3158
+    },
+    "72": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "73": {
+     "n": 40,
+     "heading": 0.325
+    },
+    "74": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "75": {
+     "n": 3,
+     "heading": 0.3333
+    },
+    "76": {
+     "n": 23,
+     "heading": 0.087
+    },
+    "79": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "82": {
+     "n": 15,
+     "heading": 0.4
+    },
+    "83": {
+     "n": 21,
+     "heading": 0.5714
+    },
+    "84": {
+     "n": 119,
+     "heading": 0.563
+    },
+    "85": {
+     "n": 94,
+     "heading": 0.7766
+    },
+    "87": {
+     "n": 39,
+     "heading": 0.4359
+    },
+    "88": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "89": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "90": {
+     "n": 58,
+     "heading": 0.5
+    },
+    "92": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "93": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "94": {
+     "n": 27,
+     "heading": 0.7407
+    },
+    "95": {
+     "n": 117,
+     "heading": 0.9402
+    },
+    "96": {
+     "n": 11,
+     "heading": 0.2727
+    },
+    "97": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "98": {
+     "n": 4,
+     "heading": 0.0
+    }
+   },
+   "calibration": {
+    "strong": {
+     "said": 440,
+     "right": 283
+    },
+    "broker": {
+     "said": 654,
+     "firstGuessWrong": 492
+    }
+   },
+   "citations": {
+    "support": 3160,
+    "sameHeading": 3151,
+    "precision": 0.9972,
+    "revokedAsSupport": 0
+   },
+   "latencyMs": {
+    "p95": 9.99
+   }
+  },
+  "live": {
+   "accuracy": {
+    "chapter": 0.7495,
+    "heading": 0.6271,
+    "subheading": 0.4159,
+    "full_code": 0.2528
+   },
+   "n": {
+    "chapter": 1094,
+    "heading": 1094,
+    "subheading": 1094,
+    "full_code": 1064
+   },
+   "perChapter": {
+    "01": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "02": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "03": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "05": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "06": {
+     "n": 2,
+     "heading": 0.0
+    },
+    "07": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "13": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "15": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "16": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "17": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "18": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "19": {
+     "n": 9,
+     "heading": 0.7778
+    },
+    "20": {
+     "n": 5,
+     "heading": 0.4
+    },
+    "21": {
+     "n": 10,
+     "heading": 0.8
+    },
+    "22": {
+     "n": 3,
+     "heading": 1.0
+    },
+    "23": {
+     "n": 2,
+     "heading": 0.0
+    },
+    "26": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "27": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "28": {
+     "n": 4,
+     "heading": 0.25
+    },
+    "29": {
+     "n": 13,
+     "heading": 0.2308
+    },
+    "30": {
+     "n": 39,
+     "heading": 0.8974
+    },
+    "32": {
+     "n": 13,
+     "heading": 0.6923
+    },
+    "33": {
+     "n": 9,
+     "heading": 0.0
+    },
+    "34": {
+     "n": 6,
+     "heading": 0.5
+    },
+    "35": {
+     "n": 4,
+     "heading": 0.0
+    },
+    "38": {
+     "n": 35,
+     "heading": 0.4857
+    },
+    "39": {
+     "n": 72,
+     "heading": 0.75
+    },
+    "40": {
+     "n": 8,
+     "heading": 0.5
+    },
+    "42": {
+     "n": 26,
+     "heading": 1.0
+    },
+    "44": {
+     "n": 27,
+     "heading": 0.5185
+    },
+    "46": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "48": {
+     "n": 18,
+     "heading": 0.7778
+    },
+    "49": {
+     "n": 25,
+     "heading": 0.6
+    },
+    "52": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "55": {
+     "n": 6,
+     "heading": 0.6667
+    },
+    "56": {
+     "n": 4,
+     "heading": 0.75
+    },
+    "57": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "58": {
+     "n": 2,
+     "heading": 0.5
+    },
+    "59": {
+     "n": 10,
+     "heading": 0.7
+    },
+    "60": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "61": {
+     "n": 24,
+     "heading": 0.75
+    },
+    "62": {
+     "n": 12,
+     "heading": 0.4167
+    },
+    "63": {
+     "n": 21,
+     "heading": 0.6667
+    },
+    "64": {
+     "n": 33,
+     "heading": 0.7576
+    },
+    "65": {
+     "n": 2,
+     "heading": 1.0
+    },
+    "66": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "67": {
+     "n": 3,
+     "heading": 1.0
+    },
+    "68": {
+     "n": 5,
+     "heading": 0.6
+    },
+    "69": {
+     "n": 5,
+     "heading": 1.0
+    },
+    "70": {
+     "n": 4,
+     "heading": 0.75
+    },
+    "71": {
+     "n": 19,
+     "heading": 0.3684
+    },
+    "72": {
+     "n": 3,
+     "heading": 0.6667
+    },
+    "73": {
+     "n": 40,
+     "heading": 0.35
+    },
+    "74": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "75": {
+     "n": 3,
+     "heading": 0.3333
+    },
+    "76": {
+     "n": 23,
+     "heading": 0.087
+    },
+    "79": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "82": {
+     "n": 15,
+     "heading": 0.4
+    },
+    "83": {
+     "n": 21,
+     "heading": 0.5714
+    },
+    "84": {
+     "n": 119,
+     "heading": 0.5546
+    },
+    "85": {
+     "n": 94,
+     "heading": 0.7872
+    },
+    "87": {
+     "n": 39,
+     "heading": 0.4359
+    },
+    "88": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "89": {
+     "n": 1,
+     "heading": 0.0
+    },
+    "90": {
+     "n": 58,
+     "heading": 0.5
+    },
+    "92": {
+     "n": 1,
+     "heading": 1.0
+    },
+    "93": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "94": {
+     "n": 27,
+     "heading": 0.7407
+    },
+    "95": {
+     "n": 117,
+     "heading": 0.9402
+    },
+    "96": {
+     "n": 11,
+     "heading": 0.2727
+    },
+    "97": {
+     "n": 3,
+     "heading": 0.0
+    },
+    "98": {
+     "n": 4,
+     "heading": 0.0
+    }
+   },
+   "calibration": {
+    "strong": {
+     "said": 543,
+     "right": 326
+    },
+    "broker": {
+     "said": 551,
+     "firstGuessWrong": 422
+    }
+   },
+   "citations": {
+    "support": 3167,
+    "sameHeading": 3159,
+    "precision": 0.9975,
+    "revokedAsSupport": 0
+   },
+   "latencyMs": {
+    "p95": 10.04
+   }
+  }
+ },
+ "instructions": {
+  "candidates": "Given a product description and candidate tariff headings with their texts, list the headings that could\nclassify the product, most likely first, with one plain sentence each.",
+  "gri": "Apply the General Rules of Interpretation in order. Use GRI 1 (heading texts and section and chapter\nnotes) first; go to GRI 2-5 only when GRI 1 cannot decide. Explain why each neighbouring heading is set aside.",
+  "subheading": "Within the chosen heading, compare subheadings at the same level only (GRI 6) and pick the ten-digit line.\nRULE: follow the closest ruling's line when its similarity is at least 0.3\nRULE: in heading 9619 choose 9619001100 when the product mentions 'pulp'\nRULE: in heading 7304 choose 7304295015 when the product mentions 'thickness'\nRULE: in heading 4901 choose 4901990093 when the product mentions 'page'\nRULE: in heading 4820 choose 4820102010 when the product mentions 'book'",
+  "cite": "Write the answer in three or four plain sentences and cite, for each sentence, the rulings that support it.\nA revoked ruling may only be cited for contrast.",
+  "confidence": "Decide whether the answer is a strong match or needs a broker. If it needs a broker, name the single fact\nthat would decide it and ask it as a question with two answers.\nRULE: say broker when the margin is below 0.0\nRULE: say broker when the precedent share is below 0.8"
+ },
+ "counts": {
+  "train": 408,
+  "corrections": 8,
+  "val": 200,
+  "test": 1094
+ },
+ "budgetMetricCalls": 4000,
+ "gepaSeconds": 29.3,
+ "seconds": 57.5,
+ "snapshots": {
+  "train": "5ca7347196e9c3fcfe9658ddca4674eee274409613ce8e7a909176538e196347",
+  "val": "998e5731e0cecef3896100b7881577fe7e0a332ff42d1fb9c4de5b3927b4a4bf",
+  "test": "502f3900d327b0e5286852408e31a833246a79a023db94653e5084045436c8e2",
+  "splitTestHash": "db8403dc6ce1ad3eeb33ae738a9489b878fe442222ac77b38ccf13d6bc728866"
+ },
+ "predictions": {
+  "optimised": [
+   {
+    "id": "NY N344548",
+    "heading": "6116",
+    "code": "6116105520",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344643",
+    "heading": "4819",
+    "code": "4819100020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344645",
+    "heading": "9506",
+    "code": "9506910010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344539",
+    "heading": "6813",
+    "code": "6813200010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344646",
+    "heading": "2924",
+    "code": "2924237000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344671",
+    "heading": "9013",
+    "code": "9013804000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344719",
+    "heading": "4602",
+    "code": "4602191800",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H306166",
+    "heading": "8415",
+    "code": "8415106000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344549",
+    "heading": "6116",
+    "code": "6116105520",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344585",
+    "heading": "2208",
+    "code": "2208907100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344651",
+    "heading": "8543",
+    "code": "8543709500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344688",
+    "heading": "3824",
+    "code": "3824300000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344689",
+    "heading": "3824",
+    "code": "3824999361",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N340696",
+    "heading": "7013",
+    "code": "7013424000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344578",
+    "heading": "5702",
+    "code": "5702921000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344724",
+    "heading": "3924",
+    "code": "3924901050",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344734",
+    "heading": "3824",
+    "code": "3824997510",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344747",
+    "heading": "3824",
+    "code": "3824992600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344750",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344777",
+    "heading": "8471",
+    "code": "8471601010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344791",
+    "heading": "6114",
+    "code": "6114301020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344661",
+    "heading": "8306",
+    "code": "8306210000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344782",
+    "heading": "6702",
+    "code": "6702903500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344667",
+    "heading": "4412",
+    "code": "4412330640",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344712",
+    "heading": "3918",
+    "code": "3918101020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344746",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344748",
+    "heading": "3824",
+    "code": "3824999310",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344833",
+    "heading": "9504",
+    "code": "9504909080",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N339869",
+    "heading": "5603",
+    "code": "5603943000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344668",
+    "heading": "0307",
+    "code": "0307430024",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344694",
+    "heading": "8501",
+    "code": "8501324500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344776",
+    "heading": "3824",
+    "code": "3824994190",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344805",
+    "heading": "4911",
+    "code": "4911914040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344807",
+    "heading": "8414",
+    "code": "8414591500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344848",
+    "heading": "3920",
+    "code": "3920991000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344861",
+    "heading": "8424",
+    "code": "8424909080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344979",
+    "heading": "4420",
+    "code": "4420904500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344803",
+    "heading": "3824",
+    "code": "3824993910",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344821",
+    "heading": "6116",
+    "code": "6116105520",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344824",
+    "heading": "7013",
+    "code": "7013423000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344854",
+    "heading": "4202",
+    "code": "4202228100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344938",
+    "heading": "8543",
+    "code": "8543709301",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345016",
+    "heading": "8537",
+    "code": "8537109160",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344838",
+    "heading": "9503",
+    "code": "9503000073",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344881",
+    "heading": "7216",
+    "code": "7216990010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344962",
+    "heading": "8471",
+    "code": "8471601050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345022",
+    "heading": "9503",
+    "code": "9503000011",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345058",
+    "heading": "9503",
+    "code": "9503000073",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344832",
+    "heading": "2106",
+    "code": "2106909985",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344880",
+    "heading": "8537",
+    "code": "8537109120",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345082",
+    "heading": "6116",
+    "code": "6116105520",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N343766",
+    "heading": "3824",
+    "code": "3824993200",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344850",
+    "heading": "0403",
+    "code": "0403908500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344949",
+    "heading": "3913",
+    "code": "3913100000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345101",
+    "heading": "3901",
+    "code": "3901901000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345177",
+    "heading": "4911",
+    "code": "4911996000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345003",
+    "heading": "3924",
+    "code": "3924905610",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345025",
+    "heading": "8505",
+    "code": "8505191000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345030",
+    "heading": "6912",
+    "code": "6912004810",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345207",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345208",
+    "heading": "3304",
+    "code": "3304991000",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H340269",
+    "heading": "2007",
+    "code": "2007996000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345069",
+    "heading": "8304",
+    "code": "8304000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345090",
+    "heading": "2106",
+    "code": "2106909973",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345182",
+    "heading": "2106",
+    "code": "2106909973",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345199",
+    "heading": "4821",
+    "code": "4821904000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345209",
+    "heading": "3304",
+    "code": "3304995000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345260",
+    "heading": "4016",
+    "code": "4016993510",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345268",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345271",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345295",
+    "heading": "4820",
+    "code": "4820102020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344939",
+    "heading": "6402",
+    "code": "6402993165",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345269",
+    "heading": "9503",
+    "code": "9503000073",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345342",
+    "heading": "8501",
+    "code": "8501721000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344099",
+    "heading": "6001",
+    "code": "6001920030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344934",
+    "heading": "3824",
+    "code": "3824991100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344955",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345026",
+    "heading": "3004",
+    "code": "3004909262",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345174",
+    "heading": "8509",
+    "code": "8509805070",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345176",
+    "heading": "3924",
+    "code": "3924905650",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345249",
+    "heading": "7601",
+    "code": "7601209030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345263",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345266",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345288",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344909",
+    "heading": "7013",
+    "code": "7013372090",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344954",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344957",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344959",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344988",
+    "heading": "5907",
+    "code": "5907006000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345167",
+    "heading": "1905",
+    "code": "1905901041",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345190",
+    "heading": "6212",
+    "code": "6212900030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345246",
+    "heading": "9401",
+    "code": "9401390010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345500",
+    "heading": "4820",
+    "code": "4820102010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345316",
+    "heading": "8510",
+    "code": "8510904000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344992",
+    "heading": "3403",
+    "code": "3403112000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345056",
+    "heading": "6110",
+    "code": "6110303053",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345175",
+    "heading": "3924",
+    "code": "3924905650",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345204",
+    "heading": "9405",
+    "code": "9405116020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345355",
+    "heading": "8704",
+    "code": "8704420080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345031",
+    "heading": "1806",
+    "code": "1806103800",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345390",
+    "heading": "8537",
+    "code": "8537108000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345569",
+    "heading": "3923",
+    "code": "3923300090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345194",
+    "heading": "3004",
+    "code": "3004310010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345389",
+    "heading": "8519",
+    "code": "8519813020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345071",
+    "heading": "1605",
+    "code": "1605290500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345367",
+    "heading": "3004",
+    "code": "3004909211",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345418",
+    "heading": "4823",
+    "code": "4823690020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345193",
+    "heading": "6211",
+    "code": "6211421075",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345200",
+    "heading": "6402",
+    "code": "6402993165",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N341568",
+    "heading": "6001",
+    "code": "6001920030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345171",
+    "heading": "4417",
+    "code": "4417004000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345475",
+    "heading": "4911",
+    "code": "4911100020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345733",
+    "heading": "8001",
+    "code": "8001200010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N343643",
+    "heading": "3824",
+    "code": "3824997510",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345226",
+    "heading": "6404",
+    "code": "6404193760",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345242",
+    "heading": "6109",
+    "code": "6109901065",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345350",
+    "heading": "6912",
+    "code": "6912003550",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345520",
+    "heading": "3824",
+    "code": "3824992100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345534",
+    "heading": "3816",
+    "code": "3816001000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345555",
+    "heading": "9504",
+    "code": "9504906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345683",
+    "heading": "6201",
+    "code": "6201407000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345245",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345395",
+    "heading": "8517",
+    "code": "8517140050",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345685",
+    "heading": "8501",
+    "code": "8501104080",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345837",
+    "heading": "4820",
+    "code": "4820102010",
+    "verdict": "strong"
+   },
+   {
+    "id": "HQ H327018",
+    "heading": "2106",
+    "code": "2106900900",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H341677",
+    "heading": "9027",
+    "code": "9027504060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N341620",
+    "heading": "5903",
+    "code": "5903902500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345433",
+    "heading": "4823",
+    "code": "4823400000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345668",
+    "heading": "3926",
+    "code": "3926902100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345363",
+    "heading": "7318",
+    "code": "7318156040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345563",
+    "heading": "1901",
+    "code": "1901909195",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345694",
+    "heading": "8471",
+    "code": "8471601050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345696",
+    "heading": "8471",
+    "code": "8471601050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345698",
+    "heading": "8471",
+    "code": "8471500150",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345702",
+    "heading": "8306",
+    "code": "8306210000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345901",
+    "heading": "8543",
+    "code": "8543901500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345905",
+    "heading": "3901",
+    "code": "3901901000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345564",
+    "heading": "6114",
+    "code": "6114200060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345727",
+    "heading": "6402",
+    "code": "6402993290",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345806",
+    "heading": "8543",
+    "code": "8543709500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345860",
+    "heading": "8517",
+    "code": "8517690000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344377",
+    "heading": "3824",
+    "code": "3824920000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345371",
+    "heading": "8413",
+    "code": "8413500080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345399",
+    "heading": "4202",
+    "code": "4202929100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345401",
+    "heading": "8708",
+    "code": "8708706045",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345734",
+    "heading": "7318",
+    "code": "7318152051",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345770",
+    "heading": "3926",
+    "code": "3926904590",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345907",
+    "heading": "3901",
+    "code": "3901901000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345404",
+    "heading": "8471",
+    "code": "8471601050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345473",
+    "heading": "4412",
+    "code": "4412343225",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345604",
+    "heading": "6403",
+    "code": "6403916090",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345609",
+    "heading": "6403",
+    "code": "6403916090",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345818",
+    "heading": "8501",
+    "code": "8501322000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345461",
+    "heading": "7321",
+    "code": "7321815000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345626",
+    "heading": "5911",
+    "code": "5911102000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345764",
+    "heading": "9405",
+    "code": "9405428200",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345804",
+    "heading": "3923",
+    "code": "3923210020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345826",
+    "heading": "9506",
+    "code": "9506910020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345916",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N342649",
+    "heading": "9612",
+    "code": "9612101020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345445",
+    "heading": "4202",
+    "code": "4202929100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345519",
+    "heading": "3004",
+    "code": "3004909236",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345537",
+    "heading": "5903",
+    "code": "5903202500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346010",
+    "heading": "3802",
+    "code": "3802100050",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345613",
+    "heading": "3214",
+    "code": "3214901000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345796",
+    "heading": "8708",
+    "code": "8708305030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345805",
+    "heading": "0511",
+    "code": "0511994070",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345888",
+    "heading": "6212",
+    "code": "6212200020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345906",
+    "heading": "6404",
+    "code": "6404192030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345909",
+    "heading": "6401",
+    "code": "6401929060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345910",
+    "heading": "6405",
+    "code": "6405909060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345913",
+    "heading": "6401",
+    "code": "6401929060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345979",
+    "heading": "3801",
+    "code": "3801101000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346109",
+    "heading": "9405",
+    "code": "9405504000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346167",
+    "heading": "6601",
+    "code": "6601910000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N340852",
+    "heading": "5407",
+    "code": "5407932050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345836",
+    "heading": "7306",
+    "code": "7306905000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345955",
+    "heading": "8415",
+    "code": "8415830050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346105",
+    "heading": "8458",
+    "code": "8458991050",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345669",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345897",
+    "heading": "8422",
+    "code": "8422309191",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345935",
+    "heading": "9401",
+    "code": "9401390010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346316",
+    "heading": "4602",
+    "code": "4602196000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345832",
+    "heading": "3004",
+    "code": "3004909276",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N344673",
+    "heading": "8471",
+    "code": "8471490000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345996",
+    "heading": "8504",
+    "code": "8504909638",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346196",
+    "heading": "5603",
+    "code": "5603920095",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346235",
+    "heading": "4911",
+    "code": "4911100060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346051",
+    "heading": "8501",
+    "code": "8501324500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346114",
+    "heading": "8544",
+    "code": "8544492000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345942",
+    "heading": "8525",
+    "code": "8525894000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345943",
+    "heading": "8525",
+    "code": "8525894000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345944",
+    "heading": "8516",
+    "code": "8516100040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345949",
+    "heading": "8525",
+    "code": "8525894000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345961",
+    "heading": "8479",
+    "code": "8479904500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346281",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346402",
+    "heading": "9401",
+    "code": "9401696001",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H328582",
+    "heading": "7007",
+    "code": "7007190000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345900",
+    "heading": "4202",
+    "code": "4202921500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345903",
+    "heading": "4202",
+    "code": "4202921500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346001",
+    "heading": "3924",
+    "code": "3924102000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346237",
+    "heading": "6913",
+    "code": "6913901000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346347",
+    "heading": "8543",
+    "code": "8543709860",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346497",
+    "heading": "4416",
+    "code": "4416003030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345998",
+    "heading": "8708",
+    "code": "8708220000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346306",
+    "heading": "0712",
+    "code": "0712342000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346309",
+    "heading": "0712",
+    "code": "0712312000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346482",
+    "heading": "9606",
+    "code": "9606292000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N338461",
+    "heading": "5512",
+    "code": "5512190027",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346031",
+    "heading": "6211",
+    "code": "6211431078",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346205",
+    "heading": "3824",
+    "code": "3824920000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346428",
+    "heading": "4420",
+    "code": "4420904500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346041",
+    "heading": "4202",
+    "code": "4202919090",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346507",
+    "heading": "3002",
+    "code": "3002905210",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346561",
+    "heading": "8543",
+    "code": "8543400040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346462",
+    "heading": "4820",
+    "code": "4820102010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346508",
+    "heading": "6302",
+    "code": "6302514000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346046",
+    "heading": "8302",
+    "code": "8302492000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346219",
+    "heading": "3926",
+    "code": "3926909940",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346291",
+    "heading": "5604",
+    "code": "5604902000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346450",
+    "heading": "6404",
+    "code": "6404199060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346610",
+    "heading": "8479",
+    "code": "8479896500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346687",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346688",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346689",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346708",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346053",
+    "heading": "6307",
+    "code": "6307908950",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346125",
+    "heading": "9506",
+    "code": "9506290030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346126",
+    "heading": "9506",
+    "code": "9506702010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346130",
+    "heading": "9506",
+    "code": "9506594040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346239",
+    "heading": "7604",
+    "code": "7604103000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346298",
+    "heading": "6505",
+    "code": "6505009045",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346424",
+    "heading": "7210",
+    "code": "7210490045",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346473",
+    "heading": "6306",
+    "code": "6306191100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346801",
+    "heading": "9504",
+    "code": "9504906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N342622",
+    "heading": "5512",
+    "code": "5512190027",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346307",
+    "heading": "8415",
+    "code": "8415106000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346365",
+    "heading": "8708",
+    "code": "8708505110",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346483",
+    "heading": "7117",
+    "code": "7117192000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346520",
+    "heading": "4420",
+    "code": "4420190000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346733",
+    "heading": "8302",
+    "code": "8302303010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346795",
+    "heading": "9013",
+    "code": "9013809100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346848",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346883",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346885",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346901",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346304",
+    "heading": "3004",
+    "code": "3004909266",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346318",
+    "heading": "3004",
+    "code": "3004105080",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346320",
+    "heading": "3004",
+    "code": "3004310010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346514",
+    "heading": "9405",
+    "code": "9405428200",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346319",
+    "heading": "3004",
+    "code": "3004909239",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346349",
+    "heading": "7104",
+    "code": "7104911000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346409",
+    "heading": "3004",
+    "code": "3004909276",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346696",
+    "heading": "3824",
+    "code": "3824994140",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346713",
+    "heading": "3926",
+    "code": "3926905700",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346925",
+    "heading": "9505",
+    "code": "9505101500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346962",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "HQ H327665",
+    "heading": "8431",
+    "code": "8431410020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346321",
+    "heading": "4202",
+    "code": "4202924500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346370",
+    "heading": "6404",
+    "code": "6404199060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346455",
+    "heading": "8442",
+    "code": "8442501000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346790",
+    "heading": "9503",
+    "code": "9503000073",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346914",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346989",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347031",
+    "heading": "4901",
+    "code": "4901990093",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346210",
+    "heading": "3923",
+    "code": "3923900016",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346236",
+    "heading": "3923",
+    "code": "3923900016",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346245",
+    "heading": "9404",
+    "code": "9404308000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346322",
+    "heading": "4202",
+    "code": "4202923131",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346323",
+    "heading": "4202",
+    "code": "4202924500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346352",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346383",
+    "heading": "5903",
+    "code": "5903202500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346410",
+    "heading": "3004",
+    "code": "3004909228",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346412",
+    "heading": "3004",
+    "code": "3004909276",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346500",
+    "heading": "3919",
+    "code": "3919905060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346536",
+    "heading": "4421",
+    "code": "4421993000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346571",
+    "heading": "8424",
+    "code": "8424201000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346743",
+    "heading": "4421",
+    "code": "4421997020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346763",
+    "heading": "8537",
+    "code": "8537200020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346764",
+    "heading": "9503",
+    "code": "9503000013",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346820",
+    "heading": "9027",
+    "code": "9027905400",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N341057",
+    "heading": "6110",
+    "code": "6110909030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N342660",
+    "heading": "6114",
+    "code": "6114301020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346413",
+    "heading": "3004",
+    "code": "3004909276",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346423",
+    "heading": "3004",
+    "code": "3004909250",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346430",
+    "heading": "6110",
+    "code": "6110303059",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346566",
+    "heading": "6211",
+    "code": "6211431076",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346654",
+    "heading": "8517",
+    "code": "8517620010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346782",
+    "heading": "3923",
+    "code": "3923210020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346788",
+    "heading": "8423",
+    "code": "8423100010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346793",
+    "heading": "3923",
+    "code": "3923210085",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346803",
+    "heading": "7404",
+    "code": "7404003020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346339",
+    "heading": "6401",
+    "code": "6401929060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346385",
+    "heading": "7318",
+    "code": "7318130060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346386",
+    "heading": "7318",
+    "code": "7318130030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346387",
+    "heading": "7318",
+    "code": "7318152091",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346388",
+    "heading": "7318",
+    "code": "7318130030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346572",
+    "heading": "3004",
+    "code": "3004909266",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346614",
+    "heading": "3004",
+    "code": "3004901000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346446",
+    "heading": "7304",
+    "code": "7304295015",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346484",
+    "heading": "8205",
+    "code": "8205206000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346664",
+    "heading": "4811",
+    "code": "4811512040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346810",
+    "heading": "7017",
+    "code": "7017901000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346832",
+    "heading": "8537",
+    "code": "8537109170",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346879",
+    "heading": "8471",
+    "code": "8471709000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347064",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347070",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346533",
+    "heading": "8710",
+    "code": "8710000060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346628",
+    "heading": "8421",
+    "code": "8421210000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346674",
+    "heading": "3004",
+    "code": "3004909266",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346936",
+    "heading": "1901",
+    "code": "1901902800",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346959",
+    "heading": "8507",
+    "code": "8507600030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N339709",
+    "heading": "6110",
+    "code": "6110303059",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346544",
+    "heading": "9603",
+    "code": "9603304000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346656",
+    "heading": "8517",
+    "code": "8517620010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346659",
+    "heading": "8517",
+    "code": "8517620010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346851",
+    "heading": "7411",
+    "code": "7411295000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347054",
+    "heading": "9603",
+    "code": "9603500000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347087",
+    "heading": "8419",
+    "code": "8419110000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347096",
+    "heading": "3004",
+    "code": "3004310010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347123",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347164",
+    "heading": "8479",
+    "code": "8479100040",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H343563",
+    "heading": "8471",
+    "code": "8471705065",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347167",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347277",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347350",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346575",
+    "heading": "8302",
+    "code": "8302496055",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346681",
+    "heading": "8516",
+    "code": "8516790000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346741",
+    "heading": "7117",
+    "code": "7117110000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346907",
+    "heading": "6403",
+    "code": "6403406000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347155",
+    "heading": "2933",
+    "code": "2933998210",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347163",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347168",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347264",
+    "heading": "8302",
+    "code": "8302426000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347355",
+    "heading": "4420",
+    "code": "4420904500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346621",
+    "heading": "3004",
+    "code": "3004105055",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346694",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347449",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346597",
+    "heading": "9019",
+    "code": "9019200000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347058",
+    "heading": "8504",
+    "code": "8504404000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347486",
+    "heading": "9506",
+    "code": "9506624080",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H340899",
+    "heading": "8508",
+    "code": "8508110000",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H341768",
+    "heading": "1605",
+    "code": "1605291010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346773",
+    "heading": "4820",
+    "code": "4820102010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346794",
+    "heading": "1006",
+    "code": "1006204035",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346712",
+    "heading": "6810",
+    "code": "6810990080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346745",
+    "heading": "8302",
+    "code": "8302416080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346814",
+    "heading": "8481",
+    "code": "8481200040",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N346854",
+    "heading": "6207",
+    "code": "6207998510",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347013",
+    "heading": "3924",
+    "code": "3924905650",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347089",
+    "heading": "4819",
+    "code": "4819400040",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347098",
+    "heading": "8537",
+    "code": "8537108000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347133",
+    "heading": "8505",
+    "code": "8505110090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347153",
+    "heading": "8452",
+    "code": "8452219000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347161",
+    "heading": "8471",
+    "code": "8471500150",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347340",
+    "heading": "9506",
+    "code": "9506514000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347345",
+    "heading": "8504",
+    "code": "8504406001",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347347",
+    "heading": "4810",
+    "code": "4810991060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347382",
+    "heading": "4016",
+    "code": "4016992000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347439",
+    "heading": "9506",
+    "code": "9506624080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347460",
+    "heading": "9506",
+    "code": "9506310000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347612",
+    "heading": "4421",
+    "code": "4421997020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347619",
+    "heading": "4418",
+    "code": "4418741000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346762",
+    "heading": "0307",
+    "code": "0307430024",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347079",
+    "heading": "8479",
+    "code": "8479899200",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347162",
+    "heading": "3924",
+    "code": "3924905650",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347241",
+    "heading": "8483",
+    "code": "8483101050",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347261",
+    "heading": "4202",
+    "code": "4202920807",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347299",
+    "heading": "3924",
+    "code": "3924102000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347448",
+    "heading": "6601",
+    "code": "6601910000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347549",
+    "heading": "4911",
+    "code": "4911996000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347847",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N334241",
+    "heading": "5512",
+    "code": "5512190027",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346924",
+    "heading": "8302",
+    "code": "8302500000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346991",
+    "heading": "8302",
+    "code": "8302103000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347026",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347100",
+    "heading": "6301",
+    "code": "6301400010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347254",
+    "heading": "8716",
+    "code": "8716905035",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347296",
+    "heading": "6202",
+    "code": "6202407000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347344",
+    "heading": "8479",
+    "code": "8479300000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347381",
+    "heading": "8479",
+    "code": "8479600000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347383",
+    "heading": "3213",
+    "code": "3213100000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347442",
+    "heading": "6301",
+    "code": "6301400010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347466",
+    "heading": "6402",
+    "code": "6402993145",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347490",
+    "heading": "8409",
+    "code": "8409919210",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347200",
+    "heading": "2106",
+    "code": "2106900900",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347407",
+    "heading": "8483",
+    "code": "8483901050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347408",
+    "heading": "8482",
+    "code": "8482105012",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347481",
+    "heading": "8205",
+    "code": "8205306000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347496",
+    "heading": "8205",
+    "code": "8205303000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347511",
+    "heading": "8427",
+    "code": "8427108040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347548",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347673",
+    "heading": "4407",
+    "code": "4407910022",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347674",
+    "heading": "4412",
+    "code": "4412333265",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347677",
+    "heading": "4407",
+    "code": "4407910063",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347679",
+    "heading": "4412",
+    "code": "4412330620",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347685",
+    "heading": "9403",
+    "code": "9403200075",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347688",
+    "heading": "4407",
+    "code": "4407910022",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347111",
+    "heading": "2106",
+    "code": "2106900900",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N341903",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347062",
+    "heading": "8543",
+    "code": "8543709100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347066",
+    "heading": "8543",
+    "code": "8543400040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347076",
+    "heading": "6702",
+    "code": "6702102000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347077",
+    "heading": "9611",
+    "code": "9611000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347362",
+    "heading": "3924",
+    "code": "3924901050",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347478",
+    "heading": "8409",
+    "code": "8409913000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347483",
+    "heading": "7117",
+    "code": "7117110000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347488",
+    "heading": "7117",
+    "code": "7117199000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347493",
+    "heading": "7117",
+    "code": "7117110000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347531",
+    "heading": "6402",
+    "code": "6402915090",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347542",
+    "heading": "8517",
+    "code": "8517620020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347573",
+    "heading": "5402",
+    "code": "5402333000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347682",
+    "heading": "6403",
+    "code": "6403200000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347711",
+    "heading": "2523",
+    "code": "2523100000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347781",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347843",
+    "heading": "4412",
+    "code": "4412345700",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N345186",
+    "heading": "5311",
+    "code": "5311002000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345507",
+    "heading": "6802",
+    "code": "6802291000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347281",
+    "heading": "8211",
+    "code": "8211930031",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347397",
+    "heading": "3924",
+    "code": "3924102000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347544",
+    "heading": "4202",
+    "code": "4202926091",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347565",
+    "heading": "9503",
+    "code": "9503000013",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347593",
+    "heading": "4202",
+    "code": "4202924500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347596",
+    "heading": "7323",
+    "code": "7323991000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347927",
+    "heading": "8302",
+    "code": "8302416015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348064",
+    "heading": "3824",
+    "code": "3824992900",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348065",
+    "heading": "3204",
+    "code": "3204201000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348104",
+    "heading": "9025",
+    "code": "9025198020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347094",
+    "heading": "8507",
+    "code": "8507600030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347148",
+    "heading": "8471",
+    "code": "8471804000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347194",
+    "heading": "1518",
+    "code": "1518002000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347487",
+    "heading": "9506",
+    "code": "9506624080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347489",
+    "heading": "9403",
+    "code": "9403409060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347828",
+    "heading": "8543",
+    "code": "8543709500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347842",
+    "heading": "8426",
+    "code": "8426120000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347949",
+    "heading": "9025",
+    "code": "9025198010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347134",
+    "heading": "8427",
+    "code": "8427104010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347145",
+    "heading": "9405",
+    "code": "9405504000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347980",
+    "heading": "7307",
+    "code": "7307110060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348148",
+    "heading": "3924",
+    "code": "3924104000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347253",
+    "heading": "6406",
+    "code": "6406901540",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347564",
+    "heading": "6404",
+    "code": "6404199030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347567",
+    "heading": "6404",
+    "code": "6404199060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347943",
+    "heading": "7310",
+    "code": "7310210070",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347946",
+    "heading": "7310",
+    "code": "7310210070",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347357",
+    "heading": "6110",
+    "code": "6110202020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347450",
+    "heading": "9506",
+    "code": "9506624080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347452",
+    "heading": "9506",
+    "code": "9506624080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347453",
+    "heading": "9506",
+    "code": "9506624080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347454",
+    "heading": "9504",
+    "code": "9504909080",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347455",
+    "heading": "9506",
+    "code": "9506624080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347458",
+    "heading": "9506",
+    "code": "9506624080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347645",
+    "heading": "4820",
+    "code": "4820300040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347646",
+    "heading": "4820",
+    "code": "4820300040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347648",
+    "heading": "4820",
+    "code": "4820300040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347739",
+    "heading": "2106",
+    "code": "2106900900",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347213",
+    "heading": "8514",
+    "code": "8514319000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347290",
+    "heading": "8543",
+    "code": "8543709500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348181",
+    "heading": "9031",
+    "code": "9031410060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348345",
+    "heading": "9506",
+    "code": "9506910010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347475",
+    "heading": "8302",
+    "code": "8302423065",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347746",
+    "heading": "5904",
+    "code": "5904909000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347830",
+    "heading": "8481",
+    "code": "8481200040",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348050",
+    "heading": "7308",
+    "code": "7308909590",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347670",
+    "heading": "7504",
+    "code": "7504000010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347742",
+    "heading": "6806",
+    "code": "6806100090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347753",
+    "heading": "8543",
+    "code": "8543400040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347974",
+    "heading": "4016",
+    "code": "4016935020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348200",
+    "heading": "4820",
+    "code": "4820102010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348231",
+    "heading": "8543",
+    "code": "8543709860",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348259",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348261",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348395",
+    "heading": "7608",
+    "code": "7608200090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347521",
+    "heading": "9405",
+    "code": "9405426000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347600",
+    "heading": "7323",
+    "code": "7323991000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347668",
+    "heading": "3302",
+    "code": "3302101000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347708",
+    "heading": "2930",
+    "code": "2930909231",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348026",
+    "heading": "9506",
+    "code": "9506628020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348142",
+    "heading": "8505",
+    "code": "8505191000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348269",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348281",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348284",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347553",
+    "heading": "2106",
+    "code": "2106902400",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347635",
+    "heading": "3004",
+    "code": "3004505015",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347643",
+    "heading": "3002",
+    "code": "3002140010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347656",
+    "heading": "4412",
+    "code": "4412394062",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347675",
+    "heading": "8419",
+    "code": "8419501000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347680",
+    "heading": "6404",
+    "code": "6404193760",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347703",
+    "heading": "7117",
+    "code": "7117110000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347745",
+    "heading": "4203",
+    "code": "4203291500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347855",
+    "heading": "8479",
+    "code": "8479899585",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347907",
+    "heading": "9031",
+    "code": "9031804000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348031",
+    "heading": "4911",
+    "code": "4911100060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348052",
+    "heading": "5703",
+    "code": "5703392030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348135",
+    "heading": "4820",
+    "code": "4820102040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348288",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348340",
+    "heading": "3901",
+    "code": "3901302000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348366",
+    "heading": "8423",
+    "code": "8423810010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348385",
+    "heading": "9504",
+    "code": "9504906000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347665",
+    "heading": "2918",
+    "code": "2918221000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347694",
+    "heading": "8711",
+    "code": "8711900100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347699",
+    "heading": "3004",
+    "code": "3004909232",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347755",
+    "heading": "3004",
+    "code": "3004909270",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347764",
+    "heading": "2941",
+    "code": "2941905090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347894",
+    "heading": "2106",
+    "code": "2106900900",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347909",
+    "heading": "8479",
+    "code": "8479899200",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347999",
+    "heading": "8528",
+    "code": "8528520000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348117",
+    "heading": "6405",
+    "code": "6405909060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348265",
+    "heading": "9401",
+    "code": "9401390010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348444",
+    "heading": "4911",
+    "code": "4911913000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N332646",
+    "heading": "5903",
+    "code": "5903902500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347760",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347761",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347792",
+    "heading": "8543",
+    "code": "8543400040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347794",
+    "heading": "3004",
+    "code": "3004909221",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347911",
+    "heading": "8486",
+    "code": "8486400030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347930",
+    "heading": "8708",
+    "code": "8708305030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348102",
+    "heading": "4421",
+    "code": "4421993000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348174",
+    "heading": "8543",
+    "code": "8543709100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348178",
+    "heading": "4409",
+    "code": "4409104090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348515",
+    "heading": "6507",
+    "code": "6507000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347818",
+    "heading": "3004",
+    "code": "3004200030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N347929",
+    "heading": "3406",
+    "code": "3406000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348150",
+    "heading": "8486",
+    "code": "8486400030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348151",
+    "heading": "8486",
+    "code": "8486400030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348179",
+    "heading": "8431",
+    "code": "8431410060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348310",
+    "heading": "8543",
+    "code": "8543901200",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348323",
+    "heading": "8537",
+    "code": "8537108000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348342",
+    "heading": "8421",
+    "code": "8421320000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348734",
+    "heading": "4010",
+    "code": "4010394100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348766",
+    "heading": "3917",
+    "code": "3917320010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N342209",
+    "heading": "2005",
+    "code": "2005992000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347822",
+    "heading": "9027",
+    "code": "9027208060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348165",
+    "heading": "8525",
+    "code": "8525891000",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H329919",
+    "heading": "8528",
+    "code": "8528713000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348908",
+    "heading": "0402",
+    "code": "0402995500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348002",
+    "heading": "3004",
+    "code": "3004909276",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348325",
+    "heading": "6505",
+    "code": "6505005045",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348524",
+    "heading": "4420",
+    "code": "4420110010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348001",
+    "heading": "3004",
+    "code": "3004909232",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348011",
+    "heading": "3004",
+    "code": "3004909265",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348012",
+    "heading": "8539",
+    "code": "8539320040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348090",
+    "heading": "6204",
+    "code": "6204616010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348101",
+    "heading": "3213",
+    "code": "3213100000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348125",
+    "heading": "5903",
+    "code": "5903902500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348156",
+    "heading": "8501",
+    "code": "8501315000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348233",
+    "heading": "7321",
+    "code": "7321890010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348372",
+    "heading": "9505",
+    "code": "9505101500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348458",
+    "heading": "6402",
+    "code": "6402994960",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348490",
+    "heading": "8459",
+    "code": "8459290070",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348500",
+    "heading": "8481",
+    "code": "8481801020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348561",
+    "heading": "8481",
+    "code": "8481809035",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348027",
+    "heading": "5603",
+    "code": "5603910010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348214",
+    "heading": "3002",
+    "code": "3002140010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348280",
+    "heading": "9031",
+    "code": "9031410060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348388",
+    "heading": "8543",
+    "code": "8543709500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348485",
+    "heading": "6404",
+    "code": "6404119050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348548",
+    "heading": "4901",
+    "code": "4901990093",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348678",
+    "heading": "8424",
+    "code": "8424411000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348706",
+    "heading": "8205",
+    "code": "8205303000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348712",
+    "heading": "8481",
+    "code": "8481302090",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348713",
+    "heading": "8481",
+    "code": "8481302090",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348943",
+    "heading": "8203",
+    "code": "8203204000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349022",
+    "heading": "8443",
+    "code": "8443120000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349064",
+    "heading": "8501",
+    "code": "8501104080",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H347637",
+    "heading": "1516",
+    "code": "1516100000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348098",
+    "heading": "9504",
+    "code": "9504400000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348224",
+    "heading": "7318",
+    "code": "7318154000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348407",
+    "heading": "3901",
+    "code": "3901105030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348539",
+    "heading": "8543",
+    "code": "8543709860",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348607",
+    "heading": "8302",
+    "code": "8302496055",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348700",
+    "heading": "8421",
+    "code": "8421914000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348898",
+    "heading": "4903",
+    "code": "4903000000",
+    "verdict": "strong"
+   },
+   {
+    "id": "HQ H337673",
+    "heading": "8517",
+    "code": "8517610000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348123",
+    "heading": "5402",
+    "code": "5402471020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348138",
+    "heading": "9504",
+    "code": "9504906000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348190",
+    "heading": "1902",
+    "code": "1902300040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348191",
+    "heading": "1902",
+    "code": "1902300040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348468",
+    "heading": "8406",
+    "code": "8406904000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348499",
+    "heading": "8419",
+    "code": "8419501000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348521",
+    "heading": "8302",
+    "code": "8302306000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348625",
+    "heading": "9027",
+    "code": "9027810000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348691",
+    "heading": "8708",
+    "code": "8708505110",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348699",
+    "heading": "8421",
+    "code": "8421390140",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348880",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348896",
+    "heading": "9027",
+    "code": "9027208060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349135",
+    "heading": "7326",
+    "code": "7326908610",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349155",
+    "heading": "4820",
+    "code": "4820102010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348346",
+    "heading": "3402",
+    "code": "3402499000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348501",
+    "heading": "4202",
+    "code": "4202923131",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348563",
+    "heading": "3926",
+    "code": "3926902100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348624",
+    "heading": "8462",
+    "code": "8462325020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348789",
+    "heading": "9503",
+    "code": "9503000013",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348835",
+    "heading": "8543",
+    "code": "8543709100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348977",
+    "heading": "8421",
+    "code": "8421390130",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349030",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349152",
+    "heading": "8205",
+    "code": "8205906000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349257",
+    "heading": "8421",
+    "code": "8421914000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N346898",
+    "heading": "6802",
+    "code": "6802930025",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348208",
+    "heading": "3401",
+    "code": "3401115000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348360",
+    "heading": "9401",
+    "code": "9401790015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348384",
+    "heading": "5903",
+    "code": "5903202500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348438",
+    "heading": "4911",
+    "code": "4911100060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348495",
+    "heading": "9403",
+    "code": "9403200046",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348503",
+    "heading": "4202",
+    "code": "4202929100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348508",
+    "heading": "8486",
+    "code": "8486400030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348520",
+    "heading": "2844",
+    "code": "2844430028",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348526",
+    "heading": "2918",
+    "code": "2918111000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348575",
+    "heading": "9019",
+    "code": "9019102030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348634",
+    "heading": "1701",
+    "code": "1701142000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348746",
+    "heading": "6502",
+    "code": "6502009060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348916",
+    "heading": "9209",
+    "code": "9209300000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349040",
+    "heading": "9503",
+    "code": "9503000071",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349200",
+    "heading": "6913",
+    "code": "6913905000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348343",
+    "heading": "6404",
+    "code": "6404193760",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348431",
+    "heading": "9018",
+    "code": "9018195500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348636",
+    "heading": "3917",
+    "code": "3917310000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348643",
+    "heading": "6302",
+    "code": "6302600020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348645",
+    "heading": "8481",
+    "code": "8481302090",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348646",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348714",
+    "heading": "8481",
+    "code": "8481100020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348752",
+    "heading": "8528",
+    "code": "8528591000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349032",
+    "heading": "8543",
+    "code": "8543709860",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348507",
+    "heading": "7218",
+    "code": "7218100000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348532",
+    "heading": "8414",
+    "code": "8414400000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348656",
+    "heading": "2833",
+    "code": "2833111000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348726",
+    "heading": "9401",
+    "code": "9401390010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348782",
+    "heading": "6210",
+    "code": "6210408033",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348813",
+    "heading": "8708",
+    "code": "8708995800",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348892",
+    "heading": "8509",
+    "code": "8509805040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348901",
+    "heading": "4820",
+    "code": "4820102010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349082",
+    "heading": "8414",
+    "code": "8414308010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349201",
+    "heading": "6913",
+    "code": "6913905000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348330",
+    "heading": "2008",
+    "code": "2008999110",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348460",
+    "heading": "2208",
+    "code": "2208500030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348475",
+    "heading": "9018",
+    "code": "9018195500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348513",
+    "heading": "9401",
+    "code": "9401710011",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348693",
+    "heading": "8536",
+    "code": "8536698000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348724",
+    "heading": "7604",
+    "code": "7604210010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348978",
+    "heading": "8518",
+    "code": "8518104000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349358",
+    "heading": "4420",
+    "code": "4420902000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N343691",
+    "heading": "6110",
+    "code": "6110303020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348141",
+    "heading": "6307",
+    "code": "6307102030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348553",
+    "heading": "6406",
+    "code": "6406104500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348721",
+    "heading": "9401",
+    "code": "9401991085",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348812",
+    "heading": "8708",
+    "code": "8708998115",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348858",
+    "heading": "6301",
+    "code": "6301400020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348886",
+    "heading": "8507",
+    "code": "8507600030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349083",
+    "heading": "8413",
+    "code": "8413702025",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349122",
+    "heading": "8517",
+    "code": "8517620010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349243",
+    "heading": "4202",
+    "code": "4202313000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348497",
+    "heading": "3004",
+    "code": "3004909215",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348577",
+    "heading": "6001",
+    "code": "6001106000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348628",
+    "heading": "6702",
+    "code": "6702102000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348658",
+    "heading": "7504",
+    "code": "7504000010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348684",
+    "heading": "8543",
+    "code": "8543709301",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348767",
+    "heading": "6301",
+    "code": "6301400020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348855",
+    "heading": "8471",
+    "code": "8471300100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348957",
+    "heading": "4907",
+    "code": "4907000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349047",
+    "heading": "9401",
+    "code": "9401390010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349118",
+    "heading": "8421",
+    "code": "8421310000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349427",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349457",
+    "heading": "7308",
+    "code": "7308909590",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348588",
+    "heading": "2933",
+    "code": "2933998210",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348861",
+    "heading": "8301",
+    "code": "8301403000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348877",
+    "heading": "8501",
+    "code": "8501104040",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348979",
+    "heading": "4016",
+    "code": "4016993000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348998",
+    "heading": "8504",
+    "code": "8504210080",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349076",
+    "heading": "8486",
+    "code": "8486300000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349210",
+    "heading": "6502",
+    "code": "6502006030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349258",
+    "heading": "4016",
+    "code": "4016993000",
+    "verdict": "strong"
+   },
+   {
+    "id": "HQ H303312",
+    "heading": "8543",
+    "code": "8543709500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348579",
+    "heading": "6113",
+    "code": "6113009052",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348725",
+    "heading": "6404",
+    "code": "6404116160",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348968",
+    "heading": "8480",
+    "code": "8480718045",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349078",
+    "heading": "8419",
+    "code": "8419505000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349173",
+    "heading": "4202",
+    "code": "4202221500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349460",
+    "heading": "4911",
+    "code": "4911914040",
+    "verdict": "strong"
+   },
+   {
+    "id": "HQ H335208",
+    "heading": "8528",
+    "code": "8528713000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348762",
+    "heading": "8516",
+    "code": "8516604078",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348771",
+    "heading": "2921",
+    "code": "2921412000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348906",
+    "heading": "8481",
+    "code": "8481301010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349144",
+    "heading": "9031",
+    "code": "9031410060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349349",
+    "heading": "8543",
+    "code": "8543901500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349379",
+    "heading": "8481",
+    "code": "8481301010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349496",
+    "heading": "5511",
+    "code": "5511100030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349498",
+    "heading": "5511",
+    "code": "5511100030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349768",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N332953",
+    "heading": "5903",
+    "code": "5903202500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349242",
+    "heading": "9603",
+    "code": "9603106000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349299",
+    "heading": "8426",
+    "code": "8426910000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349413",
+    "heading": "8414",
+    "code": "8414308060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349586",
+    "heading": "8421",
+    "code": "8421290040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349606",
+    "heading": "8206",
+    "code": "8206000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348800",
+    "heading": "9021",
+    "code": "9021500000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348803",
+    "heading": "9021",
+    "code": "9021100090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348833",
+    "heading": "3004",
+    "code": "3004909265",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349097",
+    "heading": "5602",
+    "code": "5602101000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349253",
+    "heading": "6301",
+    "code": "6301400020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349543",
+    "heading": "8421",
+    "code": "8421290015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349639",
+    "heading": "4901",
+    "code": "4901990093",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H342749",
+    "heading": "8421",
+    "code": "8421210000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348903",
+    "heading": "9503",
+    "code": "9503000073",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N348907",
+    "heading": "4202",
+    "code": "4202227000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349024",
+    "heading": "9021",
+    "code": "9021294000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349066",
+    "heading": "6212",
+    "code": "6212103000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349224",
+    "heading": "8508",
+    "code": "8508110000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349229",
+    "heading": "1901",
+    "code": "1901102100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349400",
+    "heading": "3924",
+    "code": "3924901050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349470",
+    "heading": "9403",
+    "code": "9403200040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349567",
+    "heading": "4016",
+    "code": "4016935020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349602",
+    "heading": "8421",
+    "code": "8421290015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349666",
+    "heading": "9401",
+    "code": "9401390010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349704",
+    "heading": "4820",
+    "code": "4820300040",
+    "verdict": "strong"
+   },
+   {
+    "id": "HQ H323634",
+    "heading": "8517",
+    "code": "8517620020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349001",
+    "heading": "8302",
+    "code": "8302423065",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349132",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349133",
+    "heading": "8708",
+    "code": "8708700500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349176",
+    "heading": "3004",
+    "code": "3004909250",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349206",
+    "heading": "3204",
+    "code": "3204179086",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349207",
+    "heading": "3204",
+    "code": "3204131000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349231",
+    "heading": "3004",
+    "code": "3004909246",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349232",
+    "heading": "3004",
+    "code": "3004909251",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349264",
+    "heading": "8302",
+    "code": "8302496035",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349345",
+    "heading": "6813",
+    "code": "6813200015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349431",
+    "heading": "8536",
+    "code": "8536698000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349433",
+    "heading": "8504",
+    "code": "8504406001",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349448",
+    "heading": "8541",
+    "code": "8541420010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349677",
+    "heading": "8302",
+    "code": "8302498090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349685",
+    "heading": "6114",
+    "code": "6114301020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349832",
+    "heading": "8467",
+    "code": "8467210070",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349973",
+    "heading": "8302",
+    "code": "8302103000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N348931",
+    "heading": "4901",
+    "code": "4901990093",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349015",
+    "heading": "9401",
+    "code": "9401710011",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349034",
+    "heading": "9404",
+    "code": "9404901060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349035",
+    "heading": "6302",
+    "code": "6302600030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349043",
+    "heading": "4202",
+    "code": "4202929400",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349114",
+    "heading": "6405",
+    "code": "6405909060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349208",
+    "heading": "3204",
+    "code": "3204131000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349234",
+    "heading": "8508",
+    "code": "8508600000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349267",
+    "heading": "1905",
+    "code": "1905901041",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349745",
+    "heading": "8543",
+    "code": "8543709500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349011",
+    "heading": "9401",
+    "code": "9401390030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349167",
+    "heading": "9401",
+    "code": "9401696001",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349241",
+    "heading": "8536",
+    "code": "8536698000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349262",
+    "heading": "8501",
+    "code": "8501324500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349269",
+    "heading": "3926",
+    "code": "3926904590",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349346",
+    "heading": "8708",
+    "code": "8708305030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349366",
+    "heading": "5801",
+    "code": "5801360020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349404",
+    "heading": "7308",
+    "code": "7308903000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349493",
+    "heading": "8419",
+    "code": "8419601000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349537",
+    "heading": "8504",
+    "code": "8504406001",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349830",
+    "heading": "4411",
+    "code": "4411133000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349886",
+    "heading": "4819",
+    "code": "4819300040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349918",
+    "heading": "9603",
+    "code": "9603104000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349927",
+    "heading": "6912",
+    "code": "6912004810",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349965",
+    "heading": "4016",
+    "code": "4016993510",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N344142",
+    "heading": "6110",
+    "code": "6110303020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349127",
+    "heading": "8543",
+    "code": "8543901500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349196",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349217",
+    "heading": "3004",
+    "code": "3004310010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349221",
+    "heading": "3005",
+    "code": "3005101000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349261",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349421",
+    "heading": "8419",
+    "code": "8419501000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349446",
+    "heading": "8486",
+    "code": "8486400030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349449",
+    "heading": "8486",
+    "code": "8486200000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349451",
+    "heading": "8486",
+    "code": "8486400030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349776",
+    "heading": "8543",
+    "code": "8543901500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349995",
+    "heading": "4910",
+    "code": "4910002000",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H329722",
+    "heading": "8507",
+    "code": "8507600030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349296",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349347",
+    "heading": "4202",
+    "code": "4202924500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349352",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349353",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349416",
+    "heading": "4202",
+    "code": "4202228100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349758",
+    "heading": "6110",
+    "code": "6110303053",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349931",
+    "heading": "9505",
+    "code": "9505102500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349932",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349933",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349934",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349936",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350035",
+    "heading": "4817",
+    "code": "4817202000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349190",
+    "heading": "3923",
+    "code": "3923210020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349256",
+    "heading": "8543",
+    "code": "8543400030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349268",
+    "heading": "8427",
+    "code": "8427108040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349339",
+    "heading": "8302",
+    "code": "8302103000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349527",
+    "heading": "8483",
+    "code": "8483101030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349668",
+    "heading": "8481",
+    "code": "8481200040",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349688",
+    "heading": "9503",
+    "code": "9503000073",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349938",
+    "heading": "9505",
+    "code": "9505104020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349939",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350111",
+    "heading": "8703",
+    "code": "8703400020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350151",
+    "heading": "3923",
+    "code": "3923900080",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349265",
+    "heading": "6406",
+    "code": "6406901540",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349355",
+    "heading": "2106",
+    "code": "2106902400",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349505",
+    "heading": "7308",
+    "code": "7308909590",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349541",
+    "heading": "8517",
+    "code": "8517140050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349598",
+    "heading": "8708",
+    "code": "8708503110",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349622",
+    "heading": "8411",
+    "code": "8411991040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349718",
+    "heading": "8539",
+    "code": "8539520091",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349742",
+    "heading": "8525",
+    "code": "8525894000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349756",
+    "heading": "9503",
+    "code": "9503000071",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349860",
+    "heading": "8467",
+    "code": "8467210030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349916",
+    "heading": "8517",
+    "code": "8517140050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349924",
+    "heading": "8419",
+    "code": "8419200010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349941",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349942",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349943",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349275",
+    "heading": "8413",
+    "code": "8413190000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349411",
+    "heading": "7102",
+    "code": "7102290020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349426",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349825",
+    "heading": "8419",
+    "code": "8419501000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350036",
+    "heading": "4911",
+    "code": "4911996000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350133",
+    "heading": "8433",
+    "code": "8433110010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349453",
+    "heading": "4202",
+    "code": "4202399000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349467",
+    "heading": "4202",
+    "code": "4202313000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349599",
+    "heading": "8708",
+    "code": "8708998105",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349638",
+    "heading": "3213",
+    "code": "3213100000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349761",
+    "heading": "8486",
+    "code": "8486400030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349781",
+    "heading": "7315",
+    "code": "7315110060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349884",
+    "heading": "4203",
+    "code": "4203295000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349887",
+    "heading": "4202",
+    "code": "4202929100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349945",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349574",
+    "heading": "6405",
+    "code": "6405909060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349585",
+    "heading": "2824",
+    "code": "2824902000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349631",
+    "heading": "8406",
+    "code": "8406904000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349842",
+    "heading": "9506",
+    "code": "9506624080",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349897",
+    "heading": "8504",
+    "code": "8504409510",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349921",
+    "heading": "9010",
+    "code": "9010504000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350004",
+    "heading": "9031",
+    "code": "9031410060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350012",
+    "heading": "8716",
+    "code": "8716390050",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350068",
+    "heading": "9027",
+    "code": "9027504060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350094",
+    "heading": "9608",
+    "code": "9608300031",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350502",
+    "heading": "7310",
+    "code": "7310210070",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350505",
+    "heading": "7310",
+    "code": "7310210070",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349495",
+    "heading": "9603",
+    "code": "9603106000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349497",
+    "heading": "8302",
+    "code": "8302496085",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349544",
+    "heading": "8481",
+    "code": "8481809015",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349636",
+    "heading": "8406",
+    "code": "8406904000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349676",
+    "heading": "4203",
+    "code": "4203290500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349697",
+    "heading": "7604",
+    "code": "7604210010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349787",
+    "heading": "7301",
+    "code": "7301205000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349930",
+    "heading": "8414",
+    "code": "8414400000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350124",
+    "heading": "3204",
+    "code": "3204132500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350206",
+    "heading": "9607",
+    "code": "9607190060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350212",
+    "heading": "2208",
+    "code": "2208500030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350309",
+    "heading": "4819",
+    "code": "4819100040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350432",
+    "heading": "9406",
+    "code": "9406900130",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N347023",
+    "heading": "3824",
+    "code": "3824992600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349747",
+    "heading": "6702",
+    "code": "6702903500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349792",
+    "heading": "4202",
+    "code": "4202929100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349489",
+    "heading": "8306",
+    "code": "8306100000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349801",
+    "heading": "6404",
+    "code": "6404199030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349823",
+    "heading": "7601",
+    "code": "7601209030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349898",
+    "heading": "8302",
+    "code": "8302103000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349904",
+    "heading": "3004",
+    "code": "3004320080",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349980",
+    "heading": "9503",
+    "code": "9503000013",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350076",
+    "heading": "9507",
+    "code": "9507100040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350126",
+    "heading": "3814",
+    "code": "3814005090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350367",
+    "heading": "8414",
+    "code": "8414513000",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H341715",
+    "heading": "3824",
+    "code": "3824300000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349750",
+    "heading": "7318",
+    "code": "7318154000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349917",
+    "heading": "8516",
+    "code": "8516210000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350103",
+    "heading": "8302",
+    "code": "8302303060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350199",
+    "heading": "7312",
+    "code": "7312108000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349663",
+    "heading": "8708",
+    "code": "8708801610",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349876",
+    "heading": "8215",
+    "code": "8215993000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349914",
+    "heading": "3006",
+    "code": "3006600000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350072",
+    "heading": "9018",
+    "code": "9018195500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350122",
+    "heading": "8704",
+    "code": "8704105030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350128",
+    "heading": "3814",
+    "code": "3814005090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350308",
+    "heading": "9503",
+    "code": "9503000011",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350327",
+    "heading": "6106",
+    "code": "6106100010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350472",
+    "heading": "9504",
+    "code": "9504300040",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349660",
+    "heading": "8708",
+    "code": "8708704546",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349664",
+    "heading": "8302",
+    "code": "8302303060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349867",
+    "heading": "4202",
+    "code": "4202999000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349868",
+    "heading": "9018",
+    "code": "9018907560",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349952",
+    "heading": "3926",
+    "code": "3926909950",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349961",
+    "heading": "3926",
+    "code": "3926203000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350273",
+    "heading": "3304",
+    "code": "3304991000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350537",
+    "heading": "4820",
+    "code": "4820102040",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350696",
+    "heading": "7604",
+    "code": "7604291010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350822",
+    "heading": "8206",
+    "code": "8206000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349794",
+    "heading": "8419",
+    "code": "8419501000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349979",
+    "heading": "6402",
+    "code": "6402992790",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350043",
+    "heading": "8528",
+    "code": "8528520000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350114",
+    "heading": "8543",
+    "code": "8543400040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350223",
+    "heading": "5903",
+    "code": "5903201500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350302",
+    "heading": "9506",
+    "code": "9506310000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350415",
+    "heading": "8518",
+    "code": "8518294000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350591",
+    "heading": "3926",
+    "code": "3926400010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350922",
+    "heading": "9503",
+    "code": "9503000071",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349974",
+    "heading": "3824",
+    "code": "3824993200",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350045",
+    "heading": "8302",
+    "code": "8302496085",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350116",
+    "heading": "8507",
+    "code": "8507600030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350371",
+    "heading": "9021",
+    "code": "9021908100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350566",
+    "heading": "5407",
+    "code": "5407612100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350583",
+    "heading": "9503",
+    "code": "9503000073",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350909",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349967",
+    "heading": "6402",
+    "code": "6402914067",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N349986",
+    "heading": "6406",
+    "code": "6406200000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350026",
+    "heading": "9113",
+    "code": "9113204000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350180",
+    "heading": "7314",
+    "code": "7314311000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350189",
+    "heading": "8507",
+    "code": "8507600090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350205",
+    "heading": "7607",
+    "code": "7607191000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350390",
+    "heading": "9027",
+    "code": "9027504015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350709",
+    "heading": "7219",
+    "code": "7219900025",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N349953",
+    "heading": "9404",
+    "code": "9404909622",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350173",
+    "heading": "8543",
+    "code": "8543903500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350184",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350185",
+    "heading": "8481",
+    "code": "8481200020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350337",
+    "heading": "2853",
+    "code": "2853909090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350346",
+    "heading": "4418",
+    "code": "4418749000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350374",
+    "heading": "5903",
+    "code": "5903902500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350419",
+    "heading": "8505",
+    "code": "8505191000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350568",
+    "heading": "7308",
+    "code": "7308200035",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350582",
+    "heading": "6505",
+    "code": "6505006045",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350636",
+    "heading": "6106",
+    "code": "6106100010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350881",
+    "heading": "3902",
+    "code": "3902300000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350046",
+    "heading": "8206",
+    "code": "8206000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350395",
+    "heading": "8526",
+    "code": "8526921000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350401",
+    "heading": "8206",
+    "code": "8206000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350440",
+    "heading": "9013",
+    "code": "9013101000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350564",
+    "heading": "7018",
+    "code": "7018101000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350803",
+    "heading": "7318",
+    "code": "7318155051",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350824",
+    "heading": "8408",
+    "code": "8408901040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350866",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350275",
+    "heading": "8543",
+    "code": "8543709500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350314",
+    "heading": "7607",
+    "code": "7607116010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350420",
+    "heading": "8302",
+    "code": "8302103000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350425",
+    "heading": "8206",
+    "code": "8206000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350426",
+    "heading": "8302",
+    "code": "8302306000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350447",
+    "heading": "7210",
+    "code": "7210706030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350713",
+    "heading": "8414",
+    "code": "8414801640",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350731",
+    "heading": "9027",
+    "code": "9027504060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350732",
+    "heading": "9027",
+    "code": "9027501000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350929",
+    "heading": "8418",
+    "code": "8418300000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N345059",
+    "heading": "6110",
+    "code": "6110909030",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350178",
+    "heading": "2104",
+    "code": "2104100020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350230",
+    "heading": "9403",
+    "code": "9403200035",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350276",
+    "heading": "9027",
+    "code": "9027508060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350303",
+    "heading": "4202",
+    "code": "4202321000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350316",
+    "heading": "3924",
+    "code": "3924104000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350340",
+    "heading": "7505",
+    "code": "7505111000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350413",
+    "heading": "8516",
+    "code": "8516210000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350489",
+    "heading": "9024",
+    "code": "9024100000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350577",
+    "heading": "3924",
+    "code": "3924905650",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350631",
+    "heading": "3926",
+    "code": "3926902500",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350670",
+    "heading": "7613",
+    "code": "7613000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350734",
+    "heading": "9027",
+    "code": "9027905400",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350736",
+    "heading": "9027",
+    "code": "9027905400",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350781",
+    "heading": "7608",
+    "code": "7608100090",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350289",
+    "heading": "9401",
+    "code": "9401390010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350397",
+    "heading": "7304",
+    "code": "7304490005",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350571",
+    "heading": "3401",
+    "code": "3401301000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350586",
+    "heading": "7323",
+    "code": "7323100000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350596",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350597",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350598",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350600",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350880",
+    "heading": "3918",
+    "code": "3918101020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350913",
+    "heading": "8505",
+    "code": "8505191000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351124",
+    "heading": "8544",
+    "code": "8544110020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N341069",
+    "heading": "3924",
+    "code": "3924901050",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350312",
+    "heading": "3004",
+    "code": "3004909266",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350373",
+    "heading": "9403",
+    "code": "9403200035",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350436",
+    "heading": "2103",
+    "code": "2103907400",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350482",
+    "heading": "8302",
+    "code": "8302492000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350508",
+    "heading": "8543",
+    "code": "8543400040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350532",
+    "heading": "9401",
+    "code": "9401790015",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350574",
+    "heading": "9620",
+    "code": "9620006500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350592",
+    "heading": "4010",
+    "code": "4010125000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350633",
+    "heading": "9018",
+    "code": "9018907570",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350689",
+    "heading": "8479",
+    "code": "8479500000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350753",
+    "heading": "9027",
+    "code": "9027504015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350754",
+    "heading": "9027",
+    "code": "9027504015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350833",
+    "heading": "9027",
+    "code": "9027504015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350860",
+    "heading": "8302",
+    "code": "8302423065",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350919",
+    "heading": "3923",
+    "code": "3923290000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351247",
+    "heading": "8479",
+    "code": "8479904500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350403",
+    "heading": "3004",
+    "code": "3004909276",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350406",
+    "heading": "3004",
+    "code": "3004909221",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350424",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350625",
+    "heading": "3824",
+    "code": "3824997000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350660",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350661",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350662",
+    "heading": "8302",
+    "code": "8302303010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350663",
+    "heading": "8302",
+    "code": "8302303010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350835",
+    "heading": "9027",
+    "code": "9027504015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350928",
+    "heading": "6406",
+    "code": "6406901540",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351067",
+    "heading": "8518",
+    "code": "8518104000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351130",
+    "heading": "9608",
+    "code": "9608500000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351155",
+    "heading": "9503",
+    "code": "9503000090",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351160",
+    "heading": "8419",
+    "code": "8419819040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351212",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351219",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351264",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351322",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350641",
+    "heading": "8479",
+    "code": "8479904500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350934",
+    "heading": "7601",
+    "code": "7601209085",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350960",
+    "heading": "3824",
+    "code": "3824402000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351148",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351153",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351208",
+    "heading": "9404",
+    "code": "9404901060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351272",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351277",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351473",
+    "heading": "7314",
+    "code": "7314496000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350773",
+    "heading": "8415",
+    "code": "8415106000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351191",
+    "heading": "2309",
+    "code": "2309904490",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351195",
+    "heading": "9027",
+    "code": "9027905400",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351245",
+    "heading": "7318",
+    "code": "7318156070",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N343421",
+    "heading": "3924",
+    "code": "3924104000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350828",
+    "heading": "9027",
+    "code": "9027905400",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350829",
+    "heading": "9027",
+    "code": "9027894530",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350831",
+    "heading": "9027",
+    "code": "9027894530",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351068",
+    "heading": "7311",
+    "code": "7311000060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351102",
+    "heading": "3213",
+    "code": "3213100000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351121",
+    "heading": "6110",
+    "code": "6110303035",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351123",
+    "heading": "8413",
+    "code": "8413500080",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351125",
+    "heading": "8543",
+    "code": "8543400040",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351276",
+    "heading": "7312",
+    "code": "7312103012",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351299",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351312",
+    "heading": "9027",
+    "code": "9027501000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351315",
+    "heading": "9027",
+    "code": "9027501000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351328",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350527",
+    "heading": "0202",
+    "code": "0202300200",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350716",
+    "heading": "1901",
+    "code": "1901909195",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350790",
+    "heading": "3304",
+    "code": "3304991000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350932",
+    "heading": "4421",
+    "code": "4421997020",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350936",
+    "heading": "4420",
+    "code": "4420110010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351071",
+    "heading": "9503",
+    "code": "9503000013",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351144",
+    "heading": "6404",
+    "code": "6404193730",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351202",
+    "heading": "9503",
+    "code": "9503000011",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351309",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351321",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351403",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "HQ H305273",
+    "heading": "9606",
+    "code": "9606214000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350567",
+    "heading": "2933",
+    "code": "2933997000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350797",
+    "heading": "6205",
+    "code": "6205202051",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351232",
+    "heading": "8525",
+    "code": "8525894000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351293",
+    "heading": "9027",
+    "code": "9027504015",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351313",
+    "heading": "9027",
+    "code": "9027501000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351404",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351422",
+    "heading": "8202",
+    "code": "8202310000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350685",
+    "heading": "3006",
+    "code": "3006305000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350763",
+    "heading": "4202",
+    "code": "4202228100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350798",
+    "heading": "6211",
+    "code": "6211339042",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351218",
+    "heading": "1806",
+    "code": "1806202600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351388",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351417",
+    "heading": "3824",
+    "code": "3824999397",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351521",
+    "heading": "7223",
+    "code": "7223001005",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350779",
+    "heading": "4202",
+    "code": "4202929100",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350801",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350924",
+    "heading": "8609",
+    "code": "8609000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350933",
+    "heading": "9401",
+    "code": "9401614011",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N350956",
+    "heading": "1806",
+    "code": "1806208100",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351268",
+    "heading": "8481",
+    "code": "8481809035",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351401",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351434",
+    "heading": "3824",
+    "code": "3824992600",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351601",
+    "heading": "8708",
+    "code": "8708295125",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351637",
+    "heading": "7302",
+    "code": "7302101035",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350783",
+    "heading": "8421",
+    "code": "8421320000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351059",
+    "heading": "3920",
+    "code": "3920620050",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351170",
+    "heading": "9018",
+    "code": "9018907520",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351198",
+    "heading": "4911",
+    "code": "4911913000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351244",
+    "heading": "8543",
+    "code": "8543706000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351280",
+    "heading": "4907",
+    "code": "4907000000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351331",
+    "heading": "9401",
+    "code": "9401390030",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351406",
+    "heading": "9505",
+    "code": "9505906000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351411",
+    "heading": "8482",
+    "code": "8482105036",
+    "verdict": "broker"
+   },
+   {
+    "id": "HQ H335912",
+    "heading": "2106",
+    "code": "2106900300",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351072",
+    "heading": "8517",
+    "code": "8517620020",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351211",
+    "heading": "6307",
+    "code": "6307909891",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351337",
+    "heading": "3917",
+    "code": "3917400060",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351344",
+    "heading": "8517",
+    "code": "8517620010",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351451",
+    "heading": "8424",
+    "code": "8424490000",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351495",
+    "heading": "9403",
+    "code": "9403200078",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351670",
+    "heading": "3917",
+    "code": "3917390010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350917",
+    "heading": "7117",
+    "code": "7117906000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351400",
+    "heading": "6110",
+    "code": "6110302061",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351419",
+    "heading": "9403",
+    "code": "9403200075",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351463",
+    "heading": "9401",
+    "code": "9401802001",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351466",
+    "heading": "7108",
+    "code": "7108121013",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351488",
+    "heading": "2106",
+    "code": "2106900600",
+    "verdict": "strong"
+   },
+   {
+    "id": "NY N351489",
+    "heading": "3815",
+    "code": "3815120010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351518",
+    "heading": "2008",
+    "code": "2008198500",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350941",
+    "heading": "3926",
+    "code": "3926305000",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350951",
+    "heading": "9607",
+    "code": "9607190060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N350952",
+    "heading": "9607",
+    "code": "9607190060",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351242",
+    "heading": "8423",
+    "code": "8423100010",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351426",
+    "heading": "9401",
+    "code": "9401790006",
+    "verdict": "broker"
+   },
+   {
+    "id": "NY N351545",
+    "heading": "3824",
+    "code": "3824920000",
+    "verdict": "broker"
+   }
+  ]
+ }
+}

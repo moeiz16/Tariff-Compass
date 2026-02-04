@@ -1,0 +1,168 @@
+{
+  "candidates": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Given a product description and candidate tariff headings with their texts, list the headings that could\nclassify the product, most likely first, with one plain sentence each.",
+      "fields": [
+        {
+          "prefix": "Product:",
+          "description": "description, spec sheet text and photo facts"
+        },
+        {
+          "prefix": "Candidates:",
+          "description": "candidate headings with their official texts"
+        },
+        {
+          "prefix": "Headings:",
+          "description": "comma-separated four-digit headings, most likely first"
+        },
+        {
+          "prefix": "Rationale:",
+          "description": "one sentence per heading"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "gri": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Apply the General Rules of Interpretation in order. Use GRI 1 (heading texts and section and chapter\nnotes) first; go to GRI 2-5 only when GRI 1 cannot decide. Explain why each neighbouring heading is set aside.\nRULE: prefer 7117 over 8414 when the product mentions 'necklace'",
+      "fields": [
+        {
+          "prefix": "Product:",
+          "description": "${product}"
+        },
+        {
+          "prefix": "Headings:",
+          "description": "candidate headings with texts and relevant notes"
+        },
+        {
+          "prefix": "Rulings:",
+          "description": "numbered rulings with their holdings"
+        },
+        {
+          "prefix": "Heading:",
+          "description": "the chosen four-digit heading"
+        },
+        {
+          "prefix": "Gri:",
+          "description": "the rule that decides it, e.g. GRI 1"
+        },
+        {
+          "prefix": "Set Aside:",
+          "description": "one line per neighbour: code | reason | ruling number or none"
+        },
+        {
+          "prefix": "Facts:",
+          "description": "one line per fact: key | value | stated, read, assumed or unknown"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "subheading": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Within the chosen heading, compare subheadings at the same level only (GRI 6) and pick the ten-digit line.",
+      "fields": [
+        {
+          "prefix": "Product:",
+          "description": "${product}"
+        },
+        {
+          "prefix": "Lines:",
+          "description": "the heading's indented lines with codes"
+        },
+        {
+          "prefix": "Country:",
+          "description": "US or CA"
+        },
+        {
+          "prefix": "Code:",
+          "description": "ten digits, no dots"
+        },
+        {
+          "prefix": "Why:",
+          "description": "${why}"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "cite": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Write the answer in three or four plain sentences and cite, for each sentence, the rulings that support it.\nA revoked ruling may only be cited for contrast.",
+      "fields": [
+        {
+          "prefix": "Product:",
+          "description": "${product}"
+        },
+        {
+          "prefix": "Decision:",
+          "description": "chosen codes, path and set-aside neighbours"
+        },
+        {
+          "prefix": "Rulings:",
+          "description": "numbered rulings with holdings and status"
+        },
+        {
+          "prefix": "Sentences:",
+          "description": "one sentence per line ending with citation numbers like [1][2]"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "confidence": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Decide whether the answer is a strong match or needs a broker. If it needs a broker, name the single fact\nthat would decide it and ask it as a question with two answers.\nRULE: say broker when the margin is below 0.0\nRULE: say broker when the precedent share is below 0.8",
+      "fields": [
+        {
+          "prefix": "Product:",
+          "description": "${product}"
+        },
+        {
+          "prefix": "Decision:",
+          "description": "${decision}"
+        },
+        {
+          "prefix": "Agreement:",
+          "description": "how many cited rulings reach the same heading"
+        },
+        {
+          "prefix": "Verdict:",
+          "description": "strong or broker"
+        },
+        {
+          "prefix": "Deciding Fact:",
+          "description": "fact key, or none"
+        },
+        {
+          "prefix": "Question:",
+          "description": "the question that would settle it, or none"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.13",
+      "dspy": "3.5.0",
+      "cloudpickle": "3.1"
+    }
+  }
+}
