@@ -24,19 +24,35 @@ text.
 
 ### Label quality, and how training uses it
 
-The mirror's tariff numbers are mostly right but not always. Measured over the 18,136 rulings kept:
+The mirror carries CBP's letters with a ruling number, a date and a tariff number, but the three don't always belong
+to the same letter. `search/corpus.py` reads every letter on its own terms, and `manage.py build_index` writes the
+counts to `classify/artifacts/labels_report.json`. Over the 18,136 letters kept by the fetcher:
 
-- 12,689 (70.0%) state a classification holding in the letter ("The applicable subheading … will be …"); the
-  rest are HQ decisions phrased differently, country-of-origin or marking rulings, or rulings that decline to rule.
-- Where a holding is stated, the mirror's number agrees with it 97.0% at ten digits, 97.6% at six and 97.9% at the
-  heading.
-- Some entries carry the wrong collection or number (e.g. the 2021 revocation listed as "NY N319947" is HQ H303684
-  by its own letterhead).
+| Check | Letters |
+|---|---|
+| State a classification holding ("The applicable subheading … will be …", or an HQ HOLDING) | 13,456 |
+| No holding (country-of-origin, marking, valuation, vessels, declined rulings) | 4,680 (searchable, never labels) |
+| Holding agrees with the mirror's number at the heading / six digits / ten digits | 12,947 / 12,849 / 10,944 |
+| Holding disagrees with the mirror's number at the heading (dropped as labels, never cited) | 509 |
+| Holdings spread over several subheadings (a letter on several articles; not a label) | 1,422 |
+| File reference chapter ("CLA-2-73") disagrees with the holding (not a label) | 383 |
+| HQ letters filed under an NY number, re-keyed from the letterhead (e.g. "NY N319947" → HQ H303684) | 890 |
+| NY-style letters filed under an HQ number (number unknown; searchable, never cited) | 1,137 |
+| HQ letters whose letterhead number differs from the mirror's, often by one transposed digit (never cited) | 493 |
+| Rulings revoked / modified by an HQ letter in the corpus | 309 / 102 |
+| Revoked numbers whose corpus letter is plainly another letter (moved to an unverified id; the revocation is kept as a noted record quoting the revoking letter) | 19 |
+| Revoked rulings named by a corpus HQ letter but absent from the corpus (noted records, never cited) | 385 |
+| **Labelled examples** (holding agrees at the heading, one six-digit subheading, trusted number, description ≥ 40 characters) | **10,556** |
+| Citable rulings (number trusted) | 16,020 |
 
-So the training and test sets use **labels re-derived from the letter's own holding**, keep only rulings where the
-holding and the stated number agree at the heading, and take the ruling number from the letterhead when it
-disagrees with the mirror. Rulings without a holding stay searchable (they are real evidence) but never become
-labelled examples. The classification core records the exact counts per round in its report.
+So the training and test labels are the codes each letter holds, never the mirror's field. A noted record (for
+example NY N297758, revoked by HQ H303684 on 7 Jul 2021) says "The letter for NY N297758 is not in the corpus", quotes
+how the revoking letter describes it, and is never cited; the hearing-aids letter the mirror filed under that number
+stays searchable under "NY ?N297758".
+
+The classifier's input is the product as the letter describes it before any legal analysis: the subject line plus
+the facts, cut at the first sentence that names a heading, a tariff number, the HTSUS, a GRI or another ruling, with
+every tariff number removed. The holding never reaches a model.
 
 ### Splits by date (no leakage across time)
 
@@ -48,10 +64,16 @@ it used.
 ### The tariff editions on the demo date
 
 USITC serves JSON only for the current revision; archived revisions (including 2026 Revision 3) are published as
-PDF. The fetcher stores the current JSON with its release name (`data/hts/release.json`). The demo pins the
-**2026 Revision 3** reading: the lines the seed and the duty engine rely on are checked against the Revision 3
-chapter PDFs, and the duty layers were read from the Revision 3 Chapter 99. Canada's T2026 consolidation is the one
-in force from 1 Jan 2026.
+PDF. The fetcher stores the JSON of whichever revision is current when it runs (`data/hts/release.json` names it)
+and then pins it to the **2026 Revision 3** reading: `fetch_data.py rev3` downloads the 96 Revision 3 chapter PDFs,
+keeps only the JSON lines whose eight-digit number Revision 3 prints (`data/hts/hts_2026_rev3.jsonl`, the file the
+app reads) and lists every difference in `data/hts/rev3_check.json`. On the run behind the committed artefacts every
+eight-digit line of the JSON was present in Revision 3; three Revision 3 lines (6103.21.00, 6203.21.00, 8525.69.40)
+were not in the JSON; and every ad valorem column 1 rate in the chapters Northbound imports was printed beside its
+line except one (8415.90.80, a PDF layout miss), while the rates that didn't match elsewhere are specific or
+compound rates ("¢/kg") the check doesn't parse. The ten-digit lines the hand-checked landed costs use (for example
+8507.60.00.90, 6110.20.20.10, 7323.93.00.60) were read in the Revision 3 PDFs as well. The duty layers were read
+from the Revision 3 Chapter 99. Canada's T2026 consolidation is the one in force from 1 Jan 2026.
 
 ## Duty layers as of Thursday 19 February 2026
 
@@ -172,4 +194,7 @@ accuracy figures; it loads the reports the runs produced, labelled with the LM t
 | Rulings download (deleted after parsing) | ~290 MB |
 | `data/rulings/rulings.jsonl` | ~100 MB |
 | `data/hts/hts_current.jsonl`, `data/ca/customs_tariff_t2026.jsonl` | a few MB each |
-| Committed fixtures (`search/fixtures`) | ~1.6 MB rulings sample (616 rulings, letters trimmed) + tariff samples |
+| `data/rulings/rulings_clean.jsonl` (cleaned corpus) | ~120 MB |
+| `data/index/full` (Tantivy) | ~95 MB |
+| `data/hts/rev3/` (Revision 3 chapter PDFs, for the check) | ~90 MB |
+| Committed fixtures (`search/fixtures`) | rulings sample (letters trimmed to the facts and the holding) + tariff samples |

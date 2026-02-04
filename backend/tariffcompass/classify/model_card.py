@@ -123,13 +123,23 @@ def render(report: dict, labels: dict | None) -> str:
             f"{m['chapter']} ({m['train']:.3f} → {m['new']:.3f})" for m in drift["trainVsTest"]["mostMoved"][:4]
         )
         + ".",
-        "- By month as new rulings arrive: " + ", ".join(f"{m['month']} {m['psi']}" for m in drift["byMonth"]) + ".",
+        "- By month as new rulings arrive: "
+        + ", ".join(f"{m['month']} {m['psi']} (n={m['n']})" for m in drift["byMonth"])
+        + ". A month with few rulings swings widely; the monthly series is a watch signal, not a verdict.",
         "",
         "## Serving",
         "",
         f"- p95 {report['latencyMs']['p95']} ms per description on this laptop (gate: < 150 ms); artefacts "
         f"{sum(report['artifactBytes'].values()) / 1e6:.1f} MB (JSON vocabulary, sparse float16 weights, no pickles).",
         "- Tracked in MLflow (local SQLite store, `mlruns/`, git-ignored); registered as `tariff-compass-first-stage`.",
+        "",
+        "## How the test set was used",
+        "",
+        "Once, for the final measurement above. An earlier end-to-end run of the training command (a pipeline check",
+        "with one trial per study) also printed test figures; nothing was chosen from them. The champion rule (top-5",
+        "on validation) and every threshold were fixed in code beforehand, and the gates in `eval/gates.toml` predate",
+        "both runs. After training, the input normalisation gained a Canadian/British-to-US spelling map",
+        "(“aluminium” → “aluminum”); CBP's letters use US spelling, so the measured figures are unaffected.",
         "",
         "## Limits",
         "",

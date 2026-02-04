@@ -49,3 +49,32 @@ against real rulings rather than hand-tuned, and the whole pipeline runnable wit
   budget is kept small enough for free-tier quotas and is recorded in the report.
 - The program's signatures are a contract between the program and the simulator policies; changing a field means
   changing both, with tests.
+
+## How the simulator behaves (as built)
+
+The task policies (`adapters/lm_sim.py`) read only the prompt DSPy renders: the product text, the candidate
+headings with the first stage's probability, the share of retrieved rulings under each heading ("precedent"), a
+tariff-text search rank, the heading texts and the words of their lines, the notes that relate headings (Section
+XV Note 1(m), Section XVII Note 2(f)), the numbered rulings with their holdings, and the tariff lines. Gold labels
+never reach them; GEPA's feedback, which does name the right code for training examples, reaches only the
+reflection policy, as it would reach a real reflection LM.
+
+- **Defaults an unoptimised LM would plausibly have:** trust the first stage most, precedent some, the heading's
+  own words a little; walk the subheadings level by level (GRI 6), with "Other" as the residual; cite the rulings
+  under the chosen heading and one neighbour for contrast; say "Strong match" when the first two headings are a
+  little apart or the deciding fact is stated.
+- **Imperfection, on purpose:** deterministic noise on every score (± 0.03–0.05, from a hash of the product and the
+  option); a citation slip (a top-listed neighbouring ruling cited as support in 30% of the cases, unless told
+  otherwise); a small, fixed reader's vocabulary (bicycle = cycle, polyester is a man-made fibre, "air removed" =
+  vacuum, "insulated" weakly suggests vacuum unless "air-insulated", negations drop the word).
+- **Instructions it understands:** a fixed grammar of `RULE:` sentences (precedent weights, heading-term weight,
+  "prefer A over B when the product mentions 'x'", "in heading H choose C when …", the precedent-following
+  threshold, "cite as support only rulings under the chosen heading", the confidence thresholds). Anything else in
+  the instructions is read and ignored.
+- **Reflection:** writes those sentences from the feedback on a minibatch: preference rules from the words that
+  point to the expected heading in the training rulings, precedent weights when precedent pointed the right way,
+  the citation rule after a slip, and the confidence thresholds that minimise "a wrong Strong match costs three
+  needless broker reviews" on the minibatch.
+
+So an optimisation round really changes behaviour, and the change can be read in the saved program's instructions;
+but the numbers measure this pipeline with a rule-following stand-in, not a language model's reasoning.

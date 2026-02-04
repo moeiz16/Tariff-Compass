@@ -37,3 +37,14 @@ the product will face, so the evaluation must respect time.
 - Coverage is uneven: some headings have few rulings (the corpus has two in heading 9617 since 2014). Per-chapter
   tables make that visible instead of averaging it away.
 - The first stage is also the fallback the product can explain when no LM is configured.
+
+## As built
+
+- The champion is chosen on validation top-5 heading accuracy before the test set is read. The linear SVM won
+  (validation top-5 0.894 vs 0.881 for logistic regression); it ships pruned to 4,800 weights per heading, in
+  float16, with a single temperature fitted on validation. LightGBM, tuned the same way, ranks chapters only and
+  stayed a challenger (chapter top-3 on the test set 0.883 vs 0.918 for the shipped model).
+- Headings with fewer than two training rulings are not classes; their test rulings count as misses.
+- The program's evidence is gathered as of each example's date (validation) or the test window's start (test).
+- Every figure is in `docs/MODEL_CARD.md`, `classify/artifacts/first_stage_report.json`, the training rounds'
+  reports and `eval/RESULTS.md`.
