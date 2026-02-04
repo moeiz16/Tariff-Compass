@@ -85,6 +85,15 @@ def to_dspy(e: Example, first_stage, retriever, before: date, cache: EvidenceCac
     ).with_inputs("product", "evidence")
 
 
+_UNINFORMATIVE_WORDS = (
+    "made item items article articles percent over under about with each also into used using size sizes model "
+    "number style color colour inch inches feet cm mm product products piece pieces set sets approximately "
+    "measures measuring consist consists composed comprised designed intended feature features include includes "
+    "including other type types like such available sold imported"
+)
+UNINFORMATIVE = frozenset(_UNINFORMATIVE_WORDS.split())
+
+
 class WordTable:
     """Which words point to which heading, from training rulings only (used to write GEPA's feedback)."""
 
@@ -98,10 +107,10 @@ class WordTable:
         gt, ct = sum(g.values()) or 1, sum(c.values()) or 1
         scored = []
         for w in ev.stems(text):
-            if g[w] < 2:
+            if g[w] < 3 or w in UNINFORMATIVE or w.isdigit() or len(w) < 4:
                 continue
             s = math.log((g[w] + 1) / gt) - math.log((c[w] + 1) / ct)
-            if s > 0.5:
+            if s > 1.0:
                 scored.append((s, w))
         return [w for _, w in sorted(scored, reverse=True)[:n]]
 
@@ -124,8 +133,9 @@ def make_metric(words: WordTable):
         support_rows = [r for r in pred.cited if r["id"] in set(pred.support_ids)]
         bad_cites = [r for r in support_rows if r["heading"] != pred.heading]
         six_right = bool(h["subheading"])
-        score = 0.1 * bool(h["chapter"]) + 0.45 * bool(h["heading"]) + 0.25 * six_right + 0.15 * bool(h["full_code"])
-        score += 0.05 * (1.0 if not bad_cites else 0.0)
+        calibrated = (pred.verdict == "strong") == six_right  # "Strong match" when right, "Needs a broker" when not
+        score = 0.1 * bool(h["chapter"]) + 0.4 * bool(h["heading"]) + 0.2 * six_right + 0.15 * bool(h["full_code"])
+        score += 0.05 * (1.0 if not bad_cites else 0.0) + 0.1 * calibrated
         votes = e.get("votes", {})
         fb: list[str] = []
         runner = ev.runner_up(pred.heading, pred.set_aside)
@@ -173,7 +183,6 @@ def make_metric(words: WordTable):
             fb.append(f"Broker's lesson: {gold.lesson}")
         if pred_name == "confidence":
             fb = [f for f in fb if "FB[confidence]" in f or f.startswith("Broker")]
-            calibrated = (pred.verdict == "strong") == six_right
             return dspy.Prediction(score=1.0 if calibrated else 0.0, feedback="\n".join(fb))
         if pred_name == "cite":
             fb = [f for f in fb if "FB[cite]" in f] or ["Every cited ruling shares the answer's heading."]

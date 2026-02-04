@@ -569,19 +569,45 @@ def _set_knob(instr: str, pattern: str, sentence: str) -> str:
     return "\n".join([*lines, sentence]).strip()
 
 
+COMPONENT_MARKERS = (
+    ("candidate tariff headings", "candidates"),
+    ("General Rules of Interpretation", "gri"),
+    ("subheadings at the same level", "subheading"),
+    ("three or four plain sentences", "cite"),
+    ("strong match or needs a broker", "confidence"),
+)
+
+
+def component_of(instruction: str) -> str:
+    """Which module an instruction belongs to, from the signature's own first sentence (kept by every rewrite)."""
+    for marker, name in COMPONENT_MARKERS:
+        if marker in instruction:
+            return name
+    return ""
+
+
 def tariff_reflection_policy(outputs: list[str], inputs: dict[str, str], prompt: str) -> dict[str, str]:
     """Write the next instruction from the current one and the feedback on a minibatch (deterministic)."""
     current = (inputs.get("current_instruction") or inputs.get("current_instruction_doc") or "").strip()
     items = _feedback_items(inputs.get("examples_with_feedback") or inputs.get("dataset_with_feedback") or prompt)
     new = current
     added = 0
-    kinds = {k for k, _ in items}
+    component = component_of(current)
+    # each module learns only from the feedback that concerns it
+    allowed = {
+        "candidates": {"candidates"},
+        "gri": {"heading"},
+        "subheading": {"line"},
+        "cite": {"cite"},
+        "confidence": {"confidence"},
+    }.get(component, set())
+    kinds = {k for k, _ in items} & allowed
     if "heading" in kinds:
         wrong = [d for k, d in items if k == "heading"]
         for d in wrong:
             for term in (d.get("words") or "").split(","):
                 term = term.replace("_", " ").strip()
-                if not term or added >= MAX_NEW_RULES:
+                if not term or term == "none" or added >= MAX_NEW_RULES:
                     continue
                 rule = f"RULE: prefer {d['expected']} over {d['chose']} when the product mentions '{term}'"
                 if rule not in new:
@@ -621,6 +647,7 @@ def tariff_reflection_policy(outputs: list[str], inputs: dict[str, str], prompt:
             )
         for d in lines:
             term = (d.get("words") or "").split(",")[0].replace("_", " ").strip()
+            term = "" if term == "none" else term
             if term and added < MAX_NEW_RULES and d.get("expected", "").isdigit() and len(d["expected"]) == 10:
                 rule = f"RULE: in heading {d['expected'][:4]} choose {d['expected']} when the product mentions '{term}'"
                 if rule not in new:

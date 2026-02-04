@@ -89,18 +89,27 @@ def test_confidence_thresholds_come_from_the_instructions():
     assert lm_sim._confidence(agree, "RULE: say broker when the margin is below 0.2")["verdict"] == "broker"
 
 
-def test_reflection_writes_rules_from_feedback_deterministically():
+def test_reflection_writes_each_module_only_its_own_rules_deterministically():
     fb = (
         "Wrong heading. FB[heading] chose=7323 expected=9617 words=vacuum precedent_expected=0.6 precedent_chose=0.2\n"
-        "FB[cite] wrong_support=1\nFB[confidence] margin=0.05 agreeing=1 right=no\nFB[confidence] margin=0.4 agreeing=2 right=yes"
+        "FB[cite] wrong_support=1\nFB[confidence] margin=0.05 agreeing=1 precedent=0.2 right=no\n"
+        "FB[confidence] margin=0.4 agreeing=2 precedent=0.9 right=yes"
     )
-    inputs = {"current_instruction": "Apply the General Rules.", "examples_with_feedback": fb}
-    a = lm_sim.tariff_reflection_policy(["new_instruction"], inputs, "")["new_instruction"]
-    assert a == lm_sim.tariff_reflection_policy(["new_instruction"], inputs, "")["new_instruction"]
-    assert "RULE: prefer 9617 over 7323 when the product mentions 'vacuum'" in a
-    assert "RULE: cite as support only rulings under the chosen heading" in a
-    assert "RULE: weigh precedent at 0.5 when choosing the heading" in a
-    assert "RULE: say broker when the margin is below" in a
+
+    def reflect(instruction: str) -> str:
+        inputs = {"current_instruction": instruction, "examples_with_feedback": fb}
+        return lm_sim.tariff_reflection_policy(["new_instruction"], inputs, "")["new_instruction"]
+
+    gri = reflect("Apply the General Rules of Interpretation in order.")
+    assert gri == reflect("Apply the General Rules of Interpretation in order.")
+    assert "RULE: prefer 9617 over 7323 when the product mentions 'vacuum'" in gri
+    assert "RULE: weigh precedent at 0.5 when choosing the heading" in gri
+    assert "cite" not in gri and "broker" not in gri
+    assert "RULE: cite as support only rulings under the chosen heading" in reflect(
+        "Write the answer in three or four plain sentences."
+    )
+    conf = reflect("Decide whether the answer is a strong match or needs a broker.")
+    assert "RULE: say broker when the margin is below" in conf and "prefer" not in conf
 
 
 def test_the_simulator_never_sees_a_gold_label(retriever, first_stage):
