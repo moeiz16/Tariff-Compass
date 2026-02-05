@@ -134,6 +134,7 @@ def test_two_different_people_make_a_round_live(world, rounds):
 def test_importers_cannot_sign_and_failed_checks_block(world, rounds):
     assert world.api("importer").post("lab/rounds/7/sign", {"statement": "Jordan Tse"}).status_code == 403
     TrainingRound.objects.filter(n=7).update(report=report(7, passed=False))
+    assert world.api("compliance").get("lab/rounds/7").json()["signOff"]["canSign"] is False
     res = world.api("compliance").post("lab/rounds/7/sign", {"statement": "Maya Lindqvist"})
     assert res.status_code == 409 and res.json()["code"] == "gates_failed"
     TrainingRound.objects.filter(n=7).update(status="live")

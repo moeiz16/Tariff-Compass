@@ -69,7 +69,10 @@ def test_counts(seeded):
 def test_docket_story(seeded):
     open_items = ReviewItem.objects.filter(org=north(), status__in=("waiting", "asked", "answered"))
     kinds = {i.kind for i in open_items}
-    assert kinds == {"unsure", "differs", "ruling_changed", "always_review", "requested"}
+    # "differs" appears only when the classifier's answer differs from the last approved code
+    assert {"unsure", "ruling_changed", "always_review", "requested"} <= kinds
+    for i in open_items.filter(kind="differs"):
+        assert i.proposed_us != i.previous_us
     assert open_items.filter(into="CA").count() >= 2 and open_items.filter(status="asked").count() == 1
     ages = [(clock.today() - clock.local(i.created_at).date()).days for i in open_items]
     assert min(ages) == 0 and max(ages) <= 6
@@ -197,10 +200,26 @@ def test_lab_rounds_come_only_from_committed_reports(seeded):
     assert made == committed
     for r in TrainingRound.objects.filter(org=north()):
         assert r.report == reports.committed(r.n)
+    api = Api()
+    api.post("auth/demo", {"role": "compliance"})
+    for n in made:
+        res = api.get(f"lab/rounds/{n}")
+        assert res.status_code == 200, res.content
+        assert all(not isinstance(v, list) for v in res.json()["drift"].values())
+    for r in TrainingRound.objects.filter(org=north()):
+        passed_all = all(g["passed"] for g in r.report["gates"])
+        if not passed_all:  # never a sign-off the sign-off endpoint would refuse
+            assert not r.signoffs.exists()
+        assert (
+            "%" not in r.note
+            and str(round(next(d for d in r.report["by_depth"] if d["system"] == "optimised")["full_code"] * 100))
+            in r.note
+        )
     if 7 in made:
         seven = TrainingRound.objects.get(org=north(), n=7)
         assert seven.status == "waiting_signoff"
-        assert [s.user.full_name for s in seven.signoffs.all()] == ["Maya Lindqvist"]
+        if all(g["passed"] for g in seven.report["gates"]):
+            assert [s.user.full_name for s in seven.signoffs.all()] == ["Maya Lindqvist"]
 
 
 def test_seed_is_idempotent(seeded, capsys):

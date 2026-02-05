@@ -106,6 +106,14 @@ def _chapters(report: dict[str, Any]) -> list[dict[str, Any]]:
     return out
 
 
+def _drift(report: dict[str, Any]) -> dict[str, Any]:
+    """Scalars only on the wire: a list of chapters reads "61, 84, 95"."""
+    out: dict[str, Any] = {}
+    for k, v in (report.get("drift_psi") or {}).items():
+        out[k] = ", ".join(str(x) for x in v) if isinstance(v, (list, tuple)) else v
+    return out
+
+
 def _checks(report: dict[str, Any]) -> list[dict[str, Any]]:
     return [
         {
@@ -147,7 +155,13 @@ def round_out(r: TrainingRound, ctx: Ctx | None) -> dict[str, Any]:
     window = report.get("test_window") or [None, None]
     sigs = list(r.signoffs.select_related("user").order_by("signed_at"))
     signed_ids = {s.user_id for s in sigs}
-    can_sign = bool(ctx and ctx.can("lab:sign") and r.status == "waiting_signoff" and ctx.user.pk not in signed_ids)
+    can_sign = bool(
+        ctx
+        and ctx.can("lab:sign")
+        and r.status == "waiting_signoff"
+        and ctx.user.pk not in signed_ids
+        and checks_pass(r)
+    )
     prev_live = (
         TrainingRound.objects.filter(org=r.org, status="live").exclude(pk=r.pk).values_list("n", flat=True).first()
     )
@@ -179,7 +193,7 @@ def round_out(r: TrainingRound, ctx: Ctx | None) -> dict[str, Any]:
         "confidence": _confidence(report),
         "by_chapter": _chapters(report),
         "learned": list(report.get("learned", [])),
-        "drift": dict(report.get("drift_psi") or {}),
+        "drift": _drift(report),
         "checks": _checks(report),
         "sign_off": {
             "required": REQUIRED,

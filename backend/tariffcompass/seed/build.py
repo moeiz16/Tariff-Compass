@@ -780,6 +780,8 @@ def docket(ctx: Ctx) -> None:
                 summary=f"{who_saved(a)} saved the answer to the {p.sku} binder",
                 at=opened - timedelta(minutes=1),
             )
+            if kind == "differs" and last is not None and codes.digits(us) == last.us_code:
+                kind = "requested"  # the classifier agrees with the last code: a re-check the importer asked for
             detail, rule, change, misread, phrases = docket_detail(ctx, item, kind, us, last)
             if kind == "ruling_changed":
                 us, ca = item.us, item.ca
@@ -802,7 +804,7 @@ def docket(ctx: Ctx) -> None:
                 deciding_phrases=phrases,
                 leaning=a.verdict == "broker",
                 created_at=opened,
-                note="New supplier in Mexico: can we claim USMCA?" if kind == "requested" else "",
+                note="New supplier in Mexico: can we claim USMCA?" if item.sku == "NB-AP-0207" else "",
             )
             Product.objects.filter(pk=p.pk).update(standing="in_review")
             audit.record(
@@ -913,7 +915,7 @@ def docket_detail(ctx: Ctx, item: Item, kind: str, us: str, last) -> tuple[str, 
     if kind == "differs":
         prev = last.us_code if last else item.us
         detail = f"Proposed {codes.fmt(us)}; the last approved code was {codes.fmt(prev)}."
-        if item.sku == "NB-KT-0388":
+        if item.sku == "NB-KT-0388" and codes.digits(us).startswith("9617"):
             _, lines = documents.SPEC_SHEETS[item.sku]
             text = " ".join(lines)
             start = text.find("air-insulated")
@@ -950,32 +952,71 @@ def docket_detail(ctx: Ctx, item: Item, kind: str, us: str, last) -> tuple[str, 
         if item.sku == "NB-OD-0702":
             detail = f"Always reviewed: entry value ${item.value:,.0f} is over $25,000."
     else:
-        detail = "Sent for review by Jordan Tse: new supplier in Mexico; does USMCA apply?"
+        detail = {
+            "NB-KT-0388": "Re-check: the supplier's new listing says “insulated”; the spec sheet says air-insulated.",
+            "NB-KT-0297": "Re-check: HQ H303684 puts vacuum-insulated stainless containers in 9617; this binder "
+            "relies on NY N297165 (7323).",
+        }.get(item.sku, "Sent for review by Jordan Tse: new supplier in Mexico; does USMCA apply?")
     return detail, rule, change, misread, phrases
 
 
 # ── Lab rounds (only from the core's committed reports) ─────────────────────────────────────────────────
-ROUNDS = {
-    4: ("retired", demo_day(1, 2) - timedelta(days=31), "Live through January; retired when round 6 went live."),
-    5: ("not_made_live", demo_day(1, 6), "Worse on knitted apparel, so round 4 stayed live."),
-    6: ("live", demo_day(1, 28), "Trained on rulings plus the first broker corrections."),
-    7: ("waiting_signoff", demo_day(2, 19), "Trained on rulings plus broker corrections up to 31 Jan."),
+ROUNDS = {  # status in the demo, and the day it was trained; everything else comes from the round's own report
+    4: ("retired", demo_day(1, 2) - timedelta(days=31)),
+    5: ("not_made_live", demo_day(1, 6)),
+    6: ("live", demo_day(1, 28)),
+    7: ("waiting_signoff", demo_day(2, 19)),
 }
 
 
+def _full(report: dict[str, Any], system: str) -> int | None:
+    d = next((x for x in report.get("by_depth", []) if x["system"] == system), None)
+    return round(d["full_code"] * 100) if d else None
+
+
+def round_note(n: int, status: str, report: dict[str, Any], previous_live: int | None) -> str:
+    """One sentence from the report itself: nothing here is a figure the run didn't produce."""
+    gates = report.get("gates", [])
+    passed = sum(1 for g in gates if g.get("passed"))
+    full = _full(report, "optimised")
+    failed = [g.get("label") or g.get("key") for g in gates if not g.get("passed")]
+    if status == "not_made_live" and previous_live:
+        return f"Full code right {full} in 100, no better than before, so round {previous_live} stayed live."
+    if passed == len(gates) and gates:
+        return f"Full code right {full} in 100 on rulings it hasn't seen; passed all {len(gates)} checks."
+    return (
+        f"Full code right {full} in 100 on rulings it hasn't seen; passed {passed} of {len(gates)} checks "
+        f"(not passed: {', '.join(str(f) for f in failed)})."
+    )
+
+
 def lab_rounds(ctx: Ctx) -> int:
+    """Rounds 4–7 from the core's committed reports. A two-person sign-off is recorded only for a round that passed
+    all five checks, exactly as the sign-off endpoint enforces it; a round in use without one says so."""
     maya, dana = ctx.people["compliance"], ctx.people["broker"]
     made = 0
-    for n, (status, trained, note) in ROUNDS.items():
+    previous_live: int | None = None
+    for n, (status, trained) in ROUNDS.items():
         report = reports.committed(n)
         if report is None:
             log.warning("seed_round_missing", round=n, hint="run `make optimize ROUND=n` to produce its report")
             continue
         loaded = reports.load(report)
+        note = round_note(n, status, report, previous_live)
+        if status in ("live", "retired"):
+            previous_live = n
+        passed_all = bool(report.get("gates")) and all(g.get("passed") for g in report["gates"])
         started = local_dt(trained, 6, 10) if n == 7 else local_dt(trained, 8, 30)
 
         def build(
-            n=n, status=status, trained=trained, note=note, report=report, loaded=loaded, started=started
+            n=n,
+            status=status,
+            trained=trained,
+            note=note,
+            report=report,
+            loaded=loaded,
+            started=started,
+            passed_all=passed_all,
         ) -> None:
             r = TrainingRound.objects.create(
                 org=ctx.north,
@@ -995,7 +1036,7 @@ def lab_rounds(ctx: Ctx) -> int:
             audit.record(
                 ctx.north,
                 "lab.round_finished",
-                f"Training round {n} finished and is waiting for sign-off",
+                f"Training round {n} finished: {note}",
                 target_type="round",
                 target_id=str(n),
                 details={"round": n},
@@ -1004,41 +1045,37 @@ def lab_rounds(ctx: Ctx) -> int:
             checks = [{"key": g.get("key"), "passed": g.get("passed")} for g in report.get("gates", [])]
             if status in ("live", "retired"):
                 go_live = local_dt(trained + timedelta(days=2), 15, 30)
-                for who, minute in ((maya, 0), (dana, 42)):
-                    s_at = go_live - timedelta(minutes=60 - minute)
-                    SignOff.objects.create(
-                        round=r,
-                        user=who,
-                        role="compliance" if who == maya else "broker",
-                        statement=who.full_name,
-                        checks=checks,
-                        signed_at=s_at,
-                    )
+                if passed_all:
+                    for who, role, minute in ((maya, "compliance", 0), (dana, "broker", 42)):
+                        s_at = go_live - timedelta(minutes=60 - minute)
+                        SignOff.objects.create(
+                            round=r, user=who, role=role, statement=who.full_name, checks=checks, signed_at=s_at
+                        )
+                        audit.record(
+                            ctx.north,
+                            "lab.signed",
+                            f"{who.full_name} signed training round {n}",
+                            actor=who,
+                            actor_role=role,
+                            target_type="round",
+                            target_id=str(n),
+                            details={"round": n},
+                            at=s_at,
+                        )
                     audit.record(
                         ctx.north,
-                        "lab.signed",
-                        f"{who.full_name} signed training round {n}",
-                        actor=who,
-                        actor_role="compliance" if who == maya else "broker",
+                        "lab.made_live",
+                        f"Training round {n} went live, signed by {maya.full_name} and {dana.full_name}",
                         target_type="round",
                         target_id=str(n),
                         details={"round": n},
-                        at=s_at,
+                        at=go_live,
                     )
                 r.live_from = go_live
                 if status == "retired":
                     r.live_to = local_dt(ROUNDS[6][1] + timedelta(days=2), 15, 30)
                 r.save(update_fields=["live_from", "live_to"])
-                audit.record(
-                    ctx.north,
-                    "lab.made_live",
-                    f"Training round {n} went live, signed by {maya.full_name} and {dana.full_name}",
-                    target_type="round",
-                    target_id=str(n),
-                    details={"round": n},
-                    at=go_live,
-                )
-            if status == "waiting_signoff":
+            if status == "waiting_signoff" and passed_all:
                 s_at = local_dt(trained, 9, 48)
                 if s_at < clock.now():
                     SignOff.objects.create(
