@@ -114,7 +114,7 @@ def definitions() -> list[dict[str, Any]]:
             "headline": "2026 HTSUS Revision 3 is in force: none of your lines were renumbered or split",
             "body": "Revision 3 of the 2026 Harmonized Tariff Schedule took effect on 12 February 2026. Each binder's "
             "US code was checked against it; every line you use still exists with the same text and rate.",
-            "knows": ["Revision 3 is the edition in force from 12 to 25 February 2026."],
+            "knows": ["Revision 3 is the edition in force from 12 February 2026."],
             "unknowns": [],
             "source_label": "USITC HTS release list",
             "source_url": "https://hts.usitc.gov/reststop/releaseList",

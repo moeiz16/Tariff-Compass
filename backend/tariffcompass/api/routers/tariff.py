@@ -26,7 +26,7 @@ landed_router = WireRouter()  # /landed-cost
 layers_router = WireRouter()  # /duty-layers
 
 EDITIONS = {
-    "US": "HTSUS 2026 Revision 3 (in force 12–25 Feb 2026)",
+    "US": "HTSUS 2026 Revision 3 (in force from 12 Feb 2026)",
     "CA": "Customs Tariff T2026 (from 1 Jan 2026)",
 }
 
