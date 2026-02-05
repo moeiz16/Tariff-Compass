@@ -401,13 +401,14 @@ AffectedOut  = { productId, sku, title, effect, recheck: unchanged|needs_review|
 ## 1.12 Lab: training rounds and sign-off
 
 All figures come from a round's `RoundReport` (Part 3), measured on rulings the classifier hasn't seen. A round
-goes live only with **two signatures from two different people holding `lab:sign`** (in the sample: Maya, then
-Dana). Promotion keeps the previous live round one step away; approved answers keep their codes; nothing is
+is in use only when it **passed all five checks and was signed by two different people holding `lab:sign`**
+(in the sample: Maya, then Dana). Until a round qualifies, word matching (the classical first stage) is in use and
+every round is a challenger; `lab.live.live_round()` is what the classifier reads. Promotion keeps the previous live round one step away; approved answers keep their codes; nothing is
 re-filed.
 
 | Method | Path | Permission | Body | Response |
 |---|---|---|---|---|
-| GET | `/lab` | `lab:read` | – | `LabOut { rounds: RoundStrip[], live, candidate, correctionsWaiting }` |
+| GET | `/lab` | `lab:read` | – | `LabOut { rounds: RoundStrip[], live, candidate, correctionsWaiting, inUse: { kind: word_matching\|round, round, label, fullCode, heading, sentence } }` |
 | GET | `/lab/rounds/{n}` | `lab:read` | – | `RoundOut` |
 | POST | `/lab/rounds` | `lab:run` | `StartRoundIn { note }` | `202 JobAccepted` (one round at a time; `409 conflict` while one runs) |
 | POST | `/lab/rounds/{n}/sign` | `lab:sign` | `SignIn { statement }` (the signer types their name) | `RoundOut`; the second signature makes it live (`409 same_person`, `409 gates_failed`) |

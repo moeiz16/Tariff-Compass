@@ -961,11 +961,11 @@ def docket_detail(ctx: Ctx, item: Item, kind: str, us: str, last) -> tuple[str, 
 
 
 # ── Lab rounds (only from the core's committed reports) ─────────────────────────────────────────────────
-ROUNDS = {  # status in the demo, and the day it was trained; everything else comes from the round's own report
-    4: ("retired", demo_day(1, 2) - timedelta(days=31)),
-    5: ("not_made_live", demo_day(1, 6)),
-    6: ("live", demo_day(1, 28)),
-    7: ("waiting_signoff", demo_day(2, 19)),
+ROUNDS = {  # the day each demo round was trained; its status follows from its own report and the sign-off rule
+    4: demo_day(1, 2) - timedelta(days=31),
+    5: demo_day(1, 6),
+    6: demo_day(1, 28),
+    7: demo_day(2, 19),
 }
 
 
@@ -974,39 +974,54 @@ def _full(report: dict[str, Any], system: str) -> int | None:
     return round(d["full_code"] * 100) if d else None
 
 
-def round_note(n: int, status: str, report: dict[str, Any], previous_live: int | None) -> str:
+def round_note(report: dict[str, Any], in_use: int | None) -> str:
     """One sentence from the report itself: nothing here is a figure the run didn't produce."""
     gates = report.get("gates", [])
     passed = sum(1 for g in gates if g.get("passed"))
     full = _full(report, "optimised")
-    failed = [g.get("label") or g.get("key") for g in gates if not g.get("passed")]
-    if status == "not_made_live" and previous_live:
-        return f"Full code right {full} in 100, no better than before, so round {previous_live} stayed live."
-    if passed == len(gates) and gates:
+    if gates and passed == len(gates):
         return f"Full code right {full} in 100 on rulings it hasn't seen; passed all {len(gates)} checks."
+    failed = ", ".join(str(g.get("label") or g.get("key")) for g in gates if not g.get("passed"))
+    stays = f"round {in_use}" if in_use else "word matching"
     return (
         f"Full code right {full} in 100 on rulings it hasn't seen; passed {passed} of {len(gates)} checks "
-        f"(not passed: {', '.join(str(f) for f in failed)})."
+        f"(not passed: {failed}), so {stays} stayed in use."
     )
 
 
 def lab_rounds(ctx: Ctx) -> int:
-    """Rounds 4–7 from the core's committed reports. A two-person sign-off is recorded only for a round that passed
-    all five checks, exactly as the sign-off endpoint enforces it; a round in use without one says so."""
+    """Rounds 4–7 from the core's committed reports, under the product's own rule: a round is in use only if it
+    passed all five checks and two different people signed. A round that didn't pass is a challenger (not made
+    live); if none passed, word matching stays in use. The latest passing round waits for its second signature."""
     maya, dana = ctx.people["compliance"], ctx.people["broker"]
-    made = 0
-    previous_live: int | None = None
-    for n, (status, trained) in ROUNDS.items():
+    plan: list[tuple[int, date, dict[str, Any], bool]] = []
+    for n, trained in ROUNDS.items():
         report = reports.committed(n)
         if report is None:
             log.warning("seed_round_missing", round=n, hint="run `make optimize ROUND=n` to produce its report")
             continue
+        passed = bool(report.get("gates")) and all(g.get("passed") for g in report["gates"])
+        plan.append((n, trained, report, passed))
+    latest = plan[-1][0] if plan else None
+    in_use: int | None = None
+    lives: dict[int, datetime] = {}
+    for n, trained, _report, passed in plan:
+        if passed and n != latest:
+            lives[n] = local_dt(trained + timedelta(days=2), 15, 30)
+    for n, trained, report, passed in plan:
         loaded = reports.load(report)
-        note = round_note(n, status, report, previous_live)
+        if passed and n == latest:
+            status = "waiting_signoff"
+        elif passed:
+            later = [m for m in lives if m > n]
+            status = "retired" if later else "live"
+        else:
+            status = "not_made_live"
+        note = round_note(report, in_use)
         if status in ("live", "retired"):
-            previous_live = n
-        passed_all = bool(report.get("gates")) and all(g.get("passed") for g in report["gates"])
-        started = local_dt(trained, 6, 10) if n == 7 else local_dt(trained, 8, 30)
+            in_use = n
+        started = local_dt(trained, 6, 10) if n == latest else local_dt(trained, 8, 30)
+        retired_at = lives[min(m for m in lives if m > n)] if status == "retired" else None
 
         def build(
             n=n,
@@ -1016,7 +1031,7 @@ def lab_rounds(ctx: Ctx) -> int:
             report=report,
             loaded=loaded,
             started=started,
-            passed_all=passed_all,
+            retired_at=retired_at,
         ) -> None:
             r = TrainingRound.objects.create(
                 org=ctx.north,
@@ -1044,38 +1059,35 @@ def lab_rounds(ctx: Ctx) -> int:
             )
             checks = [{"key": g.get("key"), "passed": g.get("passed")} for g in report.get("gates", [])]
             if status in ("live", "retired"):
-                go_live = local_dt(trained + timedelta(days=2), 15, 30)
-                if passed_all:
-                    for who, role, minute in ((maya, "compliance", 0), (dana, "broker", 42)):
-                        s_at = go_live - timedelta(minutes=60 - minute)
-                        SignOff.objects.create(
-                            round=r, user=who, role=role, statement=who.full_name, checks=checks, signed_at=s_at
-                        )
-                        audit.record(
-                            ctx.north,
-                            "lab.signed",
-                            f"{who.full_name} signed training round {n}",
-                            actor=who,
-                            actor_role=role,
-                            target_type="round",
-                            target_id=str(n),
-                            details={"round": n},
-                            at=s_at,
-                        )
+                go_live = lives[n]
+                for who, role, minute in ((maya, "compliance", 0), (dana, "broker", 42)):
+                    s_at = go_live - timedelta(minutes=60 - minute)
+                    SignOff.objects.create(
+                        round=r, user=who, role=role, statement=who.full_name, checks=checks, signed_at=s_at
+                    )
                     audit.record(
                         ctx.north,
-                        "lab.made_live",
-                        f"Training round {n} went live, signed by {maya.full_name} and {dana.full_name}",
+                        "lab.signed",
+                        f"{who.full_name} signed training round {n}",
+                        actor=who,
+                        actor_role=role,
                         target_type="round",
                         target_id=str(n),
                         details={"round": n},
-                        at=go_live,
+                        at=s_at,
                     )
-                r.live_from = go_live
-                if status == "retired":
-                    r.live_to = local_dt(ROUNDS[6][1] + timedelta(days=2), 15, 30)
+                audit.record(
+                    ctx.north,
+                    "lab.made_live",
+                    f"Training round {n} went live, signed by {maya.full_name} and {dana.full_name}",
+                    target_type="round",
+                    target_id=str(n),
+                    details={"round": n},
+                    at=go_live,
+                )
+                r.live_from, r.live_to = go_live, retired_at
                 r.save(update_fields=["live_from", "live_to"])
-            if status == "waiting_signoff" and passed_all:
+            if status == "waiting_signoff":
                 s_at = local_dt(trained, 9, 48)
                 if s_at < clock.now():
                     SignOff.objects.create(
@@ -1094,8 +1106,7 @@ def lab_rounds(ctx: Ctx) -> int:
                     )
 
         ctx.at(started, build)
-        made += 1
-    return made
+    return len(plan)
 
 
 def morning_check(ctx: Ctx) -> dict[str, Any]:

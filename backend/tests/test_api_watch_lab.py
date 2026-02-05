@@ -71,9 +71,19 @@ def report(n: int, *, full: float = 0.71, live: float | None = 0.58, passed: boo
 
 @pytest.fixture
 def rounds(world):
-    TrainingRound.objects.create(
-        org=world.north, n=6, status="live", report=report(6, full=0.58, live=None), trained_on=date(2026, 1, 28)
+    from tariffcompass import clock
+    from tariffcompass.lab.models import SignOff
+
+    six = TrainingRound.objects.create(
+        org=world.north,
+        n=6,
+        status="live",
+        report=report(6, full=0.58, live=None),
+        trained_on=date(2026, 1, 28),
+        live_from=clock.now(),
     )
+    SignOff.objects.create(round=six, user=world.compliance, role="compliance", statement="Maya Lindqvist")
+    SignOff.objects.create(round=six, user=world.broker, role="broker", statement="Dana Whitlock")
     seven = TrainingRound.objects.create(
         org=world.north, n=7, status="waiting_signoff", report=report(7), trained_on=date(2026, 2, 19)
     )
@@ -88,6 +98,9 @@ def test_report_round_trip():
 def test_lab_overview_and_round_in_plain_words(world, rounds):
     lab = world.api("compliance").get("lab").json()
     assert lab["live"] == 6 and lab["candidate"] == 7 and [r["n"] for r in lab["rounds"]] == [6, 7]
+    assert (
+        lab["inUse"]["kind"] == "round" and "signed off by Maya Lindqvist and Dana Whitlock" in lab["inUse"]["sentence"]
+    )
     r = world.api("compliance").get("lab/rounds/7").json()
     assert r["lede"] == (
         "Round 7 gets the full ten-digit code right for 71 in 100 rulings it hasn't seen, up from 58. "
@@ -209,12 +222,22 @@ def test_scope_counts(world, catalogue):
     assert world.api("importer").get("scopes/counts", q="zzzz").json()["products"] == 0
 
 
-def test_promotion_tells_the_core_which_round_is_live(world, rounds, monkeypatch, django_capture_on_commit_callbacks):
-    import tariffcompass.classify.program as program
+def test_promotion_tells_the_core_which_round_is_live(world, rounds, django_capture_on_commit_callbacks):
+    from tariffcompass.lab.live import live_round
 
-    seen: list[int | None] = []
-    monkeypatch.setattr(program, "set_live", lambda n: seen.append(n))
+    assert live_round(world.north) == 6
     world.api("compliance").post("lab/rounds/7/sign", {"statement": "Maya Lindqvist"})
+    assert live_round(world.north) == 6  # one signature changes nothing
     with django_capture_on_commit_callbacks(execute=True):
         world.api("broker").post("lab/rounds/7/sign", {"statement": "Dana Whitlock"})
-    assert seen == [7]
+    assert live_round(world.north) == 7
+
+
+def test_unsigned_or_failing_rounds_are_never_in_use(world):
+    from tariffcompass.lab.live import live_round
+
+    TrainingRound.objects.create(org=world.north, n=6, status="live", report=report(6, live=None))  # no signatures
+    lab = world.api("compliance").get("lab").json()
+    assert lab["live"] is None and lab["inUse"]["kind"] == "word_matching" and lab["inUse"]["round"] is None
+    assert "word matching, which gets the full ten-digit code right 44 in 100" in lab["inUse"]["sentence"]
+    assert live_round(world.north) is None

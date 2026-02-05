@@ -45,11 +45,55 @@ def strip(r: TrainingRound) -> dict[str, Any]:
 
 
 def lab_out(org: Organisation) -> dict[str, Any]:
+    from tariffcompass.lab.live import signed_live
+
     rounds = list(TrainingRound.objects.filter(org=org).order_by("n"))
-    live = next((r.n for r in rounds if r.status == "live"), None)
+    live_round = signed_live(org)
     candidate = next((r.n for r in reversed(rounds) if r.status in ("waiting_signoff", "training")), None)
     waiting = TrainingExample.objects.filter(org=org, used_in_round__isnull=True).count()
-    return {"rounds": [strip(r) for r in rounds], "live": live, "candidate": candidate, "corrections_waiting": waiting}
+    return {
+        "rounds": [strip(r) for r in rounds],
+        "live": live_round.n if live_round else None,
+        "candidate": candidate,
+        "corrections_waiting": waiting,
+        "in_use": in_use(rounds, live_round),
+    }
+
+
+def in_use(rounds: list[TrainingRound], live: TrainingRound | None) -> dict[str, Any]:
+    """What answers today: the signed-off live round, or word matching (the classical first stage)."""
+    if live is not None:
+        cand = _depth(live.report or {}, "optimised") or {}
+        names = " and ".join(s.user.full_name for s in live.signoffs.select_related("user").order_by("signed_at"))
+        full, heading = pct(cand.get("full_code")), pct(cand.get("heading"))
+        return {
+            "kind": "round",
+            "round": live.n,
+            "label": f"Round {live.n}",
+            "full_code": full,
+            "heading": heading,
+            "sentence": f"In use: round {live.n}, signed off by {names}. It gets the full ten-digit code right "
+            f"{round(full or 0)} in 100 rulings it hasn't seen.",
+        }
+    latest = next((r for r in reversed(rounds) if r.report), None)
+    words = _depth(latest.report or {}, "word_matching") if latest else None
+    full = pct(words["full_code"]) if words else None
+    heading = pct(words["heading"]) if words else None
+    sentence = "In use: word matching. No training round has passed its five checks and been signed off yet."
+    if words:
+        sentence = (
+            f"In use: word matching, which gets the full ten-digit code right {round(full or 0)} in 100 "
+            f"rulings it hasn't seen ({round(heading or 0)} in 100 at the heading). No training round has "
+            "passed its five checks and been signed off yet, so every round below is a challenger."
+        )
+    return {
+        "kind": "word_matching",
+        "round": None,
+        "label": "Word matching",
+        "full_code": full,
+        "heading": heading,
+        "sentence": sentence,
+    }
 
 
 def get_round(org: Organisation, n: int) -> TrainingRound:
@@ -270,12 +314,5 @@ def promote(ctx: Ctx, r: TrainingRound) -> None:
 
 
 def _go_live(n: int) -> None:
-    """Tell the classification core which round answers from now on, then drop its cached instances."""
-    try:
-        from tariffcompass.classify import program
-    except ImportError:  # the core isn't installed (fakes): nothing to switch
-        program = None  # type: ignore[assignment]
-    set_live = getattr(program, "set_live", None)
-    if callable(set_live):
-        set_live(n)
-    services.reset()
+    """Round `n` now answers: drop the core's cached instances so it re-reads the signed-off live round."""
+    services.reset()  # the core re-reads lab.live.live_round() on its next answer

@@ -23,11 +23,23 @@ class RoundStrip(Wire):
     note: str  # "worse on knitted apparel, so round 4 stayed"
 
 
+class InUseOut(Wire):
+    """What answers today: a signed-off round, or word matching when no round has passed and been signed."""
+
+    kind: Literal["word_matching", "round"]
+    round: int | None
+    label: str  # "Word matching" | "Round 6"
+    full_code: float | None  # 0..100 on rulings it hasn't seen
+    heading: float | None
+    sentence: str
+
+
 class LabOut(Wire):
     rounds: list[RoundStrip]
-    live: int | None
+    live: int | None  # only a round that passed all five checks and was signed by two people
     candidate: int | None
     corrections_waiting: int
+    in_use: InUseOut
 
 
 class DepthRow(Wire):

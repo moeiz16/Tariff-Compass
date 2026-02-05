@@ -195,11 +195,11 @@ def test_ieepa_layers_stay_pending(seeded):
 
 
 def test_lab_rounds_come_only_from_committed_reports(seeded):
+    from tariffcompass.lab.live import live_round
+
     made = set(TrainingRound.objects.filter(org=north()).values_list("n", flat=True))
     committed = {n for n in (4, 5, 6, 7) if reports.committed(n) is not None}
     assert made == committed
-    for r in TrainingRound.objects.filter(org=north()):
-        assert r.report == reports.committed(r.n)
     api = Api()
     api.post("auth/demo", {"role": "compliance"})
     for n in made:
@@ -207,19 +207,19 @@ def test_lab_rounds_come_only_from_committed_reports(seeded):
         assert res.status_code == 200, res.content
         assert all(not isinstance(v, list) for v in res.json()["drift"].values())
     for r in TrainingRound.objects.filter(org=north()):
+        assert r.report == reports.committed(r.n)
         passed_all = all(g["passed"] for g in r.report["gates"])
-        if not passed_all:  # never a sign-off the sign-off endpoint would refuse
-            assert not r.signoffs.exists()
-        assert (
-            "%" not in r.note
-            and str(round(next(d for d in r.report["by_depth"] if d["system"] == "optimised")["full_code"] * 100))
-            in r.note
-        )
-    if 7 in made:
-        seven = TrainingRound.objects.get(org=north(), n=7)
-        assert seven.status == "waiting_signoff"
-        if all(g["passed"] for g in seven.report["gates"]):
-            assert [s.user.full_name for s in seven.signoffs.all()] == ["Maya Lindqvist"]
+        signers = r.signoffs.values("user").distinct().count()
+        if r.status in ("live", "retired"):  # in use only with all checks passed and two signatures
+            assert passed_all and signers == 2
+        if not passed_all:
+            assert r.status == "not_made_live" and signers == 0
+        full = next(d for d in r.report["by_depth"] if d["system"] == "optimised")["full_code"]
+        assert str(round(full * 100)) in r.note and "%" not in r.note
+    lab = api.get("lab").json()
+    live = live_round(north())
+    assert lab["live"] == live
+    assert lab["inUse"]["kind"] == ("round" if live else "word_matching")
 
 
 def test_seed_is_idempotent(seeded, capsys):
