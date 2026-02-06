@@ -397,6 +397,7 @@ export const WATCH: WatchOut = {
 /* ---------------- lab ---------------- */
 
 export const LAB: LabOut = {
+  inUse: { kind: "round", round: 6, label: "Round 6", fullCode: 58, heading: 84, sentence: "In use: round 6, signed by the compliance lead and a licensed broker after it passed its five checks." },
   rounds: [
     { n: 4, status: "retired", statusLabel: "Retired", trainedOn: "2025-12-08", note: "full code 51 in 100" },
     { n: 5, status: "not_made_live", statusLabel: "Not made live", trainedOn: "2026-01-08", note: "worse on knitted apparel, so round 4 stayed" },

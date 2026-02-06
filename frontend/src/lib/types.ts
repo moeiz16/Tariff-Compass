@@ -664,7 +664,16 @@ export interface RoundStrip {
   trainedOn: string | null;
   note: string;
 }
+export interface InUseOut {
+  kind: "word_matching" | "round";
+  round: number | null;
+  label: string;
+  fullCode: number;
+  heading: number;
+  sentence: string;
+}
 export interface LabOut {
+  inUse?: InUseOut | null;
   rounds: RoundStrip[];
   live: number | null;
   candidate: number | null;

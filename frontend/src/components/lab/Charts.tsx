@@ -38,7 +38,7 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
         <span class="inline-flex items-center gap-2">
           <span class="h-2.5 w-5 bg-hi" /> What round {props.n} adds
         </span>
-        <Show when={props.rows.some((r) => r.live !== null && r.live !== undefined && r.candidate < r.live)}>
+        <Show when={props.rows.some((r) => r.candidate < (r.live ?? r.wordMatching))}>
           <span class="inline-flex items-center gap-2">
             <span class="h-2.5 w-5 border-[1.5px] border-bad" /> What it loses
           </span>
@@ -47,8 +47,10 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
       <div class="mt-5" aria-hidden="true">
         <For each={props.rows}>
           {(r) => {
-            const lo = () => Math.min(r.live ?? r.candidate, r.candidate);
-            const hi = () => Math.max(r.live ?? r.candidate, r.candidate);
+            // The gain is measured against what is in use: the live round, or word matching when no round is live.
+            const base = () => r.live ?? r.wordMatching;
+            const lo = () => Math.min(base(), r.candidate);
+            const hi = () => Math.max(base(), r.candidate);
             return (
               <div class="grid grid-cols-[150px_minmax(0,1fr)_150px] items-center gap-x-6 border-b border-rule py-3.5 max-md:grid-cols-[96px_minmax(0,1fr)] max-md:gap-x-3">
                 <div>
@@ -57,10 +59,12 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
                 </div>
                 <div class="relative h-[20px]">
                   <span class="absolute inset-x-0 top-1/2 h-px bg-rule" />
-                  <span class="absolute top-1/2 h-[2px] -translate-y-1/2 bg-muted" style={{ left: `${Math.min(r.wordMatching, lo())}%`, width: `${Math.abs(lo() - r.wordMatching)}%` }} />
+                  <Show when={r.live !== null && r.live !== undefined}>
+                    <span class="absolute top-1/2 h-[2px] -translate-y-1/2 bg-muted" style={{ left: `${Math.min(r.wordMatching, lo())}%`, width: `${Math.abs(lo() - r.wordMatching)}%` }} />
+                  </Show>
                   <span
                     class="absolute top-1/2 h-[9px] -translate-y-1/2"
-                    classList={{ "bg-hi": r.candidate >= (r.live ?? r.candidate), "border-[1.5px] border-bad bg-paper": r.candidate < (r.live ?? r.candidate) }}
+                    classList={{ "bg-hi": r.candidate >= base(), "border-[1.5px] border-bad bg-paper": r.candidate < base() }}
                     style={{ left: `${lo()}%`, width: `${hi() - lo()}%` }}
                   />
                   <Mark kind="ring" at={r.wordMatching} />

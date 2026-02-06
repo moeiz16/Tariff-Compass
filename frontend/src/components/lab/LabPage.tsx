@@ -17,7 +17,8 @@ export function LabPage(props: { n?: number }) {
   const navigate = useNavigate();
   // Never ask for what the role can't see: no lab:read, no request.
   const [overview, { refetch: refetchLab }] = createResource(() => (can("lab:read") ? true : null), () => lab.get());
-  const roundN = () => props.n ?? overview()?.candidate ?? overview()?.live ?? null;
+  // Show the chosen round, else the challenger waiting for sign-off, else the round in use, else the latest round.
+  const roundN = () => props.n ?? overview()?.candidate ?? overview()?.live ?? overview()?.rounds.at(-1)?.n ?? null;
   const [round, { mutate, refetch }] = createResource(roundN, (n) => lab.round(n));
   const [job, setJob] = createSignal<JobOut | null>(null);
 
@@ -54,6 +55,25 @@ export function LabPage(props: { n?: number }) {
           </div>
         </Match>
         <Match when={overview() && round()}>
+          <Show when={overview()!.inUse}>
+            {(u) => (
+              <section class="gm border-b border-rule py-6" aria-labelledby="inuse-h">
+                <div class="gl">
+                  <span>Answering questions now</span>
+                  <h2 id="inuse-h" class="not-italic">
+                    <b>In use</b>
+                  </h2>
+                </div>
+                <div class="gm-wide flex max-w-[1160px] flex-wrap items-baseline gap-x-6 gap-y-2">
+                  <p class="text-[22px] font-[800] tracking-[-0.01em]">{u().label}</p>
+                  <p class="font-code text-[15px] text-ink-2">
+                    full code {Math.round(u().fullCode)} in 100 · heading {Math.round(u().heading)} in 100
+                  </p>
+                  <p class="w-full max-w-[860px] text-[16.5px] leading-[1.6] text-ink-2">{u().sentence}</p>
+                </div>
+              </section>
+            )}
+          </Show>
           <RoundsStrip lab={overview()!} current={round()!.n} />
           <Show when={can("lab:run")}>
             <div class="flex flex-wrap items-center justify-end gap-3 px-8 pt-3 max-md:px-4">
