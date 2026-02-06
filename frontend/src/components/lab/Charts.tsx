@@ -38,6 +38,11 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
         <span class="inline-flex items-center gap-2">
           <span class="h-2.5 w-5 bg-hi" /> What round {props.n} adds
         </span>
+        <Show when={props.rows.some((r) => r.live !== null && r.live !== undefined && r.candidate < r.live)}>
+          <span class="inline-flex items-center gap-2">
+            <span class="h-2.5 w-5 border-[1.5px] border-bad" /> What it loses
+          </span>
+        </Show>
       </figcaption>
       <div class="mt-5" aria-hidden="true">
         <For each={props.rows}>
@@ -53,7 +58,11 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
                 <div class="relative h-[20px]">
                   <span class="absolute inset-x-0 top-1/2 h-px bg-rule" />
                   <span class="absolute top-1/2 h-[2px] -translate-y-1/2 bg-muted" style={{ left: `${Math.min(r.wordMatching, lo())}%`, width: `${Math.abs(lo() - r.wordMatching)}%` }} />
-                  <span class="absolute top-1/2 h-[9px] -translate-y-1/2 bg-hi" style={{ left: `${lo()}%`, width: `${hi() - lo()}%` }} />
+                  <span
+                    class="absolute top-1/2 h-[9px] -translate-y-1/2"
+                    classList={{ "bg-hi": r.candidate >= (r.live ?? r.candidate), "border-[1.5px] border-bad bg-paper": r.candidate < (r.live ?? r.candidate) }}
+                    style={{ left: `${lo()}%`, width: `${hi() - lo()}%` }}
+                  />
                   <Mark kind="ring" at={r.wordMatching} />
                   <Show when={r.live !== null && r.live !== undefined}>
                     <Mark kind="half" at={r.live!} />
@@ -61,7 +70,7 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
                   <Mark kind="filled" at={r.candidate} />
                 </div>
                 <p class="text-right font-code text-[16px] max-md:col-span-2 max-md:text-left max-md:text-[14px]">
-                  {r.wordMatching} · {r.live ?? "–"} · <b>{r.candidate}</b>
+                  {Math.round(r.wordMatching)} · {r.live === null || r.live === undefined ? "–" : Math.round(r.live)} · <b>{Math.round(r.candidate)}</b>
                 </p>
               </div>
             );
@@ -91,10 +100,10 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
               {(r) => (
                 <tr class="border-b border-rule">
                   <th scope="row" class="py-1.5 pr-3 font-[600]">{r.levelLabel}</th>
-                  <td class="py-1.5 pr-3 text-right font-code">{r.wordMatching}</td>
-                  <td class="py-1.5 pr-3 text-right font-code">{r.unoptimised ?? "–"}</td>
-                  <td class="py-1.5 pr-3 text-right font-code">{r.live ?? "–"}</td>
-                  <td class="py-1.5 text-right font-code font-[650]">{r.candidate}</td>
+                  <td class="py-1.5 pr-3 text-right font-code">{Math.round(r.wordMatching)}</td>
+                  <td class="py-1.5 pr-3 text-right font-code">{r.unoptimised === null || r.unoptimised === undefined ? "–" : Math.round(r.unoptimised)}</td>
+                  <td class="py-1.5 pr-3 text-right font-code">{r.live === null || r.live === undefined ? "–" : Math.round(r.live)}</td>
+                  <td class="py-1.5 text-right font-code font-[650]">{Math.round(r.candidate)}</td>
                 </tr>
               )}
             </For>

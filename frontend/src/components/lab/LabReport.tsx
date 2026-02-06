@@ -165,6 +165,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
   const [busy, setBusy] = createSignal(false);
   let nameInput: HTMLInputElement | undefined;
   const allPassed = () => r().checks.every((c) => c.passed);
+  const liveRound = () => props.lab.live ?? props.lab.rounds.find((x) => x.status === "live")?.n ?? null;
 
   const sign = async () => {
     setError("");
@@ -198,7 +199,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
         <p class="mt-2 text-[15px] text-muted">Answers written by: {r().runBy}.</p>
       </Section>
       <Section n="§ 1" label="By depth" note="out of 100 test rulings">
-        <DepthPlot rows={r().byDepth} liveN={props.lab.live !== r().n ? props.lab.live : null} n={r().n} />
+        <DepthPlot rows={r().byDepth} liveN={liveRound() !== r().n ? liveRound() : null} n={r().n} />
       </Section>
       <Section n="§ 2" label="The confidence word" note="each dot is one ruling in a hundred">
         <div class="grid grid-cols-2 gap-10 border-t-[1.5px] border-ink pt-5 max-lg:grid-cols-1">
@@ -296,7 +297,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
         title={r().signOff.willPromote ? `Make round ${r().n} live for Northbound?` : `Sign round ${r().n}?`}
         description={
           r().signOff.willPromote
-            ? `New questions will be answered by round ${r().n} from now on. Round ${props.lab.live ?? "the live round"} stays available to switch back. Type your name to sign.`
+            ? `New questions will be answered by round ${r().n} from now on. Round ${liveRound() ?? "the live round"} stays available to switch back. Type your name to sign.`
             : "Your signature is the first of two. The round goes live when someone else signs too. Type your name to sign."
         }
         initialFocus={() => nameInput ?? null}
