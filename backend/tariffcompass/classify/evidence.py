@@ -83,6 +83,20 @@ def short(text: str, n: int = 80) -> str:
     return t if len(t) <= n else t[:n].rsplit(" ", 1)[0] + "…"
 
 
+MATERIAL_WORDS = (
+    "stainless steel iron aluminum aluminium plastic plastics polypropylene polyethylene polyester nylon cotton "
+    "wool silicone rubber glass ceramic wood bamboo leather copper zinc alloy metal"
+)
+MATERIALS = frozenset(MATERIAL_WORDS.split())
+
+
+def article_words(text: str) -> str:
+    """The words that name the article and what it does, without materials or numbers: what a heading's terms
+    are searched with (materials are the first stage's job, and they drown the article in the tariff text)."""
+    words = [w for w in re.findall(r"[A-Za-z][A-Za-z-]+", text) if w.lower() not in MATERIALS]
+    return " ".join(words)
+
+
 def expand(text: str) -> str:
     """The description plus the tariff words a reader would search for (the simulator's PHRASES and READS)."""
     from tariffcompass.adapters.lm_sim import _RULED_OUT, PHRASES, READS
@@ -158,7 +172,7 @@ def build(query: ProductQuery, first: FirstStageResult, retriever: Retriever, *,
     tariff_rank: dict[str, float] = {}
     if us is not None:
         lead = re.split(r"[.:;]", query.text, maxsplit=1)[0]  # the article itself, before its details
-        for q_text in (expand(query.text[:400]), expand(lead)):
+        for q_text in (article_words(expand(query.text[:400])), article_words(expand(lead))):
             found = retriever.tariff(q_text, country="US", k=12, levels=("heading", "subheading"))  # type: ignore[call-arg]
             for i, line in enumerate(found):
                 tariff_rank[line.code[:4]] = tariff_rank.get(line.code[:4], 0.0) + 1.0 / (i + 1)

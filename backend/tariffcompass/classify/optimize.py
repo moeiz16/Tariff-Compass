@@ -35,7 +35,7 @@ from tariffcompass.classify.program import TariffProgram, artifact_dir
 from tariffcompass.contracts import DepthAccuracy, Optimizer, ProductQuery, RoundReport, RoundRequest
 from tariffcompass.search.sections import chapter_title
 
-EVIDENCE_VERSION = "ev-6"  # bump when evidence.build changes
+EVIDENCE_VERSION = "ev-7"  # bump when evidence.build changes
 NORTHBOUND_CHAPTERS = ("39", "42", "61", "62", "63", "66", "73", "76", "82", "85", "94", "95", "96")
 DEPTHS = ("chapter", "heading", "subheading", "full_code")
 Progress = Callable[[float, str, str], None]
@@ -194,50 +194,52 @@ def make_metric(words: WordTable):
 
 
 # ── measuring ───────────────────────────────────────────────────────────────────────────────────────────
+def _row(ex: dspy.Example, pred, ms: float) -> dict:
+    from tariffcompass.classify.confidence import features
+
+    e = json.loads(ex.evidence)
+    support = [r for r in pred.cited if r["id"] in set(pred.support_ids)]
+    return {
+        "id": ex.id,
+        "heading": pred.heading,
+        "code": pred.us_code,
+        "verdict": pred.verdict,
+        "support": [(r["id"], r["heading"], r["status"]) for r in support],
+        "x": features(e, pred.heading, pred.us_code, pred.cited, pred.support_ids, ex.product),
+        "ms": ms,
+    }
+
+
 def run_program(program: TariffProgram, examples: list[dspy.Example], lm) -> list[dict]:
     out = []
     with dspy.context(lm=lm, adapter=dspy.ChatAdapter()):
         for ex in examples:
             t0 = time.perf_counter()
             pred = program(product=ex.product, evidence=ex.evidence)
-            ms = (time.perf_counter() - t0) * 1000
-            support = [r for r in pred.cited if r["id"] in set(pred.support_ids)]
-            out.append(
-                {
-                    "id": ex.id,
-                    "heading": pred.heading,
-                    "code": pred.us_code,
-                    "verdict": pred.verdict,
-                    "support": [(r["id"], r["heading"], r["status"]) for r in support],
-                    "ms": ms,
-                }
-            )
+            out.append(_row(ex, pred, (time.perf_counter() - t0) * 1000))
     return out
 
 
-def word_matching(examples: list[dspy.Example], first_stage, train: list[Example]) -> list[dict]:
-    """The classical baseline: the first stage's top heading, then the closest older ruling's line under it
-    (TF-IDF cosine), else the tariff line under it that shares the most words with the description."""
-    import scipy.sparse as sp
+def word_matching(examples: list[dspy.Example], first_stage=None, train=None) -> list[dict]:
+    """The classical baseline, exactly as it answers when no round is live: the first stage's top heading, the
+    closest retrieved ruling's line under it (else a GRI 6 walk down its lines), no LM."""
+    from tariffcompass.classify.program import word_matching_prediction
 
-    vec = first_stage.vec
-    by_heading: dict[str, list[Example]] = defaultdict(list)
-    for e in train:
-        if len(e.code) == 10:
-            by_heading[e.heading].append(e)
-    mats = {h: sp.vstack([vec.transform_one(e.text) for e in rows]).tocsr() for h, rows in by_heading.items()}
     out = []
     for ex in examples:
-        e = json.loads(ex.evidence)
-        heading = e["first_stage"][0]["code"] if e["first_stage"] else ""
-        code = ""
-        if heading in mats:
-            sims = (mats[heading] @ vec.transform_one(ex.product).T).toarray().ravel()
-            code = by_heading[heading][int(np.argmax(sims))].code
-        if not code:
-            code = ev.best_line_for(e, heading, ex.product) if heading else ""
-        out.append({"id": ex.id, "heading": heading, "code": code, "verdict": "", "support": [], "ms": 0.0})
+        t0 = time.perf_counter()
+        pred = word_matching_prediction(json.loads(ex.evidence), ex.product)
+        out.append(_row(ex, pred, (time.perf_counter() - t0) * 1000))
     return out
+
+
+def right_six(preds: list[dict], examples: list[dspy.Example]) -> list[bool]:
+    gold = {ex.id: ex for ex in examples}
+    return [p["code"][:6] == gold[p["id"]].gold_six for p in preds]
+
+
+def apply_calibrator(preds: list[dict], cal) -> list[dict]:
+    return [{**p, "verdict": cal.verdict(p["x"])} for p in preds]
 
 
 def score(preds: list[dict], examples: list[dspy.Example]) -> dict:
@@ -370,22 +372,48 @@ class GepaOptimizer:
             optimised = gepa.compile(student, trainset=d_tr, valset=d_va)
         gepa_s = time.perf_counter() - t0
 
+        from tariffcompass.classify import confidence as conf_mod
+        from tariffcompass.classify.program import calibrator_path
+
+        say(0.7, "calibrating", "Calibrating the confidence word on validation rulings no round used…")
+        used = {e.id for e in tr} | {e.id for e in va}
+        held = [e for e in val if e.id not in used]
+        d_held = [to_dspy(e, first, retriever, e.issued, cache) for e in held]
+        held_opt = run_program(optimised, d_held, task_lm)
+        held_wm = word_matching(d_held)
+        cal_opt = conf_mod.fit([p["x"] for p in held_opt], right_six(held_opt, d_held))
+        cal_wm = conf_mod.fit([p["x"] for p in held_wm], right_six(held_wm, d_held))
+
         say(0.75, "testing", f"Testing on {len(d_te)} rulings it hasn't seen…")
-        base = score(word_matching(d_te, first, splits.train), d_te)
+        wm_preds = apply_calibrator(word_matching(d_te), cal_wm)
         unopt_preds = run_program(TariffProgram(), d_te, task_lm)
-        opt_preds = run_program(optimised, d_te, task_lm)
-        unopt, opt = score(unopt_preds, d_te), score(opt_preds, d_te)
-        live = None
-        live_path = _live_program_path(request.round_n)
-        if live_path is not None:
-            prog = TariffProgram()
-            prog.load(str(live_path))
-            live = score(run_program(prog, d_te, task_lm), d_te)
+        opt_raw = run_program(optimised, d_te, task_lm)
+        opt_preds = apply_calibrator(opt_raw, cal_opt)
+        base, unopt, opt = score(wm_preds, d_te), score(unopt_preds, d_te), score(opt_preds, d_te)
+        opt_lm_verdict = score(opt_raw, d_te)["calibration"]
+        live = None  # word matching is what is in use until a round passes its checks and is signed live
+        conf_report = {
+            "method": "Platt-scaled logistic model over the answer's evidence; threshold for 90 in 100 on validation",
+            "heldOutValidation": len(d_held),
+            "optimised": {
+                "threshold": cal_opt.threshold,
+                "validation": cal_opt.validation,
+                "test": conf_mod.measure(cal_opt, [p["x"] for p in opt_raw], right_six(opt_raw, d_te)),
+                "lmVerdictTest": opt_lm_verdict,
+            },
+            "wordMatching": {
+                "threshold": cal_wm.threshold,
+                "validation": cal_wm.validation,
+                "test": conf_mod.measure(cal_wm, [p["x"] for p in wm_preds], right_six(wm_preds, d_te)),
+            },
+        }
 
         rounds = artifact_dir() / "rounds"
         rounds.mkdir(parents=True, exist_ok=True)
         program_file = rounds / f"round-{request.round_n}.program.json"
         optimised.save(str(program_file))
+        cal_opt.save(calibrator_path(request.round_n))
+        cal_wm.save(calibrator_path(None))
         instructions = {name: p.signature.instructions for name, p in optimised.named_predictors()}
 
         by_depth = [
@@ -395,7 +423,7 @@ class GepaOptimizer:
         ]
         if live is not None:
             by_depth.append(_depth("live", live, len(d_te)))
-        before = live or unopt
+        before = base  # the system in use: word matching
         test_ch = Counter(e.chapter for e in test)
         by_chapter = []
         for ch, n in test_ch.most_common():
@@ -422,7 +450,7 @@ class GepaOptimizer:
                 f"training rulings (PSI {psi['psi']:.2f})."
             ),
         }
-        gates = _gates(opt, before, live is not None)
+        gates = _gates(opt, before)
         learned = tuple(c.lesson for c in corrections if c.lesson)[:3] or _learned_from(instructions)
         seconds = time.perf_counter() - t_start
         report = RoundReport(
@@ -449,6 +477,7 @@ class GepaOptimizer:
                 "optimised": opt,
                 **({"live": live} if live else {}),
             },
+            "confidence": conf_report,
             "instructions": instructions,
             "counts": {"train": len(d_tr), "corrections": len(corrections), "val": len(d_va), "test": len(d_te)},
             "budgetMetricCalls": request.budget_metric_calls,
@@ -472,16 +501,6 @@ def _depth(system: str, scored: dict, n: int) -> DepthAccuracy:
     return DepthAccuracy(system, a["chapter"], a["heading"], a["subheading"], a["full_code"], n)  # type: ignore[arg-type]
 
 
-def _live_program_path(round_n: int) -> Path | None:
-    rounds = artifact_dir() / "rounds"
-    marker = rounds / "live.json"
-    if marker.exists():
-        p = rounds / json.loads(marker.read_text())["program"]
-        if p.exists() and not p.name.startswith(f"round-{round_n}."):
-            return p
-    return None
-
-
 def _learned_from(instructions: dict[str, str]) -> tuple[str, ...]:
     out = []
     for text in instructions.values():
@@ -502,52 +521,29 @@ def _learned_from(instructions: dict[str, str]) -> tuple[str, ...]:
     return tuple(dict.fromkeys(out))[:3]
 
 
-def _gates(opt: dict, before: dict, has_live: bool) -> list[dict]:
-    who = "the live round" if has_live else "the unoptimised program"
+def _gates(opt: dict, in_use: dict) -> list[dict]:
+    """The five checks before signing, against what is in use (word matching until a round is signed live)."""
+    who = "word matching (in use)"
     s = opt["calibration"]["strong"]
     strong_rate = s["right"] / s["said"] if s["said"] else 0.0
     worst = 0.0
     for ch in NORTHBOUND_CHAPTERS:
-        b, a = before["perChapter"].get(ch), opt["perChapter"].get(ch)
+        b, a = in_use["perChapter"].get(ch), opt["perChapter"].get(ch)
         if b and a:
             worst = min(worst, a["heading"] - b["heading"])
+    full, head = opt["accuracy"]["full_code"], opt["accuracy"]["heading"]
     rows = [
-        (
-            "full_code_vs_live",
-            "Full-code accuracy at least " + who + "'s",
-            opt["accuracy"]["full_code"],
-            before["accuracy"]["full_code"],
-            opt["accuracy"]["full_code"] >= before["accuracy"]["full_code"],
-        ),
-        (
-            "heading_vs_live",
-            "Heading accuracy at least " + who + "'s",
-            opt["accuracy"]["heading"],
-            before["accuracy"]["heading"],
-            opt["accuracy"]["heading"] >= before["accuracy"]["heading"],
-        ),
-        (
-            "chapter_regression",
-            "No chapter Northbound imports gets worse by more than 3 points",
-            round(worst, 4),
-            -0.03,
-            worst >= -0.03,
-        ),
-        (
-            "strong_right",
-            "“Strong match” right at least 90 times in 100",
-            round(strong_rate, 4),
-            0.90,
-            strong_rate >= 0.90,
-        ),
-        (
-            "citation_precision",
-            "Cited rulings share the answer's heading at least 95 times in 100",
-            opt["citations"]["precision"],
-            0.95,
-            opt["citations"]["precision"] >= 0.95,
-        ),
-    ]
+        ("full_code_vs_live", f"Full-code accuracy at least {who}'s", full, in_use["accuracy"]["full_code"],
+         full >= in_use["accuracy"]["full_code"]),
+        ("heading_vs_live", f"Heading accuracy at least {who}'s", head, in_use["accuracy"]["heading"],
+         head >= in_use["accuracy"]["heading"]),
+        ("chapter_regression", "No chapter Northbound imports gets worse by more than 3 points", round(worst, 4),
+         -0.03, worst >= -0.03),
+        ("strong_right", "“Strong match” right at least 90 times in 100", round(strong_rate, 4), 0.90,
+         s["said"] > 0 and strong_rate >= 0.90),
+        ("citation_precision", "Cited rulings share the answer's heading at least 95 times in 100",
+         opt["citations"]["precision"], 0.95, opt["citations"]["precision"] >= 0.95),
+    ]  # fmt: skip
     return [
         {"key": k, "label": label, "passed": bool(p), "value": v, "threshold": t, "plain": label}
         for k, label, v, t, p in rows

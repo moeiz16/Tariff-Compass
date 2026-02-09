@@ -405,23 +405,116 @@ def artifact_dir() -> Path:
     return Path(str(settings.TARIFF_COMPASS["ARTIFACT_DIR"]))
 
 
-def live_program_path() -> Path | None:
-    """The optimised program JSON of the live round (classify/artifacts/rounds/live.json names it)."""
-    rounds = artifact_dir() / "rounds"
-    marker = rounds / "live.json"
-    if marker.exists():
-        p = rounds / json.loads(marker.read_text())["program"]
-        return p if p.exists() else None
-    found = sorted(rounds.glob("round-*.program.json")) if rounds.exists() else []
-    return found[-1] if found else None
+def live_round() -> int | None:
+    """The round the Lab has signed live (two signatures, every check passed), or None: word matching is in use."""
+    try:
+        from tariffcompass.lab.live import live_round as lab_live_round
+
+        return lab_live_round()
+    except Exception:  # no platform or no database (offline tooling)
+        return None
+
+
+def round_program_path(round_n: int) -> Path:
+    return artifact_dir() / "rounds" / f"round-{round_n}.program.json"
+
+
+def calibrator_path(round_n: int | None) -> Path:
+    if round_n is None:
+        return artifact_dir() / "word_matching.confidence.json"
+    return artifact_dir() / "rounds" / f"round-{round_n}.confidence.json"
+
+
+def load_calibrator(round_n: int | None):
+    from tariffcompass.classify.confidence import Calibrator
+
+    p = calibrator_path(round_n)
+    return Calibrator.load(p) if p.exists() else None
+
+
+def calibrated(pred: dspy.Prediction, e: dict, product: str, calibrator) -> dspy.Prediction:
+    """Replace the verdict with the calibrated one ("Strong match" only above the validated threshold)."""
+    if calibrator is None:
+        return pred
+    from tariffcompass.classify.confidence import features
+
+    x = features(e, pred.heading, pred.us_code, pred.cited, pred.support_ids, product)
+    pred.verdict = calibrator.verdict(x)
+    pred.p_right = round(calibrator.probability(x), 4)
+    return pred
+
+
+def word_matching_prediction(e: dict, product: str) -> dspy.Prediction:
+    """The classical answer, with no LM: the first stage's top heading (or the neighbour a stated deciding fact
+    points to), the closest retrieved ruling's line under it (else a GRI 6 walk down its lines), and the rulings
+    under that heading as support."""
+    from tariffcompass.adapters.lm_sim import _subheading
+
+    heading = (
+        e["first_stage"][0]["code"] if e["first_stage"] else (e["candidates"][0]["heading"] if e["candidates"] else "")
+    )
+    # the deciding-fact check (GRI 1): when the description states the fact that separates the top heading from a
+    # known neighbour, and it points to the neighbour, the neighbour's terms describe the article
+    for c in e["candidates"]:
+        if c["heading"] != heading and ev.deciding_status(product, heading, c["heading"]) == "stated_against":
+            heading = c["heading"]
+            break
+    rulings = [r for r in e["rulings"].get(heading, []) if r["status"] != "revoked"]
+    near = next(
+        (r for r in rulings if len(r["code"]) == 10 and r["code"] in {c for c, _ in e["us_lines"].get(heading, [])}),
+        None,
+    )
+    code = near["code"] if near else ev.best_line_for(e, heading, product)
+    ca = ""
+    if e["ca_lines"].get(heading):
+        ca_out = _subheading({"product": product, "lines": ev.render_lines(e, heading, "CA", us_code=code)}, "")
+        ca = ev.parse_code(ca_out.get("code", ""), e["ca_lines"][heading])
+    others = [c["heading"] for c in e["candidates"] if c["heading"] != heading][:3]
+    cited = ev.citation_rulings(e, heading, others)
+    support = [i + 1 for i, r in enumerate(cited) if r["heading"] == heading and r["status"] != "revoked"][:3]
+    contrast = next((i + 1 for i, r in enumerate(cited) if r["heading"] != heading), None)
+    cites = "".join(f"[{n}]" for n in support)
+    sentences = [
+        (f"Word matching places the product in heading {heading}{(' ' + cites) if cites else ''}.", tuple(support))
+    ]
+    if near:
+        sentences.append(
+            (f"The closest ruling under that heading, {near['id']}, holds the line {codes.fmt(code)} [1].", (1,))
+        )
+    if contrast:
+        sentences.append(
+            (
+                f"By contrast, rulings under heading {cited[contrast - 1]['heading']} turned on different facts "
+                f"[{contrast}].",
+                (contrast,),
+            )
+        )
+    return dspy.Prediction(
+        order=[heading, *others],
+        heading=heading,
+        gri="GRI 1",
+        set_aside=[(h, "Set aside: word matching ranks it lower", None) for h in others],
+        facts="",
+        us_code=code,
+        us_why=f"The closest ruling, {near['id']}, holds this line." if near else "",
+        ca_code=ca,
+        ca_why="",
+        cited=cited,
+        sentences=sentences,
+        support_ids=[cited[n - 1]["id"] for n in support],
+        verdict="broker",
+        deciding_fact="none",
+        question="none",
+    )
 
 
 class DSPyClassifier:
-    """ClassifierProgram: evidence → five modules → ProgramAnswer."""
+    """ClassifierProgram: evidence → five modules → calibrated verdict → ProgramAnswer."""
 
-    def __init__(self, program: TariffProgram, lm, lm_label: str, version: str) -> None:
+    def __init__(self, program: TariffProgram, lm, lm_label: str, version: str, calibrator=None) -> None:
         self.program, self.lm, self.lm_label = program, lm, lm_label
         self.version = version
+        self.calibrator = calibrator
 
     def classify(self, query: ProductQuery, first_stage: FirstStageResult, retriever: Retriever) -> ProgramAnswer:
         t0 = time.perf_counter()
@@ -430,8 +523,27 @@ class DSPyClassifier:
         product = ev.product_text(query)
         with dspy.context(lm=self.lm, adapter=dspy.ChatAdapter()):
             pred = self.program(product=product, evidence=json.dumps(e))
+        pred = calibrated(pred, e, product, self.calibrator)
         t2 = time.perf_counter()
         timings = {"evidence": (t1 - t0) * 1000, "program": (t2 - t1) * 1000}
+        return assemble(query, e, pred, lm_label=self.lm_label, version=self.version, timings=timings)
+
+
+class WordMatchingClassifier:
+    """ClassifierProgram while no round is signed live: the classical first stage answers, calibrated, no LM."""
+
+    lm_label = "none (word matching)"
+
+    def __init__(self, calibrator=None) -> None:
+        self.calibrator = calibrator
+        self.version = f"{PROGRAM_VERSION}:word-matching"
+
+    def classify(self, query: ProductQuery, first_stage: FirstStageResult, retriever: Retriever) -> ProgramAnswer:
+        t0 = time.perf_counter()
+        e = build_evidence(query, first_stage, retriever)
+        product = ev.product_text(query)
+        pred = calibrated(word_matching_prediction(e, product), e, product, self.calibrator)
+        timings = {"evidence": (time.perf_counter() - t0) * 1000, "program": 0.0}
         return assemble(query, e, pred, lm_label=self.lm_label, version=self.version, timings=timings)
 
 
@@ -443,22 +555,17 @@ def make_program(path: Path | None = None) -> TariffProgram:
 
 
 def load_program() -> ClassifierProgram:
+    """The signed-live round's program (with its calibrated confidence), else word matching."""
     from tariffcompass.adapters import lm as lm_adapter
 
-    path = live_program_path()
-    prog = make_program(path)
-    version = f"{PROGRAM_VERSION}:{path.stem if path else 'unoptimised'}"
-    return DSPyClassifier(prog, lm_adapter.task_lm(), lm_adapter.lm_label("task"), version)
+    n = live_round()
+    if n is None or not round_program_path(n).exists():
+        return WordMatchingClassifier(load_calibrator(None))
+    prog = make_program(round_program_path(n))
+    version = f"{PROGRAM_VERSION}:round-{n}"
+    return DSPyClassifier(prog, lm_adapter.task_lm(), lm_adapter.lm_label("task"), version, load_calibrator(n))
 
 
 def set_live(round_n: int | None) -> None:
-    """Record which round's optimised program the classifier uses (called when a round is signed live)."""
-    rounds = artifact_dir() / "rounds"
-    marker = rounds / "live.json"
-    if round_n is None:
-        marker.unlink(missing_ok=True)
-        return
-    name = f"round-{round_n}.program.json"
-    if not (rounds / name).exists():
-        raise FileNotFoundError(name)
-    marker.write_text(json.dumps({"round": round_n, "program": name}) + "\n")
+    """Kept for callers of the earlier hook; the Lab's sign-off record (lab.live) decides what is live."""
+    return None

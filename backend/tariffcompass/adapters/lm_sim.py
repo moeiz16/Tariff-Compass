@@ -126,7 +126,8 @@ import hashlib  # noqa: E402
 
 NOISE = {"candidates": 0.04, "gri": 0.05, "subheading": 0.03}
 CITE_SLIP = 0.3
-CANDIDATE_TERMS_WEIGHT = 0.6  # how much the candidate step reads the heading texts themselves
+CANDIDATE_TERMS_WEIGHT = 0.6
+GRI_PRIOR_WEIGHT = 1.0  # how much the candidate step reads the heading texts themselves
 TARIFF_TEXT_WEIGHT = 0.1  # how much the candidate step trusts a heading found by searching the tariff text
 SIM_SEED = "tariff-compass-sim-1"
 DEFAULTS = {
@@ -320,6 +321,7 @@ def _gri(inputs: dict[str, str], instr: str) -> dict[str, str]:
                 "overlap": overlap,
                 "key": len(((pst | read) & (hst | lst)) - GENERIC),
                 "score": 0.4 / rank
+                + GRI_PRIOR_WEIGHT * float(kv.get("p", 0))  # the first stage's probability is a prior, not just a rank
                 + w_terms * overlap
                 + w_prec * float(kv.get("precedent", 0))
                 + NOISE["gri"] * _noise(product, parts[0], "gri"),
@@ -340,7 +342,7 @@ def _gri(inputs: dict[str, str], instr: str) -> dict[str, str]:
                 lo, hi = int(m.group(2)), int(m.group(3))
                 for o in cands:
                     if o["h"] != c["h"] and lo <= int(o["h"][:2]) <= hi:
-                        o["score"] -= 1.0
+                        o["score"] = -9.0  # a section note excludes it outright (GRI 1)
                         reasons[o["h"]] = f"Set aside: excluded by {m.group(1)}"
         for x in c["excludes"]:
             for o in cands:
