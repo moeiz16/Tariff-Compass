@@ -70,7 +70,7 @@
     "train": [],
     "demos": [],
     "signature": {
-      "instructions": "Within the chosen heading, compare subheadings at the same level only (GRI 6) and pick the ten-digit line.\nRULE: follow the closest ruling's line when its similarity is at least 0.31\nRULE: in heading 8716 choose 8716905059 when the product mentions 'tire'",
+      "instructions": "Within the chosen heading, compare subheadings at the same level only (GRI 6) and pick the ten-digit line.\nRULE: follow the closest ruling's line when its similarity is at least 0.31\nRULE: in heading 8716 choose 8716905059 when the product mentions 'wheel'",
       "fields": [
         {
           "prefix": "Product:",

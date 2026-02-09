@@ -70,7 +70,7 @@
     "train": [],
     "demos": [],
     "signature": {
-      "instructions": "Within the chosen heading, compare subheadings at the same level only (GRI 6) and pick the ten-digit line.",
+      "instructions": "Within the chosen heading, compare subheadings at the same level only (GRI 6) and pick the ten-digit line.\nRULE: follow the closest ruling's line when its similarity is at least 0.3\nRULE: in heading 8703 choose 8703400020 when the product mentions 'engine'\nRULE: in heading 8443 choose 8443992510 when the product mentions 'ink'\nRULE: in heading 6404 choose 6404193760 when the product mentions 'women'",
       "fields": [
         {
           "prefix": "Product:",
@@ -128,7 +128,7 @@
     "train": [],
     "demos": [],
     "signature": {
-      "instructions": "Decide whether the answer is a strong match or needs a broker. If it needs a broker, name the single fact\nthat would decide it and ask it as a question with two answers.\nRULE: say broker when the margin is below 0.0\nRULE: say broker when the precedent share is below 0.8",
+      "instructions": "Decide whether the answer is a strong match or needs a broker. If it needs a broker, name the single fact\nthat would decide it and ask it as a question with two answers.\nRULE: say broker when the margin is below 0.4\nRULE: say broker when the precedent share is below 0.0",
       "fields": [
         {
           "prefix": "Product:",

@@ -31,7 +31,7 @@
     "train": [],
     "demos": [],
     "signature": {
-      "instructions": "Apply the General Rules of Interpretation in order. Use GRI 1 (heading texts and section and chapter\nnotes) first; go to GRI 2-5 only when GRI 1 cannot decide. Explain why each neighbouring heading is set aside.\nRULE: prefer 3307 over 9404 when the product mentions 'fragrance'\nRULE: prefer 3926 over 8302 when the product mentions 'lieu'\nRULE: weigh precedent at 0.5 when choosing the heading",
+      "instructions": "Apply the General Rules of Interpretation in order. Use GRI 1 (heading texts and section and chapter\nnotes) first; go to GRI 2-5 only when GRI 1 cannot decide. Explain why each neighbouring heading is set aside.",
       "fields": [
         {
           "prefix": "Product:",

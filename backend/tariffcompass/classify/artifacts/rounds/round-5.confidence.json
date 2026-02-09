@@ -1,0 +1,32 @@
+{
+ "coef": [
+  0.686851,
+  0.90768,
+  0.326055,
+  0.997448,
+  -0.800725,
+  -1.432075,
+  0.0,
+  2.331873
+ ],
+ "intercept": -1.408848,
+ "threshold": 0.8082,
+ "fitted_on": 613,
+ "validation": {
+  "precision": 0.9022,
+  "coverage": 0.3002,
+  "ece": 0.0621,
+  "rightRate": 0.5285,
+  "wrongCaught": 0.9377
+ },
+ "features": [
+  "first_stage_p",
+  "margin",
+  "kept_first_stage_top",
+  "precedent",
+  "agreeing",
+  "deciding_for",
+  "deciding_against_or_read",
+  "closest_ruling_holds_line"
+ ]
+}
