@@ -1,0 +1,499 @@
+{
+ "round": 7,
+ "lm": "offline simulator",
+ "reflectionLm": "offline simulator",
+ "testWindow": [
+  "2025-01-02",
+  "2025-08-01"
+ ],
+ "testCount": 1094,
+ "accuracy": {
+  "word_matching": {
+   "chapter": 0.7806,
+   "heading": 0.6536,
+   "subheading": 0.4863,
+   "full_code": 0.3665
+  },
+  "unoptimised": {
+   "chapter": 0.7559,
+   "heading": 0.6353,
+   "subheading": 0.3601,
+   "full_code": 0.1391
+  },
+  "optimised": {
+   "chapter": 0.7559,
+   "heading": 0.6353,
+   "subheading": 0.4186,
+   "full_code": 0.2509
+  }
+ },
+ "firstStage": {
+  "shipped": {
+   "model": "linear_svm",
+   "heading": {
+    "top1": 0.6536,
+    "top3": 0.7888,
+    "top5": 0.8327
+   },
+   "chapter": {
+    "top1": 0.7943,
+    "top3": 0.9177,
+    "top5": 0.9433
+   },
+   "ece": 0.0977
+  },
+  "logistic_regression": {
+   "heading": {
+    "top1": 0.6133,
+    "top3": 0.7697,
+    "top5": 0.8263
+   },
+   "chapter": {
+    "top1": 0.7733,
+    "top3": 0.9269,
+    "top5": 0.9497
+   }
+  },
+  "linear_svm": {
+   "heading": {
+    "top1": 0.6453,
+    "top3": 0.7943,
+    "top5": 0.8336
+   },
+   "chapter": {
+    "top1": 0.7852,
+    "top3": 0.9159,
+    "top5": 0.9406
+   }
+  },
+  "lightgbm_chapter": {
+   "chapter": {
+    "top1": 0.7075,
+    "top3": 0.883,
+    "top5": 0.9177
+   }
+  }
+ },
+ "firstStageCalibration": {
+  "test_ece": 0.0977,
+  "method": "temperature scaling on validation (Platt-style, one parameter)",
+  "temperature": 0.0944,
+  "eceValBefore": 0.7154,
+  "eceValAfter": 0.0939
+ },
+ "calibration": {
+  "strong": {
+   "said": 175,
+   "right": 154
+  },
+  "broker": {
+   "said": 919,
+   "firstGuessWrong": 615
+  }
+ },
+ "citations": {
+  "support": 3178,
+  "sameHeading": 3170,
+  "precision": 0.9975,
+  "revokedAsSupport": 0
+ },
+ "landedCost": {
+  "n": 20,
+  "exact": 20,
+  "rows": [
+   {
+    "id": "LC01",
+    "product": "20 oz stainless vacuum tumbler (hero)",
+    "expected": "3458.93",
+    "got": "3458.93",
+    "exact": true
+   },
+   {
+    "id": "LC02",
+    "product": "Bicycle headlight",
+    "expected": "2797.14",
+    "got": "2797.14",
+    "exact": true
+   },
+   {
+    "id": "LC03",
+    "product": "Men's knitted cotton pullover",
+    "expected": "3697.14",
+    "got": "3697.14",
+    "exact": true
+   },
+   {
+    "id": "LC04",
+    "product": "Lithium-ion power bank",
+    "expected": "9774.28",
+    "got": "9774.28",
+    "exact": true
+   },
+   {
+    "id": "LC05",
+    "product": "Stainless steel saucepan (steel content $6,000)",
+    "expected": "4203.58",
+    "got": "4203.58",
+    "exact": true
+   },
+   {
+    "id": "LC06",
+    "product": "Aluminium cookware, not cast, uncoated (aluminium content $4,500)",
+    "expected": "3227.08",
+    "got": "3227.08",
+    "exact": true
+   },
+   {
+    "id": "LC07",
+    "product": "Plastic food storage containers",
+    "expected": "1209.83",
+    "got": "1209.83",
+    "exact": true
+   },
+   {
+    "id": "LC08",
+    "product": "Backpack, man-made fibre (exclusion not confirmed)",
+    "expected": "9460.71",
+    "got": "9460.71",
+    "exact": true
+   },
+   {
+    "id": "LC09",
+    "product": "Backpack, man-made fibre, within the 9903.88.69 dimensions",
+    "expected": "5710.71",
+    "got": "5710.71",
+    "exact": true
+   },
+   {
+    "id": "LC10",
+    "product": "Backpack, man-made fibre",
+    "expected": "5710.71",
+    "got": "5710.71",
+    "exact": true
+   },
+   {
+    "id": "LC11",
+    "product": "USB wall charger (by air)",
+    "expected": "4083.58",
+    "got": "4083.58",
+    "exact": true
+   },
+   {
+    "id": "LC12",
+    "product": "Bluetooth speakers, large shipment",
+    "expected": "69714.00",
+    "got": "69714.00",
+    "exact": true
+   },
+   {
+    "id": "LC13",
+    "product": "Flashlight",
+    "expected": "1664.83",
+    "got": "1664.83",
+    "exact": true
+   },
+   {
+    "id": "LC14",
+    "product": "Bicycle headlight, USMCA-qualifying, by truck",
+    "expected": "0.00",
+    "got": "0.00",
+    "exact": true
+   },
+   {
+    "id": "LC15",
+    "product": "Men's knitted cotton pullover, no USMCA claim, by truck",
+    "expected": "4184.64",
+    "got": "4184.64",
+    "exact": true
+   },
+   {
+    "id": "LC16",
+    "product": "Plastic food storage containers",
+    "expected": "789.83",
+    "got": "789.83",
+    "exact": true
+   },
+   {
+    "id": "LC17",
+    "product": "20 oz stainless vacuum tumbler into Canada",
+    "expected": "1609.38",
+    "got": "1609.38",
+    "exact": true
+   },
+   {
+    "id": "LC18",
+    "product": "Men's knitted cotton pullover into Canada, CPTPP origin",
+    "expected": "500.00",
+    "got": "500.00",
+    "exact": true
+   },
+   {
+    "id": "LC19",
+    "product": "Men's knitted cotton pullover into Canada, no proof of origin",
+    "expected": "2390.00",
+    "got": "2390.00",
+    "exact": true
+   },
+   {
+    "id": "LC20",
+    "product": "Steel tent stakes into Canada",
+    "expected": "1523.00",
+    "got": "1523.00",
+    "exact": true
+   }
+  ]
+ },
+ "drift": {
+  "psi": {
+   "psi": 0.3405,
+   "reading": "large shift",
+   "mostMoved": [
+    {
+     "chapter": "61",
+     "train": 0.0824,
+     "new": 0.0219,
+     "change": -0.0605
+    },
+    {
+     "chapter": "84",
+     "train": 0.0588,
+     "new": 0.1088,
+     "change": 0.05
+    },
+    {
+     "chapter": "95",
+     "train": 0.0726,
+     "new": 0.1069,
+     "change": 0.0343
+    },
+    {
+     "chapter": "62",
+     "train": 0.0439,
+     "new": 0.011,
+     "change": -0.033
+    },
+    {
+     "chapter": "90",
+     "train": 0.0218,
+     "new": 0.053,
+     "change": 0.0312
+    }
+   ],
+   "bins": 31
+  },
+  "byMonth": [
+   {
+    "month": "2025-01",
+    "n": 93,
+    "psi": 0.9604,
+    "reading": "large shift"
+   },
+   {
+    "month": "2025-02",
+    "n": 87,
+    "psi": 0.7255,
+    "reading": "large shift"
+   },
+   {
+    "month": "2025-03",
+    "n": 128,
+    "psi": 0.802,
+    "reading": "large shift"
+   },
+   {
+    "month": "2025-04",
+    "n": 153,
+    "psi": 0.6592,
+    "reading": "large shift"
+   },
+   {
+    "month": "2025-05",
+    "n": 203,
+    "psi": 0.6882,
+    "reading": "large shift"
+   },
+   {
+    "month": "2025-06",
+    "n": 202,
+    "psi": 0.8978,
+    "reading": "large shift"
+   },
+   {
+    "month": "2025-07",
+    "n": 222,
+    "psi": 0.7254,
+    "reading": "large shift"
+   },
+   {
+    "month": "2025-08",
+    "n": 6,
+    "psi": 6.5985,
+    "reading": "large shift"
+   }
+  ],
+  "revision": {
+   "changes": [
+    "6110202010 is no longer a line of the schedule",
+    "8512102000 is no longer a line of the schedule",
+    "9617001000 was split into 9617001010, 9617001090",
+    "the text of 8513 changed",
+    "8512103000 is a new line"
+   ],
+   "products": 16,
+   "expectedAffected": [
+    "LC01",
+    "LC02",
+    "LC03",
+    "LC13",
+    "LC14",
+    "LC15"
+   ],
+   "flagged": [
+    "LC01",
+    "LC02",
+    "LC03",
+    "LC13",
+    "LC14",
+    "LC15"
+   ],
+   "detected": true
+  }
+ },
+ "latency": {
+  "firstStageP95": 0.71,
+  "answerP95": 56.5,
+  "coldStartMs": 36.0,
+  "firstStage": "first-stage-svm-db8403dc-k4800",
+  "program": "program-5m-1:word-matching",
+  "lm": "none (word matching)",
+  "retriever": "tantivy-bm25-rerank-1"
+ },
+ "remeasured": {
+  "word_matching": {
+   "chapter": 0.7806,
+   "heading": 0.6536,
+   "subheading": 0.4863,
+   "full_code": 0.3665
+  },
+  "unoptimised": {
+   "chapter": 0.7559,
+   "heading": 0.6353,
+   "subheading": 0.3601,
+   "full_code": 0.1391
+  },
+  "optimised": {
+   "chapter": 0.7559,
+   "heading": 0.6353,
+   "subheading": 0.4186,
+   "full_code": 0.2509
+  }
+ },
+ "gates": [
+  {
+   "key": "beats_word_matching_heading",
+   "label": "Optimised program beats word matching at heading",
+   "value": 0.6353,
+   "threshold": 0.6536,
+   "passed": false
+  },
+  {
+   "key": "beats_word_matching_full_code",
+   "label": "Optimised program beats word matching at full_code",
+   "value": 0.2509,
+   "threshold": 0.3665,
+   "passed": false
+  },
+  {
+   "key": "beats_unoptimised_heading",
+   "label": "Optimised program beats the unoptimised program at heading",
+   "value": 0.6353,
+   "threshold": 0.6353,
+   "passed": false
+  },
+  {
+   "key": "beats_unoptimised_full_code",
+   "label": "Optimised program beats the unoptimised program at full_code",
+   "value": 0.2509,
+   "threshold": 0.1391,
+   "passed": true
+  },
+  {
+   "key": "first_stage_top5_heading",
+   "label": "First stage: right heading in its top 5",
+   "value": 0.8327,
+   "threshold": 0.8,
+   "passed": true
+  },
+  {
+   "key": "first_stage_top3_chapter",
+   "label": "First stage: right chapter in its top 3",
+   "value": 0.9177,
+   "threshold": 0.9,
+   "passed": true
+  },
+  {
+   "key": "strong_right",
+   "label": "\u201cStrong match\u201d right (six digits)",
+   "value": 0.88,
+   "threshold": 0.9,
+   "passed": false
+  },
+  {
+   "key": "broker_catches_wrong",
+   "label": "\u201cNeeds a broker\u201d caught a wrong first guess",
+   "value": 0.6692,
+   "threshold": 0.25,
+   "passed": true
+  },
+  {
+   "key": "citation_precision",
+   "label": "Cited rulings share the answer's heading",
+   "value": 0.9975,
+   "threshold": 0.95,
+   "passed": true
+  },
+  {
+   "key": "revoked_as_support",
+   "label": "Revoked rulings cited as support",
+   "value": 0,
+   "threshold": 0,
+   "passed": true
+  },
+  {
+   "key": "landed_cost",
+   "label": "Landed cost exact on the hand-checked set",
+   "value": "20/20",
+   "threshold": 1.0,
+   "passed": true
+  },
+  {
+   "key": "simulated_revision",
+   "label": "A simulated tariff revision flags every affected product (and only those)",
+   "value": "6/6",
+   "threshold": true,
+   "passed": true
+  },
+  {
+   "key": "psi_reported",
+   "label": "Chapter-mix drift (PSI) reported",
+   "value": 0.3405,
+   "threshold": "reported",
+   "passed": true
+  },
+  {
+   "key": "first_stage_p95",
+   "label": "First stage p95 (ms)",
+   "value": 0.71,
+   "threshold": 150,
+   "passed": true
+  },
+  {
+   "key": "answer_p95_offline",
+   "label": "Full answer p95 with the offline simulator (ms)",
+   "value": 56.5,
+   "threshold": 1000,
+   "passed": true
+  }
+ ],
+ "passed": false
+}
