@@ -360,9 +360,9 @@
   }
  },
  "latency": {
-  "firstStageP95": 0.71,
-  "answerP95": 56.5,
-  "coldStartMs": 36.0,
+  "firstStageP95": 0.69,
+  "answerP95": 51.26,
+  "coldStartMs": 37.9,
   "firstStage": "first-stage-svm-db8403dc-k4800",
   "program": "program-5m-1:word-matching",
   "lm": "none (word matching)",
@@ -483,14 +483,14 @@
   {
    "key": "first_stage_p95",
    "label": "First stage p95 (ms)",
-   "value": 0.71,
+   "value": 0.69,
    "threshold": 150,
    "passed": true
   },
   {
    "key": "answer_p95_offline",
    "label": "Full answer p95 with the offline simulator (ms)",
-   "value": 56.5,
+   "value": 51.26,
    "threshold": 1000,
    "passed": true
   }

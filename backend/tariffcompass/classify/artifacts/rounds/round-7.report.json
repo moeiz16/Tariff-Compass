@@ -713,19 +713,19 @@
  "gates": [
   {
    "key": "full_code_vs_live",
-   "label": "Full-code accuracy at least word matching (in use)'s",
+   "label": "Full-code accuracy at least as good as word matching (in use)",
    "passed": false,
    "value": 0.2509,
    "threshold": 0.3665,
-   "plain": "Full-code accuracy at least word matching (in use)'s"
+   "plain": "Full-code accuracy at least as good as word matching (in use)"
   },
   {
    "key": "heading_vs_live",
-   "label": "Heading accuracy at least word matching (in use)'s",
+   "label": "Heading accuracy at least as good as word matching (in use)",
    "passed": false,
    "value": 0.6353,
    "threshold": 0.6536,
-   "plain": "Heading accuracy at least word matching (in use)'s"
+   "plain": "Heading accuracy at least as good as word matching (in use)"
   },
   {
    "key": "chapter_regression",

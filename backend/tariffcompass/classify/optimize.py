@@ -533,9 +533,9 @@ def _gates(opt: dict, in_use: dict) -> list[dict]:
             worst = min(worst, a["heading"] - b["heading"])
     full, head = opt["accuracy"]["full_code"], opt["accuracy"]["heading"]
     rows = [
-        ("full_code_vs_live", f"Full-code accuracy at least {who}'s", full, in_use["accuracy"]["full_code"],
+        ("full_code_vs_live", f"Full-code accuracy at least as good as {who}", full, in_use["accuracy"]["full_code"],
          full >= in_use["accuracy"]["full_code"]),
-        ("heading_vs_live", f"Heading accuracy at least {who}'s", head, in_use["accuracy"]["heading"],
+        ("heading_vs_live", f"Heading accuracy at least as good as {who}", head, in_use["accuracy"]["heading"],
          head >= in_use["accuracy"]["heading"]),
         ("chapter_regression", "No chapter Northbound imports gets worse by more than 3 points", round(worst, 4),
          -0.03, worst >= -0.03),

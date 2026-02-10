@@ -25,12 +25,14 @@ depth but does not beat word matching: its rule-following heading step is slight
 first stage's top heading, and word matching's nearest-ruling line is a strong ten-digit baseline. The gates
 below report that as failures; the thresholds were not changed.
 
-**How the test set was used.** The rounds were run three times. After the first and second runs, the training
-logs and the saved instructions showed two mechanical faults: the reflection step wrote every module's rules
-into whichever module it was rewriting (so the confidence step never received its thresholds), and the round
-score ignored the confidence word (so no confidence change could ever be accepted). Both were fixed, the metric
-budgets were raised so every module gets a turn, and the rounds were re-run. The test figures of the earlier
-runs were visible in the same logs; no threshold, gate or policy default was changed in response to them.
+**How the test set was used.** The rounds were run several times while the pipeline was being fixed, and each
+run printed its test figures. The fixes were found in the training logs, the saved instructions and the
+validation window: the reflection step wrote every module's rules into whichever module it was rewriting; the
+round score ignored the confidence word; the heading step used the first stage's rank but not its probability;
+a section note only lowered an excluded heading instead of excluding it; the tariff-text search was drowned by
+material words; the confidence word was replaced by a calibrated one with its threshold chosen on validation.
+No gate threshold was changed, and nothing was fitted to the test set; but the test set has been looked at
+more than once, and a fresh test window (rulings after August 2025) is the clean check.
 
 **What is in use.** A round answers only after it passes all five checks and two people sign it live. While
 none qualifies, word matching (the classical first stage, calibrated) answers in the product and the program
@@ -78,7 +80,7 @@ Before calibration the program's own confidence step said “Strong match” 675
 - Landed cost: 20 of 20 hand-checked products exact to the cent (`eval/sets/landed_cost_20.json`).
 - Chapter-mix PSI, training vs the newest rulings: 0.3405 (large shift).
 - Simulated tariff revision: 5 changes; flagged LC01, LC02, LC03, LC13, LC14, LC15 (expected LC01, LC02, LC03, LC13, LC14, LC15).
-- First stage p95: 0.71 ms. Full answer p95 offline (none (word matching)): 56.5 ms, after a first answer that opens the indexes (36.0 ms).
+- First stage p95: 0.69 ms. Full answer p95 offline (none (word matching)): 51.26 ms, after a first answer that opens the indexes (37.9 ms).
 
 ## Gates (`eval/gates.toml`)
 
@@ -97,6 +99,6 @@ Before calibration the program's own confidence step said “Strong match” 675
 | Landed cost exact on the hand-checked set | 20/20 | 1.0 | pass |
 | A simulated tariff revision flags every affected product (and only those) | 6/6 | True | pass |
 | Chapter-mix drift (PSI) reported | 0.3405 | reported | pass |
-| First stage p95 (ms) | 0.71 | 150 | pass |
-| Full answer p95 with the offline simulator (ms) | 56.5 | 1000 | pass |
+| First stage p95 (ms) | 0.69 | 150 | pass |
+| Full answer p95 with the offline simulator (ms) | 51.26 | 1000 | pass |
 
