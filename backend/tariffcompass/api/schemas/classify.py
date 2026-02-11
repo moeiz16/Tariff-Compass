@@ -59,6 +59,15 @@ class AgreementSegment(Wire):
     kind: Literal["same", "contrast", "differs"]
 
 
+class VerdictDepthOut(Wire):
+    """The confidence word at one depth: the heading can be a strong match while the full code needs a broker."""
+
+    level: Literal["heading", "full_code"]
+    level_label: str  # "Heading" | "Full code"
+    word: VerdictWord
+    word_label: str
+
+
 class VerdictOut(Wire):
     word: VerdictWord
     word_label: str  # "Strong match" | "Needs a broker"
@@ -67,6 +76,7 @@ class VerdictOut(Wire):
     cited: int
     in_force: int  # "still in force 5 of 6"
     agreement_bar: list[AgreementSegment]
+    by_depth: list[VerdictDepthOut] = []  # `word` above is the full-code word
 
 
 class AlternativeOut(Wire):

@@ -224,7 +224,8 @@ AnswerOut = {
   id, query: ClassifyIn, madeInLabel, createdAt, createdBy, tariffsAsOf, snapshotLabel, sample,
   us: CodeOut|null, ca: CodeOut|null,                                    # holding band code cards
   verdict: { word: strong|broker, wordLabel: "Strong match"|"Needs a broker", sentence,
-             agreeing, cited, inForce, agreementBar: { n, kind: same|contrast|differs }[] },
+             agreeing, cited, inForce, agreementBar: { n, kind: same|contrast|differs }[],
+             byDepth: { level: heading|full_code, levelLabel, word, wordLabel }[] },   # word = the full-code word
   alternative?: { code: CodeOut, condition, dutyAtStake },              # "Also possible, if the torch use is real"
   decidingQuestion?: { factKey, question, options: { key, label, leadsTo }[], notSureLabel },
   holdingSentence,                                                       # "The tumbler is classified in subheading 9617.00.10.00, HTSUS, and …"

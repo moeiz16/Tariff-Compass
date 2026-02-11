@@ -184,6 +184,20 @@ def landed_out(lc: LandedCost) -> dict[str, Any]:
     }
 
 
+DEPTH_LABELS = {"heading": "Heading", "full_code": "Full code"}
+
+
+def verdict_depths(ans: Any) -> list[dict[str, str]]:
+    """`ProgramAnswer.verdict_by_depth` on the wire (empty when the core doesn't say)."""
+    out = []
+    for level, word in getattr(ans, "verdict_by_depth", ()) or ():
+        if level in DEPTH_LABELS and word in labels.VERDICTS:
+            out.append(
+                {"level": level, "level_label": DEPTH_LABELS[level], "word": word, "word_label": labels.VERDICTS[word]}
+            )
+    return out
+
+
 def legal_open(status: str | None) -> bool:
     return bool(status) and "pending" in str(status).lower()
 
@@ -270,6 +284,7 @@ def payload(
             "cited": ans.cited_rulings,
             "in_force": sum(1 for c in cites if c.ruling.status == "in_force"),
             "agreement_bar": [{"n": c.n, "kind": _bar_kind(c)} for c in cites],
+            "by_depth": verdict_depths(ans),
         },
         "alternative": alternative,
         "deciding_question": deciding,

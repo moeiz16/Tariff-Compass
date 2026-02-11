@@ -203,3 +203,16 @@ def test_landed_cost_and_duty_layers(world, fake_core):
         == 422
     )
     assert api.get("duty-layers", country="US").status_code == 200
+
+
+def test_verdict_by_depth_maps_onto_the_wire():
+    from types import SimpleNamespace
+
+    from tariffcompass.catalog.answers import verdict_depths
+
+    ans = SimpleNamespace(verdict_by_depth=(("heading", "strong"), ("full_code", "broker"), ("chapter", "strong")))
+    assert verdict_depths(ans) == [
+        {"level": "heading", "level_label": "Heading", "word": "strong", "word_label": "Strong match"},
+        {"level": "full_code", "level_label": "Full code", "word": "broker", "word_label": "Needs a broker"},
+    ]
+    assert verdict_depths(SimpleNamespace()) == []
