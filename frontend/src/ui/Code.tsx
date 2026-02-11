@@ -28,7 +28,8 @@ export function CodeDigits(props: { code: string; leaning?: boolean; lock?: bool
               aria-hidden="true"
               classList={{
                 hl: seg.heading && !props.leaning,
-                "underline decoration-dashed decoration-warn decoration-2 underline-offset-[0.18em]": seg.heading && !!props.leaning,
+                // A dashed amber rule under the heading digits (a border, so it also shows under the dropping digits).
+                "border-b-2 border-dashed border-warn": seg.heading && !!props.leaning,
               }}
             >
               <For each={seg.text.split("")}>
