@@ -233,6 +233,9 @@ class ProgramAnswer:
     alternative: CodeChoice | None = None  # "Also possible…"
     duty_at_stake: str | None = None  # "about 10 points"
     deciding_question: DecidingQuestion | None = None
+    # the confidence word per depth, each calibrated on validation: (("heading", "strong"), ("full_code", "broker"));
+    # `verdict` is the full-code word. Empty when no per-depth calibration exists.
+    verdict_by_depth: tuple[tuple[str, Verdict], ...] = ()
     lm_label: str = "offline simulator"  # which LM produced it: shown in the Lab and stored on the answer
     program_version: str = ""
     timings_ms: dict[str, float] = field(default_factory=dict)

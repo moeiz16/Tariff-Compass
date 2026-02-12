@@ -224,3 +224,76 @@ def compare(product: list[Fact], ruling_text: str) -> list[FactCompare]:
             match = "differs"
         out.append(FactCompare(f.label, f.value, t.value, match))  # type: ignore[arg-type]
     return out[:6]
+
+
+# ── stated facts against a tariff line's words (GRI 6: a line that contradicts a stated fact is ruled out) ──
+_LINE_MATERIALS: tuple[tuple[str, str], ...] = (
+    (r"\bkashmir\b|\bcashmere\b", "cashmere"),
+    (r"\bwool\b|fine animal hair", "wool"),
+    (r"\bcotton\b", "cotton"),
+    (r"\bsilk\b", "silk"),
+    (r"\bflax\b|\blinen\b", "flax"),
+    (r"man-made fib|synthetic fib|artificial fib", "man-made"),
+    (r"\bstainless steel\b", "stainless steel"),
+    (r"\bcast iron\b", "cast iron"),
+    (r"\baluminum\b|\baluminium\b", "aluminium"),
+    (r"\bplastics?\b", "plastic"),
+    (r"\bglass\b", "glass"),
+    (r"\bporcelain\b|\bchina\b|\bceramic\b", "ceramic"),
+    (r"\bwood\b", "wood"),
+    (r"\bleather\b", "leather"),
+    (r"\btextile", "textile"),
+)
+# what each stated material is compatible with on a line
+_COMPATIBLE = {
+    "Cotton": {"cotton", "textile"},
+    "Man-made fibres": {"man-made", "textile"},
+    "Wool": {"wool", "cashmere", "textile"},
+    "Stainless steel": {"stainless steel"},
+    "Steel": {"stainless steel", "cast iron"},
+    "Cast iron": {"cast iron"},
+    "Aluminium": {"aluminium"},
+    "Plastic": {"plastic"},
+    "Glass": {"glass"},
+    "Ceramic": {"ceramic"},
+    "Wood": {"wood"},
+    "Leather": {"leather"},
+}
+_GENDER = (
+    (r"\bmen'?s\b", "Men"),
+    (r"\bboys'?\b", "Boys"),
+    (r"\bwomen'?s\b", "Women"),
+    (r"\bgirls'?\b", "Girls"),
+)
+
+
+def stated_materials(text: str) -> set[str]:
+    """Every material the description states (a tent can be polyester with aluminium poles)."""
+    rule = next(r for r in RULES if r.key == "material")
+    t = text.lower()
+    return {value for pat, value in rule.patterns if re.search(pat, t)}
+
+
+def line_conflicts(facts: list[Fact], segment: str, text: str = "") -> str | None:
+    """The stated fact a tariff line's words contradict, or None. Only stated or confirmed facts rule a line out;
+    a line that names no material, construction or wearer never conflicts, and a line that names several
+    materials conflicts only when none of them fits."""
+    stated = {f.key: f.value for f in facts if f.source == "stated"}
+    s = segment.lower()
+    materials = stated_materials(text) if text else ({stated["material"]} if "material" in stated else set())
+    compatible = set().union(*(_COMPATIBLE.get(m, set()) for m in materials)) if materials else set()
+    if compatible and any(m in _COMPATIBLE for m in materials):
+        named = {name for pat, name in _LINE_MATERIALS if re.search(pat, s)}
+        if named and not (named & compatible):
+            return f"material ({', '.join(sorted(materials))})"
+    construction = stated.get("construction")
+    if construction == "Woven" and re.search(r"(?<!not )knitted or crocheted", s):
+        return "construction (woven)"
+    if construction == "Knitted" and re.search(r"not knitted|other than knitted", s):
+        return "construction (knitted)"
+    wearer = stated.get("wearer")
+    if wearer in ("Men", "Women", "Boys", "Girls"):
+        named = {g for pat, g in _GENDER if re.search(pat, s)}
+        if named and wearer not in named:
+            return f"wearer ({wearer.lower()})"
+    return None

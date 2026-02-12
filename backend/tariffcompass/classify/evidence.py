@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import math
 import re
+from dataclasses import dataclass
 from datetime import date
 
 from tariffcompass.contracts import FirstStageResult, ProductQuery, Retriever, Span
@@ -22,22 +23,98 @@ from tariffcompass.search.sections import chapter_title
 
 # Notes quoted from the HTSUS (as quoted in CBP rulings) that set one candidate aside in favour of another:
 # (excluded heading prefix, chosen heading prefix) → note.
-NOTES: tuple[tuple[tuple[str, ...], tuple[str, ...], str, str], ...] = (
-    (
+_KNIT = re.compile(r"\b(?:knit(?:ted)?|crochet(?:ed)?|jersey|fleece)\b", re.I)
+_WOVEN = re.compile(r"\bwoven\b", re.I)
+_LAMP = re.compile(r"\b(?:lamp|light|lantern|flashlight|torch|headlamp|led)\w*", re.I)
+_BAG = re.compile(r"\b(?:bag|backpack|rucksack|knapsack|case|pouch|tote|duffel|wallet|purse)s?\b", re.I)
+
+
+@dataclass(frozen=True)
+class Note:
+    """A section or chapter note that takes goods out of some chapters in favour of others (GRI 1)."""
+
+    ref: str
+    excluded: tuple[str, ...]  # chapter numbers it excludes from
+    favoured: tuple[str, ...]  # chapter or heading prefixes it sends the goods to
+    quote: str  # the note's words (as CBP's rulings quote them)
+    when: re.Pattern | None = None  # only for descriptions that state this (e.g. knitted)
+    unless: re.Pattern | None = None
+
+
+NOTES: tuple[Note, ...] = (
+    Note(
+        "Section XV, Note 1(m)",
         tuple(str(c) for c in range(72, 84)),
         ("96",),
-        "Section XV, Note 1(m)",
         "This section does not cover: … (m) Hand sieves, buttons, pens, pencil-holders, pen nibs, monopods, bipods, "
         "tripods and similar articles or other articles of chapter 96 (miscellaneous manufactured articles).",
     ),
-    (
+    Note(
+        "Section XVII, Note 2(f)",
         ("86", "87", "88", "89"),
         ("85",),
-        "Section XVII, Note 2(f)",
         "The expressions “parts” and “parts and accessories” do not apply to the following articles, whether or not "
         "they are identifiable as for the goods of this section: … (f) Electrical machinery or equipment (chapter 85).",
     ),
+    Note(
+        "Section XVII, Note 2(e)",
+        ("86", "87", "88", "89"),
+        tuple(str(h) for h in range(8401, 8480)),
+        "The expressions “parts” and “parts and accessories” do not apply to the following articles, whether or not "
+        "they are identifiable as for the goods of this section: … (e) Machines or apparatus of headings 8401 to "
+        "8479, or parts thereof.",
+    ),
+    Note(
+        "Chapter 39, Note 2(m)",
+        ("39",),
+        ("4201", "4202"),
+        "This chapter does not cover: … saddlery or harness (heading 4201) or trunks, suitcases, handbags or other "
+        "containers of heading 4202.",
+        when=_BAG,
+    ),
+    Note(
+        "Chapter 62, Note 1",
+        ("62",),
+        ("61",),
+        "This chapter applies only to made up articles of any textile fabric other than wadding, excluding knitted or "
+        "crocheted articles (other than those of heading 6212).",
+        when=_KNIT,
+        unless=_WOVEN,
+    ),
+    Note(
+        "Chapter 61, Note 1",
+        ("61",),
+        ("62",),
+        "This chapter applies only to made up knitted or crocheted articles.",
+        when=_WOVEN,
+        unless=_KNIT,
+    ),
+    Note(
+        "Chapter 94, Note 1(f)",
+        ("94",),
+        ("85",),
+        "This chapter does not cover: … (f) Lamps or lighting fittings of chapter 85.",
+        when=_LAMP,
+    ),
 )
+
+
+def notes_for(text: str, candidates: list[str]) -> dict[str, list[dict]]:
+    """Which candidate headings a note protects, against which other candidates, for this description."""
+    out: dict[str, list[dict]] = {}
+    for note in NOTES:
+        if note.when is not None and not note.when.search(text):
+            continue
+        if note.unless is not None and note.unless.search(text):
+            continue
+        for hd in candidates:
+            if not hd.startswith(note.favoured):
+                continue
+            if any(o[:2] in note.excluded and o != hd for o in candidates):
+                out.setdefault(hd, []).append({"ref": note.ref, "quote": note.quote, "excludes": list(note.excluded)})
+    return out
+
+
 TARIFF_CANDIDATES = 3  # headings added from a search of the tariff text itself
 _EXCLUDING = re.compile(r"(?:other than|excluding|except)\b[^;:]*?heading\s+(\d{2})\.?(\d{2})", re.I)
 CITE_RE = re.compile(r"\[(\d+)\]")
@@ -88,6 +165,27 @@ MATERIAL_WORDS = (
     "wool silicone rubber glass ceramic wood bamboo leather copper zinc alloy metal"
 )
 MATERIALS = frozenset(MATERIAL_WORDS.split())
+
+
+def tariff_coverage(text: str, us, hd: str) -> int:
+    """How many of the article's own words a heading's text and lines use (what a reader scanning the tariff sees)."""
+    from tariffcompass.adapters.lm_sim import GENERIC, _stems
+
+    line = us.line(hd)
+    if line is None:
+        return 0
+    words = " ".join([line.text, *(ln.full_text.split(": ", 1)[-1] for ln in us.leaves(hd))])
+    return len((_stems(article_words(expand(text))) & _stems(words)) - GENERIC)
+
+
+def key_match(product: str, e: dict, hd: str) -> int:
+    """How many of the product's distinctive words the candidate heading's text or lines use."""
+    from tariffcompass.adapters.lm_sim import _EXCEPT, GENERIC, _stems
+
+    words = f"{_EXCEPT.sub('', e['heading_text'].get(hd, ''))} {e.get('line_words', {}).get(hd, '').replace(',', ' ')}"
+    from tariffcompass.adapters.lm_sim import MATERIAL_STEMS
+
+    return len((_stems(product) & _stems(words)) - GENERIC - MATERIAL_STEMS)
 
 
 def article_words(text: str) -> str:
@@ -177,7 +275,8 @@ def build(query: ProductQuery, first: FirstStageResult, retriever: Retriever, *,
             for i, line in enumerate(found):
                 tariff_rank[line.code[:4]] = tariff_rank.get(line.code[:4], 0.0) + 1.0 / (i + 1)
         added = 0
-        for hd, _ in sorted(tariff_rank.items(), key=lambda kv: -kv[1]):
+        coverage = {hd: tariff_coverage(query.text, us, hd) for hd in tariff_rank}
+        for hd, _ in sorted(tariff_rank.items(), key=lambda kv: (-kv[1], -coverage[kv[0]])):
             if added >= TARIFF_CANDIDATES or len(cand) >= MAX_CANDIDATES + TARIFF_CANDIDATES:
                 break
             if hd not in cand and known(hd):
@@ -253,10 +352,7 @@ def build(query: ProductQuery, first: FirstStageResult, retriever: Retriever, *,
         e["line_words"][hd] = line_words(e["us_lines"].get(hd, []))
         m = _EXCLUDING.findall(htext)
         e["excludes"][hd] = [a + b for a, b in m]
-    for hd in cand:
-        for excluded, chosen, ref, quote in NOTES:
-            if hd[:2] in chosen and any(o[:2] in excluded for o in cand if o != hd):
-                e["notes"].setdefault(hd, []).append({"ref": ref, "quote": quote, "excludes": list(excluded)})
+    e["notes"] = notes_for(query.text, cand)
     p = [c["p"] for c in e["candidates"]]
     ranked = [*sorted(p, reverse=True), 0.0, 0.0]
     e["margin"] = round(ranked[0] - ranked[1], 4)

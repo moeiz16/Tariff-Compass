@@ -35,7 +35,7 @@ from tariffcompass.classify.program import TariffProgram, artifact_dir
 from tariffcompass.contracts import DepthAccuracy, Optimizer, ProductQuery, RoundReport, RoundRequest
 from tariffcompass.search.sections import chapter_title
 
-EVIDENCE_VERSION = "ev-7"  # bump when evidence.build changes
+EVIDENCE_VERSION = "ev-9"  # bump when evidence.build changes
 NORTHBOUND_CHAPTERS = ("39", "42", "61", "62", "63", "66", "73", "76", "82", "85", "94", "95", "96")
 DEPTHS = ("chapter", "heading", "subheading", "full_code")
 Progress = Callable[[float, str, str], None]
@@ -238,6 +238,11 @@ def right_six(preds: list[dict], examples: list[dspy.Example]) -> list[bool]:
     return [p["code"][:6] == gold[p["id"]].gold_six for p in preds]
 
 
+def right_heading(preds: list[dict], examples: list[dspy.Example]) -> list[bool]:
+    gold = {ex.id: ex for ex in examples}
+    return [p["heading"] == gold[p["id"]].gold_heading for p in preds]
+
+
 def apply_calibrator(preds: list[dict], cal) -> list[dict]:
     return [{**p, "verdict": cal.verdict(p["x"])} for p in preds]
 
@@ -383,6 +388,8 @@ class GepaOptimizer:
         held_wm = word_matching(d_held)
         cal_opt = conf_mod.fit([p["x"] for p in held_opt], right_six(held_opt, d_held))
         cal_wm = conf_mod.fit([p["x"] for p in held_wm], right_six(held_wm, d_held))
+        cal_opt_h = conf_mod.fit([p["x"] for p in held_opt], right_heading(held_opt, d_held))
+        cal_wm_h = conf_mod.fit([p["x"] for p in held_wm], right_heading(held_wm, d_held))
 
         say(0.75, "testing", f"Testing on {len(d_te)} rulings it hasn't seen…")
         wm_preds = apply_calibrator(word_matching(d_te), cal_wm)
@@ -406,6 +413,20 @@ class GepaOptimizer:
                 "validation": cal_wm.validation,
                 "test": conf_mod.measure(cal_wm, [p["x"] for p in wm_preds], right_six(wm_preds, d_te)),
             },
+            "byDepth": {
+                "heading": {
+                    "optimised": {
+                        "threshold": cal_opt_h.threshold,
+                        "validation": cal_opt_h.validation,
+                        "test": conf_mod.measure(cal_opt_h, [p["x"] for p in opt_raw], right_heading(opt_raw, d_te)),
+                    },
+                    "wordMatching": {
+                        "threshold": cal_wm_h.threshold,
+                        "validation": cal_wm_h.validation,
+                        "test": conf_mod.measure(cal_wm_h, [p["x"] for p in wm_preds], right_heading(wm_preds, d_te)),
+                    },
+                },
+            },
         }
 
         rounds = artifact_dir() / "rounds"
@@ -414,6 +435,8 @@ class GepaOptimizer:
         optimised.save(str(program_file))
         cal_opt.save(calibrator_path(request.round_n))
         cal_wm.save(calibrator_path(None))
+        cal_opt_h.save(calibrator_path(request.round_n, "heading"))
+        cal_wm_h.save(calibrator_path(None, "heading"))
         instructions = {name: p.signature.instructions for name, p in optimised.named_predictors()}
 
         by_depth = [

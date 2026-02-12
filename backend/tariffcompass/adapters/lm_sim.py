@@ -199,6 +199,11 @@ GENERIC_WORDS = (
     "equipment other material good product"
 )
 GENERIC = frozenset(GENERIC_WORDS.split())  # words too common in heading texts to decide anything
+_MATERIAL_WORDS = (
+    "stainless steel iron aluminum plastic polypropylene polyethylene polyester nylon cotton wool silicone rubber "
+    "glass ceramic wood bamboo leather copper zinc alloy metal man-made synthetic textile"
+)
+MATERIAL_STEMS = frozenset(_MATERIAL_WORDS.split())
 _RULED_OUT = re.compile(r"\bair[- ]insulated|only air|no vacuum|not vacuum|without (?:a )?vacuum\b", re.I)
 
 
@@ -319,7 +324,7 @@ def _gri(inputs: dict[str, str], instr: str) -> dict[str, str]:
                 "excludes": [x for x in kv.get("excludes", "none").split(",") if x and x != "none"],
                 "notes": kv.get("notes", "none"),
                 "overlap": overlap,
-                "key": len(((pst | read) & (hst | lst)) - GENERIC),
+                "key": len(((pst | read) & (hst | lst)) - GENERIC - MATERIAL_STEMS),
                 "score": 0.4 / rank
                 + GRI_PRIOR_WEIGHT * float(kv.get("p", 0))  # the first stage's probability is a prior, not just a rank
                 + w_terms * overlap
@@ -334,14 +339,14 @@ def _gri(inputs: dict[str, str], instr: str) -> dict[str, str]:
     # notes and heading exclusions (GRI 1): a heading whose terms match, protected by a note, wins
     for c in cands:
         if c["notes"] != "none" and c["key"] > 0:
-            m = re.search(
-                r"(Section [IVX]+, Note \d+\([a-z]\)|Section [IVX]+, Note \d+) excludes chapters (\d+)-(\d+)",
+            for m in re.finditer(
+                r"((?:Section [IVX]+|Chapter \d+), Note \d+(?:\([a-z]\))?) excludes chapters (\d+)-(\d+)",
                 c["notes"],
-            )
-            if m:
+            ):
                 lo, hi = int(m.group(2)), int(m.group(3))
                 for o in cands:
-                    if o["h"] != c["h"] and lo <= int(o["h"][:2]) <= hi:
+                    # the note applies when the protected heading names the article better than the excluded one
+                    if o["h"] != c["h"] and lo <= int(o["h"][:2]) <= hi and c["key"] > o["key"]:
                         o["score"] = -9.0  # a section note excludes it outright (GRI 1)
                         reasons[o["h"]] = f"Set aside: excluded by {m.group(1)}"
         for x in c["excludes"]:
@@ -360,9 +365,9 @@ def _gri(inputs: dict[str, str], instr: str) -> dict[str, str]:
     # numbered rulings: the first one filed under the chosen heading, cited against each neighbour
     rid: dict[str, str] = {}
     for line in inputs.get("rulings", "").splitlines():
-        m = re.match(r"\[(\d+)\]\s+(\S+ \S+)\s+\|\s+(\d{4})", line)
-        if m and m.group(3) == best["h"]:
-            rid.setdefault(best["h"], m.group(2))
+        hit = re.match(r"\[(\d+)\]\s+(\S+ \S+)\s+\|\s+(\d{4})", line)
+        if hit and hit.group(3) == best["h"]:
+            rid.setdefault(best["h"], hit.group(2))
     aside = []
     for c in cands[1:4]:
         why = reasons.get(c["h"]) or f"Set aside: its terms (“{c['text'][:70]}”) describe the product less closely"
@@ -418,6 +423,12 @@ def _subheading(inputs: dict[str, str], instr: str) -> dict[str, str]:
             lines.append((parts[0], parts[1]))
     if not lines:
         return {"code": "", "why": "none"}
+    # a line whose words contradict a stated fact (material, construction, wearer) is ruled out, not weighed
+    from tariffcompass.classify.facts import extract, line_conflicts
+
+    stated = extract(product)
+    fitting = [(c, t) for c, t in lines if not any(line_conflicts(stated, seg, product) for seg in t.split(": ")[1:])]
+    lines = fitting or lines
     codes_ = [c for c, _ in lines]
     rules = re.findall(r"RULE: in heading (\d{4}) choose (\d{10}) when the product mentions '([^']+)'", instr)
     for _h, c, t in rules:

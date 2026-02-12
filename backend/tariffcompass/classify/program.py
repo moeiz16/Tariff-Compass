@@ -291,6 +291,7 @@ def assemble(
         alternative=alt,
         duty_at_stake=stake,
         deciding_question=dq,
+        verdict_by_depth=tuple(getattr(pred, "verdict_by_depth", ()) or ()),
         lm_label=lm_label,
         program_version=version,
         timings_ms=timings,
@@ -419,21 +420,24 @@ def round_program_path(round_n: int) -> Path:
     return artifact_dir() / "rounds" / f"round-{round_n}.program.json"
 
 
-def calibrator_path(round_n: int | None) -> Path:
+def calibrator_path(round_n: int | None, depth: str = "") -> Path:
+    """The calibrated confidence word: six digits (the main word) or, with depth="heading", the heading's."""
+    suffix = f".confidence-{depth}.json" if depth else ".confidence.json"
     if round_n is None:
-        return artifact_dir() / "word_matching.confidence.json"
-    return artifact_dir() / "rounds" / f"round-{round_n}.confidence.json"
+        return artifact_dir() / f"word_matching{suffix}"
+    return artifact_dir() / "rounds" / f"round-{round_n}{suffix}"
 
 
-def load_calibrator(round_n: int | None):
+def load_calibrator(round_n: int | None, depth: str = ""):
     from tariffcompass.classify.confidence import Calibrator
 
-    p = calibrator_path(round_n)
+    p = calibrator_path(round_n, depth)
     return Calibrator.load(p) if p.exists() else None
 
 
-def calibrated(pred: dspy.Prediction, e: dict, product: str, calibrator) -> dspy.Prediction:
-    """Replace the verdict with the calibrated one ("Strong match" only above the validated threshold)."""
+def calibrated(pred: dspy.Prediction, e: dict, product: str, calibrator, heading_calibrator=None) -> dspy.Prediction:
+    """Replace the verdict with the calibrated one ("Strong match" only above the validated threshold), and give
+    the heading its own calibrated word when one was fitted."""
     if calibrator is None:
         return pred
     from tariffcompass.classify.confidence import features
@@ -441,6 +445,8 @@ def calibrated(pred: dspy.Prediction, e: dict, product: str, calibrator) -> dspy
     x = features(e, pred.heading, pred.us_code, pred.cited, pred.support_ids, product)
     pred.verdict = calibrator.verdict(x)
     pred.p_right = round(calibrator.probability(x), 4)
+    if heading_calibrator is not None:
+        pred.verdict_by_depth = (("heading", heading_calibrator.verdict(x)), ("full_code", pred.verdict))
     return pred
 
 
@@ -459,7 +465,15 @@ def word_matching_prediction(e: dict, product: str) -> dspy.Prediction:
         if c["heading"] != heading and ev.deciding_status(product, heading, c["heading"]) == "stated_against":
             heading = c["heading"]
             break
-    rulings = [r for r in e["rulings"].get(heading, []) if r["status"] != "revoked"]
+    from tariffcompass.classify.facts import extract, line_conflicts
+
+    stated = extract(product)
+    text_of = dict(e["us_lines"].get(heading, []))
+
+    def fits(code: str) -> bool:
+        return not any(line_conflicts(stated, seg, product) for seg in text_of.get(code, "").split(": ")[1:])
+
+    rulings = [r for r in e["rulings"].get(heading, []) if r["status"] != "revoked" and fits(r["code"])]
     near = next(
         (r for r in rulings if len(r["code"]) == 10 and r["code"] in {c for c, _ in e["us_lines"].get(heading, [])}),
         None,
@@ -511,10 +525,12 @@ def word_matching_prediction(e: dict, product: str) -> dspy.Prediction:
 class DSPyClassifier:
     """ClassifierProgram: evidence → five modules → calibrated verdict → ProgramAnswer."""
 
-    def __init__(self, program: TariffProgram, lm, lm_label: str, version: str, calibrator=None) -> None:
+    def __init__(
+        self, program: TariffProgram, lm, lm_label: str, version: str, calibrator=None, heading_calibrator=None
+    ) -> None:
         self.program, self.lm, self.lm_label = program, lm, lm_label
         self.version = version
-        self.calibrator = calibrator
+        self.calibrator, self.heading_calibrator = calibrator, heading_calibrator
 
     def classify(self, query: ProductQuery, first_stage: FirstStageResult, retriever: Retriever) -> ProgramAnswer:
         t0 = time.perf_counter()
@@ -523,7 +539,7 @@ class DSPyClassifier:
         product = ev.product_text(query)
         with dspy.context(lm=self.lm, adapter=dspy.ChatAdapter()):
             pred = self.program(product=product, evidence=json.dumps(e))
-        pred = calibrated(pred, e, product, self.calibrator)
+        pred = calibrated(pred, e, product, self.calibrator, self.heading_calibrator)
         t2 = time.perf_counter()
         timings = {"evidence": (t1 - t0) * 1000, "program": (t2 - t1) * 1000}
         return assemble(query, e, pred, lm_label=self.lm_label, version=self.version, timings=timings)
@@ -534,15 +550,15 @@ class WordMatchingClassifier:
 
     lm_label = "none (word matching)"
 
-    def __init__(self, calibrator=None) -> None:
-        self.calibrator = calibrator
+    def __init__(self, calibrator=None, heading_calibrator=None) -> None:
+        self.calibrator, self.heading_calibrator = calibrator, heading_calibrator
         self.version = f"{PROGRAM_VERSION}:word-matching"
 
     def classify(self, query: ProductQuery, first_stage: FirstStageResult, retriever: Retriever) -> ProgramAnswer:
         t0 = time.perf_counter()
         e = build_evidence(query, first_stage, retriever)
         product = ev.product_text(query)
-        pred = calibrated(word_matching_prediction(e, product), e, product, self.calibrator)
+        pred = calibrated(word_matching_prediction(e, product), e, product, self.calibrator, self.heading_calibrator)
         timings = {"evidence": (time.perf_counter() - t0) * 1000, "program": 0.0}
         return assemble(query, e, pred, lm_label=self.lm_label, version=self.version, timings=timings)
 
@@ -554,16 +570,29 @@ def make_program(path: Path | None = None) -> TariffProgram:
     return prog
 
 
+# The heading's own calibrated word reached 90 in 100 on validation but not on the test set (85 to 87 in 100), and
+# it said "Strong match" on wrong headings in the phrasing check, so it is measured and reported but not shown.
+HEADING_WORD_IN_USE = False
+
+
 def load_program() -> ClassifierProgram:
     """The signed-live round's program (with its calibrated confidence), else word matching."""
     from tariffcompass.adapters import lm as lm_adapter
 
     n = live_round()
     if n is None or not round_program_path(n).exists():
-        return WordMatchingClassifier(load_calibrator(None))
+        heading_cal = load_calibrator(None, "heading") if HEADING_WORD_IN_USE else None
+        return WordMatchingClassifier(load_calibrator(None), heading_cal)
     prog = make_program(round_program_path(n))
     version = f"{PROGRAM_VERSION}:round-{n}"
-    return DSPyClassifier(prog, lm_adapter.task_lm(), lm_adapter.lm_label("task"), version, load_calibrator(n))
+    return DSPyClassifier(
+        prog,
+        lm_adapter.task_lm(),
+        lm_adapter.lm_label("task"),
+        version,
+        load_calibrator(n),
+        load_calibrator(n, "heading") if HEADING_WORD_IN_USE else None,
+    )
 
 
 def set_live(round_n: int | None) -> None:
