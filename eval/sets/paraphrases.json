@@ -1,0 +1,40 @@
+{
+ "about": "Phrasing-robustness check for the three public samples. The paraphrases were written before any result was seen; the first of each set is the sample's own text and the tumbler set includes the landing page's 'vacuum sealed' phrasing. A paraphrase passes when the answer lands on the expected heading.",
+ "samples": [
+  {
+   "key": "tumbler",
+   "expectedHeading": "9617",
+   "texts": [
+    "20 oz double-wall stainless steel tumbler, vacuum insulated, with a sliding lid. Holds 591 ml.",
+    "Stainless insulated tumbler, 20 oz, double wall, vacuum sealed, slide lid",
+    "Vacuum-sealed double-wall stainless steel travel tumbler, 20 ounce, with sliding lid",
+    "20oz stainless tumbler with vacuum insulation between two walls and a press-in lid",
+    "Insulated drink tumbler, 18/8 stainless, vacuum between the walls, holds 591 ml",
+    "Double walled vacuum flask style tumbler for coffee, 20 oz, stainless steel"
+   ]
+  },
+  {
+   "key": "bike-light",
+   "expectedHeading": "8512",
+   "texts": [
+    "Rechargeable LED bicycle headlight, 800 lumens, USB-C, mounts on the handlebar with a rubber strap.",
+    "USB rechargeable front light for bikes, LED, handlebar clamp",
+    "Bicycle head lamp, 600 lumen LED, battery powered, mounts to handlebars",
+    "LED cycle light set, front and rear, for road bicycles",
+    "Bike headlight with lithium battery, waterproof, 1000 lumens"
+   ]
+  },
+  {
+   "key": "pullover",
+   "expectedHeading": "6110",
+   "expectedSubheading": "611020",
+   "texts": [
+    "Women's crew-neck pullover, knitted, 100% cotton, ribbed cuffs and hem.",
+    "Ladies' knit cotton sweater, crew neck, long sleeves",
+    "Women's 100% cotton knitted jumper with ribbed hem",
+    "Cotton pullover sweater for women, fine-gauge knit",
+    "Knitted women's cotton crewneck top, pullover style, rib trim"
+   ]
+  }
+ ]
+}

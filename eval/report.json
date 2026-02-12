@@ -11,20 +11,20 @@
   "word_matching": {
    "chapter": 0.7806,
    "heading": 0.6536,
-   "subheading": 0.4863,
-   "full_code": 0.3665
+   "subheading": 0.4845,
+   "full_code": 0.3609
   },
   "unoptimised": {
-   "chapter": 0.7559,
-   "heading": 0.6353,
-   "subheading": 0.3601,
-   "full_code": 0.1391
+   "chapter": 0.7605,
+   "heading": 0.6362,
+   "subheading": 0.362,
+   "full_code": 0.1429
   },
   "optimised": {
-   "chapter": 0.7559,
-   "heading": 0.6353,
-   "subheading": 0.4186,
-   "full_code": 0.2509
+   "chapter": 0.7605,
+   "heading": 0.6362,
+   "subheading": 0.4214,
+   "full_code": 0.2481
   }
  },
  "firstStage": {
@@ -83,17 +83,17 @@
  },
  "calibration": {
   "strong": {
-   "said": 175,
-   "right": 154
+   "said": 192,
+   "right": 168
   },
   "broker": {
-   "said": 919,
-   "firstGuessWrong": 615
+   "said": 902,
+   "firstGuessWrong": 609
   }
  },
  "citations": {
-  "support": 3178,
-  "sameHeading": 3170,
+  "support": 3188,
+  "sameHeading": 3180,
   "precision": 0.9975,
   "revokedAsSupport": 0
  },
@@ -361,60 +361,187 @@
  },
  "latency": {
   "firstStageP95": 0.69,
-  "answerP95": 51.26,
-  "coldStartMs": 37.9,
+  "answerP95": 86.49,
+  "coldStartMs": 101.6,
   "firstStage": "first-stage-svm-db8403dc-k4800",
   "program": "program-5m-1:word-matching",
   "lm": "none (word matching)",
   "retriever": "tantivy-bm25-rerank-1"
  },
- "remeasured": {
-  "word_matching": {
-   "chapter": 0.7806,
-   "heading": 0.6536,
-   "subheading": 0.4863,
-   "full_code": 0.3665
+ "remeasured": null,
+ "phrasing": {
+  "bySample": {
+   "tumbler": {
+    "right": 3,
+    "n": 6
+   },
+   "bike-light": {
+    "right": 0,
+    "n": 5
+   },
+   "pullover": {
+    "right": 4,
+    "n": 5
+   }
   },
-  "unoptimised": {
-   "chapter": 0.7559,
-   "heading": 0.6353,
-   "subheading": 0.3601,
-   "full_code": 0.1391
-  },
-  "optimised": {
-   "chapter": 0.7559,
-   "heading": 0.6353,
-   "subheading": 0.4186,
-   "full_code": 0.2509
-  }
+  "rows": [
+   {
+    "sample": "tumbler",
+    "text": "20 oz double-wall stainless steel tumbler, vacuum insulated, with a sliding lid. Holds 591 ml.",
+    "code": "9617001000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "tumbler",
+    "text": "Stainless insulated tumbler, 20 oz, double wall, vacuum sealed, slide lid",
+    "code": "7323930080",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": false
+   },
+   {
+    "sample": "tumbler",
+    "text": "Vacuum-sealed double-wall stainless steel travel tumbler, 20 ounce, with sliding lid",
+    "code": "7323930080",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": false
+   },
+   {
+    "sample": "tumbler",
+    "text": "20oz stainless tumbler with vacuum insulation between two walls and a press-in lid",
+    "code": "7323930080",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": false
+   },
+   {
+    "sample": "tumbler",
+    "text": "Insulated drink tumbler, 18/8 stainless, vacuum between the walls, holds 591 ml",
+    "code": "9617001000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "tumbler",
+    "text": "Double walled vacuum flask style tumbler for coffee, 20 oz, stainless steel",
+    "code": "9617001000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "bike-light",
+    "text": "Rechargeable LED bicycle headlight, 800 lumens, USB-C, mounts on the handlebar with a rubber strap.",
+    "code": "8714969000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": false
+   },
+   {
+    "sample": "bike-light",
+    "text": "USB rechargeable front light for bikes, LED, handlebar clamp",
+    "code": "8507908000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": false
+   },
+   {
+    "sample": "bike-light",
+    "text": "Bicycle head lamp, 600 lumen LED, battery powered, mounts to handlebars",
+    "code": "8714969000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": false
+   },
+   {
+    "sample": "bike-light",
+    "text": "LED cycle light set, front and rear, for road bicycles",
+    "code": "8714998000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": false
+   },
+   {
+    "sample": "bike-light",
+    "text": "Bike headlight with lithium battery, waterproof, 1000 lumens",
+    "code": "8507208061",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": false
+   },
+   {
+    "sample": "pullover",
+    "text": "Women's crew-neck pullover, knitted, 100% cotton, ribbed cuffs and hem.",
+    "code": "6110202020",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "pullover",
+    "text": "Ladies' knit cotton sweater, crew neck, long sleeves",
+    "code": "6110202077",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "pullover",
+    "text": "Women's 100% cotton knitted jumper with ribbed hem",
+    "code": "6102200010",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": false
+   },
+   {
+    "sample": "pullover",
+    "text": "Cotton pullover sweater for women, fine-gauge knit",
+    "code": "6110202020",
+    "verdict": "strong",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "pullover",
+    "text": "Knitted women's cotton crewneck top, pullover style, rib trim",
+    "code": "6110202020",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   }
+  ]
  },
  "gates": [
   {
    "key": "beats_word_matching_heading",
    "label": "Optimised program beats word matching at heading",
-   "value": 0.6353,
+   "value": 0.6362,
    "threshold": 0.6536,
    "passed": false
   },
   {
    "key": "beats_word_matching_full_code",
    "label": "Optimised program beats word matching at full_code",
-   "value": 0.2509,
-   "threshold": 0.3665,
+   "value": 0.2481,
+   "threshold": 0.3609,
    "passed": false
   },
   {
    "key": "beats_unoptimised_heading",
    "label": "Optimised program beats the unoptimised program at heading",
-   "value": 0.6353,
-   "threshold": 0.6353,
+   "value": 0.6362,
+   "threshold": 0.6362,
    "passed": false
   },
   {
    "key": "beats_unoptimised_full_code",
    "label": "Optimised program beats the unoptimised program at full_code",
-   "value": 0.2509,
-   "threshold": 0.1391,
+   "value": 0.2481,
+   "threshold": 0.1429,
    "passed": true
   },
   {
@@ -434,14 +561,14 @@
   {
    "key": "strong_right",
    "label": "\u201cStrong match\u201d right (six digits)",
-   "value": 0.88,
+   "value": 0.875,
    "threshold": 0.9,
    "passed": false
   },
   {
    "key": "broker_catches_wrong",
    "label": "\u201cNeeds a broker\u201d caught a wrong first guess",
-   "value": 0.6692,
+   "value": 0.6752,
    "threshold": 0.25,
    "passed": true
   },
@@ -490,7 +617,7 @@
   {
    "key": "answer_p95_offline",
    "label": "Full answer p95 with the offline simulator (ms)",
-   "value": 51.26,
+   "value": 86.49,
    "threshold": 1000,
    "passed": true
   }

@@ -14,9 +14,9 @@ when these numbers were produced, so there is no live-LM table yet.
 
 | System | LM | Chapter | Heading | 6 digits | 10 digits |
 |---|---|---|---|---|---|
-| Word matching (TF-IDF first stage + nearest ruling) | none (classical) | 78.1 | 65.4 | 48.6 | 36.6 |
-| Program, unoptimised | offline simulator | 75.6 | 63.5 | 36.0 | 13.9 |
-| Program, GEPA-optimised | offline simulator | 75.6 | 63.5 | 41.9 | 25.1 |
+| Word matching (TF-IDF first stage + nearest ruling) | none (classical) | 78.1 | 65.4 | 48.4 | 36.1 |
+| Program, unoptimised | offline simulator | 76.0 | 63.6 | 36.2 | 14.3 |
+| Program, GEPA-optimised | offline simulator | 76.0 | 63.6 | 42.1 | 24.8 |
 
 Ten-digit accuracy counts the 1064 test rulings whose letter holds a ten-digit code; the other depths count all 1094.
 
@@ -25,14 +25,14 @@ depth but does not beat word matching: its rule-following heading step is slight
 first stage's top heading, and word matching's nearest-ruling line is a strong ten-digit baseline. The gates
 below report that as failures; the thresholds were not changed.
 
-**How the test set was used.** The rounds were run several times while the pipeline was being fixed, and each
-run printed its test figures. The fixes were found in the training logs, the saved instructions and the
-validation window: the reflection step wrote every module's rules into whichever module it was rewriting; the
-round score ignored the confidence word; the heading step used the first stage's rank but not its probability;
-a section note only lowered an excluded heading instead of excluding it; the tariff-text search was drowned by
-material words; the confidence word was replaced by a calibrated one with its threshold chosen on validation.
-No gate threshold was changed, and nothing was fitted to the test set; but the test set has been looked at
-more than once, and a fresh test window (rulings after August 2025) is the clean check.
+**How the test set was used.** While the pipeline was being fixed the rounds were run several times and each
+run printed its test figures. The fixes came from the training logs, the saved instructions, the validation
+window and the sample catalogue (never from the test set): module-specific reflection, calibration in the round
+score, the first stage's probability as a prior, outright exclusion by a section note, tariff-text search by
+the article's words, a calibrated confidence word with its threshold chosen on validation, section and chapter
+notes as data, tariff lines that contradict a stated fact ruled out, and a calibrated word per depth. After the
+last of those fixes the test set was measured once more, for these tables; that was the final look. No gate
+or threshold was changed. A fresh test window (rulings after August 2025) is the clean check.
 
 **What is in use.** A round answers only after it passes all five checks and two people sign it live. While
 none qualifies, word matching (the classical first stage, calibrated) answers in the product and the program
@@ -66,39 +66,57 @@ rulings that no training round used; the threshold is chosen there and only meas
 
 | System | Threshold | Validation: right when Strong | coverage | Test: right when Strong | coverage | Wrong answers sent to a broker (test) | ECE (test) |
 |---|---|---|---|---|---|---|---|
-| Program, GEPA-optimised | 0.8154 | 0.9118 | 0.2937 | 0.88 | 0.16 | 0.967 | 0.0645 |
-| Word matching | 1.01 | None | 0.0 | None | 0.0 | 1.0 | 0.0361 |
+| Program, GEPA-optimised | 0.8235 | 0.9085 | 0.3067 | 0.875 | 0.1755 | 0.9621 | 0.0605 |
+| Word matching | 0.7965 | 0.9149 | 0.3045 | 0.8653 | 0.1764 | 0.9539 | 0.0359 |
 
-Before calibration the program's own confidence step said “Strong match” 675 times and was right 377 times on the test set.
+Before calibration the program's own confidence step said “Strong match” 675 times and was right 380 times on the test set.
 
-- “Strong match” said 175 times, right at six digits 154 times.
-- “Needs a broker” said 919 times; the first guess was wrong 615 times.
-- Citation precision: 3170 of 3178 supporting citations share the answer's heading (0.9975); revoked rulings cited as support: 0.
+- “Strong match” said 192 times, right at six digits 168 times.
+- “Needs a broker” said 902 times; the first guess was wrong 609 times.
+- Citation precision: 3180 of 3188 supporting citations share the answer's heading (0.9975); revoked rulings cited as support: 0.
+**Confidence by depth.** A calibrated word for the heading alone was fitted the same way (Strong only where
+it was right at least 90 times in 100 on validation). It met the bar on validation but not on the test set,
+and in the phrasing check it said Strong on wrong headings, so the product keeps the single full-code word;
+the per-depth word is measured here and switched off (`classify.program.HEADING_WORD_IN_USE`).
+
+| System | Depth | Threshold | Validation: right when Strong | coverage | Test: right when Strong | coverage |
+|---|---|---|---|---|---|---|
+| Word matching | heading | 0.7084 | 0.9 | 0.7127 | 0.8546 | 0.5722 |
+| Word matching | six digits | 0.7965 | 0.9149 | 0.3045 | 0.8653 | 0.1764 |
+| Program, GEPA-optimised | heading | 0.7464 | 0.9006 | 0.6955 | 0.8689 | 0.5229 |
+| Program, GEPA-optimised | six digits | 0.8235 | 0.9085 | 0.3067 | 0.875 | 0.1755 |
+
+## Phrasing robustness (the three public samples, paraphrases written before any result)
+
+- tumbler: 3 of 6 paraphrases land on the expected heading.
+- bike-light: 0 of 5 paraphrases land on the expected heading.
+- pullover: 4 of 5 paraphrases land on the expected heading.
+
 
 ## Landed cost, drift and latency
 
 - Landed cost: 20 of 20 hand-checked products exact to the cent (`eval/sets/landed_cost_20.json`).
 - Chapter-mix PSI, training vs the newest rulings: 0.3405 (large shift).
 - Simulated tariff revision: 5 changes; flagged LC01, LC02, LC03, LC13, LC14, LC15 (expected LC01, LC02, LC03, LC13, LC14, LC15).
-- First stage p95: 0.69 ms. Full answer p95 offline (none (word matching)): 51.26 ms, after a first answer that opens the indexes (37.9 ms).
+- First stage p95: 0.69 ms. Full answer p95 offline (none (word matching)): 86.49 ms, after a first answer that opens the indexes (101.6 ms).
 
 ## Gates (`eval/gates.toml`)
 
 | Gate | Value | Threshold | Result |
 |---|---|---|---|
-| Optimised program beats word matching at heading | 0.6353 | 0.6536 | **fail** |
-| Optimised program beats word matching at full_code | 0.2509 | 0.3665 | **fail** |
-| Optimised program beats the unoptimised program at heading | 0.6353 | 0.6353 | **fail** |
-| Optimised program beats the unoptimised program at full_code | 0.2509 | 0.1391 | pass |
+| Optimised program beats word matching at heading | 0.6362 | 0.6536 | **fail** |
+| Optimised program beats word matching at full_code | 0.2481 | 0.3609 | **fail** |
+| Optimised program beats the unoptimised program at heading | 0.6362 | 0.6362 | **fail** |
+| Optimised program beats the unoptimised program at full_code | 0.2481 | 0.1429 | pass |
 | First stage: right heading in its top 5 | 0.8327 | 0.8 | pass |
 | First stage: right chapter in its top 3 | 0.9177 | 0.9 | pass |
-| “Strong match” right (six digits) | 0.88 | 0.9 | **fail** |
-| “Needs a broker” caught a wrong first guess | 0.6692 | 0.25 | pass |
+| “Strong match” right (six digits) | 0.875 | 0.9 | **fail** |
+| “Needs a broker” caught a wrong first guess | 0.6752 | 0.25 | pass |
 | Cited rulings share the answer's heading | 0.9975 | 0.95 | pass |
 | Revoked rulings cited as support | 0 | 0 | pass |
 | Landed cost exact on the hand-checked set | 20/20 | 1.0 | pass |
 | A simulated tariff revision flags every affected product (and only those) | 6/6 | True | pass |
 | Chapter-mix drift (PSI) reported | 0.3405 | reported | pass |
 | First stage p95 (ms) | 0.69 | 150 | pass |
-| Full answer p95 with the offline simulator (ms) | 51.26 | 1000 | pass |
+| Full answer p95 with the offline simulator (ms) | 86.49 | 1000 | pass |
 

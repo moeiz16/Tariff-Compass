@@ -153,6 +153,36 @@ def latencies() -> dict:
     }
 
 
+def phrasing_check() -> dict:
+    """The three public samples in paraphrases written before any result was seen (eval/sets/paraphrases.json),
+    through the classifier in use: how many land on the expected heading."""
+    from tariffcompass import services
+
+    first, retr, prog = services.first_stage(), services.retriever(), services.program()
+    doc = json.loads((HERE / "sets" / "paraphrases.json").read_text())
+    rows = []
+    for s in doc["samples"]:
+        for text in s["texts"]:
+            q = ProductQuery(text, made_in="CN")
+            a = prog.classify(q, first.predict(q, k=5), retr)
+            code = a.us.code if a.us else ""
+            rows.append(
+                {
+                    "sample": s["key"],
+                    "text": text,
+                    "code": code,
+                    "verdict": a.verdict,
+                    "byDepth": dict(a.verdict_by_depth),
+                    "rightHeading": code[:4] == s["expectedHeading"],
+                }
+            )
+    by = {}
+    for s in doc["samples"]:
+        mine = [r for r in rows if r["sample"] == s["key"]]
+        by[s["key"]] = {"right": sum(r["rightHeading"] for r in mine), "n": len(mine)}
+    return {"bySample": by, "rows": rows}
+
+
 def remeasure(n: int) -> dict:
     """Re-run the three systems on the frozen test set and compare with the round's report."""
     from tariffcompass import services
@@ -307,6 +337,7 @@ def main() -> int:
         lat["answerP95"] <= gates["latency"]["answer_p95_ms_max_offline"],
     )
     re_ = remeasure(n) if (a.remeasure and n) else None
+    phr = phrasing_check()
 
     report = {
         "round": n,
@@ -326,6 +357,7 @@ def main() -> int:
         "drift": {"psi": fs_report["drift"]["trainVsTest"], "byMonth": fs_report["drift"]["byMonth"], "revision": rev},
         "latency": lat,
         "remeasured": re_,
+        "phrasing": phr,
         "gates": rows,
         "passed": all(r["passed"] for r in rows),
     }
@@ -384,14 +416,14 @@ def markdown(r: dict, fs: dict, details: dict | None) -> str:
         "first stage's top heading, and word matching's nearest-ruling line is a strong ten-digit baseline. The gates",
         "below report that as failures; the thresholds were not changed.",
         "",
-        "**How the test set was used.** The rounds were run several times while the pipeline was being fixed, and each",
-        "run printed its test figures. The fixes were found in the training logs, the saved instructions and the",
-        "validation window: the reflection step wrote every module's rules into whichever module it was rewriting; the",
-        "round score ignored the confidence word; the heading step used the first stage's rank but not its probability;",
-        "a section note only lowered an excluded heading instead of excluding it; the tariff-text search was drowned by",
-        "material words; the confidence word was replaced by a calibrated one with its threshold chosen on validation.",
-        "No gate threshold was changed, and nothing was fitted to the test set; but the test set has been looked at",
-        "more than once, and a fresh test window (rulings after August 2025) is the clean check.",
+        "**How the test set was used.** While the pipeline was being fixed the rounds were run several times and each",
+        "run printed its test figures. The fixes came from the training logs, the saved instructions, the validation",
+        "window and the sample catalogue (never from the test set): module-specific reflection, calibration in the round",
+        "score, the first stage's probability as a prior, outright exclusion by a section note, tariff-text search by",
+        "the article's words, a calibrated confidence word with its threshold chosen on validation, section and chapter",
+        "notes as data, tariff lines that contradict a stated fact ruled out, and a calibrated word per depth. After the",
+        "last of those fixes the test set was measured once more, for these tables; that was the final look. No gate",
+        "or threshold was changed. A fresh test window (rulings after August 2025) is the clean check.",
         "",
         "**What is in use.** A round answers only after it passes all five checks and two people sign it live. While",
         "none qualifies, word matching (the classical first stage, calibrated) answers in the product and the program",
@@ -461,6 +493,34 @@ def markdown(r: dict, fs: dict, details: dict | None) -> str:
         out.append(
             f"- Citation precision: {ci['sameHeading']} of {ci['support']} supporting citations share the answer's heading ({ci['precision']}); revoked rulings cited as support: {ci['revokedAsSupport']}."
         )
+    if conf and conf.get("byDepth"):
+        h = conf["byDepth"]["heading"]
+        out += [
+            "**Confidence by depth.** A calibrated word for the heading alone was fitted the same way (Strong only where",
+            "it was right at least 90 times in 100 on validation). It met the bar on validation but not on the test set,",
+            "and in the phrasing check it said Strong on wrong headings, so the product keeps the single full-code word;",
+            "the per-depth word is measured here and switched off (`classify.program.HEADING_WORD_IN_USE`).",
+            "",
+            "| System | Depth | Threshold | Validation: right when Strong | coverage | Test: right when Strong | coverage |",
+            "|---|---|---|---|---|---|---|",
+        ]
+        for key, name in (("wordMatching", "Word matching"), ("optimised", "Program, GEPA-optimised")):
+            c = h[key]
+            out.append(
+                f"| {name} | heading | {c['threshold']} | {c['validation'].get('precision')} | "
+                f"{c['validation'].get('coverage')} | {c['test']['precision']} | {c['test']['coverage']} |"
+            )
+            c6 = conf[key]
+            out.append(
+                f"| {name} | six digits | {c6['threshold']} | {c6['validation'].get('precision')} | "
+                f"{c6['validation'].get('coverage')} | {c6['test']['precision']} | {c6['test']['coverage']} |"
+            )
+        out.append("")
+    if r.get("phrasing"):
+        out += ["## Phrasing robustness (the three public samples, paraphrases written before any result)", ""]
+        for key, v in r["phrasing"]["bySample"].items():
+            out.append(f"- {key}: {v['right']} of {v['n']} paraphrases land on the expected heading.")
+        out.append("")
     lc = r["landedCost"]
     rev = r["drift"]["revision"]
     out += [

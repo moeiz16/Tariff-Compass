@@ -104,7 +104,10 @@ Once, for the final measurement above. An earlier end-to-end run of the training
 with one trial per study) also printed test figures; nothing was chosen from them. The champion rule (top-5
 on validation) and every threshold were fixed in code beforehand, and the gates in `eval/gates.toml` predate
 both runs. After training, the input normalisation gained a Canadian/British-to-US spelling map
-(“aluminium” → “aluminum”); CBP's letters use US spelling, so the measured figures are unaffected.
+(“aluminium” → “aluminum”); CBP's letters use US spelling, so the measured figures are unaffected. The
+program's training rounds and the evaluation read the test set again while the pipeline was being fixed;
+the last of those readings, after the final fixes, is the one reported in `eval/RESULTS.md` and was the
+final look.
 
 ## Limits
 
