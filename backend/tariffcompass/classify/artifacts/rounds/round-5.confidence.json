@@ -1,23 +1,23 @@
 {
  "coef": [
-  0.686851,
-  0.90768,
-  0.326055,
-  0.997448,
-  -0.800725,
-  -1.432075,
+  0.656195,
+  0.830763,
+  0.312468,
+  1.015801,
+  -0.83386,
+  -1.455285,
   0.0,
-  2.331873
+  2.306325
  ],
- "intercept": -1.408848,
- "threshold": 0.8082,
+ "intercept": -1.139611,
+ "threshold": 0.8144,
  "fitted_on": 613,
  "validation": {
-  "precision": 0.9022,
-  "coverage": 0.3002,
-  "ece": 0.0621,
-  "rightRate": 0.5285,
-  "wrongCaught": 0.9377
+  "precision": 0.9043,
+  "coverage": 0.3067,
+  "ece": 0.0698,
+  "rightRate": 0.5237,
+  "wrongCaught": 0.9384
  },
  "features": [
   "first_stage_p",
