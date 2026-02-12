@@ -231,6 +231,8 @@ export interface VerdictOut {
   cited: number;
   inForce: number;
   agreementBar: { n: number; kind: "same" | "contrast" | "differs" }[];
+  /** The confidence word at each depth ("Heading: Strong match", "Full code: Needs a broker"); empty means only `word`. */
+  byDepth?: { level: "heading" | "full_code"; levelLabel: string; word: Verdict; wordLabel: string }[];
 }
 export interface AlternativeOut {
   code: CodeOut;

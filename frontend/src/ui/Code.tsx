@@ -5,14 +5,27 @@
 import { For, Show } from "solid-js";
 import { codeSegments } from "~/lib/format";
 import { reducedMotion } from "~/lib/motion";
+import type { DigitTreatment } from "~/lib/verdict";
 
-export function CodeDigits(props: { code: string; leaning?: boolean; lock?: boolean; size?: "xl" | "lg" | "md" | "sm"; class?: string }) {
+export function CodeDigits(props: {
+  code: string;
+  leaning?: boolean;
+  /** Overrides `leaning`: how to draw the heading digits and the rest (from the confidence word at each depth). */
+  treatment?: { heading: DigitTreatment; rest: DigitTreatment };
+  lock?: boolean;
+  size?: "xl" | "lg" | "md" | "sm";
+  class?: string;
+}) {
   const segs = () => codeSegments(props.code);
   const size = () =>
     ({ xl: "text-[clamp(30px,2.65vw,40px)] font-[600]", lg: "text-[28px] font-[600]", md: "text-[17px] font-[550]", sm: "text-[14.5px] font-[500]" })[
       props.size ?? "md"
     ];
   const lock = () => !!props.lock && !reducedMotion();
+  const treat = (heading: boolean): DigitTreatment => {
+    const t = props.treatment ?? { heading: props.leaning ? "dashed" : "hl", rest: "plain" };
+    return heading ? t.heading : t.rest;
+  };
   let digit = 0;
   return (
     <span class={`font-code tracking-[-0.01em] leading-none whitespace-nowrap ${size()} ${props.class ?? ""}`} aria-label={props.code}>
@@ -26,10 +39,11 @@ export function CodeDigits(props: { code: string; leaning?: boolean; lock?: bool
             </Show>
             <span
               aria-hidden="true"
+              data-treatment={treat(seg.heading)}
               classList={{
-                hl: seg.heading && !props.leaning,
-                // A dashed amber rule under the heading digits (a border, so it also shows under the dropping digits).
-                "border-b-2 border-dashed border-warn": seg.heading && !!props.leaning,
+                hl: treat(seg.heading) === "hl",
+                // A dashed amber rule (a border, so it also shows under the dropping digits).
+                "border-b-2 border-dashed border-warn": treat(seg.heading) === "dashed",
               }}
             >
               <For each={seg.text.split("")}>

@@ -5,24 +5,25 @@
 import { Clipboard } from "@ark-ui/solid/clipboard";
 import { For, Show, type JSX } from "solid-js";
 import { dateWithDay } from "~/lib/format";
+import { depthWords, digitTreatment } from "~/lib/verdict";
 import type { AnswerOut, CodeOut } from "~/lib/types";
 import { CodeDigits } from "~/ui/Code";
 import { CompassMark } from "~/ui/Compass";
 import { AskIcon, OkIcon } from "~/ui/Icons";
 import { WithCodes } from "./Memo";
 
-function CodeCard(props: { code: CodeOut; source: string; lock: boolean }) {
+function CodeCard(props: { code: CodeOut; source: string; lock: boolean; words: ReturnType<typeof depthWords> }) {
   return (
     <div class="min-w-0">
       <p class="flex items-center gap-2 text-[14.5px] font-[700] text-ink-2">
         <span class="rounded-[3px] border-[1.5px] border-ink px-1 font-code text-[11.5px] font-[650] text-ink">{props.code.country}</span>
         {props.code.countryLabel} · {props.source}
-        <Show when={props.code.leaning}>
-          <span class="font-[550] italic text-warn">leaning</span>
+        <Show when={props.words ? props.words.full !== "strong" : props.code.leaning}>
+          <span class="font-[550] italic text-warn">{props.words && props.words.heading === "strong" ? "heading sure, last digits leaning" : "leaning"}</span>
         </Show>
       </p>
       <div class="mt-2">
-        <CodeDigits code={props.code.code} leaning={props.code.leaning} lock={props.lock} size="xl" />
+        <CodeDigits code={props.code.code} treatment={digitTreatment(props.code, props.words)} lock={props.lock} size="xl" />
       </div>
       <p class="mt-2 max-w-[400px] font-law text-[16.5px] leading-snug text-ink-2">{props.code.text}</p>
       <Clipboard.Root value={props.code.code} class="mt-1.5">
@@ -38,6 +39,7 @@ export function HoldingBand(props: { answer: AnswerOut; actions?: JSX.Element; l
   const a = () => props.answer;
   const strong = () => a().verdict.word === "strong";
   const bearing = () => (strong() ? 32 : 18);
+  const words = () => depthWords(a().verdict);
   return (
     <section aria-labelledby="holding-h" class="border-b border-rule bg-paper-2" data-rise>
       <div class="gm py-9 max-md:py-6">
@@ -52,13 +54,28 @@ export function HoldingBand(props: { answer: AnswerOut; actions?: JSX.Element; l
         </div>
         <div class="gm-wide">
           <div class="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(240px,0.9fr)] gap-x-8 gap-y-7 max-xl:grid-cols-2 max-md:grid-cols-1">
-            <Show when={a().us}>{(c) => <CodeCard code={c()} source="HTSUS" lock={!!props.lock} />}</Show>
-            <Show when={a().ca}>{(c) => <CodeCard code={c()} source="Customs Tariff" lock={!!props.lock} />}</Show>
+            <Show when={a().us}>{(c) => <CodeCard code={c()} source="HTSUS" lock={!!props.lock} words={words()} />}</Show>
+            <Show when={a().ca}>{(c) => <CodeCard code={c()} source="Customs Tariff" lock={!!props.lock} words={words()} />}</Show>
             <div class="border-l-[1.5px] border-ink pl-8 max-xl:col-span-2 max-xl:border-l-0 max-xl:border-t max-xl:border-rule max-xl:pl-0 max-xl:pt-5 max-md:col-span-1">
               <p class="flex items-center gap-2 text-[19px] font-[750]" classList={{ "text-ok": strong(), "text-warn": !strong() }}>
                 {strong() ? <OkIcon size={20} /> : <AskIcon size={20} />}
                 {a().verdict.wordLabel}
               </p>
+              <Show when={a().verdict.byDepth?.length}>
+                <dl class="mt-2.5 space-y-1" aria-label="The confidence word at each depth">
+                  <For each={a().verdict.byDepth}>
+                    {(d) => (
+                      <div class="flex items-center gap-1.5 text-[15.5px]">
+                        <dt class="text-ink-2">{d.levelLabel} ·</dt>
+                        <dd class="flex items-center gap-1.5 font-[650]" classList={{ "text-ok": d.word === "strong", "text-warn": d.word !== "strong" }}>
+                          {d.word === "strong" ? <OkIcon size={14} /> : <AskIcon size={14} />}
+                          {d.wordLabel}
+                        </dd>
+                      </div>
+                    )}
+                  </For>
+                </dl>
+              </Show>
               <p class="mt-2.5 text-[16px] leading-[1.55] text-ink-2">{a().verdict.sentence}</p>
               <div class="mt-5" aria-label={`Rulings reaching the same heading: ${a().verdict.agreeing} of ${a().verdict.cited}`}>
                 <div class="flex gap-[3px]" aria-hidden="true">

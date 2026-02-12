@@ -471,6 +471,7 @@ export const HOME: HomeOut = {
   dateLine: "Thursday 19 February 2026 · tariffs current as of this morning, 06:00 PT",
   recent: [
     { id: "ans-tumbler", queryText: "Stainless insulated tumbler, 20 oz, double wall, slide lid", usCode: "9617.00.10.00", verdict: "strong", verdictLabel: "Strong match", createdAt: "2026-02-19T18:21:00Z", createdBy: "Jordan Tse" },
+    { id: "ans-bottle", queryText: "Insulated stainless steel bottle, vacuum double wall, screw cap", usCode: "9617.00.10.00", verdict: "broker", verdictLabel: "Needs a broker", createdAt: "2026-02-19T17:05:00Z", createdBy: "Jordan Tse" },
     { id: "ans-bikelight", queryText: "Bluetooth bike light, 800 lumen, USB-C", usCode: "8512.10.20.00", verdict: "broker", verdictLabel: "Needs a broker", createdAt: "2026-02-18T20:02:00Z", createdBy: "Jordan Tse" },
     { id: "ans-tumbler", queryText: "Ridgeline double-wall camp mug, 350 ml", usCode: "9617.00.10.00", verdict: "strong", verdictLabel: "Strong match", createdAt: "2026-02-17T19:40:00Z", createdBy: "Jordan Tse" },
   ],

@@ -4,7 +4,7 @@
  * sessionStorage, enforces the role permissions, stamps X-Tariff-Compass-Now and returns RFC 7807 problems.
  */
 import type { AnswerOut, ClassifyIn, LandedCostIn, ReviewRow, Role } from "../types";
-import { SAMPLES, bikelightAnswer, tumblerAnswer, tumblerLandedCA, tumblerLandedMexico, tumblerLandedUS, tumblerLandedVietnam } from "./answers";
+import { SAMPLES, bikelightAnswer, bottleAnswer, tumblerAnswer, tumblerLandedCA, tumblerLandedMexico, tumblerLandedUS, tumblerLandedVietnam } from "./answers";
 import { DEMO_NOW, DEMO_PEOPLE, MEMBERS, META, ROLES, ROLE_LABELS, ROLE_PERMISSIONS, meFor } from "./core";
 import { SECTIONS } from "./sections";
 import { AUDIT, HOME, LAB, PRODUCTS, REVIEW_ROWS, RULES, RULINGS, SETTINGS, TARIFF_LINES, WATCH, binderFor, decisionRecord, docket, productDetail, round } from "./work";
@@ -79,7 +79,8 @@ function page<T>(items: T[], p: URLSearchParams) {
 
 function answerFor(text: string): AnswerOut | null {
   const t = text.toLowerCase();
-  if (/(tumbler|flask|vacuum|insulated|mug|bottle)/.test(t)) return tumblerAnswer("ans-tumbler");
+  if (/bottle/.test(t)) return bottleAnswer("ans-bottle");
+  if (/(tumbler|flask|vacuum|insulated|mug)/.test(t)) return tumblerAnswer("ans-tumbler");
   if (/(bike|bicycle|light|lamp|torch)/.test(t)) return bikelightAnswer("ans-bikelight");
   return null;
 }
@@ -114,6 +115,7 @@ const routes: [string, RegExp, Handler][] = [
   ["GET", /^\/public\/samples\/([\w-]+)$/, (m) => {
     if (m[1] === "tumbler") return json(tumblerAnswer("sample-tumbler", true));
     if (m[1] === "bike-light") return json(bikelightAnswer("sample-bike-light", true));
+    if (m[1] === "bottle") return json(bottleAnswer("sample-bottle", true));
     return problem(404, "not_found", "No such sample.");
   }],
   ["POST", /^\/public\/classify$/, (_m, _q, b) => {
@@ -132,6 +134,7 @@ const routes: [string, RegExp, Handler][] = [
   ["GET", /^\/answers\/([\w-]+)$/, (m) => {
     need("classify:read");
     if (m[1]!.includes("bikelight")) return json(bikelightAnswer(m[1]));
+    if (m[1]!.includes("bottle")) return json(bottleAnswer(m[1]));
     if (m[1]!.includes("tumbler")) return json(tumblerAnswer(m[1]));
     return problem(404, "not_found", "We couldn't find that answer.");
   }],

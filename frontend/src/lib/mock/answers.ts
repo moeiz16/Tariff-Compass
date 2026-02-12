@@ -332,6 +332,10 @@ export function bikelightAnswer(id = "ans-bikelight", sample = false): AnswerOut
       word: "broker",
       wordLabel: "Needs a broker",
       sentence: "It leans to bicycle lighting, but a light that also works in the hand can be a portable lamp. One fact decides it.",
+      byDepth: [
+        { level: "heading", levelLabel: "Heading", word: "broker", wordLabel: "Needs a broker" },
+        { level: "full_code", levelLabel: "Full code", word: "broker", wordLabel: "Needs a broker" },
+      ],
       agreeing: 1,
       cited: 3,
       inForce: 3,
@@ -387,7 +391,51 @@ export function bikelightAnswer(id = "ans-bikelight", sample = false): AnswerOut
   };
 }
 
+/**
+ * Sure at the heading, unsure at the full code: a vacuum bottle whose capacity isn't stated. Heading 9617 is settled
+ * by "vacuum"; the US statistical line splits at one and two litres, so the last digits need a broker.
+ */
+export function bottleAnswer(id = "ans-bottle", sample = false): AnswerOut {
+  const base = tumblerAnswer(id, sample);
+  const over: CodeOut = { ...TUMBLER_US, code: "9617.00.30.00", digits: "9617003000", text: "Having a capacity exceeding 1 litre but not exceeding 2 litres", leaning: true };
+  return {
+    ...base,
+    query: { ...base.query, text: "Insulated stainless steel bottle, vacuum double wall, screw cap, carry loop." },
+    us: { ...TUMBLER_US, leaning: true },
+    ca: TUMBLER_CA,
+    verdict: {
+      ...base.verdict,
+      word: "broker",
+      wordLabel: "Needs a broker",
+      sentence: "The heading is settled: a vacuum between the walls makes it a vacuum vessel. The capacity isn't stated, and the US line splits at one litre.",
+      byDepth: [
+        { level: "heading", levelLabel: "Heading", word: "strong", wordLabel: "Strong match" },
+        { level: "full_code", levelLabel: "Full code", word: "broker", wordLabel: "Needs a broker" },
+      ],
+    },
+    alternative: { code: over, condition: "if it holds more than one litre", dutyAtStake: "0.3 points of duty on the goods value" },
+    decidingQuestion: {
+      factKey: "capacity",
+      question: "Does the bottle hold one litre or less?",
+      options: [
+        { key: "up_to_1l", label: "One litre or less", leadsTo: "9617.00.10.00" },
+        { key: "over_1l", label: "More than one litre, up to two", leadsTo: "9617.00.30.00" },
+      ],
+      notSureLabel: "Not sure: send to Driftwood",
+    },
+    holdingSentence: "The bottle is classified in heading 9617, HTSUS, and tariff item 9617.00.00.00 of Canada's Customs Tariff; the US statistical line waits on its capacity.",
+    facts: base.facts.map((f) =>
+      f.key === "capacity"
+        ? { ...f, value: "Not stated", source: "unknown", sourceLabel: "Not stated", sourceNote: "the listing gives no capacity", decides: true }
+        : f.key === "between_walls"
+          ? { ...f, source: "stated", sourceLabel: "Stated", sourceNote: "your description: 'vacuum double wall'", decides: false }
+          : f,
+    ),
+  };
+}
+
 export const SAMPLES = [
   { key: "tumbler", title: "stainless insulated tumbler, 20 oz", madeIn: "CN", query: TUMBLER_TEXT },
+  { key: "bottle", title: "insulated bottle, capacity not stated", madeIn: "CN", query: "Insulated stainless steel bottle, vacuum double wall, screw cap, carry loop." },
   { key: "bike-light", title: "Bluetooth bike light, USB-C", madeIn: "CN", query: "Bluetooth bike light, 800 lumen, USB-C rechargeable, handlebar mount, with a torch mode." },
 ];
