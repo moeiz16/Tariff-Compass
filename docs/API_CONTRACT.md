@@ -418,7 +418,7 @@ re-filed.
 RoundStrip = { n, status: training|waiting_signoff|live|not_made_live|retired|failed, statusLabel, trainedOn, note }
 RoundOut   = { n, status, statusLabel, trainedOn, testCount, testFrom, testTo, snapshot, rerunNote, lede,
                byDepth: { level: chapter|heading|subheading|full_code, levelLabel, wordMatching, live, candidate, unoptimised }[],
-               confidence: { strong: ConfidenceCell, broker: ConfidenceCell },     # "right 97 times in 100"
+               confidence: { strong: ConfidenceCell, broker: ConfidenceCell },     # "right 87 times in 100"
                byChapter: { chapter, title, tested, before, after, change, changeLabel, newRulings, moving }[],
                learned: string[], drift: { newRulings, mostMoved, psi, sentence }, checks: { key, label, passed, value, threshold }[],
                signOff: { required: 2, signatures: { name, role, roleLabel, signedAt, statement }[], canSign, willPromote, note },
@@ -541,7 +541,7 @@ The audience is importers, brokers and compliance leads, not engineers (`fronten
   `provenance.lmLabel` and `RoundOut.runBy` exist for the binder export and the Lab's "Answers written by" line only.
 - **Use:** "the classifier", "word matching" (the classical baseline), "training round", "rulings it hasn't seen",
   "Strong match" / "Needs a broker", "the fact that decides it".
-- **No percentages for confidence.** Accuracy is reported as frequencies ("right 97 times in 100").
+- **No percentages for confidence.** Accuracy is reported as frequencies ("right 87 times in 100").
 - **Compliance language:** "designed to support reasonable-care record keeping"; never "compliant" or "certified".
   Nothing is filed automatically; a licensed broker approves every code before it is used on an entry.
 - **Legal status:** IEEPA layers say "Pending at the Supreme Court (argued 5 Nov 2025)" on the demo date and never

@@ -24,7 +24,7 @@ reproducible as of a chosen day.
    Django's `timezone.now`; `TARIFF_COMPASS_DEMO_TIME` pins the time of day, anchored in `data/demo-clock.json` so
    the API, the worker and management commands agree. Every response carries `X-Tariff-Compass-Now`; the web app
    follows it. Sessions and rate limits keep the real wall clock. "Tariffs as of" uses the data snapshot date.
-4. **Editions are pinned.** The demo reads 2026 HTSUS Revision 3 (in force 12–25 Feb 2026) and Canada's T2026
+4. **Editions are pinned.** The demo reads 2026 HTSUS Revision 3 (in force from 12 Feb 2026) and Canada's T2026
    (from 1 Jan 2026).
 
 ## Consequences

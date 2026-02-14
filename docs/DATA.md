@@ -9,7 +9,7 @@ in the git-ignored `data/` folder (`make fetch-data`); small samples are committ
 | Source | What we use | Access | Licence / terms | Snapshot |
 |---|---|---|---|---|
 | **CBP CROSS rulings** (NY and HQ ruling letters) | ruling number, date, tariff numbers, the letter text | Public mirror of CROSS on Hugging Face (`orlandowhite/hts-cross-rulings`, ~290 MB JSON), stream-parsed by `scripts/fetch_data.py` | The letters are works of the US government (public domain, 17 U.S.C. 105). The mirror states no licence; we keep only CBP's own content and drop the mirror's generated summaries | 18,136 rulings issued 21 Jan 2014 – 1 Aug 2025 (3,442 HQ) |
-| **USITC Harmonized Tariff Schedule** | headings, subheadings, indent, article descriptions, units, column 1 General / Special rates, Chapter 99 | REST JSON export, chapter by chapter (`/reststop/exportList`); revision list (`/reststop/releaseList`); archived revisions as PDF (`/reststop/file?release=…`) | US government work, public domain | Demo edition: **2026 HTSUS Revision 3**, in force 12–25 Feb 2026 |
+| **USITC Harmonized Tariff Schedule** | headings, subheadings, indent, article descriptions, units, column 1 General / Special rates, Chapter 99 | REST JSON export, chapter by chapter (`/reststop/exportList`); revision list (`/reststop/releaseList`); archived revisions as PDF (`/reststop/file?release=…`) | US government work, public domain | Demo edition: **2026 HTSUS Revision 3**, in force from 12 Feb 2026 |
 | **CBSA Customs Tariff T2026** | tariff item, statistical suffix, description, unit, MFN rate, preferential treatments (MXT, CEUT, CPTPT …) | Chapter HTML pages of the departmental consolidation effective 1 Jan 2026 | Federal law, reproduced under the Reproduction of Federal Law Order; not an official version | **T2026**, effective 1 Jan 2026 (the edition in force on 19 Feb 2026) |
 | **Duty layers** | rate, scope, stacking and exclusion rules, Chapter 99 numbers, effective dates, legal status, sources | Hand-curated from primary sources into `backend/tariffcompass/duties/data/layers.json` (33 layers) | Federal Register, executive orders, USTR notices, CBP CSMS messages (public domain); Canada Gazette and CBSA customs notices (Reproduction of Federal Law Order) | As of **Thu 19 Feb 2026** |
 | **CBSA memoranda** | citations in copy and binders | cbsa-asfc.gc.ca | Government of Canada | D11-11-3, D10-0-1, D10-14-64, D11-6-6, D17-1-21 |
@@ -179,13 +179,18 @@ training round, each with the broker's one-sentence lesson.
 4. **26 Dec 2025:** Canada's Steel Derivative Goods Surtax Order (SOR/2025-267): steel tent stakes into Canada
    affected.
 5. **10 Nov 2025:** the opioid-linked IEEPA duty on China cut from 20% to 10% (EO 14357).
+6. **A ruling changed:** HQ H289250 revoked NY N284187 (a lamp of heading 9405), so a binder that relied on it
+   needs a broker's re-check even where the code stays the same.
 
 ### Lab rounds
 
 Training rounds 4–7 come from real `make optimize` runs (offline simulator unless a key is set), loaded by the
-seed with dates assigned by the demo clock: round 4 retired, round 5 not made live, round 6 live since 30 Jan,
-round 7 trained on 19 Feb and waiting for its second signature (Maya signed at 09:48). The seed never invents
-accuracy figures; it loads the reports the runs produced, labelled with the LM that produced them.
+seed from their committed reports with dates assigned by the demo clock (trained 2 Dec 2025, 6 Jan, 28 Jan and
+19 Feb 2026). The seed applies the product's own rule: a round is in use only if it passed all five checks and two
+different people signed it. With the offline simulator none of the four passes (each misses at least the "Strong
+match right 90 times in 100" check), so every round is shown as a challenger, not made live, and **word matching
+is in use**. The seed never invents accuracy figures; it loads the reports the runs produced, labelled with the LM
+that produced them.
 
 ## Sizes on disk
 

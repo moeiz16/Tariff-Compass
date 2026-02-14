@@ -20,7 +20,7 @@ flowchart LR
   end
 
   subgraph Core[Classification core]
-    FS[First stage<br/>TF-IDF + logistic regression / linear SVM<br/>LightGBM chapter & heading]
+    FS[First stage: word matching<br/>TF-IDF + calibrated linear SVM<br/>logistic regression and LightGBM chapter challengers]
     SE[Search engine<br/>Tantivy BM25 over rulings + tariff text<br/>+ reranker]
     PG[DSPy program<br/>candidates → GRI reasoning → subheading<br/>→ citations → confidence]
     DE[Duty engine<br/>dated layers: MFN · 301 · 232 · IEEPA · fees<br/>CA MFN · preferences · surtaxes · GST]
@@ -49,12 +49,14 @@ flowchart LR
 
 1. `POST /api/v1/classify` with text, origin, countries and any evidence ids (spec sheet text from pypdf, photo
    facts from the vision adapter).
-2. **First stage** (CPU, in process): TF-IDF features → calibrated logistic regression / linear SVM and LightGBM →
-   top-k chapters and headings with probabilities and the words that drove them.
+2. **First stage** (CPU, in process): TF-IDF features → the calibrated linear SVM (chosen on validation over logistic
+   regression; LightGBM, which ranks chapters only, stayed a challenger) → top-k chapters and headings with
+   probabilities and the words that drove them.
 3. **Search engine**: BM25 over rulings restricted to the candidate headings (plus contrast rulings from
    neighbouring headings), BM25 over the tariff text of those headings; rerank by heading agreement, recency and
    status (a revoked ruling is never cited as support).
-4. **Program** (DSPy): five modules in order: CandidateHeadings → GriReasoning → ChooseSubheading (US and CA) →
+4. **Program** (DSPy), when a training round is live (the Lab decides; until one is, word matching answers with
+   the closest ruling's line under its top heading and a calibrated confidence word): five modules in order: CandidateHeadings → GriReasoning → ChooseSubheading (US and CA) →
    SelectCitations → Confidence. The output is a `ProgramAnswer` (contracts.py): codes, verdict, facts with their
    sources, the path with the GRI per step and the neighbours set aside, sentences with citation numbers, and the
    deciding question when unsure.
@@ -68,7 +70,7 @@ flowchart LR
 
 | Stage | Budget (p95) | Notes |
 |---|---|---|
-| First stage | **< 150 ms** | sparse TF-IDF + linear model + LightGBM; measured 0.2 ms per call on the toolchain smoke |
+| First stage | **< 150 ms** | sparse TF-IDF + pruned linear SVM; under 1 ms at p95 in `make eval` |
 | Search (rulings + tariff text) | < 120 ms | Tantivy, in-process, index memory-mapped |
 | Program, offline simulator | < 400 ms | five predictor calls, deterministic |
 | Duty engine | < 30 ms | pure Python over ~35 dated layers |

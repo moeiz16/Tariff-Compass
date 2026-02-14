@@ -176,6 +176,8 @@ Header in the gutter grid: "Binder · NB-KT-0412 / REASONABLE-CARE RECORD", prod
 Dated items in the gutter grid ("PENDING / argued 5 Nov 2025", "16 FEB 2026"…), each with a kind tag, "N of your products" on the highlighter, a headline and a paragraph. The top item is the pending Supreme Court decision with **What we know / What we don't** and the most affected products. The others are the modified ruling with each binder's re-check, new battery-pack rulings, and the 2026 schedule in force. **What Watch checks every morning** is a strip at the end, not a rail. Shot: `08-watch-light.png`.
 
 ### 5.8 Optimisation lab: the report (`lab.html`)
+*The prototype below uses illustrative figures and an imagined live round. As built, the Lab shows only measured figures, opens with what is in use (word matching until a round passes its five checks and is signed live) and offers the sign-off only for a round that passed; see §14 and `eval/RESULTS.md`.*
+
 A **strip of training rounds** across the top (Round 4 retired · 5 not made live · 6 live since 30 Jan · **7 waiting for sign-off** on the highlighter). Then numbered report sections in the gutter grid:
 - **In one sentence:** "Round 7 gets the full ten-digit code right for **71 in 100** rulings it hasn't seen, up from 58. Word matching alone gets 44.", plus the test set, data snapshot and re-run note.
 - **§1 By depth:** the three-mark dot plot (word matching ring · round 6 half · round 7 filled; the gain on the highlighter) across the full measure.

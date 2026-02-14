@@ -34,7 +34,7 @@ the product will face, so the evaluation must respect time.
 ## Consequences
 
 - The program has to beat a strong, honest baseline on future rulings, not on a random split.
-- Coverage is uneven: some headings have few rulings (the corpus has two in heading 9617 since 2014). Per-chapter
+- Coverage is uneven: some headings have few rulings (the corpus has four letters in heading 9617 since 2014). Per-chapter
   tables make that visible instead of averaging it away.
 - The first stage is also the fallback the product can explain when no LM is configured.
 
