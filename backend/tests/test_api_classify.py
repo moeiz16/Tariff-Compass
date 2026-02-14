@@ -148,7 +148,7 @@ def test_evidence_upload_reads_spec_sheet_text(world, fake_core):
 def test_public_samples_need_no_account(db, fake_core):
     api = Api()
     samples = api.get("public/samples").json()
-    assert {s["key"] for s in samples} == {"tumbler", "bike-light", "pullover"} and samples[0]["madeIn"]
+    assert {s["key"] for s in samples} == {"tumbler", "sleeping-bag", "pullover"} and samples[0]["madeIn"]
     one = api.get("public/samples/tumbler").json()
     assert one["sample"] is True and one["id"] == "sample-tumbler"
     hit = api.post("public/classify", {"text": "a 20 oz vacuum tumbler"})

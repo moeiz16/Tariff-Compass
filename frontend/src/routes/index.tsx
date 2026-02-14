@@ -121,7 +121,7 @@ export default function Landing() {
 
   onMount(() => {
     const key = params.q;
-    // A sample key ("tumbler", "bike-light") opens that sample; anything else is classified as text.
+    // A sample key ("tumbler", "sleeping-bag") opens that sample; anything else is classified as text.
     if (key) void (async () => {
       const list = await publicApi.samples().catch(() => []);
       void run(list.some((s) => s.key === key) ? "sample" : "text", key);
@@ -192,6 +192,7 @@ export default function Landing() {
                     )}
                   </For>
                 </div>
+                <p class="mt-3 text-[14.5px] text-muted">Samples are illustrations; measured accuracy is in the Lab and in the README.</p>
               </div>
               <div class="mx-auto mt-12 max-w-[1000px]">
                 <Switch>
@@ -253,7 +254,7 @@ export default function Landing() {
                   <A href="/signin" class="font-[700] underline underline-offset-4">
                     Sign in
                   </A>{" "}
-                  to classify your own and keep each answer in an audit binder.
+                  to classify your own and keep each answer in an audit binder. Samples are illustrations; measured accuracy is in the Lab and in the README.
                 </p>
               </div>
             }

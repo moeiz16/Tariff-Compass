@@ -1,5 +1,5 @@
 {
- "about": "Phrasing-robustness check for the three public samples. The paraphrases were written before any result was seen; the first of each set is the sample's own text and the tumbler set includes the landing page's 'vacuum sealed' phrasing. A paraphrase passes when the answer lands on the expected heading.",
+ "about": "Phrasing-robustness check for the public samples. The paraphrases were written before any result was seen; the first of each set is the sample's own text and the tumbler set includes the landing page's 'vacuum sealed' phrasing. A paraphrase passes when the answer lands on the expected heading. The bicycle headlight was a public sample until it was replaced by the down sleeping bag (the classifier in use gets its heading wrong); its paraphrases stay here as a known weakness, and the sleeping bag's were written before any of them was run.",
  "samples": [
   {
    "key": "tumbler",
@@ -22,6 +22,18 @@
     "Bicycle head lamp, 600 lumen LED, battery powered, mounts to handlebars",
     "LED cycle light set, front and rear, for road bicycles",
     "Bike headlight with lithium battery, waterproof, 1000 lumens"
+   ],
+   "formerSample": true
+  },
+  {
+   "key": "sleeping-bag",
+   "expectedHeading": "9404",
+   "texts": [
+    "Down sleeping bag, -10 °C: nylon shell, duck down, 650 fill, mummy cut.",
+    "Mummy sleeping bag filled with duck down, nylon outer, rated to -10 C",
+    "Down-filled sleeping bag for backpacking, 650 fill power, nylon ripstop shell",
+    "Winter sleeping bag, goose and duck down insulation, mummy shape",
+    "Camping sleeping bag with down fill and a nylon shell, three-season"
    ]
   },
   {

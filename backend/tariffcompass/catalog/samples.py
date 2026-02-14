@@ -1,5 +1,8 @@
 """The public demo's sample products (the landing's "Try a sample"). Anyone can classify these without an
-account; any other text gets `404 not_in_demo`. Answers are computed by the real classification core."""
+account; any other text gets `404 not_in_demo`. Answers are computed by the real classification core.
+
+Each sample is a product from Northbound's catalogue (seed/catalog.py) and none is one of the hand-checked
+evaluation items (eval/sets/landed_cost_20.json). Samples are illustrations; measured accuracy is in eval/RESULTS.md."""
 
 from __future__ import annotations
 
@@ -14,12 +17,12 @@ SAMPLES: dict[str, dict[str, Any]] = {
         "query": "20 oz double-wall stainless steel tumbler, vacuum insulated, with a sliding lid. Holds 591 ml.",
         "shipment": {"value": "12500.00", "currency": "USD", "quantity": 1000, "transport": "ocean"},
     },
-    "bike-light": {
-        "title": "Rechargeable bicycle headlight",
-        "made_in": "CN",
+    "sleeping-bag": {
+        "title": "Down sleeping bag",
+        "made_in": "VN",
         "into": ["US", "CA"],
-        "query": "Rechargeable LED bicycle headlight, 800 lumens, USB-C, mounts on the handlebar with a rubber strap.",
-        "shipment": {"value": "8400.00", "currency": "USD", "quantity": 600, "transport": "ocean"},
+        "query": "Down sleeping bag, -10 °C: nylon shell, duck down, 650 fill, mummy cut.",
+        "shipment": {"value": "32000.00", "currency": "USD", "quantity": 500, "transport": "ocean"},
     },
     "pullover": {
         "title": "Knitted cotton pullover",
