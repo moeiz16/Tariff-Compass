@@ -1,0 +1,80 @@
+{
+ "system": "word matching (in use)",
+ "rule": "lower_bound",
+ "ruleText": "Strong match starts at the lowest calibrated probability where, on the held-out validation rulings, the one-sided 95% Clopper-Pearson lower bound of the share of Strong answers right at six digits is at least 0.90 (and at least 10 answers say Strong).",
+ "fittedFrom": {
+  "round": 7,
+  "seed": 7,
+  "trainN": 400,
+  "valN": 200,
+  "heldOut": 463
+ },
+ "reproduced": {
+  "threshold": 0.7965,
+  "coefficients": true
+ },
+ "previousWord": {
+  "coef": [
+   0.875038,
+   1.19814,
+   -0.000137,
+   1.152678,
+   -0.00041,
+   -0.841617,
+   0.0,
+   1.636159
+  ],
+  "intercept": -3.495434,
+  "threshold": 0.7965
+ },
+ "threshold": 1.01,
+ "validation": {
+  "rule": "lower_bound",
+  "precision": null,
+  "precisionLowerBound": 0.0,
+  "bestLowerBound": {
+   "lowerBound": 0.874,
+   "threshold": 0.7966,
+   "said": 131,
+   "right": 121
+  },
+  "coverage": 0.0,
+  "ece": 0.0425,
+  "rightRate": 0.581,
+  "wrongCaught": 1.0
+ },
+ "previous": {
+  "rule": "point",
+  "threshold": 0.7965,
+  "validation": {
+   "precision": 0.9149,
+   "coverage": 0.3045,
+   "ece": 0.0425,
+   "rightRate": 0.581,
+   "wrongCaught": 0.9381
+  },
+  "test": {
+   "n": 1094,
+   "strongSaid": 193,
+   "strongRight": 167,
+   "precision": 0.8653,
+   "coverage": 0.1764,
+   "brokerSaid": 901,
+   "brokerFirstGuessWrong": 538,
+   "wrongCaught": 0.9539,
+   "ece": 0.0359
+  }
+ },
+ "test": {
+  "n": 1094,
+  "strongSaid": 0,
+  "strongRight": 0,
+  "precision": null,
+  "coverage": 0.0,
+  "brokerSaid": 1094,
+  "brokerFirstGuessWrong": 564,
+  "wrongCaught": 1.0,
+  "ece": 0.0359
+ },
+ "testLook": "One further look at the test set, made after this rule and its threshold were fixed on validation. The test set had already been read many times while the pipeline was being fixed (eval/RESULTS.md); the earlier word's 87 in 100 came from one of those readings, so this rule was adopted after that look."
+}

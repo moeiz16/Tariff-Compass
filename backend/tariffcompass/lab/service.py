@@ -86,6 +86,7 @@ def in_use(rounds: list[TrainingRound], live: TrainingRound | None) -> dict[str,
             f"rulings it hasn't seen ({round(heading or 0)} in 100 at the heading). No training round has "
             "passed its five checks and been signed off yet, so every round below is a challenger."
         )
+    sentence += _in_use_word_note()
     return {
         "kind": "word_matching",
         "round": None,
@@ -94,6 +95,24 @@ def in_use(rounds: list[TrainingRound], live: TrainingRound | None) -> dict[str,
         "heading": heading,
         "sentence": sentence,
     }
+
+
+def _in_use_word_note() -> str:
+    """When word matching's confidence word can't clear its bar on validation, say so: every answer goes to a broker."""
+    import json
+
+    from tariffcompass.classify.recalibrate import report_path
+
+    try:
+        rep = json.loads(report_path().read_text())
+    except (OSError, ValueError):
+        return ""
+    if float(rep.get("threshold", 0)) <= 1.0:
+        return ""
+    return (
+        " Its confidence word can't yet show “Strong match” right at least 90 times in 100 with a safe margin, so "
+        "every answer it gives says “Needs a broker”."
+    )
 
 
 def get_round(org: Organisation, n: int) -> TrainingRound:

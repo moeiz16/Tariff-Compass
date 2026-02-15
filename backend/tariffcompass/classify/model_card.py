@@ -129,7 +129,8 @@ def render(report: dict, labels: dict | None) -> str:
         "",
         "## Serving",
         "",
-        f"- p95 {report['latencyMs']['p95']} ms per description on this laptop (gate: < 150 ms); artefacts "
+        f"- p95 {report['latencyMs']['p95']} ms per description, measured when the model was trained (gate: < 150 "
+        "ms; `make eval` re-measures it on every run, see `eval/RESULTS.md`); artefacts "
         f"{sum(report['artifactBytes'].values()) / 1e6:.1f} MB (JSON vocabulary, sparse float16 weights, no pickles).",
         "- Tracked in MLflow (local SQLite store, `mlruns/`, git-ignored); registered as `tariff-compass-first-stage`.",
         "",
@@ -146,6 +147,7 @@ def render(report: dict, labels: dict | None) -> str:
         "top-listed ruling under a neighbouring heading is cited as support in 30 of 100 answers, the commonest",
         "citation slip a hurried reader makes. Nothing in the noise reads a gold label. Details in ADR 0003.",
         "",
+        *_confidence_word(),
         "## How the test set was used",
         "",
         "Once, for the final measurement above. An earlier end-to-end run of the training command (a pipeline check",
@@ -154,8 +156,9 @@ def render(report: dict, labels: dict | None) -> str:
         "both runs. After training, the input normalisation gained a Canadian/British-to-US spelling map",
         "(“aluminium” → “aluminum”); CBP's letters use US spelling, so the measured figures are unaffected. The",
         "program's training rounds and the evaluation read the test set again while the pipeline was being fixed;",
-        "the last of those readings, after the final fixes, is the one reported in `eval/RESULTS.md` and was the",
-        "final look.",
+        "the last of those readings, after the final fixes, is the one reported in `eval/RESULTS.md`. After it, the",
+        "confidence word's threshold rule was replaced (above): the new rule was fixed on validation and the test set",
+        "was then read once more, for that word only. That further look is counted in `eval/RESULTS.md` too.",
         "",
         "## Limits",
         "",
@@ -167,6 +170,53 @@ def render(report: dict, labels: dict | None) -> str:
         "",
     ]
     return "\n".join(lines)
+
+
+def _confidence_word() -> list[str]:
+    """The in-use confidence word and the "Also possible" rule, from their validation reports (when present)."""
+    out: list[str] = []
+    cp = artifact_dir() / "word_matching.confidence-report.json"
+    if cp.exists():
+        c = json.loads(cp.read_text())
+        v, t, prev = c["validation"], c.get("test") or {}, c["previous"]
+        best = v.get("bestLowerBound") or {}
+        out += [
+            "## The confidence word",
+            "",
+            "A logistic model over the answer's evidence (the first stage's probability and margin, the share of close",
+            "rulings under the heading, agreeing citations, whether the deciding fact is stated, whether the closest",
+            "ruling holds the line) gives the probability that the six-digit code is right; it is fitted on "
+            f"{c['fittedFrom']['heldOut']} validation rulings no training round used.",
+            "",
+            f"Rule: {c['ruleText']} The earlier rule (point precision of at least 0.90 on validation) gave threshold",
+            f"{prev['threshold']}, right {prev['validation'].get('precision')} of the time on validation but "
+            f"{prev['test'].get('precision')} on the test set; that",
+            "test reading is why the rule was replaced, so the replacement came after a look at the test set.",
+        ]
+        if c["threshold"] > 1:
+            out += [
+                "",
+                "Under the rule no threshold qualifies: the best lower bound on validation is "
+                f"{best.get('lowerBound')} ({best.get('right')} right of {best.get('said')}).",
+                "So word matching never says “Strong match”; every answer says “Needs a broker”. On the test set (one",
+                f"look, after the rule was fixed) it said “Needs a broker” {t.get('brokerSaid')} times, and its first "
+                f"guess was wrong {t.get('brokerFirstGuessWrong')} of those times.",
+                "The release gate for the word (right at least 90 in 100, and said at all) therefore fails; it is a",
+                "known limitation, and the threshold was not loosened.",
+            ]
+        out.append("")
+    ap = artifact_dir() / "alternative.json"
+    if ap.exists():
+        a = json.loads(ap.read_text())
+        chosen: dict = next((r for r in a["sweep"] if r["floor"] == a["floor"]), {})
+        out += [
+            "## “Also possible”",
+            "",
+            f"{a['rule']} Chosen on validation: floor {a['floor']}, where {chosen.get('right')} of "
+            f"{chosen.get('shown')} alternatives shown were the right heading. The test set was not read for it.",
+            "",
+        ]
+    return out
 
 
 def write(repo_dir: Path) -> Path:

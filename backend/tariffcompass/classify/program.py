@@ -206,7 +206,9 @@ def assemble(
     facts = facts_mod.extract(
         query.text + " " + query.spec_sheet_text + " " + " ".join(query.photo_facts), query.confirmed_facts
     )
-    runner = ev.runner_up(heading, pred.set_aside) or next((h for h in pred.order if h != heading), None)
+    # "Also possible", the issue and the deciding question name a neighbour only when it has real support
+    # (plausible_alternative); an implausible neighbour is still set aside in the path, but never offered
+    runner = plausible_alternative(e, heading, pred.set_aside, list(pred.order))
     dist = facts_mod.distinction(heading, runner, head_text, e["heading_text"].get(runner, "")) if runner else None
     if dist is not None and pred.verdict == "broker":
         facts = [
@@ -245,6 +247,11 @@ def assemble(
     alt = None
     dq = None
     stake = None
+    stated_for = None
+    if dist is not None and runner:
+        said = query.text + " " + query.spec_sheet_text + " " + " ".join(query.photo_facts)
+        if ev.deciding_status(said, heading, runner) == "stated_for":
+            stated_for = next((f for f in facts if f.key == dist.key and f.source == "stated"), None)
     if pred.verdict == "broker" and runner:
         alt_code = (e["us_lines"].get(runner) or [[""]])[0][0]
         best_alt = ev.best_line_for(e, runner, query.text)
@@ -252,17 +259,38 @@ def assemble(
         if alt_code:
             alt = CodeChoice("US", alt_code, e["us_text"].get(alt_code, ""), e["heading_text"].get(runner, ""))
         if dist is not None:
+            # the option that keeps the answer's heading leads to the answer's own line, not another line under it
             opts = tuple(
-                (k, label, ev.best_line_for(e, h, query.text) or (e["us_lines"].get(h) or [[h]])[0][0])
+                (
+                    k,
+                    label,
+                    pred.us_code
+                    if h == heading and pred.us_code
+                    else ev.best_line_for(e, h, query.text) or (e["us_lines"].get(h) or [[h]])[0][0],
+                )
                 for k, label, h in dist.options
             )
-            dq = DecidingQuestion(dist.key, dist.question if pred.question in ("", "none") else pred.question, opts)
+            question = dist.question if pred.question in ("", "none") else pred.question
+            if stated_for is not None:  # the description already states it: ask to confirm what was stated
+                question = f"{question} The description says: {stated_for.value[:1].lower()}{stated_for.value[1:]}."
+            dq = DecidingQuestion(dist.key, question, opts)
         stake = "depends on the duty layers of each line"
-    verdict_sentence = (
-        f"{agreeing} of {len(citations)} cited rulings reach heading {heading}, and the deciding facts are stated."
-        if pred.verdict == "strong"
-        else "The answer turns on a fact the description doesn't settle; a broker should confirm it."
-    )
+    if pred.verdict == "strong":
+        verdict_sentence = (
+            f"{agreeing} of {len(citations)} cited rulings reach heading {heading}, and the deciding facts are stated."
+        )
+    elif runner and stated_for is not None:
+        verdict_sentence = (
+            f"The description states the fact that separates heading {heading} from heading {runner}; a broker "
+            "should confirm it before the code is used."
+        )
+    elif runner:
+        verdict_sentence = "The answer turns on a fact the description doesn't settle; a broker should confirm it."
+    else:
+        verdict_sentence = (
+            f"No other heading has real support for this product, but the evidence for heading {heading} falls "
+            "short of a Strong match; a broker should confirm the code."
+        )
     subject = _subject(query.text)
     holding = f"{subject} is classified in subheading {codes.fmt(pred.us_code)}, HTSUS" + (
         f", and tariff item {codes.fmt(pred.ca_code)} of Canada's Customs Tariff." if pred.ca_code else "."
@@ -433,6 +461,56 @@ def load_calibrator(round_n: int | None, depth: str = ""):
 
     p = calibrator_path(round_n, depth)
     return Calibrator.load(p) if p.exists() else None
+
+
+# ── "Also possible": only a plausible neighbour ─────────────────────────────────────────────────────────
+ALTERNATIVE_FILE = "alternative.json"
+ALTERNATIVE_TARGET = 0.25  # shown alternatives are the right heading at least 25 times in 100 (validation)
+ALTERNATIVE_MIN_SHOWN = 20
+ALTERNATIVE_FLOOR_GRID = (0.0, 0.005, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.5)
+
+
+def alternative_floor() -> float:
+    """The first stage's probability an alternative heading needs, chosen on validation (manage.py recalibrate
+    --alternatives); never shown when the choice hasn't been made."""
+    p = artifact_dir() / ALTERNATIVE_FILE
+    try:
+        return float(json.loads(p.read_text())["floor"])
+    except (OSError, ValueError, KeyError):
+        return 1.01
+
+
+def supported(e: dict, heading: str, alt: str) -> bool:
+    """Real support for a neighbour: it shares the answer's chapter, or one of the product's ten closest rulings
+    is held under it."""
+    return alt[:2] == heading[:2] or float(e.get("votes", {}).get(alt, 0.0)) > 0.0
+
+
+def alternative_candidates(heading: str, set_aside: list, order: list) -> list[str]:
+    """The neighbours in the order they would be offered: the one with a known deciding fact first, then the rest
+    as the answer set them aside."""
+    first = ev.runner_up(heading, set_aside)
+    rest = [h for h, *_ in set_aside] + list(order)
+    out: list[str] = []
+    for h in [first, *rest]:
+        if h and h != heading and h not in out:
+            out.append(h)
+    return out
+
+
+def plausible_alternative(
+    e: dict, heading: str, set_aside: list, order: list, floor: float | None = None
+) -> str | None:
+    """The declared rule: offer a neighbour as "Also possible" only when it and the answer are a documented pair
+    with a deciding fact (facts.DISTINCTIONS, the disputes CBP's rulings turn on), or when the first stage gives it
+    at least the validated floor of probability and it has real support (supported); otherwise offer none."""
+    floor = alternative_floor() if floor is None else floor
+    p = {c["heading"]: float(c.get("p", 0.0)) for c in e.get("candidates", [])}
+    for h in alternative_candidates(heading, set_aside, order):
+        documented = frozenset({heading, h}) in facts_mod.DISTINCTIONS
+        if documented or (p.get(h, 0.0) >= floor and supported(e, heading, h)):
+            return h
+    return None
 
 
 def calibrated(pred: dspy.Prediction, e: dict, product: str, calibrator, heading_calibrator=None) -> dspy.Prediction:

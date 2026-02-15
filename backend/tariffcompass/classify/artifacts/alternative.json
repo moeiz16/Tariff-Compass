@@ -1,0 +1,87 @@
+{
+ "rule": "Offer a neighbouring heading as \u201cAlso possible\u201d only when it and the answer are a documented pair with a deciding fact (the disputes CBP's rulings turn on, such as 9617 against 7323), or when the first stage gives it at least `floor` of probability and it has real support (it shares the answer's chapter, or one of the product's ten closest rulings is held under it). `floor` is the lowest value on the declared grid at which the alternatives shown on validation are the right heading at least 25% of the time (over at least 20 shown); none is shown if no value qualifies.",
+ "target": 0.25,
+ "floor": 0.05,
+ "fittedFrom": {
+  "round": 7,
+  "seed": 7,
+  "heldOut": 463,
+  "answerHeadingWrong": 116
+ },
+ "sweep": [
+  {
+   "floor": 0.0,
+   "shown": 289,
+   "right": 41,
+   "share": 0.1419
+  },
+  {
+   "floor": 0.005,
+   "shown": 169,
+   "right": 36,
+   "share": 0.213
+  },
+  {
+   "floor": 0.01,
+   "shown": 154,
+   "right": 34,
+   "share": 0.2208
+  },
+  {
+   "floor": 0.02,
+   "shown": 133,
+   "right": 30,
+   "share": 0.2256
+  },
+  {
+   "floor": 0.03,
+   "shown": 113,
+   "right": 26,
+   "share": 0.2301
+  },
+  {
+   "floor": 0.05,
+   "shown": 80,
+   "right": 22,
+   "share": 0.275
+  },
+  {
+   "floor": 0.075,
+   "shown": 62,
+   "right": 19,
+   "share": 0.3065
+  },
+  {
+   "floor": 0.1,
+   "shown": 54,
+   "right": 17,
+   "share": 0.3148
+  },
+  {
+   "floor": 0.15,
+   "shown": 36,
+   "right": 12,
+   "share": 0.3333
+  },
+  {
+   "floor": 0.2,
+   "shown": 21,
+   "right": 7,
+   "share": 0.3333
+  },
+  {
+   "floor": 0.3,
+   "shown": 10,
+   "right": 4,
+   "share": 0.4
+  },
+  {
+   "floor": 0.5,
+   "shown": 4,
+   "right": 1,
+   "share": 0.25
+  }
+ ],
+ "test": "not read; the floor decides only what is displayed",
+ "history": "The documented-pair clause was added once, before this floor was chosen, after the first sweep dropped the vacuum question from a tumbler described without the word vacuum; the floor was then chosen again on validation under the amended rule. The test set was never read for it."
+}

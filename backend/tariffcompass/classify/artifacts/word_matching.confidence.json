@@ -10,14 +10,22 @@
   1.636159
  ],
  "intercept": -3.495434,
- "threshold": 0.7965,
+ "threshold": 1.01,
  "fitted_on": 463,
  "validation": {
-  "precision": 0.9149,
-  "coverage": 0.3045,
+  "rule": "lower_bound",
+  "precision": null,
+  "precisionLowerBound": 0.0,
+  "bestLowerBound": {
+   "lowerBound": 0.874,
+   "threshold": 0.7966,
+   "said": 131,
+   "right": 121
+  },
+  "coverage": 0.0,
   "ece": 0.0425,
   "rightRate": 0.581,
-  "wrongCaught": 0.9381
+  "wrongCaught": 1.0
  },
  "features": [
   "first_stage_p",

@@ -82,7 +82,7 @@ Most frequent confusions (gold chapter → predicted chapter): 73→83 (7), 90�
 
 ## Serving
 
-- p95 1.78 ms per description on this laptop (gate: < 150 ms); artefacts 8.6 MB (JSON vocabulary, sparse float16 weights, no pickles).
+- p95 1.78 ms per description, measured when the model was trained (gate: < 150 ms; `make eval` re-measures it on every run, see `eval/RESULTS.md`); artefacts 8.6 MB (JSON vocabulary, sparse float16 weights, no pickles).
 - Tracked in MLflow (local SQLite store, `mlruns/`, git-ignored); registered as `tariff-compass-first-stage`.
 
 ## Champion and challenger
@@ -98,6 +98,26 @@ go either way, as an LM's do, while clear calls never flip; and without an instr
 top-listed ruling under a neighbouring heading is cited as support in 30 of 100 answers, the commonest
 citation slip a hurried reader makes. Nothing in the noise reads a gold label. Details in ADR 0003.
 
+## The confidence word
+
+A logistic model over the answer's evidence (the first stage's probability and margin, the share of close
+rulings under the heading, agreeing citations, whether the deciding fact is stated, whether the closest
+ruling holds the line) gives the probability that the six-digit code is right; it is fitted on 463 validation rulings no training round used.
+
+Rule: Strong match starts at the lowest calibrated probability where, on the held-out validation rulings, the one-sided 95% Clopper-Pearson lower bound of the share of Strong answers right at six digits is at least 0.90 (and at least 10 answers say Strong). The earlier rule (point precision of at least 0.90 on validation) gave threshold
+0.7965, right 0.9149 of the time on validation but 0.8653 on the test set; that
+test reading is why the rule was replaced, so the replacement came after a look at the test set.
+
+Under the rule no threshold qualifies: the best lower bound on validation is 0.874 (121 right of 131).
+So word matching never says “Strong match”; every answer says “Needs a broker”. On the test set (one
+look, after the rule was fixed) it said “Needs a broker” 1094 times, and its first guess was wrong 564 of those times.
+The release gate for the word (right at least 90 in 100, and said at all) therefore fails; it is a
+known limitation, and the threshold was not loosened.
+
+## “Also possible”
+
+Offer a neighbouring heading as “Also possible” only when it and the answer are a documented pair with a deciding fact (the disputes CBP's rulings turn on, such as 9617 against 7323), or when the first stage gives it at least `floor` of probability and it has real support (it shares the answer's chapter, or one of the product's ten closest rulings is held under it). `floor` is the lowest value on the declared grid at which the alternatives shown on validation are the right heading at least 25% of the time (over at least 20 shown); none is shown if no value qualifies. Chosen on validation: floor 0.05, where 22 of 80 alternatives shown were the right heading. The test set was not read for it.
+
 ## How the test set was used
 
 Once, for the final measurement above. An earlier end-to-end run of the training command (a pipeline check
@@ -106,8 +126,9 @@ on validation) and every threshold were fixed in code beforehand, and the gates 
 both runs. After training, the input normalisation gained a Canadian/British-to-US spelling map
 (“aluminium” → “aluminum”); CBP's letters use US spelling, so the measured figures are unaffected. The
 program's training rounds and the evaluation read the test set again while the pipeline was being fixed;
-the last of those readings, after the final fixes, is the one reported in `eval/RESULTS.md` and was the
-final look.
+the last of those readings, after the final fixes, is the one reported in `eval/RESULTS.md`. After it, the
+confidence word's threshold rule was replaced (above): the new rule was fixed on validation and the test set
+was then read once more, for that word only. That further look is counted in `eval/RESULTS.md` too.
 
 ## Limits
 

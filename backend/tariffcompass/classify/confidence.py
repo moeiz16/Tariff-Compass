@@ -4,9 +4,14 @@ A Platt-scaled logistic model turns the answer's evidence into the probability t
 the first stage's probability for the chosen heading, its margin over the runner-up, whether the answer kept the
 first stage's top heading, the share of retrieved rulings under that heading, how many cited rulings support it,
 whether the deciding fact is stated for it (or against it, or only read), and whether the closest ruling under the
-heading holds the chosen line. It is fitted on validation rulings that no training round used, and the threshold
-is the lowest probability at which "Strong match" is right at least 90 times in 100 on those rulings. Everything
-below the threshold says "Needs a broker". The test set only reports how this holds up.
+heading holds the chosen line. It is fitted on validation rulings that no training round used.
+
+The threshold rule (THRESHOLD_RULE, declared before the test set is read): "Strong match" starts at the lowest
+probability where, on those validation rulings, the one-sided 95% Clopper-Pearson lower bound of the share of
+"Strong match" answers that are right is at least 0.90. A point estimate of 90 in 100 on a few hundred rulings
+is a coin toss on new rulings; the lower bound asks for 90 in 100 with room for sampling error. The earlier
+rule (point precision >= 0.90, "point") is kept so older rounds' thresholds can be reproduced. Everything below
+the threshold says "Needs a broker". The test set only reports how this holds up.
 """
 
 from __future__ import annotations
@@ -30,6 +35,9 @@ FEATURES = (
     "closest_ruling_holds_line",
 )
 TARGET_PRECISION = 0.90
+CONFIDENCE_LEVEL = 0.95  # one-sided, for the lower bound
+MIN_STRONG = 10  # never set a threshold on fewer than ten "Strong match" answers
+THRESHOLD_RULE = "lower_bound"  # or "point" (the rule rounds 4 to 7 were fitted with)
 
 
 def features(e: dict, heading: str, code: str, cited: list[dict], support_ids: list[str], product: str) -> list[float]:
@@ -95,7 +103,50 @@ def ece(p: np.ndarray, y: np.ndarray, bins: int = 10) -> float:
     return round(float(total), 4)
 
 
-def fit(x: list[list[float]], y: list[bool], target: float = TARGET_PRECISION) -> Calibrator:
+def precision_lower_bound(right: int, said: int, level: float = CONFIDENCE_LEVEL) -> float:
+    """One-sided Clopper-Pearson lower bound of a precision of right/said at the given confidence level."""
+    from scipy.stats import beta
+
+    if said <= 0 or right <= 0:
+        return 0.0
+    return float(beta.ppf(1.0 - level, right, said - right + 1))
+
+
+def choose_threshold(
+    p: np.ndarray, y: np.ndarray, target: float = TARGET_PRECISION, rule: str = THRESHOLD_RULE
+) -> float:
+    """The lowest probability that meets the rule on these (validation) rulings; 1.01 (never Strong) if none does."""
+    for t in sorted(set(np.round(p, 4).tolist())):
+        m = p >= t
+        said = int(m.sum())
+        if said < MIN_STRONG:
+            continue
+        right = int(y[m].sum())
+        ok = precision_lower_bound(right, said) >= target if rule == "lower_bound" else right / said >= target
+        if ok:
+            return float(t)
+    return 1.01
+
+
+def best_lower_bound(p: np.ndarray, y: np.ndarray) -> dict:
+    """The highest lower bound any threshold reaches on these rulings, and where: how close the rule came."""
+    best: dict = {"lowerBound": 0.0, "threshold": None, "said": 0, "right": 0}
+    top = 0.0
+    for t in sorted(set(np.round(p, 4).tolist())):
+        m = p >= t
+        said, right = int(m.sum()), int(y[m].sum())
+        if said < MIN_STRONG:
+            break
+        lb = precision_lower_bound(right, said)
+        if lb > top:
+            top = lb
+            best = {"lowerBound": round(lb, 4), "threshold": float(t), "said": said, "right": right}
+    return best
+
+
+def fit(
+    x: list[list[float]], y: list[bool], target: float = TARGET_PRECISION, rule: str = THRESHOLD_RULE
+) -> Calibrator:
     from sklearn.linear_model import LogisticRegression
 
     X, Y = np.asarray(x, dtype=float), np.asarray(y, dtype=int)  # noqa: N806
@@ -103,15 +154,13 @@ def fit(x: list[list[float]], y: list[bool], target: float = TARGET_PRECISION) -
         return Calibrator([0.0] * len(FEATURES), 0.0, 1.01, len(Y), {"note": "one class only"})
     lr = LogisticRegression(C=1.0, max_iter=1000).fit(X, Y)
     p = lr.predict_proba(X)[:, 1]
-    threshold = 1.01
-    for t in sorted(set(np.round(p, 4).tolist())):
-        m = p >= t
-        if m.sum() >= 10 and Y[m].mean() >= target:
-            threshold = float(t)
-            break
+    threshold = choose_threshold(p, Y, target, rule)
     m = p >= threshold
     val = {
+        "rule": rule,
         "precision": round(float(Y[m].mean()), 4) if m.any() else None,
+        "precisionLowerBound": round(precision_lower_bound(int(Y[m].sum()), int(m.sum())), 4),
+        "bestLowerBound": best_lower_bound(p, Y),
         "coverage": round(float(m.mean()), 4),
         "ece": ece(p, Y),
         "rightRate": round(float(Y.mean()), 4),
