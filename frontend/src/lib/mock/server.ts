@@ -207,7 +207,7 @@ const routes: [string, RegExp, Handler][] = [
       ancestors: heading && heading !== line ? [heading] : [],
       children: TARIFF_LINES.filter((l) => l.digits.startsWith(digits) && l.digits !== digits),
       notes: digits.startsWith("9617") ? ["Section XV, Note 1(l): this section does not cover articles of Section XX."] : [],
-      editionLabel: m[1] === "US" ? "HTSUS 2026 Revision 3 (in force 12–25 Feb 2026)" : "Customs Tariff T2026 (from 1 Jan 2026)",
+      editionLabel: m[1] === "US" ? "HTSUS 2026 Revision 3 (in force from 12 Feb 2026)" : "Customs Tariff T2026 (from 1 Jan 2026)",
     });
   }],
   ["GET", /^\/products$/, (_m, q) => {

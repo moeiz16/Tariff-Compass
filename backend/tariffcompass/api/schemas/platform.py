@@ -11,7 +11,7 @@ from tariffcompass.core.wire import Wire
 
 class SnapshotOut(Wire):
     us_hts: str  # "HTSUS 2026 Revision 3"
-    us_hts_in_force: tuple[date, date]  # (2026-02-12, 2026-02-25)
+    us_hts_in_force: tuple[date, date | None]  # (2026-02-12, None): no end date was published on the demo day
     ca_tariff: str  # "Customs Tariff T2026"
     ca_tariff_from: date
     duty_layers_as_of: date

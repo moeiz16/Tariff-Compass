@@ -141,7 +141,7 @@ export interface EngagementOut {
 /* ---------- meta / home ---------- */
 export interface SnapshotOut {
   usHts: string;
-  usHtsInForce: [string, string];
+  usHtsInForce: [string, string | null]; // no end date was published on the demo day
   caTariff: string;
   caTariffFrom: string;
   dutyLayersAsOf: string;

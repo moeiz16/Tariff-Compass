@@ -1,7 +1,7 @@
 {
  "asOf": "2026-02-19",
  "scope": "US and Canadian import duty layers for China, Vietnam, Mexico and EU origins; outdoor gear, small electronics, apparel ch.61/62, kitchenware 9617/7323/7615/3924, bags 4202",
- "usHtsEditionInForce": "2026 HTSUS Revision 3 (in force 2026-02-12 to 2026-02-25)",
+ "usHtsEditionInForce": "2026 HTSUS Revision 3 (in force from 2026-02-12)",
  "caTariffInForce": "Customs Tariff T2026 (January 1, 2026 departmental consolidation)",
  "layers": [
   {
@@ -9,7 +9,7 @@
    "country": "US",
    "kind": "base",
    "name": "Normal (column 1 General) duty from the HTSUS",
-   "legalAuthority": "HTSUS 2026 edition; Revision 3 was the edition in force on 2026-02-19 (in force 2026-02-12 to 2026-02-25)",
+   "legalAuthority": "HTSUS 2026 edition; Revision 3 was the edition in force on 2026-02-19 (in force from 2026-02-12)",
    "chapter99": null,
    "rate": "Per 8/10-digit line, ad valorem on customs (transaction) value. Sample lines: 9617.00.10 7.2%; 8512.10.20 Free; 8512.10.40 2.7%; 6110.20.20 16.5%; 7323.93.00 2%; 7615.10.xx 3.1%; 3924.10.40 3.4%; 8507.60.00 3.4%; 8504.40.xx Free; 8518.22.00 Free; 4202.92.31 17.6%.",
    "scope": "All origins. Column 1 Special rates apply for FTA/GSP claims (e.g. MX via USMCA 'S/S+').",

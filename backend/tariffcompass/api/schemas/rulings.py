@@ -87,7 +87,7 @@ class TariffOutline(Wire):
     ancestors: list[TariffLineOut]
     children: list[TariffLineOut]
     notes: list[str]  # section and chapter notes that bear on this line
-    edition_label: str  # "HTSUS 2026 Revision 3 (in force 12–25 Feb 2026)" | "Customs Tariff T2026 (from 1 Jan 2026)"
+    edition_label: str  # "HTSUS 2026 Revision 3 (in force from 12 Feb 2026)" | "Customs Tariff T2026 (from 1 Jan 2026)"
 
 
 class ChapterTile(Wire):

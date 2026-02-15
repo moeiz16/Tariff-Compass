@@ -131,7 +131,7 @@ export const META: Omit<MetaOut, "clock"> = {
   version: "0.1.0",
   snapshot: {
     usHts: "HTSUS 2026 Revision 3",
-    usHtsInForce: ["2026-02-12", "2026-02-25"],
+    usHtsInForce: ["2026-02-12", null],
     caTariff: "Customs Tariff T2026",
     caTariffFrom: "2026-01-01",
     dutyLayersAsOf: "2026-02-19",

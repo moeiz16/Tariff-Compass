@@ -19,7 +19,7 @@ router = WireRouter()
 SNAPSHOT_DATE = date(2026, 2, 19)
 SNAPSHOT: dict[str, object] = {
     "us_hts": "HTSUS 2026 Revision 3",
-    "us_hts_in_force": (date(2026, 2, 12), date(2026, 2, 25)),
+    "us_hts_in_force": (date(2026, 2, 12), None),  # its end date wasn't published on the demo day
     "ca_tariff": "Customs Tariff T2026",
     "ca_tariff_from": date(2026, 1, 1),
     "duty_layers_as_of": SNAPSHOT_DATE,
