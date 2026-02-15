@@ -38,6 +38,8 @@ jobs:
         run: |
           cd .. && python -m ruff check backend scripts && python -m ruff format --check backend scripts
           if [ -d eval ]; then python -m ruff check eval && python -m ruff format --check eval; fi
+      - name: Type check
+        run: python -m mypy tariffcompass
       - name: Migrations apply cleanly and match the models
         env:
           DATABASE_URL: sqlite:///data/ci.db
@@ -56,10 +58,20 @@ jobs:
           TARIFF_COMPASS_DEMO_TODAY: "2026-02-19"
         run: |
           python manage.py migrate -v0
-          if grep -q "not implemented yet" tariffcompass/seed/management/commands/seed.py; then echo "seed not implemented yet"; else python manage.py seed; fi
-      - name: Evaluation gates
-        run: |
-          if [ -f ../eval/run.py ]; then python ../eval/run.py; else echo "eval harness not implemented yet"; fi
+          python manage.py seed
+      # Release gates (what is in use) fail the build; promotion checks (may a challenger round go live?) are
+      # reported in the report and never fail it. See eval/gates.toml.
+      - name: Evaluation (release gates)
+        run: python ../eval/run.py
+      - name: Upload the evaluation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-report
+          path: |
+            eval/RESULTS.md
+            eval/report.json
+          if-no-files-found: warn
 
   frontend:
     name: Web app
@@ -76,5 +88,6 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci --no-audit --no-fund
       - run: npm run check
+      - run: npm run lint
       - run: npm test
       - run: npm run build
