@@ -20,10 +20,11 @@ when these numbers were produced, so there is no live-LM table yet.
 
 Ten-digit accuracy counts the 1064 test rulings whose letter holds a ten-digit code; the other depths count all 1094.
 
-**Reading this table.** With the offline simulator, the optimised program beats the unoptimised one at every
-depth but does not beat word matching: its rule-following heading step is slightly worse than trusting the
-first stage's top heading, and word matching's nearest-ruling line is a strong ten-digit baseline. The gates
-below report that as failures; the thresholds were not changed.
+**Reading this table.** With the offline simulator, the optimised program beats the unoptimised one at
+six and ten digits but does not beat word matching: its rule-following heading step is slightly worse than
+trusting the first stage's top heading, and word matching's nearest-ruling line is a strong ten-digit
+baseline. So the round's promotion checks are not met and it is not promoted: word matching stays in use. That
+is the champion/challenger rule working, not a failed build; the thresholds were not changed.
 
 **How the test set was used.** While the pipeline was being fixed the rounds were run several times and each
 run printed its test figures. The fixes came from the training logs, the saved instructions, the validation
@@ -31,8 +32,10 @@ window and the sample catalogue (never from the test set): module-specific refle
 score, the first stage's probability as a prior, outright exclusion by a section note, tariff-text search by
 the article's words, a calibrated confidence word with its threshold chosen on validation, section and chapter
 notes as data, tariff lines that contradict a stated fact ruled out, and a calibrated word per depth. After the
-last of those fixes the test set was measured once more, for these tables; that was the final look. No gate
-or threshold was changed. A fresh test window (rulings after August 2025) is the clean check.
+last of those fixes the test set was measured once more, for these tables. No gate or threshold was changed.
+After that look the in-use confidence word's threshold rule was replaced (see below); the new rule was fixed
+on validation and the test set was then read once more, for that word only. That is one further look, and it
+is counted here. A fresh test window (rulings after August 2025) is the clean check.
 
 **What is in use.** A round answers only after it passes all five checks and two people sign it live. While
 none qualifies, word matching (the classical first stage, calibrated) answers in the product and the program
@@ -59,10 +62,29 @@ Shipped: linear svm (pruned, temperature-calibrated); chosen by highest validati
 
 Calibration: temperature scaling on validation (Platt-style, one parameter); ECE on validation 0.7154 → 0.0939; on the test set 0.0977.
 
-## Confidence and citations (optimised program)
+## The confidence word in use (word matching)
+
+**Rule, declared before the test set was read for it:** Strong match starts at the lowest calibrated probability where, on the held-out validation rulings, the one-sided 95% Clopper-Pearson lower bound of the share of Strong answers right at six digits is at least 0.90 (and at least 10 answers say Strong).
+
+| Rule | Threshold | Validation: right when Strong | lower bound | coverage | Test: right when Strong | coverage |
+|---|---|---|---|---|---|---|
+| earlier: point estimate ≥ 0.90 | 0.7965 | 0.9149 | – | 0.3045 | 0.8653 | 0.1764 |
+| in use: 95% lower bound ≥ 0.90 | none reaches it | – | – | 0.0 | – | 0.0 |
+
+Fitted on 463 validation rulings no training round used (rebuilt from round 7's seed and checked against its snapshot hash; the earlier rule reproduces the earlier threshold exactly).
+
+The best any threshold reaches on validation is a lower bound of 0.874 (121 right of 131 Strong answers), short of 0.90. So under the rule word matching never says “Strong match”: every answer it gives says “Needs a broker”, and the release gate for the word fails because a word that is never said proves nothing. That is a known limitation, not a threshold to loosen.
+
+On the test set (one look, after the rule was fixed): “Strong match” said 0 times, “Needs a broker” 1094 times; the first guess was wrong in 564 of those.
+
+Word matching's citations: 3282 of 3282 supporting citations share the answer's heading (1.0); revoked rulings cited as support: 0.
+
+## Confidence and citations (round 7, a challenger)
 
 The confidence word is calibrated (Platt-scaled logistic model over the answer's evidence; threshold for 90 in 100 on validation), fitted on 463 validation
 rulings that no training round used; the threshold is chosen there and only measured on the test set.
+The thresholds below are the ones fitted when the round ran, under the earlier point-estimate rule; the
+word in use now follows the lower-bound rule above, and the next round is fitted with it.
 
 | System | Threshold | Validation: right when Strong | coverage | Test: right when Strong | coverage | Wrong answers sent to a broker (test) | ECE (test) |
 |---|---|---|---|---|---|---|---|
@@ -86,11 +108,17 @@ the per-depth word is measured here and switched off (`classify.program.HEADING_
 | Program, GEPA-optimised | heading | 0.7464 | 0.9006 | 0.6955 | 0.8689 | 0.5229 |
 | Program, GEPA-optimised | six digits | 0.8235 | 0.9085 | 0.3067 | 0.875 | 0.1755 |
 
-## Phrasing robustness (the three public samples, paraphrases written before any result)
+## Phrasing robustness (the public samples, paraphrases written before any result)
 
 - tumbler: 3 of 6 paraphrases land on the expected heading.
-- bike-light: 0 of 5 paraphrases land on the expected heading.
+- bike-light: 0 of 5 paraphrases land on the expected heading (a former public sample, replaced because word matching gets its heading wrong).
+- sleeping-bag: 5 of 5 paraphrases land on the expected heading.
 - pullover: 4 of 5 paraphrases land on the expected heading.
+
+Known limitation: a tumbler described as “vacuum sealed” or with “vacuum insulation” (rather than
+“vacuum insulated” or “vacuum between the walls”) lands on 7323 with “Needs a broker”: the deciding-fact
+reader doesn't take those phrasings as stating the vacuum. A broker's answer to the deciding question
+settles it; the classifier was not tuned on these paraphrases.
 
 
 ## Landed cost, drift and latency
@@ -98,25 +126,41 @@ the per-depth word is measured here and switched off (`classify.program.HEADING_
 - Landed cost: 20 of 20 hand-checked products exact to the cent (`eval/sets/landed_cost_20.json`).
 - Chapter-mix PSI, training vs the newest rulings: 0.3405 (large shift).
 - Simulated tariff revision: 5 changes; flagged LC01, LC02, LC03, LC13, LC14, LC15 (expected LC01, LC02, LC03, LC13, LC14, LC15).
-- First stage p95: 0.69 ms. Full answer p95 offline (none (word matching)): 86.49 ms, after a first answer that opens the indexes (101.6 ms).
+- Live measurements (latency, phrasing) ran over the full corpus (18520 rulings).
+- First stage p95: 0.67 ms. Full answer p95 offline (none (word matching)): 56.19 ms, after a first answer that opens the indexes (41.8 ms).
 
-## Gates (`eval/gates.toml`)
+## Release gates (`eval/gates.toml` [release]): what is in use
+
+These decide whether the build ships: `make eval` exits non-zero, and CI fails, if any of them fails.
 
 | Gate | Value | Threshold | Result |
 |---|---|---|---|
-| Optimised program beats word matching at heading | 0.6362 | 0.6536 | **fail** |
-| Optimised program beats word matching at full_code | 0.2481 | 0.3609 | **fail** |
-| Optimised program beats the unoptimised program at heading | 0.6362 | 0.6362 | **fail** |
-| Optimised program beats the unoptimised program at full_code | 0.2481 | 0.1429 | pass |
 | First stage: right heading in its top 5 | 0.8327 | 0.8 | pass |
 | First stage: right chapter in its top 3 | 0.9177 | 0.9 | pass |
-| “Strong match” right (six digits) | 0.875 | 0.9 | **fail** |
-| “Needs a broker” caught a wrong first guess | 0.6752 | 0.25 | pass |
-| Cited rulings share the answer's heading | 0.9975 | 0.95 | pass |
-| Revoked rulings cited as support | 0 | 0 | pass |
+| In use: “Strong match” right (six digits) | never said (0 of 1094) | 0.9 | **fail** |
+| In use: “Needs a broker” caught a wrong first guess | 0.5155 | 0.25 | pass |
+| In use: cited rulings share the answer's heading | 1.0 | 0.95 | pass |
+| In use: revoked rulings cited as support | 0 | 0 | pass |
 | Landed cost exact on the hand-checked set | 20/20 | 1.0 | pass |
 | A simulated tariff revision flags every affected product (and only those) | 6/6 | True | pass |
 | Chapter-mix drift (PSI) reported | 0.3405 | reported | pass |
-| First stage p95 (ms) | 0.69 | 150 | pass |
-| Full answer p95 with the offline simulator (ms) | 86.49 | 1000 | pass |
+| First stage p95 (ms) | 0.67 | 150 | pass |
+| Full answer p95 offline (ms) | 56.19 | 1000 | pass |
+
+Release gates: **not all pass**.
+
+## Promotion checks (`eval/gates.toml` [promotion]): may round 7 replace word matching?
+
+A round answers in the product only after it meets every check here and two people sign it live in the Lab.
+Not meeting one means the round is not promoted; it is reported here and in the Lab, and is not a build failure.
+
+| Check | Round | Against | Result |
+|---|---|---|---|
+| Round 7 beats word matching at heading | 0.6362 | 0.6536 | not met |
+| Round 7 beats word matching at full code | 0.2481 | 0.3609 | not met |
+| Round 7 beats the unoptimised program at heading | 0.6362 | 0.6362 | not met |
+| Round 7 beats the unoptimised program at full code | 0.2481 | 0.1429 | met |
+| Round 7's “Strong match” right (six digits) | 0.875 | 0.9 | not met |
+
+Round 7: **not promoted; word matching stays in use**.
 

@@ -97,6 +97,93 @@
   "precision": 0.9975,
   "revokedAsSupport": 0
  },
+ "inUseCitations": {
+  "support": 3282,
+  "sameHeading": 3282,
+  "precision": 1.0,
+  "revokedAsSupport": 0
+ },
+ "inUseConfidence": {
+  "system": "word matching (in use)",
+  "rule": "lower_bound",
+  "ruleText": "Strong match starts at the lowest calibrated probability where, on the held-out validation rulings, the one-sided 95% Clopper-Pearson lower bound of the share of Strong answers right at six digits is at least 0.90 (and at least 10 answers say Strong).",
+  "fittedFrom": {
+   "round": 7,
+   "seed": 7,
+   "trainN": 400,
+   "valN": 200,
+   "heldOut": 463
+  },
+  "reproduced": {
+   "threshold": 0.7965,
+   "coefficients": true
+  },
+  "previousWord": {
+   "coef": [
+    0.875038,
+    1.19814,
+    -0.000137,
+    1.152678,
+    -0.00041,
+    -0.841617,
+    0.0,
+    1.636159
+   ],
+   "intercept": -3.495434,
+   "threshold": 0.7965
+  },
+  "threshold": 1.01,
+  "validation": {
+   "rule": "lower_bound",
+   "precision": null,
+   "precisionLowerBound": 0.0,
+   "bestLowerBound": {
+    "lowerBound": 0.874,
+    "threshold": 0.7966,
+    "said": 131,
+    "right": 121
+   },
+   "coverage": 0.0,
+   "ece": 0.0425,
+   "rightRate": 0.581,
+   "wrongCaught": 1.0
+  },
+  "previous": {
+   "rule": "point",
+   "threshold": 0.7965,
+   "validation": {
+    "precision": 0.9149,
+    "coverage": 0.3045,
+    "ece": 0.0425,
+    "rightRate": 0.581,
+    "wrongCaught": 0.9381
+   },
+   "test": {
+    "n": 1094,
+    "strongSaid": 193,
+    "strongRight": 167,
+    "precision": 0.8653,
+    "coverage": 0.1764,
+    "brokerSaid": 901,
+    "brokerFirstGuessWrong": 538,
+    "wrongCaught": 0.9539,
+    "ece": 0.0359
+   }
+  },
+  "test": {
+   "n": 1094,
+   "strongSaid": 0,
+   "strongRight": 0,
+   "precision": null,
+   "coverage": 0.0,
+   "brokerSaid": 1094,
+   "brokerFirstGuessWrong": 564,
+   "wrongCaught": 1.0,
+   "ece": 0.0359
+  },
+  "testLook": "One further look at the test set, made after this rule and its threshold were fixed on validation. The test set had already been read many times while the pipeline was being fixed (eval/RESULTS.md); the earlier word's 87 in 100 came from one of those readings, so this rule was adopted after that look."
+ },
+ "corpus": "full corpus (18520 rulings)",
  "landedCost": {
   "n": 20,
   "exact": 20,
@@ -360,9 +447,9 @@
   }
  },
  "latency": {
-  "firstStageP95": 0.69,
-  "answerP95": 86.49,
-  "coldStartMs": 101.6,
+  "firstStageP95": 0.67,
+  "answerP95": 56.19,
+  "coldStartMs": 41.8,
   "firstStage": "first-stage-svm-db8403dc-k4800",
   "program": "program-5m-1:word-matching",
   "lm": "none (word matching)",
@@ -377,6 +464,10 @@
    },
    "bike-light": {
     "right": 0,
+    "n": 5
+   },
+   "sleeping-bag": {
+    "right": 5,
     "n": 5
    },
    "pullover": {
@@ -474,6 +565,46 @@
     "rightHeading": false
    },
    {
+    "sample": "sleeping-bag",
+    "text": "Down sleeping bag, -10 \u00b0C: nylon shell, duck down, 650 fill, mummy cut.",
+    "code": "9404304000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "sleeping-bag",
+    "text": "Mummy sleeping bag filled with duck down, nylon outer, rated to -10 C",
+    "code": "9404304000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "sleeping-bag",
+    "text": "Down-filled sleeping bag for backpacking, 650 fill power, nylon ripstop shell",
+    "code": "9404304000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "sleeping-bag",
+    "text": "Winter sleeping bag, goose and duck down insulation, mummy shape",
+    "code": "9404304000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
+    "sample": "sleeping-bag",
+    "text": "Camping sleeping bag with down fill and a nylon shell, three-season",
+    "code": "9404304000",
+    "verdict": "broker",
+    "byDepth": {},
+    "rightHeading": true
+   },
+   {
     "sample": "pullover",
     "text": "Women's crew-neck pullover, knitted, 100% cotton, ribbed cuffs and hem.",
     "code": "6110202020",
@@ -501,7 +632,7 @@
     "sample": "pullover",
     "text": "Cotton pullover sweater for women, fine-gauge knit",
     "code": "6110202020",
-    "verdict": "strong",
+    "verdict": "broker",
     "byDepth": {},
     "rightHeading": true
    },
@@ -518,109 +649,133 @@
  "gates": [
   {
    "key": "beats_word_matching_heading",
-   "label": "Optimised program beats word matching at heading",
+   "label": "Round 7 beats word matching at heading",
    "value": 0.6362,
    "threshold": 0.6536,
-   "passed": false
+   "passed": false,
+   "kind": "promotion"
   },
   {
    "key": "beats_word_matching_full_code",
-   "label": "Optimised program beats word matching at full_code",
+   "label": "Round 7 beats word matching at full code",
    "value": 0.2481,
    "threshold": 0.3609,
-   "passed": false
+   "passed": false,
+   "kind": "promotion"
   },
   {
    "key": "beats_unoptimised_heading",
-   "label": "Optimised program beats the unoptimised program at heading",
+   "label": "Round 7 beats the unoptimised program at heading",
    "value": 0.6362,
    "threshold": 0.6362,
-   "passed": false
+   "passed": false,
+   "kind": "promotion"
   },
   {
    "key": "beats_unoptimised_full_code",
-   "label": "Optimised program beats the unoptimised program at full_code",
+   "label": "Round 7 beats the unoptimised program at full code",
    "value": 0.2481,
    "threshold": 0.1429,
-   "passed": true
+   "passed": true,
+   "kind": "promotion"
+  },
+  {
+   "key": "challenger_strong_right",
+   "label": "Round 7's \u201cStrong match\u201d right (six digits)",
+   "value": 0.875,
+   "threshold": 0.9,
+   "passed": false,
+   "kind": "promotion"
   },
   {
    "key": "first_stage_top5_heading",
    "label": "First stage: right heading in its top 5",
    "value": 0.8327,
    "threshold": 0.8,
-   "passed": true
+   "passed": true,
+   "kind": "release"
   },
   {
    "key": "first_stage_top3_chapter",
    "label": "First stage: right chapter in its top 3",
    "value": 0.9177,
    "threshold": 0.9,
-   "passed": true
+   "passed": true,
+   "kind": "release"
   },
   {
    "key": "strong_right",
-   "label": "\u201cStrong match\u201d right (six digits)",
-   "value": 0.875,
+   "label": "In use: \u201cStrong match\u201d right (six digits)",
+   "value": "never said (0 of 1094)",
    "threshold": 0.9,
-   "passed": false
+   "passed": false,
+   "kind": "release"
   },
   {
    "key": "broker_catches_wrong",
-   "label": "\u201cNeeds a broker\u201d caught a wrong first guess",
-   "value": 0.6752,
+   "label": "In use: \u201cNeeds a broker\u201d caught a wrong first guess",
+   "value": 0.5155,
    "threshold": 0.25,
-   "passed": true
+   "passed": true,
+   "kind": "release"
   },
   {
    "key": "citation_precision",
-   "label": "Cited rulings share the answer's heading",
-   "value": 0.9975,
+   "label": "In use: cited rulings share the answer's heading",
+   "value": 1.0,
    "threshold": 0.95,
-   "passed": true
+   "passed": true,
+   "kind": "release"
   },
   {
    "key": "revoked_as_support",
-   "label": "Revoked rulings cited as support",
+   "label": "In use: revoked rulings cited as support",
    "value": 0,
    "threshold": 0,
-   "passed": true
+   "passed": true,
+   "kind": "release"
   },
   {
    "key": "landed_cost",
    "label": "Landed cost exact on the hand-checked set",
    "value": "20/20",
    "threshold": 1.0,
-   "passed": true
+   "passed": true,
+   "kind": "release"
   },
   {
    "key": "simulated_revision",
    "label": "A simulated tariff revision flags every affected product (and only those)",
    "value": "6/6",
    "threshold": true,
-   "passed": true
+   "passed": true,
+   "kind": "release"
   },
   {
    "key": "psi_reported",
    "label": "Chapter-mix drift (PSI) reported",
    "value": 0.3405,
    "threshold": "reported",
-   "passed": true
+   "passed": true,
+   "kind": "release"
   },
   {
    "key": "first_stage_p95",
    "label": "First stage p95 (ms)",
-   "value": 0.69,
+   "value": 0.67,
    "threshold": 150,
-   "passed": true
+   "passed": true,
+   "kind": "release"
   },
   {
    "key": "answer_p95_offline",
-   "label": "Full answer p95 with the offline simulator (ms)",
-   "value": 86.49,
+   "label": "Full answer p95 offline (ms)",
+   "value": 56.19,
    "threshold": 1000,
-   "passed": true
+   "passed": true,
+   "kind": "release"
   }
  ],
- "passed": false
+ "releasePassed": false,
+ "promoted": false
 }

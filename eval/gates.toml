@@ -1,30 +1,44 @@
 # Evaluation gates (docs/adr/0006). `eval/run.py` reads these, measures each on the held-out (newest) rulings or
-# the named set, writes eval/RESULTS.md and exits non-zero if any gate fails. Thresholds apply to the offline
-# simulator runs in CI; live-LM runs are reported in their own table with the same thresholds shown for reference.
+# the named set and writes eval/RESULTS.md and eval/report.json. Thresholds apply to the offline simulator runs in
+# CI; live-LM runs are reported in their own table with the same thresholds shown for reference. No threshold here
+# was changed when the gates were split into the two kinds below.
+#
+# Two kinds of check, and only one of them can fail a build:
+# - [release]: what is in use answers well enough to ship (the first stage, the in-use confidence word, citations,
+#   landed cost, drift detection, latency). `make eval` exits non-zero when any release gate fails, and CI fails.
+# - [promotion]: whether a challenger training round may replace what is in use. Failing one means "not
+#   promoted": the round stays a challenger and the Lab shows why. That is the system working, so it is reported
+#   in the Lab and in RESULTS.md, never a build failure.
 
-[accuracy]
+[promotion]
 # The optimised program must beat word matching and the unoptimised program at the heading and full code.
 optimised_beats_word_matching = ["heading", "full_code"]
 optimised_beats_unoptimised = ["heading", "full_code"]
-first_stage_top5_heading_min = 0.80     # the right heading is among the first stage's top 5
-first_stage_top3_chapter_min = 0.90
+challenger_strong_match_right_min = 0.90    # the challenger's own "Strong match", right at least 90 times in 100
 
-[calibration]
-strong_match_right_min = 0.90           # when it says "Strong match", right at least 90 times in 100
-broker_catches_wrong_min = 0.25         # when it says "Needs a broker", its first guess was wrong at least 25 in 100
+[release.first_stage]
+top5_heading_min = 0.80                     # the right heading is among the first stage's top 5
+top3_chapter_min = 0.90
 
-[citations]
-precision_min = 0.95                    # cited rulings share the answer's heading (contrast citations excluded)
-revoked_as_support_max = 0              # never cite a revoked ruling as support
+[release.confidence]
+# The confidence word of the system in use (word matching until a round is signed live), measured on the test set.
+# Its threshold follows the rule in classify/confidence.py (THRESHOLD_RULE), fixed on validation only.
+strong_match_right_min = 0.90               # when it says "Strong match", right at six digits at least 90 times in 100
+strong_match_said_min = 1                   # and it says "Strong match" at all (a word never said proves nothing)
+broker_catches_wrong_min = 0.25             # when it says "Needs a broker", its first guess was wrong at least 25 in 100
 
-[landed_cost]
+[release.citations]
+precision_min = 0.95                        # cited rulings share the answer's heading (contrast citations excluded)
+revoked_as_support_max = 0                  # never cite a revoked ruling as support
+
+[release.landed_cost]
 hand_checked_set = "eval/sets/landed_cost_20.json"
-exact_match_min = 1.0                   # all 20 to the cent
+exact_match_min = 1.0                       # all 20 to the cent
 
-[drift]
-simulated_revision_detected = true      # a simulated HTS revision flags every affected product
+[release.drift]
+simulated_revision_detected = true          # a simulated HTS revision flags every affected product
 psi_reported = true
 
-[latency]
+[release.latency]
 first_stage_p95_ms_max = 150
 answer_p95_ms_max_offline = 1000
