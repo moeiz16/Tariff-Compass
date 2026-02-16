@@ -34,10 +34,12 @@ def _limit(bucket: str) -> int:
 
 
 def _who(request: HttpRequest) -> str:
+    from tariffcompass.platform.context import client_ip
+
     ctx = getattr(request, "ctx", None)
     if ctx is not None:
         return f"u:{ctx.user.pk}"
-    return f"ip:{request.META.get('REMOTE_ADDR', '')}"
+    return f"ip:{client_ip(request)}"
 
 
 def hit(request: HttpRequest, bucket: str) -> None:

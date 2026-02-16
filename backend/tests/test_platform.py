@@ -42,3 +42,15 @@ def test_chains_are_per_organisation():
     first_b = audit.record(b, "x", "first in B")
     assert first_a.prev_hash == first_b.prev_hash == audit.GENESIS
     assert len(audit.fingerprint(first_a.hash)) == 14
+
+
+def test_client_ip_trusts_the_forwarded_address_only_from_the_local_proxy():
+    from django.test import RequestFactory
+
+    from tariffcompass.platform.context import client_ip
+
+    rf = RequestFactory()
+    via_proxy = rf.get("/", REMOTE_ADDR="127.0.0.1", HTTP_X_FORWARDED_FOR="203.0.113.7")
+    direct = rf.get("/", REMOTE_ADDR="198.51.100.4", HTTP_X_FORWARDED_FOR="203.0.113.7")
+    assert client_ip(via_proxy) == "203.0.113.7" and client_ip(direct) == "198.51.100.4"
+    assert client_ip(rf.get("/", REMOTE_ADDR="127.0.0.1")) == "127.0.0.1"

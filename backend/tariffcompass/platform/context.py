@@ -82,8 +82,18 @@ class Ctx:
         )
 
 
+_LOOPBACK = {"127.0.0.1", "::1"}
+
+
 def client_ip(request: HttpRequest) -> str:
-    return str(request.META.get("REMOTE_ADDR", ""))[:64]
+    """The visitor's address. Behind the web app's same-origin proxy every request arrives from loopback, so the
+    proxy's X-Forwarded-For (which it sets from the socket, replacing anything the browser sent) is used then, and
+    only then: a client talking to the API directly can't choose its own address."""
+    remote = str(request.META.get("REMOTE_ADDR", ""))
+    forwarded = str(request.META.get("HTTP_X_FORWARDED_FOR", ""))
+    if remote in _LOOPBACK and forwarded:
+        remote = forwarded.split(",")[-1].strip() or remote
+    return remote[:64]
 
 
 def _no_view(request: HttpRequest) -> Any:
