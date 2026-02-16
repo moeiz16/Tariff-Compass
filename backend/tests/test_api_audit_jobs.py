@@ -105,3 +105,15 @@ def test_job_sse_streams_done(world):
     body = b"".join(res).decode()
     assert "event: done" in body and '"fileName": "x.pdf"' in body and "id: 1" in body
     assert world.api("outsider").get(f"jobs/{job.pk}/events").status_code == 404
+
+
+def test_verify_detects_a_rewritten_role_or_address(world):
+    for i in range(2):
+        audit.record(world.north, "x.y", f"event {i}", actor_role="importer", ip="10.0.0.1")
+    api = world.api("compliance")
+    assert api.get("audit/verify").json()["ok"]
+    first = AuditEvent.objects.filter(org=world.north).order_by("id").first()
+    AuditEvent.objects.filter(pk=first.pk).update(actor_role="admin")
+    assert api.get("audit/verify").json()["brokenAt"] == first.pk
+    AuditEvent.objects.filter(pk=first.pk).update(actor_role="importer", ip="10.0.0.2")
+    assert api.get("audit/verify").json()["brokenAt"] == first.pk

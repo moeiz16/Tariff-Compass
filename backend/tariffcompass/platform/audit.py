@@ -1,8 +1,9 @@
 """The activity record: an append-only SHA-256 hash chain per organisation.
 
-Each event's hash covers the previous event's hash and the event's own canonical content, so editing or
-deleting any past entry breaks every hash after it. `verify(org)` re-computes the chain; the binder export
-and Settings › Activity show the result ("Chain verified 19 Feb, 10:30") and an event's short fingerprint.
+Each event's hash covers the previous event's hash and the event's own canonical content (who, in which role,
+from where, what, when), so editing or deleting any past entry breaks every hash after it. `verify(org)`
+re-computes the chain; the binder export and Settings › Activity show the result ("Chain verified 19 Feb, 10:30")
+and an event's short fingerprint.
 """
 
 from __future__ import annotations
@@ -26,6 +27,8 @@ def _canonical(event: AuditEvent) -> str:
         "org": str(event.org_id) if event.org_id else None,
         "actor": str(event.actor_id) if event.actor_id else None,
         "actorName": event.actor_name,
+        "actorRole": event.actor_role,
+        "ip": event.ip,
         "action": event.action,
         "targetType": event.target_type,
         "targetId": event.target_id,
