@@ -30,6 +30,11 @@ the product will face, so the evaluation must respect time.
    - drift: chapter-mix PSI between training and the newest rulings, and detection of a simulated tariff revision;
    - latency: first stage p95 < 150 ms; full answer < 1 s offline.
 5. **Promotion is a sign-off, not a script.** A round goes live only if its checks pass and two people sign.
+6. **Two kinds of gate** (`eval/gates.toml`). **Release gates** judge what is in use and fail the build (and CI) when
+   one fails: the first stage's top-k, the in-use confidence word, the in-use citations, landed cost, drift detection
+   and latency. **Promotion checks** decide whether a challenger round may go live: beating word matching and the
+   unoptimised program at heading and full code, and its own "Strong match" right at least 90 times in 100. Missing
+   one means "not promoted": the round stays a challenger and the Lab says why; it is not a build failure.
 
 ## Consequences
 
@@ -46,5 +51,9 @@ the product will face, so the evaluation must respect time.
   stayed a challenger (chapter top-3 on the test set 0.883 vs 0.918 for the shipped model).
 - Headings with fewer than two training rulings are not classes; their test rulings count as misses.
 - The program's evidence is gathered as of each example's date (validation) or the test window's start (test).
+- "Strong match" starts at the lowest threshold where the one-sided 95% Clopper-Pearson lower bound of validation
+  precision (six digits) is at least 0.90. For word matching no threshold reaches it (best lower bound 0.874, 121
+  right of 131), so the in-use word is always "Needs a broker" and that release gate fails. The threshold was not
+  loosened; a better first stage or a real-LM round has to clear it.
 - Every figure is in `docs/MODEL_CARD.md`, `classify/artifacts/first_stage_report.json`, the training rounds'
   reports and `eval/RESULTS.md`.

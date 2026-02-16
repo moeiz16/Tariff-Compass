@@ -182,7 +182,7 @@ Canadian entries). A broker membership carries `viaBroker` so the UI can say "Da
 ```text
 MetaOut     = { product, version, clock, snapshot: SnapshotOut, scopes: {key,label}[], labels: {dict: {code: words}},
                 origins: {key,label}[] }
-SnapshotOut = { usHts: "HTSUS 2026 Revision 3", usHtsInForce: ["2026-02-12","2026-02-25"], caTariff: "Customs Tariff T2026",
+SnapshotOut = { usHts: "HTSUS 2026 Revision 3", usHtsInForce: ["2026-02-12", null] (no end date published), caTariff: "Customs Tariff T2026",
                 caTariffFrom: "2026-01-01", dutyLayersAsOf: "2026-02-19", rulingsCount, rulingsNewest,
                 label: "Tariffs as of Thu 19 Feb 2026" }
 RecentAnswer = { id, queryText, usCode, verdict, verdictLabel, createdAt, createdBy }
@@ -278,7 +278,7 @@ CompareOut    = { ruling: RulingDetail, citedAs, productTitle, madeInLabel,
 |---|---|---|---|---|
 | GET | `/tariff/sections` | public | – | `SectionOut[] { section: "I".."XXI", title, chapters: { chapter, title, reserved }[] }` (the 97; chapter 77 reserved) |
 | GET | `/tariff/{country}/search` | `tariff:read` | `q`, `under?`, `k?` | `TariffLineOut[]` |
-| GET | `/tariff/{country}/lines/{code}` | `tariff:read` | – | `TariffOutline { line, ancestors[], children[], notes[], editionLabel }` (unknown code → `404`) |
+| GET | `/tariff/{country}/lines/{code}` | `tariff:read` | – | `TariffOutline { line, ancestors[], children[], notes[], editionLabel }` (e.g. "HTSUS 2026 Revision 3 (in force from 12 Feb 2026)") (unknown code → `404`) |
 
 ```text
 TariffLineOut = { country, code, digits, level, levelLabel, indent, text, fullText, unit, generalRate, special, hasChildren }
