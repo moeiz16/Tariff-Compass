@@ -116,9 +116,10 @@ the per-depth word is measured here and switched off (`classify.program.HEADING_
 - pullover: 4 of 5 paraphrases land on the expected heading.
 
 Known limitation: a tumbler described as “vacuum sealed” or with “vacuum insulation” (rather than
-“vacuum insulated” or “vacuum between the walls”) lands on 7323 with “Needs a broker”: the deciding-fact
-reader doesn't take those phrasings as stating the vacuum. A broker's answer to the deciding question
-settles it; the classifier was not tuned on these paraphrases.
+“vacuum insulated” or “vacuum between the walls”) lands on 7323 with “Needs a broker”. For those
+phrasings the first stage passes on no 9617 candidate, so the vacuum check that would move the answer to
+9617 never compares the two. The answer's verdict says the stated vacuum points to heading 9617 and asks a
+broker to check the heading; the classifier was not tuned on these paraphrases.
 
 
 ## Landed cost, drift and latency
@@ -127,7 +128,7 @@ settles it; the classifier was not tuned on these paraphrases.
 - Chapter-mix PSI, training vs the newest rulings: 0.3405 (large shift).
 - Simulated tariff revision: 5 changes; flagged LC01, LC02, LC03, LC13, LC14, LC15 (expected LC01, LC02, LC03, LC13, LC14, LC15).
 - Live measurements (latency, phrasing) ran over the full corpus (18520 rulings).
-- First stage p95: 0.67 ms. Full answer p95 offline (none (word matching)): 56.19 ms, after a first answer that opens the indexes (41.8 ms).
+- First stage p95: 0.69 ms. Full answer p95 offline (none (word matching)): 68.03 ms, after a first answer that opens the indexes (88.6 ms).
 
 ## Release gates (`eval/gates.toml` [release]): what is in use
 
@@ -144,8 +145,8 @@ These decide whether the build ships: `make eval` exits non-zero, and CI fails, 
 | Landed cost exact on the hand-checked set | 20/20 | 1.0 | pass |
 | A simulated tariff revision flags every affected product (and only those) | 6/6 | True | pass |
 | Chapter-mix drift (PSI) reported | 0.3405 | reported | pass |
-| First stage p95 (ms) | 0.67 | 150 | pass |
-| Full answer p95 offline (ms) | 56.19 | 1000 | pass |
+| First stage p95 (ms) | 0.69 | 150 | pass |
+| Full answer p95 offline (ms) | 68.03 | 1000 | pass |
 
 Release gates: **not all pass**.
 

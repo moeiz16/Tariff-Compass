@@ -638,9 +638,10 @@ def markdown(r: dict, fs: dict, details: dict | None) -> str:
         out += [
             "",
             "Known limitation: a tumbler described as “vacuum sealed” or with “vacuum insulation” (rather than",
-            "“vacuum insulated” or “vacuum between the walls”) lands on 7323 with “Needs a broker”: the deciding-fact",
-            "reader doesn't take those phrasings as stating the vacuum. A broker's answer to the deciding question",
-            "settles it; the classifier was not tuned on these paraphrases.",
+            "“vacuum insulated” or “vacuum between the walls”) lands on 7323 with “Needs a broker”. For those",
+            "phrasings the first stage passes on no 9617 candidate, so the vacuum check that would move the answer to",
+            "9617 never compares the two. The answer's verdict says the stated vacuum points to heading 9617 and asks a",
+            "broker to check the heading; the classifier was not tuned on these paraphrases.",
             "",
         ]
     lc = r["landedCost"]
