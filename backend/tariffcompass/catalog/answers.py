@@ -227,6 +227,30 @@ def landed_cost(
     )
 
 
+def with_duty_at_stake(
+    ans: ProgramAnswer, landed: list[LandedCost], q: dict[str, Any], shipment: dict[str, Any] | None
+) -> ProgramAnswer:
+    """What the alternative would change on this shipment: the US charges under the alternative line against the
+    answer's, priced by the same engine on the same value ("US$900.00 less in US duty and fees on this shipment")."""
+    import dataclasses
+
+    main = next((lc for lc in landed if lc.query.country == "US"), None)
+    if ans.alternative is None or main is None or not shipment:
+        return dataclasses.replace(ans, duty_at_stake=None) if ans.alternative is None else ans
+    try:
+        other = landed_cost("US", ans.alternative.code, q["made_in"], shipment)
+    except Exception:  # a line the engine can't price: say nothing rather than guess
+        return dataclasses.replace(ans, duty_at_stake=None)
+    diff = other.charges_total - main.charges_total
+    cur = main.query.currency or "USD"
+    if diff == 0:
+        stake = "the same US duty and fees on this shipment"
+    else:
+        amount = f"{'US$' if cur == 'USD' else cur + ' '}{abs(diff):,.2f}"
+        stake = f"{amount} {'more' if diff > 0 else 'less'} in US duty and fees on this shipment"
+    return dataclasses.replace(ans, duty_at_stake=stake)
+
+
 def broker_short_name(org) -> str:
     from tariffcompass.platform.models import Engagement
 
@@ -371,6 +395,7 @@ def run_core(
                     landed.append(landed_cost(country, choice.code, q["made_in"], shipment))
                 except Exception as exc:  # an answer never fails over a duty line the engine can't price
                     log.warning("landed_cost_skipped", country=country, code=choice.code, reason=str(exc))
+    ans = with_duty_at_stake(ans, landed, q, shipment)
     t3 = time.perf_counter()
     lm = ans.lm_label or "offline simulator"
     CLASSIFY_STAGE.labels("first_stage", lm).observe(t1 - t0)

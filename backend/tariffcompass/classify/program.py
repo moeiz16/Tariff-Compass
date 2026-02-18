@@ -247,14 +247,17 @@ def assemble(
     alt = None
     dq = None
     stake = None
-    stated_for = None
+    stated_for = stated_against = None
     if dist is not None and runner:
         said = query.text + " " + query.spec_sheet_text + " " + " ".join(query.photo_facts)
-        if ev.deciding_status(said, heading, runner) == "stated_for":
-            stated_for = next((f for f in facts if f.key == dist.key and f.source == "stated"), None)
+        status = ev.deciding_status(said, heading, runner)
+        if status in ("stated_for", "stated_against"):
+            stated_fact = next((f for f in facts if f.key == dist.key and f.source == "stated"), None)
+            stated_for = stated_fact if status == "stated_for" else None
+            stated_against = stated_fact if status == "stated_against" else None
     if pred.verdict == "broker" and runner:
         alt_code = (e["us_lines"].get(runner) or [[""]])[0][0]
-        best_alt = ev.best_line_for(e, runner, query.text)
+        best_alt = ev.offered_line_for(e, runner, query.text)
         alt_code = best_alt or alt_code
         if alt_code:
             alt = CodeChoice("US", alt_code, e["us_text"].get(alt_code, ""), e["heading_text"].get(runner, ""))
@@ -266,18 +269,24 @@ def assemble(
                     label,
                     pred.us_code
                     if h == heading and pred.us_code
-                    else ev.best_line_for(e, h, query.text) or (e["us_lines"].get(h) or [[h]])[0][0],
+                    else ev.offered_line_for(e, h, query.text) or (e["us_lines"].get(h) or [[h]])[0][0],
                 )
                 for k, label, h in dist.options
             )
             question = dist.question if pred.question in ("", "none") else pred.question
-            if stated_for is not None:  # the description already states it: ask to confirm what was stated
-                question = f"{question} The description says: {stated_for.value[:1].lower()}{stated_for.value[1:]}."
+            stated = stated_for or stated_against
+            if stated is not None:  # the description already states it: ask to confirm what was stated
+                question = f"{question} The description says: {stated.value[:1].lower()}{stated.value[1:]}."
             dq = DecidingQuestion(dist.key, question, opts)
-        stake = "depends on the duty layers of each line"
+        stake = None  # priced against the answer's landed cost by the caller (catalog.answers.with_duty_at_stake)
     if pred.verdict == "strong":
         verdict_sentence = (
             f"{agreeing} of {len(citations)} cited rulings reach heading {heading}, and the deciding facts are stated."
+        )
+    elif runner and stated_against is not None:
+        verdict_sentence = (
+            f"The description states a fact that points to heading {runner} rather than {heading}; a broker should "
+            "decide between them."
         )
     elif runner and stated_for is not None:
         verdict_sentence = (
@@ -288,9 +297,15 @@ def assemble(
         verdict_sentence = "The answer turns on a fact the description doesn't settle; a broker should confirm it."
     else:
         verdict_sentence = (
-            f"No other heading has real support for this product, but the evidence for heading {heading} falls "
-            "short of a Strong match; a broker should confirm the code."
+            f"The evidence for heading {heading} falls short of a Strong match, and no neighbouring heading has "
+            "enough support to offer instead; a broker should confirm the code."
         )
+        against = _stated_against(query, heading, facts)
+        if against is not None:
+            verdict_sentence = (
+                f"The description states a fact that points to heading {against[0]} rather than {heading} "
+                f"({against[1]}); a broker should check the heading."
+            )
     subject = _subject(query.text)
     holding = f"{subject} is classified in subheading {codes.fmt(pred.us_code)}, HTSUS" + (
         f", and tariff item {codes.fmt(pred.ca_code)} of Canada's Customs Tariff." if pred.ca_code else "."
@@ -324,6 +339,21 @@ def assemble(
         program_version=version,
         timings_ms=timings,
     )
+
+
+def _stated_against(query: ProductQuery, heading: str, facts: list) -> tuple[str, str] | None:
+    """A documented neighbour the description's own stated fact points to, when the answer kept its heading anyway
+    (the neighbour wasn't among the candidates): (neighbour heading, "between the walls: a vacuum")."""
+    said = query.text + " " + query.spec_sheet_text + " " + " ".join(query.photo_facts)
+    for pair, d in facts_mod.DISTINCTIONS.items():
+        if heading not in pair:
+            continue
+        other = next(iter(pair - {heading}))
+        if ev.deciding_status(said, heading, other) == "stated_against":
+            f = next((f for f in facts if f.key == d.key and f.source == "stated"), None)
+            if f is not None:
+                return other, f"{f.label.lower()}: {f.value[:1].lower()}{f.value[1:]}"
+    return None
 
 
 def _subject(text: str) -> str:
@@ -559,8 +589,11 @@ def word_matching_prediction(e: dict, product: str) -> dspy.Prediction:
     code = near["code"] if near else ev.best_line_for(e, heading, product)
     ca = ""
     if e["ca_lines"].get(heading):
-        ca_out = _subheading({"product": product, "lines": ev.render_lines(e, heading, "CA", us_code=code)}, "")
-        ca = ev.parse_code(ca_out.get("code", ""), e["ca_lines"][heading])
+        # an article the description doesn't call a part never lands on a "Parts …" line of Canada's tariff
+        ca_rows = ev.whole_article_rows(e["ca_lines"][heading], product)
+        ca_e = {**e, "ca_lines": {**e["ca_lines"], heading: ca_rows}}
+        ca_out = _subheading({"product": product, "lines": ev.render_lines(ca_e, heading, "CA", us_code=code)}, "")
+        ca = ev.parse_code(ca_out.get("code", ""), ca_rows)
     others = [c["heading"] for c in e["candidates"] if c["heading"] != heading][:3]
     cited = ev.citation_rulings(e, heading, others)
     support = [i + 1 for i, r in enumerate(cited) if r["heading"] == heading and r["status"] != "revoked"][:3]
@@ -570,8 +603,14 @@ def word_matching_prediction(e: dict, product: str) -> dspy.Prediction:
         (f"Word matching places the product in heading {heading}{(' ' + cites) if cites else ''}.", tuple(support))
     ]
     if near:
+        # cite the closest ruling by its own number in the list, or not at all when it isn't among those cited
+        n_near = next((i + 1 for i, r in enumerate(cited) if r["id"] == near["id"]), None)
+        mark = f" [{n_near}]" if n_near else ""
         sentences.append(
-            (f"The closest ruling under that heading, {near['id']}, holds the line {codes.fmt(code)} [1].", (1,))
+            (
+                f"The closest ruling under that heading, {near['id']}, holds the line {codes.fmt(code)}{mark}.",
+                (n_near,) if n_near else (),
+            )
         )
     if contrast:
         sentences.append(

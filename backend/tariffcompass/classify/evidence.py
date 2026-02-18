@@ -601,5 +601,24 @@ def best_line_for(e: dict, heading: str, text: str) -> str:
     return _subheading({"product": text, "lines": lines}, "").get("code") or rows[0][0]
 
 
+def whole_article_rows(rows: list, text: str) -> list:
+    """Tariff lines for an article the description doesn't call a part: every line but the "Parts …" ones (all of
+    them when nothing else is left)."""
+    if re.search(r"\bparts?\b", text, re.IGNORECASE):
+        return list(rows)
+    whole = [r for r in rows if not str(r[1]).split(": ")[-1].strip().lower().startswith("parts")]
+    return whole or list(rows)
+
+
+def offered_line_for(e: dict, heading: str, text: str) -> str:
+    """The line offered for a neighbouring heading (Also possible, the deciding question's options): the GRI 6 walk,
+    but never a "Parts" line for an article the description doesn't call a part."""
+    rows = e["us_lines"].get(heading, [])
+    whole = whole_article_rows(rows, text)
+    if len(whole) == len(rows):
+        return best_line_for(e, heading, text)
+    return best_line_for({**e, "us_lines": {**e["us_lines"], heading: whole}}, heading, text)
+
+
 def chapter_words(ch: str) -> str:
     return chapter_title(ch)

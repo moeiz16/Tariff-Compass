@@ -4,6 +4,7 @@ samples are catalogue products and none is a hand-checked evaluation item."""
 
 from __future__ import annotations
 
+import dataclasses
 import json
 from pathlib import Path
 
@@ -154,7 +155,7 @@ def test_an_answer_without_a_plausible_neighbour_offers_no_alternative_and_no_qu
     e = _assemble_evidence({"6110": 0.74, "9404": 0.023}, {"6110": 1.0})
     ans = prog.assemble(q, e, _broker_pred("6110", "6110000000", ["9404"]), lm_label="t", version="t", timings={})
     assert ans.alternative is None and ans.deciding_question is None and ans.duty_at_stake is None
-    assert "9404" not in ans.issue and "No other heading has real support" in ans.verdict_sentence
+    assert "9404" not in ans.issue and "no neighbouring heading has enough support" in ans.verdict_sentence
     assert not any("9404" in a.ref for a in ans.tariff_authorities)
     assert not any(f.decides for f in ans.facts)
 
@@ -207,3 +208,63 @@ def test_a_stated_deciding_fact_is_asked_as_a_confirmation_and_its_option_leads_
     assert dq is not None and "The description says: a vacuum." in dq.question
     assert {k: code for k, _, code in dq.options}["vacuum"] == "9617001000"
     assert "states the fact that separates heading 9617 from heading 7323" in ans.verdict_sentence
+
+
+def test_an_alternative_for_a_whole_article_is_never_a_parts_line(monkeypatch):
+    monkeypatch.setattr(prog, "alternative_floor", lambda: 0.05)
+    q = ProductQuery("Stainless insulated tumbler, 20 oz, double wall, vacuum sealed, slide lid")
+    e = _assemble_evidence({"7323": 0.9, "9617": 0.003}, {"7323": 1.0})
+    e["us_lines"]["9617"] = [
+        ("9617001000", "Vacuum flasks and other vacuum vessels: Having a capacity not exceeding 1 liter"),
+        ("9617006000", "Vacuum flasks and other vacuum vessels: Parts"),
+    ]
+    ans = prog.assemble(q, e, _broker_pred("7323", "7323000000", ["9617"]), lm_label="t", version="t", timings={})
+    assert ans.alternative is not None and ans.alternative.code == "9617001000"
+    assert ans.deciding_question is not None
+    assert all(code != "9617006000" for _, _, code in ans.deciding_question.options)
+
+
+def test_duty_at_stake_is_priced_on_the_shipment_not_described(monkeypatch):
+    import re
+
+    from tariffcompass.catalog import answers
+
+    monkeypatch.setattr(prog, "alternative_floor", lambda: 0.05)
+    q = ProductQuery("20 oz double-wall stainless steel tumbler, vacuum insulated, with a sliding lid.")
+    e = _assemble_evidence({"9617": 0.4, "7323": 0.5}, {"7323": 1.0})
+    e["us_lines"]["7323"] = [("7323930080", "Table, kitchen or other household articles: Of stainless steel: Other")]
+    ans = prog.assemble(q, e, _broker_pred("9617", "9617001000", ["7323"]), lm_label="t", version="t", timings={})
+    assert ans.alternative is not None and ans.duty_at_stake is None
+    shipment = {"value": "12500.00", "currency": "USD", "quantity": 1000, "transport": "ocean"}
+    main = answers.landed_cost("US", "9617001000", "CN", shipment)
+    other = answers.landed_cost("US", ans.alternative.code, "CN", shipment)
+    priced = answers.with_duty_at_stake(ans, [main], {"made_in": "CN"}, shipment)
+    diff = other.charges_total - main.charges_total
+    assert priced.duty_at_stake is not None
+    stake = r"US\$[\d,]+\.\d\d (more|less) in US duty and fees on this shipment"
+    assert re.fullmatch(stake, priced.duty_at_stake) or priced.duty_at_stake.startswith("the same")
+    assert f"{abs(diff):,.2f}" in priced.duty_at_stake or diff == 0
+    no_alt = answers.with_duty_at_stake(dataclasses.replace(ans, alternative=None), [main], {"made_in": "CN"}, shipment)
+    assert no_alt.duty_at_stake is None
+
+
+def test_a_stated_fact_pointing_to_a_neighbour_left_out_is_named_in_the_verdict(monkeypatch):
+    # "vacuum sealed": the first stage passes on no 9617 candidate, so the answer stays 7323; the verdict says why
+    # a broker should look, without changing the code
+    monkeypatch.setattr(prog, "alternative_floor", lambda: 0.05)
+    q = ProductQuery("Stainless insulated tumbler, 20 oz, double wall, vacuum sealed, slide lid")
+    e = _assemble_evidence({"7323": 0.9, "3923": 0.01}, {"7323": 1.0})
+    ans = prog.assemble(q, e, _broker_pred("7323", "7323000000", ["3923"]), lm_label="t", version="t", timings={})
+    assert ans.us is not None and ans.us.code == "7323000000" and ans.alternative is None
+    assert "points to heading 9617 rather than 7323" in ans.verdict_sentence
+
+
+def test_canada_never_lands_on_a_parts_line_for_a_whole_article():
+    from tariffcompass.classify import evidence as ev
+
+    rows = [
+        ("7323931000", "Of stainless steel: Parts for use in the manufacture of cookware"),
+        ("7323939090", "Of stainless steel: Other"),
+    ]
+    assert ev.whole_article_rows(rows, "20 oz stainless tumbler") == rows[1:]
+    assert ev.whole_article_rows(rows, "replacement parts for a stainless tumbler") == rows
