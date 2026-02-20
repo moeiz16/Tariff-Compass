@@ -89,7 +89,7 @@ the evidence of what they knew and when.
    labelled example for the next training round.
 4. **Keeps a binder** for every product: every version of its codes, who decided, why, which rulings and evidence
    it relied on, linked into a tamper-evident activity record; exportable as PDF or ZIP and kept five years after
-   the latest entry.
+   the latest US entry, or six after the latest Canadian import when that runs longer.
 5. **Watches** the tariff, the duty layers and the rulings, and flags the products each change touches.
 6. **Measures itself**: every training round is tested on newer rulings the classifier hasn't seen, against a
    word-matching baseline, and needs two signatures (compliance and a licensed broker) before it goes live.
