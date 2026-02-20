@@ -18,7 +18,8 @@ export function LabPage(props: { n?: number }) {
   // Never ask for what the role can't see: no lab:read, no request.
   const [overview, { refetch: refetchLab }] = createResource(() => (can("lab:read") ? true : null), () => lab.get());
   // Show the chosen round, else the challenger waiting for sign-off, else the round in use, else the latest round.
-  const roundN = () => props.n ?? overview()?.candidate ?? overview()?.live ?? overview()?.rounds.at(-1)?.n ?? null;
+  const roundN = () =>
+    can("lab:read") ? (props.n ?? overview()?.candidate ?? overview()?.live ?? overview()?.rounds.at(-1)?.n ?? null) : null;
   const [round, { mutate, refetch }] = createResource(roundN, (n) => lab.round(n));
   const [job, setJob] = createSignal<JobOut | null>(null);
 

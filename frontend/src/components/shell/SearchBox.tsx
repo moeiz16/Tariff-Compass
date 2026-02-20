@@ -54,6 +54,7 @@ export function SearchBox(props: Props) {
   const [madeIn, setMadeIn] = createSignal(untrack(() => props.madeIn) ?? "CN");
   // A new question in the URL (or a new answer) updates the box.
   createEffect(on(() => props.value, (v) => v !== undefined && setText(v), { defer: true }));
+  createEffect(on(() => props.madeIn, (v) => v && setMadeIn(v), { defer: true }));
   const [evidence, setEvidence] = createSignal<EvidenceOut[]>([]);
   const [uploadError, setUploadError] = createSignal("");
   const [uploading, setUploading] = createSignal(false);

@@ -145,6 +145,8 @@ export default function Landing() {
         label="Describe what you're importing"
         placeholder="Describe what you're importing…"
         value={answer()?.query.text}
+        madeIn={answer()?.query.madeIn}
+        into={answer()?.query.into}
         busy={busy()}
         suggestions={samples()?.map((s) => s.query)}
         onSubmit={(text) => {
