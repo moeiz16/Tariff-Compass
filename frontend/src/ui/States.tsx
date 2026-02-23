@@ -34,7 +34,7 @@ export function EmptyState(props: { title: string; children?: JSX.Element; actio
   return (
     <div class="border-y border-rule py-10 text-center">
       <CompassMark size={36} class="mx-auto text-muted" />
-      <p class="mt-3 text-[18px] font-[700]">{props.title}</p>
+      <p class="ty-title mt-3 text-[19px]">{props.title}</p>
       <Show when={props.children}>
         <div class="mx-auto mt-1.5 max-w-[520px] text-[15px] text-ink-2">{props.children}</div>
       </Show>

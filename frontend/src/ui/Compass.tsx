@@ -3,6 +3,7 @@
  * (Settle for a strong match, Waver between two headings when a broker is needed).
  */
 import { Show } from "solid-js";
+import { TypedRule } from "./Type";
 
 export type NeedleState = "still" | "seek" | "settle" | "waver";
 
@@ -32,31 +33,27 @@ export function CompassMark(props: { bearing?: number; state?: NeedleState; size
   );
 }
 
-/** "Tariff C◎mpass": Tariff in light italic, Compass in heavy roman with the compass as its "o". */
+/**
+ * The letterhead: "TARIFF C◎MPASS" typed in bold capitals with the compass as its "O", over a typed double rule,
+ * as at the head of a ruling letter.
+ */
 export function Wordmark(props: { size?: "xl" | "lg"; state?: NeedleState; bearing?: number }) {
-  const big = () => (props.size ?? "xl") === "xl";
   return (
-    <h1
-      class={`flex items-center justify-center whitespace-nowrap leading-none tracking-[-0.02em] ${
-        big() ? "text-[clamp(46px,10.5vw,128px)]" : "text-[clamp(40px,8vw,96px)]"
-      }`}
-      aria-label="Tariff Compass"
-    >
-      <span class="font-[300] italic" aria-hidden="true">
-        Tariff
-      </span>
-      <span class="ml-[0.18em] inline-flex items-center font-[800]" aria-hidden="true">
-        C
-        <CompassMark size={0} class="mx-[0.02em] h-[0.66em] w-[0.66em] translate-y-[0.06em]" state={props.state} bearing={props.bearing} />
+    <h1 class="ty-letterhead mx-auto w-fit" aria-label="Tariff Compass">
+      <span class="flex items-center justify-center whitespace-nowrap" aria-hidden="true">
+        Tariff&nbsp;C
+        <CompassMark size={0} class="h-[0.6em] w-[0.6em] shrink-0 translate-y-[-0.01em]" state={props.state} bearing={props.bearing} />
         mpass
       </span>
+      <TypedRule double class="mt-[0.22em] text-[clamp(14px,1.5vw,18px)] text-ink" />
     </h1>
   );
 }
 
+/** The strip's brand: the compass and the name typed in letter-spaced capitals. */
 export function Brand(props: { compact?: boolean }) {
   return (
-    <span class="inline-flex items-center gap-2.5 text-[22px] font-[750] tracking-[-0.01em] text-ink">
+    <span class="inline-flex items-center gap-2.5 whitespace-nowrap font-type text-[17px] font-[700] uppercase tracking-[0.08em] text-ink max-sm:gap-2 max-sm:text-[14px] max-sm:tracking-[0.04em]">
       <CompassMark size={30} />
       <span classList={{ "sr-only": props.compact }}>Tariff Compass</span>
     </span>

@@ -1,16 +1,41 @@
-/* Design tokens from frontend/DESIGN.md §7 and §13. Components and recipes build on these. */
+/* Design tokens from frontend/DESIGN.md §0b, §7 and §13. Components and recipes build on these. */
 @import "tailwindcss";
-@import "@fontsource-variable/bitter";
-@import "@fontsource-variable/bitter/wght-italic.css";
-@import "@fontsource-variable/source-serif-4";
-@import "@fontsource-variable/spline-sans-mono";
+@import "@fontsource-variable/instrument-sans";
+@import "@fontsource-variable/instrument-sans/wght-italic.css";
+@import "@fontsource/courier-prime/400.css";
+@import "@fontsource/courier-prime/400-italic.css";
+@import "@fontsource/courier-prime/700.css";
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
-  --font-voice: "Bitter Variable", ui-serif, Georgia, serif;
-  --font-law: "Source Serif 4 Variable", ui-serif, Georgia, serif;
-  --font-code: "Spline Sans Mono Variable", ui-monospace, monospace;
+  /* Two faces (§0b). Typewriter: headings, the wordmark, codes and quoted law. Sans: UI, reading text, tables. */
+  --font-sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-type: "Courier Prime", "Courier New", ui-monospace, monospace;
+  /* Role aliases, both the typewriter: a value you could type on a customs form, and words quoted from the law. */
+  --font-code: var(--font-type);
+  --font-law: var(--font-type);
+
+  /* Type scale (§0b). t-* are typed (Courier Prime); the rest are Instrument Sans. */
+  --text-t-letterhead: clamp(27px, 9vw, 84px);
+  --text-t-letterhead--line-height: 1;
+  --text-t-caption: clamp(24px, 2.5vw, 33px);
+  --text-t-caption--line-height: 1.22;
+  --text-t-title: clamp(20px, 1.9vw, 24px);
+  --text-t-title--line-height: 1.3;
+  --text-t-head: 15px;
+  --text-t-head--line-height: 1.3;
+  --text-t-sub: 13px;
+  --text-t-sub--line-height: 1.35;
+  --text-t-law: 15.5px;
+  --text-t-law--line-height: 1.5;
+  --text-lede: 19px;
+  --text-lede--line-height: 1.55;
+  --text-body: 16px;
+  --text-body--line-height: 1.6;
+  --text-meta: 13.5px;
+  --text-meta--line-height: 1.45;
+
   --color-paper: #ffffff;
   --color-paper-2: #f4f4ef;
   --color-paper-3: #eaeae3;
@@ -18,6 +43,7 @@
   --color-ink-2: #3a3a36;
   --color-muted: #62625b;
   --color-rule: #d9d9d0;
+  --color-rule-type: #9c9c93;
   --color-hi: #ffe14d;
   --color-hi-soft: #fff3a6;
   --color-hi-ink: #111111;
@@ -50,6 +76,7 @@
   --color-ink-2: #c9c9c2;
   --color-muted: #a1a199;
   --color-rule: #34342f;
+  --color-rule-type: #5f5f58;
   --color-hi: #e8c800;
   --color-hi-soft: #4a4210;
   --color-hi-ink: #131312;
@@ -64,7 +91,7 @@
 }
 
 html {
-  font-family: var(--font-voice);
+  font-family: var(--font-sans);
   color: var(--color-ink);
   background: var(--color-paper);
   font-size: 16px;
@@ -73,8 +100,8 @@ html {
 }
 body {
   min-height: 100dvh;
-  font-size: 16.5px;
-  line-height: 1.58;
+  font-size: 16px;
+  line-height: 1.6;
   overflow-x: hidden;
 }
 ::selection {
@@ -147,24 +174,40 @@ body {
 .gm > .gm-wide {
   min-width: 0;
 }
+/* Gutter labels, typed like the margin of a ruling letter: "¶ 1" and the date in the typewriter, the section head
+   in typed capitals, underlined, with its colon ("FACTS:"), and the note in the sans italic. */
 .gl {
-  font-style: italic;
+  font-family: var(--font-type);
   font-size: 13.5px;
   line-height: 1.4;
   color: var(--color-muted);
-  padding-top: 4px;
-  padding-right: 20px;
+  padding-top: 2px;
+  padding-right: 24px;
 }
 .gl b,
 .gl strong {
   display: block;
+  font-family: var(--font-type);
   font-style: normal;
-  font-weight: 750;
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-size: var(--text-t-head);
+  line-height: var(--text-t-head--line-height);
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--color-ink);
-  margin: 3px 0 4px;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  margin: 4px 0 8px;
+}
+.gl b::after,
+.gl strong::after {
+  content: ":";
+  content: ":" / "";
+}
+.gl .gl-extra {
+  font-family: var(--font-sans);
+  font-style: italic;
 }
 @media (max-width: 960px) {
   .gm {
@@ -342,11 +385,143 @@ body {
   display: none;
 }
 
-/* Ditto mark in the revision matrix. */
+/* Ditto mark in the revision matrix, typed as on a typewriter: a straight double quote. */
 .ditto {
-  font-family: var(--font-law);
+  font-family: var(--font-type);
+  font-weight: 700;
   color: var(--color-muted);
-  font-size: 18px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* ---------------- typewriter headings (§0b) ---------------- */
+/* Every heading is typed in Courier Prime. Five steps, each with its own case, weight and treatment:
+   letterhead (the wordmark) · caption (page titles: bold, underlined like a typed RE: line) · title (bold, plain) ·
+   head (typed capitals, underlined, with a colon) · sub (small typed capitals, letter-spaced). */
+:root {
+  --ty-dashes: "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+  --ty-equals: "================================================================================================================================================================================================================================================================================================================================";
+}
+@layer components {
+  .ty-letterhead {
+    font-family: var(--font-type);
+    font-weight: 700;
+    font-size: var(--text-t-letterhead);
+    line-height: var(--text-t-letterhead--line-height);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+  .ty-caption {
+    font-family: var(--font-type);
+    font-weight: 700;
+    font-size: var(--text-t-caption);
+    line-height: var(--text-t-caption--line-height);
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+    text-wrap: balance;
+  }
+  .ty-title {
+    font-family: var(--font-type);
+    font-weight: 700;
+    font-size: var(--text-t-title);
+    line-height: var(--text-t-title--line-height);
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+  .ty-head {
+    font-family: var(--font-type);
+    font-weight: 700;
+    font-size: var(--text-t-head);
+    line-height: var(--text-t-head--line-height);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 4px;
+    color: var(--color-ink);
+  }
+  .ty-head::after,
+  .ty-colon::after {
+    content: ":";
+    content: ":" / "";
+  }
+  .ty-sub {
+    font-family: var(--font-type);
+    font-weight: 700;
+    font-size: var(--text-t-sub);
+    line-height: var(--text-t-sub--line-height);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  /* "RE:" before a caption, as on a ruling letter's subject line (decorative, hidden from screen readers). */
+  .ty-re {
+    display: inline-block;
+    margin-right: 0.6em;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .ty-law {
+    font-family: var(--font-type);
+    font-size: var(--text-t-law);
+    line-height: var(--text-t-law--line-height);
+  }
+  /* Typed rule lines: a run of hyphens (or equals signs for a double rule) in the typewriter, clipped to the box. */
+  .ty-rule {
+    display: block;
+    width: 0;
+    min-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    font: 400 14px/1 var(--font-type);
+    color: var(--color-rule-type);
+    user-select: none;
+    pointer-events: none;
+  }
+  .ty-rule::before {
+    content: var(--ty-dashes);
+    content: var(--ty-dashes) / "";
+  }
+  .ty-rule[data-double]::before {
+    content: var(--ty-equals);
+    content: var(--ty-equals) / "";
+  }
+  /* A typed rule along the bottom edge of a band (memo rows, report sections), in place of a hairline. */
+  .ty-ruled {
+    position: relative;
+  }
+  .ty-ruled::after {
+    content: var(--ty-dashes);
+    content: var(--ty-dashes) / "";
+    position: absolute;
+    inset-inline: 32px;
+    bottom: -0.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    font: 400 14px/1 var(--font-type);
+    color: var(--color-rule-type);
+    pointer-events: none;
+  }
+  .ty-ruled[data-double]::after {
+    content: var(--ty-equals);
+    content: var(--ty-equals) / "";
+  }
+  @media (max-width: 960px) {
+    .ty-ruled::after {
+      inset-inline: 16px;
+    }
+  }
+  /* Quoted law steps down on phones so a long quotation doesn't take the screen. */
+  @media (max-width: 520px) {
+    .ty-law {
+      font-size: 14px;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

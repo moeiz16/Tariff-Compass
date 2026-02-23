@@ -114,7 +114,7 @@ export const sheet = tv({
     positioner: "fixed inset-x-0 top-[72px] z-50 flex justify-center px-4 max-md:top-[56px]",
     content:
       "anim-sheet w-full max-w-[680px] rounded-[var(--radius-box)] border-[1.5px] border-ink bg-paper p-6 text-ink shadow-[var(--shadow-hard)] outline-none max-md:p-4",
-    title: "text-[22px] font-[750] leading-tight tracking-[-0.01em]",
+    title: "ty-title",
     description: "mt-2 text-[16px] text-ink-2",
   },
 });

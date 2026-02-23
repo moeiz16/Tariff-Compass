@@ -57,8 +57,8 @@ pins with `package-lock.json`, `.nvmrc` 21.7.1):
   extras: `ai` (`litellm==1.109.1`, only for providers DSPy doesn't reach natively), `postgres`.
 - **Web:** `@solidjs/start@1.5.1`, `@solidjs/router@0.15.4`, `@solidjs/meta@0.29.4`, `solid-js@1.9.19`,
   `vinxi@0.5.11`, `@ark-ui/solid@5.40.0`, `tailwind-variants@4.0.2`, `@tanstack/solid-table@8.21.3`,
-  `gsap@3.13.0`, `@solid-primitives/media@2.3.6`, `@fontsource-variable/bitter@5.3.0`,
-  `@fontsource-variable/source-serif-4@5.3.1`, `@fontsource-variable/spline-sans-mono@5.3.0`; dev
+  `gsap@3.13.0`, `@solid-primitives/media@2.3.6`, `@fontsource/courier-prime@5.2.8`,
+  `@fontsource-variable/instrument-sans@5.2.8`; dev
   `tailwindcss@4.1.18`, `@tailwindcss/vite@4.1.18`, `typescript@5.9.3`, `vitest@3.2.7`, `jsdom@26.1.0`,
   `@solidjs/testing-library@0.8.10`, `@types/node@20.19.43`.
 

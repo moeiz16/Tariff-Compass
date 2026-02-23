@@ -1,5 +1,5 @@
 /**
- * Tariff codes in Spline Sans Mono, grouped 4.2.2.2. The heading digits sit on the highlighter; a leaning code
+ * Tariff codes typed in Courier Prime (bold), grouped 4.2.2.2. The heading digits sit on the highlighter; a leaning code
  * (needs a broker) gets a dashed amber underline instead. "Lock" drops each digit in with a slight overshoot.
  */
 import { For, Show } from "solid-js";
@@ -18,7 +18,7 @@ export function CodeDigits(props: {
 }) {
   const segs = () => codeSegments(props.code);
   const size = () =>
-    ({ xl: "text-[clamp(30px,2.65vw,40px)] font-[600]", lg: "text-[28px] font-[600]", md: "text-[17px] font-[550]", sm: "text-[14.5px] font-[500]" })[
+    ({ xl: "text-[clamp(30px,2.65vw,40px)] font-[700]", lg: "text-[28px] font-[700]", md: "text-[17px] font-[700]", sm: "text-[14.5px] font-[700]" })[
       props.size ?? "md"
     ];
   const lock = () => !!props.lock && !reducedMotion();
@@ -64,7 +64,7 @@ export function CodeDigits(props: {
   );
 }
 
-/** A code inside prose: mono, no highlighter. */
+/** A code inside prose: typed, no highlighter. */
 export function InlineCode(props: { children: string; class?: string }) {
   return <span class={`font-code text-[0.94em] whitespace-nowrap ${props.class ?? ""}`}>{props.children}</span>;
 }

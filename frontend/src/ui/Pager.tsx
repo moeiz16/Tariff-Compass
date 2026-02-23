@@ -7,7 +7,7 @@ export function Pager(props: { count: number; pageSize: number; page: number; on
   return (
     <Show when={props.count > props.pageSize}>
       <Pagination.Root count={props.count} pageSize={props.pageSize} page={props.page} onPageChange={(d) => props.onPage(d.page)} siblingCount={1} class="mt-6 flex flex-wrap items-center gap-1.5" aria-label={props.label}>
-        <Pagination.PrevTrigger class={`${cell} font-voice text-[14px]`}>Previous</Pagination.PrevTrigger>
+        <Pagination.PrevTrigger class={`${cell} font-sans text-[14px]`}>Previous</Pagination.PrevTrigger>
         <Pagination.Context>
           {(api) => (
             <For each={api().pages}>
@@ -25,7 +25,7 @@ export function Pager(props: { count: number; pageSize: number; page: number; on
             </For>
           )}
         </Pagination.Context>
-        <Pagination.NextTrigger class={`${cell} font-voice text-[14px]`}>Next</Pagination.NextTrigger>
+        <Pagination.NextTrigger class={`${cell} font-sans text-[14px]`}>Next</Pagination.NextTrigger>
       </Pagination.Root>
     </Show>
   );
