@@ -209,7 +209,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
           </Show>
         </div>
       </Section>
-      <Section n="§ 3" label="By chapter" note="the chapters Northbound imports">
+      <Section n="§ 3" label="By chapter" note="every chapter with test rulings">
         <ChapterTable rows={r().byChapter} />
         <p class="mt-4 max-w-[820px] text-[16px] leading-[1.6] text-ink-2">
           <b class="text-ink">Drift as tariffs and rulings change:</b> {String(r().drift.sentence ?? "")}
