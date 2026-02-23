@@ -29,7 +29,7 @@ answers for the choice.
 | "Trust me" | **Numbered citations to real CBP rulings**, each compared with your product fact by fact, and never a revoked ruling as support |
 | A duty rate found on a forum | A **landed-cost receipt**: every duty layer with its rate, amount, Chapter 99 number, source and effective date, and the layers that don't apply, with why |
 | Email threads with the broker | A **broker docket**: the items that need a professional, in order, with approve, correct (with a reason) or ask; every correction teaches the next training round |
-| A folder of PDFs for an audit | A **product binder**: every version of every code, who decided, on what authority, linked into a tamper-evident record and kept five years after the last entry |
+| A folder of PDFs for an audit | A **product binder**: every version of every code, who decided, on what authority, linked into a tamper-evident record and kept for the legal retention period |
 | Finding out about a tariff change from an invoice | A **watch bulletin** that flags the products each dated change touches |
 | "The AI is 95% accurate" | A **Lab** that measures every training round on rulings it hasn't seen, shows what is actually in use, and needs two signatures before anything changes |
 
@@ -39,17 +39,16 @@ product.
 ## Gallery
 
 Every screen uses the sample organisations (Northbound Goods Co. and Driftwood Customs Brokers) with the clock set to
-**Thursday 19 February 2026**, 10:30 a.m. Vancouver time. More screens, dark mode and phone layouts are in
-[`docs/screenshots/`](docs/screenshots/).
+**Thursday 19 February 2026**, 10:30 a.m. Vancouver time. Images live in [`docs/screenshots/`](docs/screenshots/).
 
 | | |
 |---|---|
 | ![The front page: one box, the 97 chapters of the tariff as the horizon, and three sample products to try without signing in.](docs/screenshots/01-landing.jpg) | ![The answer as a ruling memo, with citation 1 unfolded in place: the ruling's holding and a fact-by-fact comparison with the product.](docs/screenshots/02-answer-citation-drawer.jpg) |
 | **Front page.** One box, the 97 chapters of the tariff as the horizon, and three sample products to try without signing in. | **The answer.** A ruling-shaped memo; citation 1 unfolds in place with the ruling's holding and a fact-by-fact comparison. |
-| ![The landed-cost receipt: each duty layer with its rate, amount, Chapter 99 number, source and effective date; IEEPA lines marked as pending at the Supreme Court.](docs/screenshots/03-landed-cost.jpg) | ![Your product against NY N321985 side by side: where the facts match and where they differ.](docs/screenshots/04-compare.jpg) |
+| ![The landed-cost receipt: each duty layer with its rate, amount, Chapter 99 number, source and effective date; IEEPA lines marked as pending at the Supreme Court.](docs/screenshots/03-landed-cost.jpg) | ![Your product against HQ H303684 side by side: where the facts match and where they differ.](docs/screenshots/04-compare.jpg) |
 | **Landed cost.** Every layer with its source and date; the IEEPA lines are marked as pending at the Supreme Court. | **Compare.** Your product against a cited ruling, side by side, fact by fact. |
 | ![A broker corrects a power bank's code digit by digit, with a required reason and what the next training round will learn.](docs/screenshots/05-docket-correction.jpg) | ![The 20 oz tumbler's binder as a revision matrix: four versions, who decided each one and the rulings it relied on.](docs/screenshots/06-binder.jpg) |
-| **Broker docket.** A correction typed digit by digit, with a required reason and what the next round will learn. | **Product binder.** Every version of the code, who decided and on what authority, kept until 2031. |
+| **Broker docket.** A correction typed digit by digit, with a required reason and what the next round will learn. | **Product binder.** Every version of the code, who decided and on what authority, kept until 10 Feb 2032. |
 | ![The watch bulletin: the pending IEEPA case, 2026 HTSUS Revision 3 and other dated changes, with the products each one touches.](docs/screenshots/07-watch.jpg) | ![The Lab: word matching in use, training rounds 4 to 7 as challengers that didn't pass their checks.](docs/screenshots/08-lab.jpg) |
 | **Watch.** Dated changes and the products they touch, the pending IEEPA case first. | **Lab.** What is in use, and every training round measured against it on rulings it hasn't seen. |
 
@@ -59,7 +58,8 @@ Every screen uses the sample organisations (Northbound Goods Co. and Driftwood C
 both) and *Made in*. The answer opens with a holding band: the US HTSUS and Canadian Customs Tariff ten-digit codes,
 a confidence word (**Strong match** or **Needs a broker**, never a percentage), the one fact that would decide it
 when it is unsure ("Is there a vacuum between the walls, or only air?") and, where a neighbouring code is plausible,
-**Also possible** with the condition under which it would apply. Answering the question re-runs the classification.
+**Also possible** with the condition under which it would apply and the duty at stake ("US$4,350.00 more in US
+duty and fees on this shipment" if the tumbler has only air between its walls). Answering the question re-runs the classification.
 "Strong match" is held to a strict statistical bar; today word matching never reaches it, so every answer says
 **Needs a broker** and a broker confirms each code.
 
@@ -89,7 +89,8 @@ into a pin input, pick the reason, write the lesson) or **ask the importer**. Ke
 **Product binder.** Each product's history as a revision matrix (proposed → question answered → approved →
 re-checked), with the US and Canadian codes, the evidence, the rulings relied on and who decided, each version
 linked to its entry in the activity record. Download it as a PDF or a ZIP with the evidence. Retention runs five
-years from the latest entry (the 20 oz tumbler's binder is kept until 2031).
+years from the latest US entry or six from the latest Canadian import, whichever is longer (the 20 oz tumbler's
+binder is kept until 10 Feb 2032).
 
 **Watch.** A dated bulletin of changes to the tariff, the duty layers and the rulings: the pending Supreme Court IEEPA
 case (what is known and what isn't), 2026 HTSUS Revision 3, the Section 301 increase on lithium-ion batteries,
@@ -124,7 +125,8 @@ your words ─▶ first stage ─▶ search ─▶ DSPy program ─▶ citations
    corrections as labelled examples and newer rulings for validation and test. Each training round is reproducible
    from its seed, budget and data snapshot hash.
 4. **Citations.** Each sentence cites rulings under the chosen heading; one ruling from a neighbouring heading is
-   cited for contrast. The compare view lines up the product's facts with the letter's.
+   cited for contrast; the closest ruling is cited by its own number. The compare view lines up the product's facts
+   with the letter's. A whole article is never given a Canadian "Parts…" line.
 5. **Duties.** The duty engine stacks the layers in force on the snapshot date (33 layers, each with a source, a
    Chapter 99 number and an effective date) and refuses any layer without them.
 
@@ -312,12 +314,12 @@ an entry.
 | Duty | What Tariff Compass does |
 |---|---|
 | **Reasonable care, 19 U.S.C. 1484** | Every code comes with its reason, the GRI at each step, the rulings relied on (compared fact by fact, as 19 CFR 177.9(b)(1) asks) and who approved it |
-| **Record keeping, 19 CFR Part 163** | Binders are append-only and kept five years from the latest entry (19 CFR 163.4), so entries in early 2026 are kept to 2031 and later ones to 2032; PDF and ZIP export with the record's fingerprint on every page |
+| **Record keeping, 19 CFR Part 163** | Binders are append-only and kept five years from the latest US entry (19 CFR 163.4), or six years from the latest Canadian import (D17-1-21) when that runs longer: the sample tumbler's binder is kept until 10 Feb 2032. PDF and ZIP export with the record's fingerprint on every page |
 | **Canada: corrections and records** | CBSA Memorandum D11-6-6 (correct within 90 days of reason to believe) and D17-1-21 (keep records six years) are shown where they apply |
 | **Canada: advance rulings and policy** | A binder holds what an advance ruling request needs (D11-11-3); D10-0-1 (parts and accessories) and D10-14-64 (Bluetooth goods) are cited where they decide a product |
 | **Duties as of a date** | Each of the 33 duty layers carries its authority, Chapter 99 number, effective dates, legal status and sources. The IEEPA duties are shown as charged and **pending at the Supreme Court** (argued 5 Nov 2025, undecided on 19 Feb 2026); the product never states an outcome. The suspended part of the China reciprocal rate is shown as suspended until 10 Nov 2026, and FY2026 fees as in force to 30 Sep 2026 |
 | **People in the loop** | Unsure answers, changed codes, changed rulings and always-review rules go to a licensed broker; a training round needs two signatures; every sensitive action is in a SHA-256 hash-chained activity record |
-| **Platform security** | Argon2 passwords, short sessions, CSRF, rate limits, security headers, RBAC by permission, tenant isolation tested (cross-tenant ids return 404) |
+| **Platform security** | Argon2 passwords, short sessions, CSRF, rate limits per visitor (behind the web proxy too), CSP and security headers on every page, RBAC by permission, tenant isolation tested (cross-tenant ids return 404), an activity hash that covers each actor's role and address |
 
 ## Data and licences
 
@@ -335,7 +337,7 @@ number shown in the product is a real CBP ruling. Details, label-quality counts 
 
 ## Tests
 
-- **230 backend tests** with pytest (platform, auth, RBAC, tenant isolation, the API, search, the first stage, the
+- **236 backend tests** with pytest (platform, auth, RBAC, tenant isolation, the API, search, the first stage, the
   DSPy program and simulator, GEPA rounds, the duty engine, the seed) and **69 web tests** with Vitest. Ruff, mypy,
   ESLint and `tsc` are clean and the production web build passes.
 - **Evaluation** (`make eval`): release gates and promotion checks, as above.
@@ -391,8 +393,9 @@ docs/                    problem statement, architecture, API contract, data, mo
   simulator; a run against a real free-tier LM (command above) is the honest test.
 - **"Vacuum sealed".** A stainless tumbler described as "vacuum sealed" or with "vacuum insulation" (rather than
   "vacuum insulated" or "a vacuum between the walls") lands on a steel household article (7323) with "Needs a
-  broker"; 3 of 6 paraphrases land on 9617. The answer offers 9617 as *Also possible* with the vacuum question, and
-  answering it leads to 9617.00.10.00. CBP itself moved such tumblers from 7323 to 9617 in 2021 (HQ H303684).
+  broker"; 3 of 6 paraphrases land on 9617. For those phrasings the first stage offers no 9617 candidate, so the
+  code stays 7323, but the verdict says the description states a fact that points to 9617 rather than 7323 and that
+  a broker should check the heading. CBP itself moved such tumblers from 7323 to 9617 in 2021 (HQ H303684).
 - **Bike lights.** A rechargeable bicycle headlight is lighting equipment for cycles (8512), but the word "bicycle"
   pulls word matching towards bicycle parts (8714): 0 of 5 paraphrases land on 8512. It is no longer a public sample;
   it stays in the hand-checked landed-cost set.
