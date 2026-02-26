@@ -34,7 +34,7 @@ export function The97(props: { sections: SectionOut[]; narrow: NarrowState; capt
             when={props.narrow.phase !== "idle" && props.caption}
             fallback={
               <>
-                <b class="font-[650] text-ink-2">The whole tariff:</b> 97 chapters in 21 sections. Every answer narrows to one.
+                <b class="font-type font-[700] uppercase tracking-[0.03em] text-ink">The whole tariff:</b> 97 chapters in 21 sections. Every answer narrows to one.
               </>
             }
           >

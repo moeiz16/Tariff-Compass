@@ -78,7 +78,7 @@ export function AnswerLoading(props: { label?: string }) {
             </span>
           </div>
           <div class="gm-wide">
-            <p role="status" class="text-[20px] font-[650]">
+            <p role="status" class="ty-title">
               {props.label ?? "Taking a bearing…"}
             </p>
             <p class="mt-1 text-[15px] text-muted">Reading the heading texts and section notes, then checking the rulings that match.</p>

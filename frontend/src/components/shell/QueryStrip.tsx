@@ -60,7 +60,7 @@ export function PersonMenu() {
                 {m().orgs.find((o) => o.id === m().activeOrg?.id)?.viaBroker ?? m().activeOrg?.name}
               </span>
             </span>
-            <span class="grid h-11 w-11 place-items-center rounded-full bg-ink text-[14px] font-[750] text-paper">{initials(m().user.fullName)}</span>
+            <span class="grid h-11 w-11 place-items-center rounded-full bg-ink font-type text-[14px] font-[700] text-paper">{initials(m().user.fullName)}</span>
           </Menu.Trigger>
           <Portal>
             <Menu.Positioner class="z-50">

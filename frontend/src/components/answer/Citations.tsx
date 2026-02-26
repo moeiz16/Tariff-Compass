@@ -47,7 +47,7 @@ export function CitationChip(props: { n: number; ruling?: CitedRulingOut; state:
                   <span class="text-muted">{dateShort(r().date)}</span>
                   <RulingStatus status={r().status} />
                 </p>
-                <p class="mt-1.5 font-law text-[15px] leading-snug">
+                <p class="ty-law mt-1.5 text-[14.5px]">
                   <Marked text={r().holding} spans={r().markedSpans} />
                 </p>
                 <p class="mt-1.5 text-[12.5px] text-muted">Press the number to open it under the sentence.</p>
@@ -95,7 +95,7 @@ export function CitationDrawer(props: {
       >
         <header class="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-rule px-4 py-2.5">
           <span class="hl grid h-6 min-w-6 place-items-center rounded-[var(--radius-chip)] border-[1.5px] border-ink font-code text-[12px] font-[650]">{r().n}</span>
-          <span class="font-code text-[16px] font-[650]">{r().id}</span>
+          <span class="font-code text-[16px] font-[700]">{r().id}</span>
           <span class="text-[14px] text-muted">{dateShort(r().date)}</span>
           <RulingStatus status={r().status} long />
           <span class="text-[13px] text-muted">{r().matchLabels.join(" · ")}</span>
@@ -105,7 +105,7 @@ export function CitationDrawer(props: {
         </header>
         <div class="grid grid-cols-[1.15fr_1fr] max-md:grid-cols-1">
           <div class="px-4 py-3.5">
-            <p class="font-law text-[16.5px] leading-[1.5]">
+            <p class="ty-law">
               <Marked text={r().holding} spans={r().markedSpans} />
             </p>
             <p class="mt-2 text-[13.5px] text-muted">The marked words support the sentence above.</p>

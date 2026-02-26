@@ -171,13 +171,13 @@ export default function Landing() {
             <main id="main" class="px-8 pb-16 pt-[clamp(32px,9vh,110px)] max-md:px-4">
               <div class="mx-auto max-w-[1060px] text-center">
                 <Wordmark state={needle()} bearing={32} />
-                <p class="mx-auto mt-8 max-w-[760px] text-[clamp(17px,1.6vw,21px)] font-[300] leading-[1.55] text-ink-2">
-                  Describe a product. Get its <b class="font-[700] text-ink">US and Canadian tariff codes</b>, the <b class="font-[700] text-ink">customs rulings</b>{" "}
-                  that back them, and <b class="font-[700] text-ink">every duty</b> it will carry.
+                <p class="mx-auto mt-7 max-w-[720px] text-[clamp(17px,1.5vw,19px)] leading-[1.55] text-ink-2">
+                  Describe a product. Get its <b class="font-[650] text-ink">US and Canadian tariff codes</b>, the <b class="font-[650] text-ink">customs rulings</b>{" "}
+                  that back them, and <b class="font-[650] text-ink">every duty</b> it will carry.
                 </p>
                 <div class="mx-auto mt-8 max-w-[1060px] text-left">{box(true)}</div>
                 <div class="mt-4 flex flex-wrap items-baseline justify-center gap-x-6 gap-y-2 text-[17px]">
-                  <span class="text-muted">Try a sample:</span>
+                  <span class="ty-sub text-muted ty-colon">Try a sample</span>
                   <For each={samples() ?? []}>
                     {(s) => (
                       <button
@@ -250,7 +250,7 @@ export default function Landing() {
             caps={{ live: false, canConfirm: false, canSend: false, canFlag: false, brokerName: "Driftwood" }}
             banner={
               <div class="gm border-b border-rule bg-paper py-4">
-                <span class="gl">Sample</span>
+                <span class="gl"><b>Sample</b></span>
                 <p class="gm-wide text-[16px]">
                   This is a sample answer for a product from Northbound Goods Co.{" "}
                   <A href="/signin" class="font-[700] underline underline-offset-4">

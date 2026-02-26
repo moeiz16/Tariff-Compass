@@ -25,7 +25,7 @@ function CodeCard(props: { code: CodeOut; source: string; lock: boolean; words: 
       <div class="mt-2">
         <CodeDigits code={props.code.code} treatment={digitTreatment(props.code, props.words)} lock={props.lock} size="xl" />
       </div>
-      <p class="mt-2 max-w-[400px] font-law text-[16.5px] leading-snug text-ink-2">{props.code.text}</p>
+      <p class="ty-law mt-2.5 max-w-[400px] text-ink-2">{props.code.text}</p>
       <Clipboard.Root value={props.code.code} class="mt-1.5">
         <Clipboard.Trigger class="text-[13px] text-muted underline decoration-rule underline-offset-4 hover:text-ink" aria-label={`Copy ${props.code.code}`}>
           <Clipboard.Indicator copied={<span>Copied</span>}>Copy code</Clipboard.Indicator>
@@ -41,7 +41,7 @@ export function HoldingBand(props: { answer: AnswerOut; actions?: JSX.Element; l
   const bearing = () => (strong() ? 32 : 18);
   const words = () => depthWords(a().verdict);
   return (
-    <section aria-labelledby="holding-h" class="border-b border-rule bg-paper-2" data-rise>
+    <section aria-labelledby="holding-h" class="ty-ruled bg-paper-2" data-double data-rise>
       <div class="gm py-9 max-md:py-6">
         <div class="gl">
           <span>Answer · {dateWithDay(a().createdAt)}</span>
@@ -57,7 +57,7 @@ export function HoldingBand(props: { answer: AnswerOut; actions?: JSX.Element; l
             <Show when={a().us}>{(c) => <CodeCard code={c()} source="HTSUS" lock={!!props.lock} words={words()} />}</Show>
             <Show when={a().ca}>{(c) => <CodeCard code={c()} source="Customs Tariff" lock={!!props.lock} words={words()} />}</Show>
             <div class="border-l-[1.5px] border-ink pl-8 max-xl:col-span-2 max-xl:border-l-0 max-xl:border-t max-xl:border-rule max-xl:pl-0 max-xl:pt-5 max-md:col-span-1">
-              <p class="flex items-center gap-2 text-[19px] font-[750]" classList={{ "text-ok": strong(), "text-warn": !strong() }}>
+              <p class="flex items-center gap-2 text-[19px] font-[700]" classList={{ "text-ok": strong(), "text-warn": !strong() }}>
                 {strong() ? <OkIcon size={20} /> : <AskIcon size={20} />}
                 {a().verdict.wordLabel}
               </p>
@@ -108,7 +108,7 @@ export function HoldingBand(props: { answer: AnswerOut; actions?: JSX.Element; l
               </Show>
             </div>
           </div>
-          <p class="mt-8 max-w-[1040px] text-[21px] leading-[1.5] max-md:text-[18px]">
+          <p class="mt-8 max-w-[1040px] font-type text-[20px] leading-[1.5] max-md:text-[16.5px]">
             <WithCodes text={a().holdingSentence} />
           </p>
           <Show when={props.actions}>

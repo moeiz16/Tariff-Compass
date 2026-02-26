@@ -39,7 +39,7 @@ export function InShort(props: { answer: AnswerOut; state: CitationState; canFla
   const [lit, setLit] = createSignal<number | null>(null);
   return (
     <MemoRow n="¶ 0" label="In short" id="p0">
-      <p class="text-[20px] leading-[1.62] max-md:text-[18px]">
+      <p class="text-[19px] leading-[1.62] max-md:text-[17px]">
         <For each={props.answer.reason}>
           {(c, i) => (
             <>
@@ -117,7 +117,7 @@ export function Facts(props: { answer: AnswerOut; canConfirm: boolean; canSend: 
       </dl>
       <Show when={q() || softFact()}>
         <div class="mt-5 rounded-[var(--radius-box)] border-[1.5px] border-warn bg-paper px-4 py-3.5">
-          <h3 class="flex items-center gap-2 text-[15px] font-[750] text-warn">
+          <h3 class="ty-sub flex items-center gap-2 text-[13.5px] text-warn">
             <AskIcon size={16} /> The fact that decides it
           </h3>
           <p class="mt-1 text-[16px]">{q()?.question ?? `Is it right that ${softFact()!.label.toLowerCase()}: ${softFact()!.value.toLowerCase()}?`}</p>
@@ -168,7 +168,7 @@ export function Facts(props: { answer: AnswerOut; canConfirm: boolean; canSend: 
 export function Issue(props: { answer: AnswerOut }) {
   return (
     <MemoRow n="¶ 2" label="Issue" id="p2">
-      <p class="text-[20px] italic leading-[1.55] max-md:text-[18px]">{props.answer.issue}</p>
+      <p class="font-type text-[19px] leading-[1.55] max-md:text-[16.5px]">{props.answer.issue}</p>
     </MemoRow>
   );
 }
@@ -180,7 +180,7 @@ export function Analysis(props: { answer: AnswerOut; state: CitationState; canFl
   const headingStep = () => steps().findIndex((s) => s.level === "heading");
   const [open, setOpen] = createSignal<string[]>([`s${Math.max(0, headingStep())}`]);
   return (
-    <section id="p3" aria-labelledby="p3-h" class="border-b border-rule py-9 max-md:py-7" data-rise>
+    <section id="p3" aria-labelledby="p3-h" class="ty-ruled py-9 max-md:py-7" data-rise>
       <div class="gm">
         <div class="gl">
           <span>¶ 3</span>
@@ -206,10 +206,10 @@ export function Analysis(props: { answer: AnswerOut; state: CitationState; canFl
                     style={{ left: `${i() * LEVEL_INDENT}px` }}
                   />
                   <span class="block pl-6 pt-2.5">
-                    <span class="block text-[13.5px] italic text-muted">
+                    <span class="block font-type text-[13px] text-muted">
                       3.{i() + 1} {s.levelLabel}
                     </span>
-                    <span class="inline-block font-code text-[19px] font-[650]" classList={{ hl: last() }}>
+                    <span class="inline-block font-code text-[19px] font-[700]" classList={{ hl: last() }}>
                       {s.code.length > 6 && !last() ? s.code : last() && s.level === "suffix" ? `.${s.code.split(".").pop()}` : s.code}
                     </span>
                   </span>
@@ -217,10 +217,10 @@ export function Analysis(props: { answer: AnswerOut; state: CitationState; canFl
                 <div class="gm-body border-b border-rule">
                   <Accordion.ItemTrigger class="flex w-full items-start gap-3 py-4 text-left">
                     <span class="min-w-0 flex-1">
-                      <span class="hidden text-[13px] italic text-muted max-[960px]:block">
-                        3.{i() + 1} {s.levelLabel} · <span class="font-code not-italic">{s.code}</span>
+                      <span class="hidden font-type text-[13px] text-muted max-[960px]:block">
+                        3.{i() + 1} {s.levelLabel} · <span class="font-[700]">{s.code}</span>
                       </span>
-                      <span class="block font-law text-[18px] leading-snug">{s.text}</span>
+                      <span class="block font-law text-[16.5px] leading-[1.45]">{s.text}</span>
                     </span>
                     <Tip label={s.griLabel}>
                       <span class="rounded-[var(--radius-btn)] border-[1.5px] border-ink px-2 py-0.5 font-code text-[12.5px] font-[650]">{s.gri}</span>
@@ -287,7 +287,7 @@ export function Authorities(props: { answer: AnswerOut }) {
     <MemoRow n="¶ 5" label="Authorities cited" id="p5" wide>
       <div class="grid max-w-[1100px] grid-cols-2 gap-x-10 gap-y-6 max-lg:grid-cols-1">
         <div>
-          <h3 class="border-b-[1.5px] border-ink pb-2 text-[14px] font-[700] text-ink-2">Customs rulings</h3>
+          <h3 class="ty-head block border-b-[1.5px] border-ink pb-2 no-underline">Customs rulings</h3>
           <ol>
             <For each={props.answer.rulings}>
               {(r) => (
@@ -311,13 +311,13 @@ export function Authorities(props: { answer: AnswerOut }) {
           </ol>
         </div>
         <div>
-          <h3 class="border-b-[1.5px] border-ink pb-2 text-[14px] font-[700] text-ink-2">Tariff texts and rules relied on</h3>
+          <h3 class="ty-head block border-b-[1.5px] border-ink pb-2 no-underline">Tariff texts and rules relied on</h3>
           <ul>
             <For each={props.answer.tariffAuthorities}>
               {(t) => (
                 <li class="border-b border-rule py-2.5">
                   <span class="text-[15px] font-[650]">{t.ref}</span>
-                  <span class="block font-law text-[15.5px] text-ink-2">“{t.quote}”</span>
+                  <span class="ty-law block text-ink-2">“{t.quote}”</span>
                 </li>
               )}
             </For>

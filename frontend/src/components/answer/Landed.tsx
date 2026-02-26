@@ -16,6 +16,7 @@ import { SkeletonLines } from "~/ui/States";
 import { WarnIcon } from "~/ui/Icons";
 import { button, floating, segment } from "~/ui/recipes";
 import { MemoRow } from "./Memo";
+import { TypedRule } from "~/ui/Type";
 
 const ORIGINS = [
   { value: "CN", label: "China" },
@@ -51,7 +52,7 @@ export function Receipt(props: { cost: LandedCostOut }) {
   const valuePerUnit = () => ({ amount: (Number(c().value.amount) / Math.max(1, c().quantity)).toFixed(2), currency: c().value.currency });
   return (
     <div class="receipt" role="group" aria-label={`Landed cost receipt, into ${c().countryLabel}`}>
-      <p class="text-center font-[700] tracking-[0.08em]">LANDED COST</p>
+      <p class="text-center text-[15px] font-[700] tracking-[0.12em] underline underline-offset-4">LANDED COST</p>
       <p class="mb-3 text-center text-[12px] text-muted">
         Into {COUNTRY_LABEL[c().country]} · from {c().madeInLabel} · tariffs as of {dateShort(c().tariffsAsOf)}
       </p>
@@ -60,7 +61,7 @@ export function Receipt(props: { cost: LandedCostOut }) {
         <span>Goods, customs value</span>
         <span class="text-right">{money(c().value)}</span>
       </div>
-      <hr class="my-2 border-0 border-t-[1.5px] border-dashed border-ink" />
+      <TypedRule class="my-2 text-ink" />
       <For each={lines().shown}>
         {(l) => (
           <div class="grid grid-cols-[18px_1fr_auto_auto] gap-x-2 py-0.5">
@@ -88,7 +89,7 @@ export function Receipt(props: { cost: LandedCostOut }) {
           </div>
         )}
       </For>
-      <hr class="my-2 border-0 border-t-[1.5px] border-dashed border-ink" />
+      <TypedRule class="my-2 text-ink" />
       <div class="flex justify-between text-[16px] font-[700]">
         <span>Charges</span>
         <span>{money(c().chargesTotal)}</span>
@@ -229,7 +230,7 @@ function ShipmentPopover(props: { cost: LandedCostOut | null; onApply: (v: { val
             <Portal>
               <Popover.Positioner class="z-50">
                 <Popover.Content class={floating({ class: "w-[300px] p-4" })}>
-                  <Popover.Title class="text-[15px] font-[750]">The shipment</Popover.Title>
+                  <Popover.Title class="ty-sub text-ink">The shipment</Popover.Title>
                   <form
                     class="mt-3 space-y-3"
                     onSubmit={(e) => {
@@ -339,7 +340,7 @@ export function LandedCost(props: { answer: AnswerOut; live: boolean }) {
 
         <Show when={cost()?.questions.length}>
           <fieldset class="mt-6 rounded-[var(--radius-box)] border-[1.5px] border-ink px-4 py-3.5">
-            <legend class="px-1 text-[15px] font-[750]">Before the USMCA preference: three origin questions</legend>
+            <legend class="ty-sub px-1 text-ink">Before the USMCA preference: three origin questions</legend>
             <div class="space-y-2.5">
               <For each={cost()!.questions}>
                 {(q) => (

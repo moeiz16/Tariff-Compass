@@ -7,11 +7,11 @@ import { button } from "~/ui/recipes";
 function StoryRow(props: { n: string; label: string; id: string; title: JSX.Element; children: JSX.Element }) {
   return (
     <section id={props.id} aria-labelledby={`${props.id}-h`} class="gm border-t border-rule py-14 max-md:py-10">
-      <p class="font-code text-[13px] text-muted max-[960px]:mb-3">
-        {props.n} · {props.label}
+      <p class="gl max-[960px]:mb-3">
+        <span>{props.n}</span> <b>{props.label}</b>
       </p>
       <div class="gm-wide max-w-[1080px]">
-        <h2 id={`${props.id}-h`} class="text-[clamp(30px,4vw,46px)] font-[800] leading-[1.08] tracking-[-0.02em]">
+        <h2 id={`${props.id}-h`} class="ty-caption text-[clamp(23px,2.6vw,34px)]">
           {props.title}
         </h2>
         <div class="mt-6">{props.children}</div>
@@ -41,7 +41,7 @@ export function Story() {
           <For each={FACTS}>
             {(f) => (
               <li class="border-t-[1.5px] border-ink pt-3">
-                <p class="font-code text-[13.5px] font-[600]">{f.date}</p>
+                <p class="font-type text-[14px] font-[700]">{f.date}</p>
                 <p class="mt-1.5 text-[16.5px] leading-[1.55] text-ink-2">{f.text}</p>
               </li>
             )}
@@ -54,7 +54,7 @@ export function Story() {
             {(a) => (
               <li class="border-t border-rule pt-3">
                 <p class="h-8">{a.key}</p>
-                <p class="mt-2 text-[16.5px] font-[700]">{a.title}</p>
+                <p class="ty-sub mt-2 text-ink">{a.title}</p>
                 <p class="mt-1 text-[15.5px] leading-[1.55] text-ink-2">{a.text}</p>
               </li>
             )}
