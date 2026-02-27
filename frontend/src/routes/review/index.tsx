@@ -147,11 +147,12 @@ export default function ReviewPage() {
   return (
     <AppPage title="Review" scope="review" permission="review:read" query={params.q} placeholder="Search the docket: product, SKU, code or ruling" boxLabel="Search the review docket" onSearch={(q) => setParams({ q: q || undefined, open: undefined })}>
       <div class="px-8 py-6 max-md:px-4">
-        <p class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[16.5px]">
+        <h1 class="ty-caption">Review docket</h1>
+        <p class="mt-2.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[16px]">
           <Show when={d()} fallback="Opening the docket…">
             {(x) => (
               <>
-                <b>{x().counts.all} waiting</b>
+                <b class="font-type font-[700]">{x().counts.all} waiting</b>
                 <span class="text-ink-2">
                   for {me()?.orgs.find((o) => o.id === me()?.activeOrg?.id)?.viaBroker ?? "your broker"} · {me()?.activeOrg?.name} · {x().oldestLabel}
                 </span>
@@ -230,7 +231,7 @@ export default function ReviewPage() {
                             >
                               <td class="whitespace-nowrap px-3 py-3.5 font-code text-[15px] max-md:order-2 max-md:p-0 max-md:text-right">{r.waitingLabel}</td>
                               <td class="px-3 py-3.5 max-md:order-1 max-md:p-0">
-                                <span class="block text-[16.5px] font-[700]">{r.productTitle}</span>
+                                <span class="block text-[16px] font-[650]">{r.productTitle}</span>
                                 <span class="font-code text-[13px] text-ink-2">{r.sku}</span>
                               </td>
                               <td class="px-3 py-3.5 text-[15px] max-md:hidden">{r.intoLabel}</td>

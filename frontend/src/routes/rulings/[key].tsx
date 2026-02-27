@@ -7,13 +7,14 @@ import { rulings } from "~/lib/endpoints";
 import { dateShort } from "~/lib/format";
 import type { CompareOut, RulingDetail } from "~/lib/types";
 import { Marked } from "~/ui/Marked";
+import { Re, TypedRule } from "~/ui/Type";
 import { PageLoading, ErrorSlip } from "~/ui/States";
 import { MatchMark, RulingStatus } from "~/ui/Status";
 
 function Letter(props: { ruling: RulingDetail; marked?: { start: number; end: number }[] }) {
   const paras = () => (props.ruling.paragraphs.length ? props.ruling.paragraphs : [{ start: 0, end: props.ruling.text.length }]);
   return (
-    <div class="space-y-4 font-law text-[17.5px] leading-[1.65]">
+    <div class="space-y-4 font-law text-[15.5px] leading-[1.65] max-sm:text-[14px]">
       <For each={paras()}>
         {(p) => {
           const text = props.ruling.text.slice(p.start, p.end);
@@ -35,7 +36,7 @@ function Compare(props: { c: CompareOut; answerId: string }) {
     <>
       <section class="gm py-8">
         <div class="gl">
-          <A href={`/answer?id=${props.answerId}`} class="text-[14px] underline underline-offset-4">
+          <A href={`/answer?id=${props.answerId}`} class="font-sans text-[14px] underline underline-offset-4">
             ‹ Back to the answer
           </A>
           <b>Compare</b>
@@ -44,11 +45,12 @@ function Compare(props: { c: CompareOut; answerId: string }) {
           </Show>
         </div>
         <div class="gm-body">
-          <h1 class="text-[clamp(28px,3.4vw,40px)] font-[800] leading-[1.1] tracking-[-0.02em]">
+          <h1 class="ty-caption">
+            <Re />
             Your product against {r().id}
           </h1>
           <blockquote class="mt-4 border-l-[3px] border-ink pl-4">
-            <p class="font-law text-[17px] leading-[1.55]">{props.c.ruleQuote}</p>
+            <p class="ty-law text-[16px]">{props.c.ruleQuote}</p>
             <p class="mt-1 text-[14px] text-muted">
               {props.c.ruleQuote.includes("177.9") ? "" : "19 CFR 177.9(b)(2): "}A classification ruling applies only to articles identical to the ones it describes, so the facts below are
               compared one by one.
@@ -82,8 +84,8 @@ function Compare(props: { c: CompareOut; answerId: string }) {
                     <td class="bg-paper-2 px-4 py-3 text-center max-md:inline-block max-md:bg-transparent max-md:p-0 max-md:pt-1">
                       <MatchMark match={f.match} label={f.matchLabel} />
                     </td>
-                    <td class="px-4 py-3 font-law text-[16.5px] max-md:block max-md:p-0 max-md:pt-1">
-                      <span class="hidden font-voice text-[13px] text-muted max-md:inline">The ruling's: </span>
+                    <td class="px-4 py-3 font-law text-[15.5px] max-md:block max-md:p-0 max-md:pt-1">
+                      <span class="hidden font-sans text-[13px] text-muted max-md:inline">The ruling's: </span>
                       {f.theirs}
                     </td>
                   </tr>
@@ -103,7 +105,7 @@ function Compare(props: { c: CompareOut; answerId: string }) {
           class="flex min-h-[420px] max-md:!flex-col"
         >
           <Splitter.Panel id="yours" class="min-w-0 overflow-auto pr-6 max-md:!w-full max-md:pr-0">
-            <h3 class="flex flex-wrap items-baseline justify-between gap-2 border-b-[1.5px] border-ink pb-2 text-[14px] font-[750] uppercase tracking-[0.08em]">
+            <h3 class="ty-head flex flex-wrap items-baseline justify-between gap-2 border-b-[1.5px] border-ink pb-2 no-underline after:hidden">
               Your product
               <span class="font-code text-[13px] normal-case tracking-normal text-ink-2">{props.c.madeInLabel}</span>
             </h3>
@@ -112,7 +114,7 @@ function Compare(props: { c: CompareOut; answerId: string }) {
                 {(e) => (
                   <div class="grid grid-cols-[130px_minmax(0,1fr)] gap-x-4 border-b border-rule py-3 max-sm:grid-cols-1">
                     <dt class="text-[15px] text-muted">{e.label}</dt>
-                    <dd class="font-law text-[16.5px] leading-[1.55]">
+                    <dd class="ty-law">
                       “<Marked text={e.text} spans={e.marked} />”
                     </dd>
                   </div>
@@ -126,7 +128,7 @@ function Compare(props: { c: CompareOut; answerId: string }) {
             class="relative w-[14px] shrink-0 cursor-col-resize before:absolute before:inset-y-0 before:left-1/2 before:w-[1.5px] before:-translate-x-1/2 before:bg-rule hover:before:bg-ink data-[focus]:before:bg-ink max-md:hidden"
           />
           <Splitter.Panel id="ruling" class="min-w-0 overflow-auto pl-6 max-md:!w-full max-md:pl-0 max-md:pt-8">
-            <h3 class="flex flex-wrap items-baseline justify-between gap-2 border-b-[1.5px] border-ink pb-2 text-[14px] font-[750] uppercase tracking-[0.08em]">
+            <h3 class="ty-head flex flex-wrap items-baseline justify-between gap-2 border-b-[1.5px] border-ink pb-2 no-underline after:hidden">
               {r().id} · {dateShort(r().issued)}
               <span class="normal-case tracking-normal">
                 <RulingStatus status={r().status} />
@@ -146,7 +148,7 @@ function Reader(props: { r: RulingDetail }) {
   return (
     <section class="gm py-8">
       <div class="gl">
-        <A href="/rulings" class="text-[14px] underline underline-offset-4">
+        <A href="/rulings" class="font-sans text-[14px] underline underline-offset-4">
           ‹ Rulings
         </A>
         <b>Ruling</b>
@@ -154,19 +156,23 @@ function Reader(props: { r: RulingDetail }) {
       </div>
       <div class="gm-body">
         <p class="flex flex-wrap items-baseline gap-3">
-          <span class="font-code text-[15px] font-[650]">{props.r.id}</span>
+          <span class="font-code text-[15px] font-[700]">{props.r.id}</span>
           <span class="text-[14.5px] text-muted">{dateShort(props.r.issued)}</span>
           <RulingStatus status={props.r.status} long />
         </p>
-        <h1 class="mt-2 text-[clamp(26px,3vw,36px)] font-[800] leading-[1.15] tracking-[-0.015em]">{props.r.subject}</h1>
+        <h1 class="ty-caption mt-2">
+          <Re />
+          {props.r.subject}
+        </h1>
         <p class="mt-3 text-[15.5px] text-ink-2">
           Codes in the letter: <span class="font-code">{props.r.codes.join(" · ")}</span> (CBP prints <span class="font-code">{props.r.codeAsQuoted}</span>)
         </p>
-        <div class="mt-6 border-t-[1.5px] border-ink pt-5">
+        <div class="mt-6">
+          <TypedRule double class="mb-5 text-ink" />
           <Letter ruling={props.r} marked={[]} />
         </div>
         <Show when={props.r.related.length}>
-          <h2 class="mt-8 text-[15px] font-[750]">Related rulings</h2>
+          <h2 class="ty-head mt-8 block">Related rulings</h2>
           <ul class="mt-2">
             <For each={props.r.related}>
               {(x) => (
@@ -181,7 +187,7 @@ function Reader(props: { r: RulingDetail }) {
           </ul>
         </Show>
         <Show when={props.r.alsoCitedIn.length}>
-          <h2 class="mt-8 text-[15px] font-[750]">Relied on in your binders</h2>
+          <h2 class="ty-head mt-8 block">Relied on in your binders</h2>
           <ul class="mt-2">
             <For each={props.r.alsoCitedIn}>
               {(p) => (

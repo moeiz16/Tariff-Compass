@@ -137,14 +137,14 @@ export function DecisionRecordView(props: {
     <div class="border-y border-rule bg-paper-2 anim-drawer" role="region" aria-label={`Decision record for ${r().row.productTitle}`}>
       <div class="grid grid-cols-[minmax(0,0.9fr)_minmax(470px,1.2fr)_minmax(0,0.9fr)] max-xl:grid-cols-2 max-md:grid-cols-1">
         <section class="border-r border-rule px-6 py-5 max-md:border-r-0 max-md:border-b max-md:px-4" aria-label="Facts">
-          <h3 class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">Facts</h3>
+          <h3 class="ty-head">Facts</h3>
           <p class="mt-3 text-[14px] text-muted">Listing says</p>
-          <p class="font-law text-[17px] leading-[1.5]">
+          <p class="ty-law text-[16px]">
             “<Marked text={r().listing} spans={listingPhrases()} />”
           </p>
           <Show when={r().specSheetFile}>
             <p class="mt-4 text-[14px] text-muted">Spec sheet says</p>
-            <p class="font-law text-[17px] leading-[1.5]">
+            <p class="ty-law text-[16px]">
               “<Marked text={r().specSheet} spans={specPhrases()} />”
             </p>
             <p class="mt-1 text-[13.5px] text-muted">
@@ -189,12 +189,12 @@ export function DecisionRecordView(props: {
         </section>
 
         <section class="border-r border-rule px-6 py-5 max-xl:border-r-0 max-md:border-b max-md:px-4" aria-label="The code">
-          <h3 class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">The code</h3>
+          <h3 class="ty-head">The code</h3>
           <Show
             when={props.canDecide}
             fallback={
-              <p class="mt-3 font-code text-[22px] font-[600]">
-                {proposed()} <span class="block font-voice text-[14px] font-[400] text-muted">proposed; a licensed broker decides</span>
+              <p class="mt-3 font-code text-[22px] font-[700]">
+                {proposed()} <span class="block font-sans text-[14px] font-[400] text-muted">proposed; a licensed broker decides</span>
               </p>
             }
           >
@@ -206,8 +206,8 @@ export function DecisionRecordView(props: {
             </div>
             <div class="mt-3 space-y-1 text-[15.5px]">
               <Show when={typed().length === 10 && digitsOf(proposed()) !== typed()}>
-                <p class="font-law text-muted line-through">{r().row.proposedUs?.text ?? r().row.proposedCa?.text}</p>
-                <p class="font-law">{line()?.line.fullText ?? (line.loading ? "Looking up that line…" : "That line wasn't found in the tariff in force.")}</p>
+                <p class="ty-law text-muted line-through">{r().row.proposedUs?.text ?? r().row.proposedCa?.text}</p>
+                <p class="ty-law">{line()?.line.fullText ?? (line.loading ? "Looking up that line…" : "That line wasn't found in the tariff in force.")}</p>
               </Show>
             </div>
             <Show when={r().row.proposedUs && r().row.into !== "US"}>
@@ -216,7 +216,10 @@ export function DecisionRecordView(props: {
                   <Checkbox.Indicator>✓</Checkbox.Indicator>
                 </Checkbox.Control>
                 <Checkbox.Label>
-                  Also change Canada to <span class="font-code">{typed().length === 10 ? canadaFor(typed()) : "the matching item"}</span>
+                  Also change Canada to{" "}
+                  <Show when={typed().length === 10} fallback="the matching item">
+                    <span class="font-code font-[700]">{canadaFor(typed())}</span>
+                  </Show>
                 </Checkbox.Label>
                 <Checkbox.HiddenInput />
               </Checkbox.Root>
@@ -233,7 +236,7 @@ export function DecisionRecordView(props: {
         </section>
 
         <section class="px-6 py-5 max-xl:col-span-2 max-xl:border-t max-xl:border-rule max-md:col-span-1 max-md:px-4" aria-label="Reason">
-          <h3 class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">Reason</h3>
+          <h3 class="ty-head">Reason</h3>
           <Show
             when={props.canDecide}
             fallback={
@@ -290,7 +293,7 @@ export function DecisionRecordView(props: {
               </p>
             </Show>
             <div class="mt-4 border-l-[3px] border-ink pl-4">
-              <p class="text-[12.5px] font-[750] uppercase tracking-[0.08em] text-ink-2">The next training round will learn</p>
+              <p class="ty-sub">The next training round will learn</p>
               <p class="mt-1 text-[15.5px] leading-[1.55]" aria-live="polite">
                 {lesson() || "Type your code and a reason; the lesson it teaches appears here."}
               </p>

@@ -12,6 +12,7 @@ import { OkIcon } from "~/ui/Icons";
 import { button } from "~/ui/recipes";
 import { ErrorSlip, PageLoading } from "~/ui/States";
 import { notify } from "~/ui/Toast";
+import { Re } from "~/ui/Type";
 
 interface MatrixRow {
   key: BinderRow | "fingerprint";
@@ -33,8 +34,8 @@ export function RevisionMatrix(props: { binder: BinderOut }) {
   const versions = () => props.binder.versions;
   const factLabel = () => versions().find((v) => v.decidingFact)?.decidingFact?.label ?? "The deciding fact";
   const rows: MatrixRow[] = [
-    { key: "usCode", label: "US code", cell: (v) => <span class="font-code text-[16px]">{v.usCode ?? "–"}</span> },
-    { key: "caCode", label: "Canada code", cell: (v) => <span class="font-code text-[16px]">{v.caCode ?? "–"}</span> },
+    { key: "usCode", label: "US code", cell: (v) => <span class="font-code text-[16px] font-[700]">{v.usCode ?? "–"}</span> },
+    { key: "caCode", label: "Canada code", cell: (v) => <span class="font-code text-[16px] font-[700]">{v.caCode ?? "–"}</span> },
     { key: "standing", label: "Standing", cell: (v) => <span>{v.standingLabel}</span> },
     {
       key: "decidingFact",
@@ -75,12 +76,12 @@ export function RevisionMatrix(props: { binder: BinderOut }) {
         <caption class="sr-only">Versions as columns, facts as rows. A ditto mark means unchanged from the version before.</caption>
         <thead>
           <tr class="border-b-[1.5px] border-ink">
-            <th scope="col" class="w-[210px] bg-paper-2 px-4 py-3 text-[15px] font-[700] leading-snug">Read across: what changed, when, and why</th>
+            <th scope="col" class="w-[210px] bg-paper-2 px-4 py-3 font-type text-[14px] font-[700] leading-snug">Read across: what changed, when, and why</th>
             <For each={versions()}>
               {(v) => (
                 <th scope="col" class="px-4 py-3 align-top" classList={{ "bg-hi text-hi-ink border-l-[2px] border-ink": v.current, "bg-paper-2": !v.current }}>
-                  <span class="flex items-center gap-2 text-[16px] font-[700]">
-                    <span class="rounded-[3px] border-[1.5px] border-current px-1 font-code text-[12px]">v{v.n}</span>
+                  <span class="flex items-center gap-2 font-type text-[14px] font-[700] uppercase tracking-[0.03em]">
+                    <span class="rounded-[3px] border-[1.5px] border-current px-1 font-code text-[12px] normal-case">v{v.n}</span>
                     {v.kindLabel}
                     {v.current ? ", current" : ""}
                   </span>
@@ -105,7 +106,7 @@ export function RevisionMatrix(props: { binder: BinderOut }) {
                     const changed = v.n > 1 && v.changed.includes(row.key as BinderRow);
                     return (
                       <td class="px-4 py-3 text-[15.5px] leading-[1.5]" classList={{ "bg-hi-soft": changed, "border-l-[2px] border-ink": v.current }}>
-                        <Show when={!same} fallback={<span class="ditto" title="Unchanged" aria-label="Unchanged">〃</span>}>
+                        <Show when={!same} fallback={<span class="ditto" title="Unchanged" aria-label="Unchanged">{'"'}</span>}>
                           {row.cell(v)}
                         </Show>
                       </td>
@@ -209,7 +210,10 @@ export default function BinderPage() {
                       </A>{" "}
                       › {b().product.categoryLabel} › made in {b().product.madeInLabel}
                     </p>
-                    <h1 class="mt-1 text-[clamp(30px,3.6vw,46px)] font-[800] leading-[1.05] tracking-[-0.025em]">{b().product.title}</h1>
+                    <h1 class="ty-caption mt-2">
+                      <Re />
+                      {b().product.title}
+                    </h1>
                     <p class="mt-2 flex flex-wrap gap-x-5 text-[16px] text-ink-2">
                       <span>Opened {dateShort(b().openedOn)}</span>
                       <span>{b().versions.length} versions</span>
@@ -241,7 +245,7 @@ export default function BinderPage() {
               </section>
               <section class="mx-8 mb-12 mt-8 grid grid-cols-3 border-t-[1.5px] border-ink max-lg:grid-cols-1 max-md:mx-4" aria-label="Evidence, entries and record">
                 <div class="py-5 pr-6 max-lg:pr-0">
-                  <h2 class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">Evidence on file</h2>
+                  <h2 class="ty-head">Evidence on file</h2>
                   <ul class="mt-2">
                     <For each={b().evidence} fallback={<li class="text-[15px] text-muted">Only the listing text so far.</li>}>
                       {(e) => (
@@ -256,7 +260,7 @@ export default function BinderPage() {
                   </ul>
                 </div>
                 <div class="border-l border-rule px-6 py-5 max-lg:border-l-0 max-lg:border-t max-lg:px-0">
-                  <h2 class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">Entries using this code</h2>
+                  <h2 class="ty-head">Entries using this code</h2>
                   <ul class="mt-2">
                     <For each={b().entries} fallback={<li class="text-[15px] text-muted">No entries yet.</li>}>
                       {(e) => (
@@ -274,7 +278,7 @@ export default function BinderPage() {
                   </ul>
                 </div>
                 <div class="border-l border-rule py-5 pl-6 max-lg:border-l-0 max-lg:border-t max-lg:pl-0">
-                  <h2 class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">Record</h2>
+                  <h2 class="ty-head">Record</h2>
                   <p class="mt-2 flex items-center gap-2 text-[15.5px]" classList={{ "text-ok": b().record.chainVerified, "text-bad": !b().record.chainVerified }}>
                     <OkIcon size={16} />
                     {b().record.chainVerified ? "Chain verified" : "Chain check failed"} {dateTime(b().record.checkedAt)}

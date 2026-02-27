@@ -31,7 +31,9 @@ export default function RulingsPage() {
       <div class="gm py-8">
         <div class="gl">
           <span>Search</span>
-          <b>Rulings</b>
+          <h1 class="not-italic">
+            <b>Rulings</b>
+          </h1>
           <span class="gl-extra block">real CBP rulings, each with its status</span>
         </div>
         <div class="gm-body">
@@ -70,7 +72,7 @@ export default function RulingsPage() {
                       {(h) => (
                         <li class="border-b border-rule py-4">
                           <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                            <A href={`/rulings/${h.key}`} class="font-code text-[17px] font-[650] underline decoration-rule underline-offset-4 hover:decoration-ink">
+                            <A href={`/rulings/${h.key}`} class="font-code text-[17px] font-[700] underline decoration-rule underline-offset-4 hover:decoration-ink">
                               {h.id}
                             </A>
                             <span class="text-[14px] text-muted">{dateShort(h.issued)}</span>
@@ -78,7 +80,7 @@ export default function RulingsPage() {
                             <span class="font-code text-[13.5px] text-ink-2">{h.code}</span>
                           </p>
                           <p class="mt-1 text-[16.5px] font-[650]">{h.subject}</p>
-                          <p class="mt-1 font-law text-[16px] leading-[1.5] text-ink-2">
+                          <p class="ty-law mt-1 text-ink-2">
                             <Marked text={h.snippet || h.holding} spans={h.snippetMarks} />
                           </p>
                           <Show when={h.status.kind !== "in_force" && h.status.text}>

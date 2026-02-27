@@ -44,12 +44,13 @@ export default function ProductsPage() {
   return (
     <AppPage title="My products" scope="products" permission="products:read" query={params.q} placeholder="Search your products: name, SKU or code" boxLabel="Search your products" onSearch={(q) => setParams({ q: q || undefined, page: undefined })}>
       <div class="px-8 py-6 max-md:px-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <p class="text-[16.5px]" aria-live="polite">
+        <h1 class="ty-caption">My products</h1>
+        <div class="mt-2.5 flex flex-wrap items-center justify-between gap-3">
+          <p class="text-[16px]" aria-live="polite">
             <Show when={list()} fallback="Opening your products…">
               {(l) => (
                 <>
-                  <b>{plural(l().total, "product")}</b>
+                  <b class="font-type font-[700]">{plural(l().total, "product")}</b>
                   <span class="text-ink-2"> · each keeps a binder, its reasonable-care record</span>
                 </>
               )}
@@ -88,7 +89,7 @@ export default function ProductsPage() {
                           return (
                             <tr class="border-b border-rule align-top hover:bg-paper-2 max-md:grid max-md:grid-cols-[1fr_auto] max-md:gap-1 max-md:py-3">
                               <td class="px-3 py-3 max-md:col-span-2 max-md:p-0">
-                                <A href={`/products/${p.sku}`} class="text-[16.5px] font-[700] underline decoration-rule underline-offset-4 hover:decoration-ink">
+                                <A href={`/products/${p.sku}`} class="text-[16px] font-[650] underline decoration-rule underline-offset-4 hover:decoration-ink">
                                   {p.title}
                                 </A>
                                 <span class="block font-code text-[13px] text-ink-2">
