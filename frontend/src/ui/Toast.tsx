@@ -1,7 +1,8 @@
-/** Saved / corrected / exported notices: small mono slips at the bottom left (Ark Toast). */
+/** Saved / corrected / exported notices: small cards at the bottom right (Ark Toast). */
 import { Toast, Toaster, createToaster } from "@ark-ui/solid/toast";
+import { OkIcon, WarnIcon } from "./Icons";
 
-export const toaster = createToaster({ placement: "bottom-start", overlap: false, gap: 8, duration: 3200, max: 4 });
+export const toaster = createToaster({ placement: "bottom-end", overlap: false, gap: 8, duration: 3200, max: 4 });
 
 export function notify(title: string, description?: string, type: "success" | "error" | "info" = "success") {
   toaster.create({ title, description, type });
@@ -11,13 +12,12 @@ export function AppToaster() {
   return (
     <Toaster toaster={toaster} aria-label="Notices">
       {(t) => (
-        <Toast.Root
-          class="min-w-[260px] max-w-[min(440px,calc(100vw-32px))] rounded-[var(--radius-btn)] border-[1.5px] border-ink bg-paper px-3.5 py-2.5 font-code text-[13px] text-ink shadow-[var(--shadow-hard)] data-[state=open]:animate-[tc-slip_240ms_var(--ease-dock)_both] data-[type=error]:border-bad translate-x-[var(--x)] translate-y-[var(--y)] scale-[var(--scale)] z-[var(--z-index)] h-[var(--height)] opacity-[var(--opacity)] will-change-[translate,opacity,scale] transition-[translate,scale,opacity,height] duration-300"
-        >
-          <div class="flex items-start gap-3">
+        <Toast.Root class="min-w-[280px] max-w-[min(420px,calc(100vw-32px))] rounded-[var(--radius-box)] border border-rule bg-card px-4 py-3 text-[14px] text-ink shadow-[var(--shadow-float)] translate-x-[var(--x)] translate-y-[var(--y)] scale-[var(--scale)] z-[var(--z-index)] h-[var(--height)] opacity-[var(--opacity)] will-change-[translate,opacity,scale] transition-[translate,scale,opacity,height] duration-300">
+          <div class="flex items-start gap-2.5">
+            {t().type === "error" ? <WarnIcon size={16} class="mt-0.5 shrink-0 text-bad" /> : <OkIcon size={16} class="mt-0.5 shrink-0 text-ok" />}
             <div class="min-w-0 flex-1">
-              <Toast.Title class="font-[650]">{t().title}</Toast.Title>
-              <Toast.Description class="text-muted">{t().description}</Toast.Description>
+              <Toast.Title class="font-[600]">{t().title}</Toast.Title>
+              <Toast.Description class="text-[13px] text-muted">{t().description}</Toast.Description>
             </div>
             <Toast.CloseTrigger class="text-muted hover:text-ink" aria-label="Dismiss">
               ×

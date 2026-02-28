@@ -1,6 +1,6 @@
 /**
- * Motion language "Bearing" (frontend/DESIGN.md §9). Everything animates transform, opacity or background-size;
- * with reduced motion every animation collapses to its final frame and no meaning is carried by motion alone.
+ * Quiet motion (frontend/DESIGN.md §9): short fades and small rises. Everything animates transform, opacity or
+ * background-size; with reduced motion every animation collapses to its final frame.
  */
 export function reducedMotion(): boolean {
   if (typeof window === "undefined" || !window.matchMedia) return true;
@@ -20,12 +20,12 @@ export const EASE = {
   settle: "cubic-bezier(.25,.6,.3,1)",
 };
 
-/** Rise: children fade up 8 px in reading order. */
-export function rise(container: Element | undefined | null, selector = "[data-rise]", stagger = 120): void {
+/** Rise: children fade up 6 px in reading order. */
+export function rise(container: Element | undefined | null, selector = "[data-rise]", stagger = 60): void {
   if (!container) return;
   container.querySelectorAll(selector).forEach((el, i) =>
-    animate(el, [{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "none" }], {
-      duration: 360,
+    animate(el, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], {
+      duration: 220,
       delay: i * stagger,
       easing: EASE.dock,
     }),

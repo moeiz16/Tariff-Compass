@@ -16,7 +16,7 @@ export function Marked(props: { text: string; spans?: Span[]; lit?: boolean; cla
 export function Kbd(props: { children: string; class?: string }) {
   return (
     <kbd
-      class={`inline-grid min-w-[20px] place-items-center rounded-[3px] border border-current px-1 font-code text-[11px] font-[600] leading-[18px] opacity-80 ${props.class ?? ""}`}
+      class={`inline-grid min-w-[20px] place-items-center rounded-[4px] border border-rule-2 bg-card px-1 font-code text-[11px] font-[500] leading-[18px] text-muted ${props.class ?? ""}`}
     >
       {props.children}
     </kbd>

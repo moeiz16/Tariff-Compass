@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@ark-ui/solid": "5.40.0",
-    "@fontsource-variable/instrument-sans": "5.2.8",
-    "@fontsource/courier-prime": "5.2.8",
+    "@fontsource-variable/plus-jakarta-sans": "5.2.8",
+    "@fontsource-variable/reddit-mono": "5.2.8",
     "@solid-primitives/media": "2.3.6",
     "@solidjs/meta": "0.29.4",
     "@solidjs/router": "0.15.4",

@@ -1,92 +1,81 @@
-/* Design tokens from frontend/DESIGN.md §0b, §7 and §13. Components and recipes build on these. */
+/* Design tokens from frontend/DESIGN.md (v3, "The answer first"). Components and recipes build on these. */
 @import "tailwindcss";
-@import "@fontsource-variable/instrument-sans";
-@import "@fontsource-variable/instrument-sans/wght-italic.css";
-@import "@fontsource/courier-prime/400.css";
-@import "@fontsource/courier-prime/400-italic.css";
-@import "@fontsource/courier-prime/700.css";
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/reddit-mono";
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
-  /* Two faces (§0b). Typewriter: headings, the wordmark, codes and quoted law. Sans: UI, reading text, tables. */
-  --font-sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-type: "Courier Prime", "Courier New", ui-monospace, monospace;
-  /* Role aliases, both the typewriter: a value you could type on a customs form, and words quoted from the law. */
-  --font-code: var(--font-type);
-  --font-law: var(--font-type);
+  /* Two faces: Plus Jakarta Sans for words, Reddit Mono for codes, rates and amounts. */
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-code: "Reddit Mono Variable", "Reddit Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Type scale (§0b). t-* are typed (Courier Prime); the rest are Instrument Sans. */
-  --text-t-letterhead: clamp(27px, 9vw, 84px);
-  --text-t-letterhead--line-height: 1;
-  --text-t-caption: clamp(24px, 2.5vw, 33px);
-  --text-t-caption--line-height: 1.22;
-  --text-t-title: clamp(20px, 1.9vw, 24px);
-  --text-t-title--line-height: 1.3;
-  --text-t-head: 15px;
-  --text-t-head--line-height: 1.3;
-  --text-t-sub: 13px;
-  --text-t-sub--line-height: 1.35;
-  --text-t-law: 15.5px;
-  --text-t-law--line-height: 1.5;
-  --text-lede: 19px;
-  --text-lede--line-height: 1.55;
-  --text-body: 16px;
-  --text-body--line-height: 1.6;
-  --text-meta: 13.5px;
-  --text-meta--line-height: 1.45;
+  --text-display: clamp(36px, 4.4vw, 52px);
+  --text-display--line-height: 1.08;
+  --text-title: 26px;
+  --text-title--line-height: 1.25;
+  --text-lead: 17px;
+  --text-lead--line-height: 1.55;
+  --text-body: 15px;
+  --text-body--line-height: 1.55;
+  --text-label: 13px;
+  --text-label--line-height: 1.4;
+  --text-small: 12.5px;
+  --text-small--line-height: 1.4;
 
-  --color-paper: #ffffff;
-  --color-paper-2: #f4f4ef;
-  --color-paper-3: #eaeae3;
-  --color-ink: #111111;
-  --color-ink-2: #3a3a36;
-  --color-muted: #62625b;
-  --color-rule: #d9d9d0;
-  --color-rule-type: #9c9c93;
-  --color-hi: #ffe14d;
-  --color-hi-soft: #fff3a6;
-  --color-hi-ink: #111111;
-  --color-ok: #1f7a4d;
-  --color-warn: #8f5207;
-  --color-bad: #b42318;
-  --color-seg-301: #5a5a54;
-  --color-seg-fee: #8c8c83;
-  --radius-box: 6px;
-  --radius-btn: 4px;
-  --radius-chip: 3px;
-  --shadow-hard: 4px 4px 0 var(--color-ink);
-  --shadow-soft: 0 10px 30px -18px rgb(17 17 17 / 0.35);
-  --spacing-gutter: 280px;
-  --spacing-measure: 820px;
-  --ease-dock: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --ease-mark: cubic-bezier(0.3, 0, 0.2, 1);
-  --ease-lock: cubic-bezier(0.34, 1.4, 0.64, 1);
-}
+  --color-paper: #f7f7f5;
+  --color-card: #ffffff;
+  --color-paper-2: #f1f1ee;
+  --color-paper-3: #e7e7e3;
+  --color-ink: #18181b;
+  --color-ink-2: #44444c;
+  --color-muted: #6b6b74;
+  --color-rule: #e4e4e0;
+  --color-rule-2: #d4d4cf;
+  --color-hi: #fbe27a;
+  --color-hi-soft: #fdf3c4;
+  --color-hi-ink: #18181b;
+  --color-ok: #17784e;
+  --color-ok-soft: #e6f4ec;
+  --color-warn: #9a5a06;
+  --color-warn-soft: #fbf1e1;
+  --color-bad: #b8322a;
+  --color-bad-soft: #fbeceb;
+  --color-seg-301: #6b6b74;
+  --color-seg-fee: #a3a3ab;
 
-:root {
-  --hi-band: 34%;
+  --radius-card: 12px;
+  --radius-box: 10px;
+  --radius-btn: 8px;
+  --radius-chip: 6px;
+  --shadow-card: 0 1px 2px rgb(24 24 27 / 0.04), 0 1px 1px rgb(24 24 27 / 0.02);
+  --shadow-float: 0 12px 32px -12px rgb(24 24 27 / 0.22), 0 2px 6px rgb(24 24 27 / 0.06);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 [data-theme="dark"] {
-  --color-paper: #131312;
-  --color-paper-2: #1c1c1a;
-  --color-paper-3: #262624;
-  --color-ink: #ededE8;
-  --color-ink-2: #c9c9c2;
-  --color-muted: #a1a199;
-  --color-rule: #34342f;
-  --color-rule-type: #5f5f58;
-  --color-hi: #e8c800;
-  --color-hi-soft: #4a4210;
-  --color-hi-ink: #131312;
-  --color-ok: #6ccb97;
-  --color-warn: #e8b25c;
-  --color-bad: #ff7b72;
-  --color-seg-301: #8e8e86;
-  --color-seg-fee: #727269;
-  --shadow-soft: 0 10px 30px -18px rgb(0 0 0 / 0.8);
-  --hi-band: 100%;
+  --color-paper: #0e0e10;
+  --color-card: #17171a;
+  --color-paper-2: #1e1e22;
+  --color-paper-3: #2a2a2f;
+  --color-ink: #ededef;
+  --color-ink-2: #c4c4ca;
+  --color-muted: #93939c;
+  --color-rule: #2b2b30;
+  --color-rule-2: #3a3a40;
+  --color-hi: #d9be45;
+  --color-hi-soft: #3a3216;
+  --color-hi-ink: #121214;
+  --color-ok: #5cc994;
+  --color-ok-soft: #143023;
+  --color-warn: #e2ae5a;
+  --color-warn-soft: #33260f;
+  --color-bad: #f2766c;
+  --color-bad-soft: #3a1a18;
+  --color-seg-301: #93939c;
+  --color-seg-fee: #5c5c64;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-float: 0 16px 40px -12px rgb(0 0 0 / 0.7), 0 2px 6px rgb(0 0 0 / 0.4);
   color-scheme: dark;
 }
 
@@ -96,25 +85,26 @@ html {
   background: var(--color-paper);
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 body {
   min-height: 100dvh;
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.55;
   overflow-x: hidden;
+  background: var(--color-paper);
 }
 ::selection {
   background: var(--color-hi);
   color: var(--color-hi-ink);
 }
 
-/* Focus: the highlighter ring, visible on every interactive part. */
+/* Focus: a calm ink ring with an offset, visible on every interactive part. */
 :where(a, button, input, textarea, select, summary, [tabindex], [role="tab"], [role="option"], [role="button"]):focus-visible {
-  outline: 3px solid var(--color-hi);
+  outline: 2px solid var(--color-ink);
   outline-offset: 2px;
-  box-shadow: 0 0 0 5px var(--color-ink);
-  border-radius: 3px;
+  border-radius: 6px;
 }
 
 .sr-only-focusable:not(:focus) {
@@ -126,147 +116,61 @@ body {
   white-space: nowrap;
 }
 
-/* ---------------- highlighter ---------------- */
-/* Light: a marker band under the lower third of the glyphs. Dark: a full-height mark with dark text. */
+.font-code {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ---------------- the page title (one per screen) ---------------- */
+@layer components {
+  .page-title {
+    font-size: var(--text-title);
+    line-height: var(--text-title--line-height);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+  .label {
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+  @media (max-width: 640px) {
+    .page-title {
+      font-size: 22px;
+    }
+  }
+}
+
+/* ---------------- highlighter (restrained: heading digits and quoted passages) ---------------- */
 .hl {
-  background: linear-gradient(var(--color-hi), var(--color-hi)) no-repeat 0 88% / 100% var(--hi-band);
-  color: var(--color-hi-ink);
+  background: linear-gradient(var(--color-hi), var(--color-hi)) no-repeat 0 92% / 100% 38%;
+  color: inherit;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
 [data-theme="dark"] .hl {
+  background-size: 100% 100%;
   color: var(--color-hi-ink);
+  border-radius: 2px;
 }
 .hl-sweep {
-  background: linear-gradient(var(--color-hi), var(--color-hi)) no-repeat 0 88% / 0% var(--hi-band);
-  transition: background-size 420ms var(--ease-mark);
+  background: linear-gradient(var(--color-hi), var(--color-hi)) no-repeat 0 92% / 0% 38%;
+  transition: background-size 480ms var(--ease-out);
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
 .hl-sweep[data-lit="true"] {
-  background-size: 100% var(--hi-band);
+  background-size: 100% 38%;
+}
+[data-theme="dark"] .hl-sweep[data-lit="true"] {
+  background-size: 100% 100%;
   color: var(--color-hi-ink);
 }
-.claim {
-  background: linear-gradient(var(--color-hi-soft), var(--color-hi-soft)) no-repeat 0 90% / 0% 42%;
-  transition: background-size 380ms var(--ease-mark);
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-.claim[data-lit="true"] {
-  background-size: 100% 42%;
-}
-[data-theme="dark"] .claim[data-lit="true"] {
-  background-size: 100% 100%;
-}
 
-/* ---------------- gutter + measure grid ---------------- */
-.gm {
-  display: grid;
-  grid-template-columns: var(--spacing-gutter) minmax(0, 1fr);
-  column-gap: 0;
-  padding-inline: 32px;
-}
-.gm > .gm-body {
-  min-width: 0;
-  max-width: var(--spacing-measure);
-}
-.gm > .gm-wide {
-  min-width: 0;
-}
-/* Gutter labels, typed like the margin of a ruling letter: "¶ 1" and the date in the typewriter, the section head
-   in typed capitals, underlined, with its colon ("FACTS:"), and the note in the sans italic. */
-.gl {
-  font-family: var(--font-type);
-  font-size: 13.5px;
-  line-height: 1.4;
-  color: var(--color-muted);
-  padding-top: 2px;
-  padding-right: 24px;
-}
-.gl b,
-.gl strong {
-  display: block;
-  font-family: var(--font-type);
-  font-style: normal;
-  font-weight: 700;
-  font-size: var(--text-t-head);
-  line-height: var(--text-t-head--line-height);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--color-ink);
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 4px;
-  margin: 4px 0 8px;
-}
-.gl b::after,
-.gl strong::after {
-  content: ":";
-  content: ":" / "";
-}
-.gl .gl-extra {
-  font-family: var(--font-sans);
-  font-style: italic;
-}
-@media (max-width: 960px) {
-  .gm {
-    grid-template-columns: minmax(0, 1fr);
-    padding-inline: 16px;
-  }
-  .gl {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 10px;
-    padding: 0 0 8px;
-  }
-  .gl b,
-  .gl strong {
-    display: inline;
-    margin: 0;
-  }
-  .gl .gl-extra {
-    display: none;
-  }
-}
-
-/* ---------------- receipt slip ---------------- */
-.receipt {
-  --perf: radial-gradient(circle at 6px 0, transparent 5px, var(--color-ink) 5.5px, var(--color-ink) 6.5px, transparent 7px) 0 0 / 12px 8px repeat-x;
-  position: relative;
-  background: var(--color-paper);
-  border-inline: 1.5px solid var(--color-ink);
-  font-family: var(--font-code);
-  font-weight: 500;
-  font-size: 13.5px;
-  line-height: 1.55;
-  padding: 18px 20px 20px;
-}
-.receipt::before,
-.receipt::after {
-  content: "";
-  position: absolute;
-  left: -1.5px;
-  right: -1.5px;
-  height: 8px;
-  background: var(--perf);
-}
-.receipt::before {
-  top: -4px;
-}
-.receipt::after {
-  bottom: -4px;
-  transform: scaleY(-1);
-}
-@media (max-width: 520px) {
-  .receipt {
-    font-size: 12.5px;
-    padding: 16px 12px;
-  }
-}
-
-/* ---------------- duty stack segments ---------------- */
+/* ---------------- duty bar segments (monochrome, always labelled) ---------------- */
 .seg-base {
   background: var(--color-ink);
 }
@@ -275,7 +179,7 @@ body {
 }
 .seg-emergency {
   background: repeating-linear-gradient(135deg, var(--color-ink) 0 2px, transparent 2px 6px);
-  border: 1.5px solid var(--color-ink);
+  box-shadow: inset 0 0 0 1.5px var(--color-ink);
 }
 .seg-fee,
 .seg-tax {
@@ -283,14 +187,13 @@ body {
 }
 .seg-surtax {
   background: repeating-linear-gradient(90deg, var(--color-seg-301) 0 3px, transparent 3px 5px);
-  border: 1.5px solid var(--color-seg-301);
+  box-shadow: inset 0 0 0 1.5px var(--color-seg-301);
 }
 .seg-preference {
-  border: 1.5px dashed var(--color-ink);
+  box-shadow: inset 0 0 0 1.5px var(--color-ink);
 }
 .seg-value {
   background: var(--color-paper-3);
-  border: 1.5px dashed var(--color-muted);
 }
 
 /* ---------------- compass mark ---------------- */
@@ -301,19 +204,19 @@ body {
 }
 .mark .n-north {
   fill: var(--color-hi);
-  stroke: var(--color-ink);
+  stroke: currentColor;
 }
 .mark .n-south {
-  fill: var(--color-ink);
+  fill: currentColor;
 }
 .mark .hub {
-  fill: var(--color-paper);
+  fill: var(--color-card);
 }
 .mark.seek .needle {
   animation: tc-seek 1.1s cubic-bezier(0.5, 0, 0.5, 1) infinite alternate;
 }
 .mark.settle .needle {
-  animation: tc-settle 1300ms cubic-bezier(0.25, 0.6, 0.3, 1) both;
+  animation: tc-settle 1100ms cubic-bezier(0.25, 0.6, 0.3, 1) both;
 }
 .mark.waver .needle {
   animation: tc-waver 1.6s ease-in-out 3;
@@ -323,11 +226,10 @@ body {
   to { transform: rotate(80deg); }
 }
 @keyframes tc-settle {
-  0% { transform: rotate(-80deg); }
-  30% { transform: rotate(calc(var(--bearing) + 38deg)); }
-  52% { transform: rotate(calc(var(--bearing) - 18deg)); }
-  70% { transform: rotate(calc(var(--bearing) + 8deg)); }
-  85% { transform: rotate(calc(var(--bearing) - 3deg)); }
+  0% { transform: rotate(-60deg); }
+  35% { transform: rotate(calc(var(--bearing) + 24deg)); }
+  60% { transform: rotate(calc(var(--bearing) - 10deg)); }
+  82% { transform: rotate(calc(var(--bearing) + 3deg)); }
   100% { transform: rotate(var(--bearing)); }
 }
 @keyframes tc-waver {
@@ -336,192 +238,69 @@ body {
 }
 
 @keyframes tc-rise {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: none; }
+}
+@keyframes tc-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 @keyframes tc-drawer {
-  from { opacity: 0; transform: translateY(-6px); }
+  from { opacity: 0; transform: translateX(16px); }
   to { opacity: 1; transform: none; }
 }
-@keyframes tc-sheet {
-  from { opacity: 0; transform: translateY(-12px); }
+@keyframes tc-drawer-up {
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: none; }
 }
-@keyframes tc-slip {
-  from { opacity: 0; transform: translateY(10px); }
+@keyframes tc-pop {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
   to { opacity: 1; transform: none; }
-}
-@keyframes tc-lock {
-  0% { transform: translateY(-0.5em); opacity: 0; }
-  60% { opacity: 1; }
-  100% { transform: none; opacity: 1; }
 }
 @keyframes tc-shimmer {
   to { background-position: -150% 0; }
 }
-.anim-rise { animation: tc-rise 360ms var(--ease-dock) both; }
-.anim-drawer { animation: tc-drawer 280ms var(--ease-dock) both; }
-.anim-sheet { animation: tc-sheet 260ms var(--ease-dock) both; }
-.anim-lock { display: inline-block; animation: tc-lock 300ms var(--ease-lock) both; }
+.anim-rise { animation: tc-rise 220ms var(--ease-out) both; }
+.anim-fade { animation: tc-fade 180ms var(--ease-out) both; }
+.anim-pop { animation: tc-pop 200ms var(--ease-out) both; }
+
+/* Ark Accordion / Collapsible content: animate height from Ark's measured size. */
+@keyframes tc-open {
+  from { height: 0; opacity: 0; }
+  to { height: var(--height); opacity: 1; }
+}
+@keyframes tc-close {
+  from { height: var(--height); opacity: 1; }
+  to { height: 0; opacity: 0; }
+}
+.fold[data-state="open"] { animation: tc-open 200ms var(--ease-out); overflow: hidden; }
+.fold[data-state="closed"] { animation: tc-close 160ms var(--ease-out); overflow: hidden; }
+
+/* Drawers (Ark Dialog as a right-hand panel; a bottom sheet on phones). */
+.drawer-panel[data-state="open"] { animation: tc-drawer 220ms var(--ease-out) both; }
+@media (max-width: 640px) {
+  .drawer-panel[data-state="open"] { animation-name: tc-drawer-up; }
+}
+.backdrop[data-state="open"] { animation: tc-fade 180ms var(--ease-out) both; }
 
 .skeleton {
-  border-radius: 3px;
-  background: linear-gradient(90deg, var(--color-paper-3) 0%, var(--color-paper-2) 40%, var(--color-paper-3) 80%) 0 0 / 250% 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--color-paper-2) 0%, var(--color-paper-3) 40%, var(--color-paper-2) 80%) 0 0 / 250% 100%;
   animation: tc-shimmer 1.4s linear infinite;
 }
 
-/* Struck digits in a redline. */
+/* Struck digits in a correction. */
 .strike-bad {
   text-decoration: line-through;
   text-decoration-color: var(--color-bad);
   text-decoration-thickness: 2px;
 }
 
-/* Hide scrollbars on the horizontally scrolling scope list (it stays keyboard and touch scrollable). */
 .no-scrollbar {
   scrollbar-width: none;
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-/* Ditto mark in the revision matrix, typed as on a typewriter: a straight double quote. */
-.ditto {
-  font-family: var(--font-type);
-  font-weight: 700;
-  color: var(--color-muted);
-  font-size: 20px;
-  line-height: 1;
-}
-
-/* ---------------- typewriter headings (§0b) ---------------- */
-/* Every heading is typed in Courier Prime. Five steps, each with its own case, weight and treatment:
-   letterhead (the wordmark) · caption (page titles: bold, underlined like a typed RE: line) · title (bold, plain) ·
-   head (typed capitals, underlined, with a colon) · sub (small typed capitals, letter-spaced). */
-:root {
-  --ty-dashes: "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
-  --ty-equals: "================================================================================================================================================================================================================================================================================================================================";
-}
-@layer components {
-  .ty-letterhead {
-    font-family: var(--font-type);
-    font-weight: 700;
-    font-size: var(--text-t-letterhead);
-    line-height: var(--text-t-letterhead--line-height);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--color-ink);
-  }
-  .ty-caption {
-    font-family: var(--font-type);
-    font-weight: 700;
-    font-size: var(--text-t-caption);
-    line-height: var(--text-t-caption--line-height);
-    letter-spacing: -0.015em;
-    color: var(--color-ink);
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.2em;
-    text-wrap: balance;
-  }
-  .ty-title {
-    font-family: var(--font-type);
-    font-weight: 700;
-    font-size: var(--text-t-title);
-    line-height: var(--text-t-title--line-height);
-    letter-spacing: -0.01em;
-    color: var(--color-ink);
-    text-wrap: balance;
-  }
-  .ty-head {
-    font-family: var(--font-type);
-    font-weight: 700;
-    font-size: var(--text-t-head);
-    line-height: var(--text-t-head--line-height);
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    text-decoration: underline;
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 4px;
-    color: var(--color-ink);
-  }
-  .ty-head::after,
-  .ty-colon::after {
-    content: ":";
-    content: ":" / "";
-  }
-  .ty-sub {
-    font-family: var(--font-type);
-    font-weight: 700;
-    font-size: var(--text-t-sub);
-    line-height: var(--text-t-sub--line-height);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-ink-2);
-  }
-  /* "RE:" before a caption, as on a ruling letter's subject line (decorative, hidden from screen readers). */
-  .ty-re {
-    display: inline-block;
-    margin-right: 0.6em;
-    font-weight: 700;
-    text-decoration: none;
-  }
-  .ty-law {
-    font-family: var(--font-type);
-    font-size: var(--text-t-law);
-    line-height: var(--text-t-law--line-height);
-  }
-  /* Typed rule lines: a run of hyphens (or equals signs for a double rule) in the typewriter, clipped to the box. */
-  .ty-rule {
-    display: block;
-    width: 0;
-    min-width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    font: 400 14px/1 var(--font-type);
-    color: var(--color-rule-type);
-    user-select: none;
-    pointer-events: none;
-  }
-  .ty-rule::before {
-    content: var(--ty-dashes);
-    content: var(--ty-dashes) / "";
-  }
-  .ty-rule[data-double]::before {
-    content: var(--ty-equals);
-    content: var(--ty-equals) / "";
-  }
-  /* A typed rule along the bottom edge of a band (memo rows, report sections), in place of a hairline. */
-  .ty-ruled {
-    position: relative;
-  }
-  .ty-ruled::after {
-    content: var(--ty-dashes);
-    content: var(--ty-dashes) / "";
-    position: absolute;
-    inset-inline: 32px;
-    bottom: -0.5em;
-    overflow: hidden;
-    white-space: nowrap;
-    font: 400 14px/1 var(--font-type);
-    color: var(--color-rule-type);
-    pointer-events: none;
-  }
-  .ty-ruled[data-double]::after {
-    content: var(--ty-equals);
-    content: var(--ty-equals) / "";
-  }
-  @media (max-width: 960px) {
-    .ty-ruled::after {
-      inset-inline: 16px;
-    }
-  }
-  /* Quoted law steps down on phones so a long quotation doesn't take the screen. */
-  @media (max-width: 520px) {
-    .ty-law {
-      font-size: 14px;
-    }
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

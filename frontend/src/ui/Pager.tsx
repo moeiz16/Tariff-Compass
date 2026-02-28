@@ -3,7 +3,7 @@ import { Pagination } from "@ark-ui/solid/pagination";
 import { For, Show } from "solid-js";
 
 export function Pager(props: { count: number; pageSize: number; page: number; onPage: (p: number) => void; label: string }) {
-  const cell = "grid h-9 min-w-9 place-items-center rounded-[var(--radius-btn)] border border-rule px-2 font-code text-[13px] data-[selected]:border-ink data-[selected]:bg-ink data-[selected]:text-paper hover:border-ink disabled:opacity-40";
+  const cell = "grid h-9 min-w-9 place-items-center rounded-[var(--radius-btn)] border border-rule bg-card px-2 font-code text-[13px] data-[selected]:border-ink data-[selected]:bg-ink data-[selected]:text-card hover:border-rule-2 disabled:opacity-40";
   return (
     <Show when={props.count > props.pageSize}>
       <Pagination.Root count={props.count} pageSize={props.pageSize} page={props.page} onPageChange={(d) => props.onPage(d.page)} siblingCount={1} class="mt-6 flex flex-wrap items-center gap-1.5" aria-label={props.label}>

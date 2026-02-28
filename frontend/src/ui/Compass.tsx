@@ -1,9 +1,8 @@
 /**
- * The compass: logo, the "o" of the wordmark, the loading state (Seek) and the confidence signal
+ * The compass: the logo and the loading state (Seek), and the confidence signal on an answer
  * (Settle for a strong match, Waver between two headings when a broker is needed).
  */
 import { Show } from "solid-js";
-import { TypedRule } from "./Type";
 
 export type NeedleState = "still" | "seek" | "settle" | "waver";
 
@@ -22,39 +21,22 @@ export function CompassMark(props: { bearing?: number; state?: NeedleState; size
       <Show when={props.title}>
         <title>{props.title}</title>
       </Show>
-      <circle cx="16" cy="16" r="13.6" fill="none" stroke="currentColor" stroke-width="2.2" />
-      <path d="M16 3.6v3.2M16 25.2v3.2M3.6 16h3.2M25.2 16h3.2" stroke="currentColor" stroke-width="1.6" />
+      <circle cx="16" cy="16" r="13.8" fill="none" stroke="currentColor" stroke-width="1.8" />
+      <path d="M16 4v2.6M16 25.4V28M4 16h2.6M25.4 16H28" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
       <g class="needle">
-        <path class="n-north" d="M16 6.2 L19.2 16 L12.8 16Z" stroke-width="1.3" stroke-linejoin="round" />
-        <path class="n-south" d="M16 25.8 L12.8 16 L19.2 16Z" />
+        <path class="n-north" d="M16 6.6 L19 16 L13 16Z" stroke-width="1.2" stroke-linejoin="round" />
+        <path class="n-south" d="M16 25.4 L13 16 L19 16Z" />
       </g>
-      <circle class="hub" cx="16" cy="16" r="1.5" />
+      <circle class="hub" cx="16" cy="16" r="1.4" />
     </svg>
   );
 }
 
-/**
- * The letterhead: "TARIFF C◎MPASS" typed in bold capitals with the compass as its "O", over a typed double rule,
- * as at the head of a ruling letter.
- */
-export function Wordmark(props: { size?: "xl" | "lg"; state?: NeedleState; bearing?: number }) {
+/** The brand: the compass and the name, sentence case. */
+export function Brand(props: { compact?: boolean; state?: NeedleState }) {
   return (
-    <h1 class="ty-letterhead mx-auto w-fit" aria-label="Tariff Compass">
-      <span class="flex items-center justify-center whitespace-nowrap" aria-hidden="true">
-        Tariff&nbsp;C
-        <CompassMark size={0} class="h-[0.6em] w-[0.6em] shrink-0 translate-y-[-0.01em]" state={props.state} bearing={props.bearing} />
-        mpass
-      </span>
-      <TypedRule double class="mt-[0.22em] text-[clamp(14px,1.5vw,18px)] text-ink" />
-    </h1>
-  );
-}
-
-/** The strip's brand: the compass and the name typed in letter-spaced capitals. */
-export function Brand(props: { compact?: boolean }) {
-  return (
-    <span class="inline-flex items-center gap-2.5 whitespace-nowrap font-type text-[17px] font-[700] uppercase tracking-[0.08em] text-ink max-sm:gap-2 max-sm:text-[14px] max-sm:tracking-[0.04em]">
-      <CompassMark size={30} />
+    <span class="inline-flex items-center gap-2.5 whitespace-nowrap text-[16px] font-[650] tracking-[-0.015em] text-ink">
+      <CompassMark size={26} state={props.state} />
       <span classList={{ "sr-only": props.compact }}>Tariff Compass</span>
     </span>
   );

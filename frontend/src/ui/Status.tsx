@@ -23,7 +23,7 @@ export function RulingStatusGlyph(props: { kind: RulingStatusOut["kind"]; size?:
 
 export function RulingStatus(props: { status: RulingStatusOut; long?: boolean; class?: string }) {
   return (
-    <span class={`inline-flex items-center gap-1.5 text-[13.5px] font-[600] ${props.class ?? ""}`}>
+    <span class={`inline-flex items-center gap-1.5 whitespace-nowrap text-[13px] font-[550] text-ink-2 ${props.class ?? ""}`}>
       <RulingStatusGlyph kind={props.status.kind} />
       <span>{props.long ? props.status.text || props.status.kindLabel : props.status.kindLabel}</span>
     </span>
@@ -32,7 +32,7 @@ export function RulingStatus(props: { status: RulingStatusOut; long?: boolean; c
 
 export function VerdictTag(props: { word: Verdict; label: string; size?: "sm" | "lg" }) {
   return (
-    <span class={tag({ tone: props.word === "strong" ? "ok" : "warn", class: props.size === "lg" ? "text-[15px] py-1" : "" })}>
+    <span class={tag({ tone: props.word === "strong" ? "ok" : "warn", class: props.size === "lg" ? "text-[13.5px] px-3 py-1" : "" })}>
       {props.word === "strong" ? <OkIcon size={14} /> : <AskIcon size={14} />}
       {props.label}
     </span>
@@ -68,7 +68,7 @@ export function KindTag(props: { tone: "ok" | "warn" | "bad" | "ink" | "muted"; 
 export function MatchMark(props: { match: MatchWord; label: string }) {
   return (
     <span
-      class="inline-flex items-center gap-1 whitespace-nowrap text-[14px] font-[650]"
+      class="inline-flex items-center gap-1 whitespace-nowrap text-[13px] font-[600]"
       classList={{ "text-ok": props.match === "same", "text-warn": props.match === "close", "text-bad": props.match === "differs" }}
     >
       <Switch>

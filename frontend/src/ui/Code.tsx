@@ -1,8 +1,8 @@
 /**
- * Tariff codes typed in Courier Prime (bold), grouped 4.2.2.2. The heading digits sit on the highlighter; a leaning code
- * (needs a broker) gets a dashed amber underline instead. "Lock" drops each digit in with a slight overshoot.
+ * Tariff codes in Reddit Mono, grouped 4.2.2.2. The heading digits are ink on the highlighter band; the rest are
+ * softer. A leaning code (needs a broker) gets a dashed amber underline instead of the highlighter.
  */
-import { For, Show } from "solid-js";
+import { For, Show, createSignal, onMount, untrack } from "solid-js";
 import { codeSegments } from "~/lib/format";
 import { reducedMotion } from "~/lib/motion";
 import type { DigitTreatment } from "~/lib/verdict";
@@ -12,23 +12,28 @@ export function CodeDigits(props: {
   leaning?: boolean;
   /** Overrides `leaning`: how to draw the heading digits and the rest (from the confidence word at each depth). */
   treatment?: { heading: DigitTreatment; rest: DigitTreatment };
+  /** Sweep the highlighter in once when the code first appears. */
   lock?: boolean;
   size?: "xl" | "lg" | "md" | "sm";
   class?: string;
 }) {
   const segs = () => codeSegments(props.code);
   const size = () =>
-    ({ xl: "text-[clamp(30px,2.65vw,40px)] font-[700]", lg: "text-[28px] font-[700]", md: "text-[17px] font-[700]", sm: "text-[14.5px] font-[700]" })[
+    ({ xl: "text-[clamp(28px,2.6vw,36px)] font-[500] tracking-[-0.02em]", lg: "text-[24px] font-[500] tracking-[-0.01em]", md: "text-[16px] font-[500]", sm: "text-[14px] font-[500]" })[
       props.size ?? "md"
     ];
-  const lock = () => !!props.lock && !reducedMotion();
+  const [lit, setLit] = createSignal(!untrack(() => props.lock) || reducedMotion());
+  onMount(() => {
+    if (!lit()) requestAnimationFrame(() => setTimeout(() => setLit(true), 120));
+  });
   const treat = (heading: boolean): DigitTreatment => {
+    // In lists (small codes) the code stays plain: the row's badge already says how sure it is.
+    if (props.size === "sm") return "plain";
     const t = props.treatment ?? { heading: props.leaning ? "dashed" : "hl", rest: "plain" };
     return heading ? t.heading : t.rest;
   };
-  let digit = 0;
   return (
-    <span class={`font-code tracking-[-0.01em] leading-none whitespace-nowrap ${size()} ${props.class ?? ""}`} aria-label={props.code}>
+    <span class={`font-code leading-none whitespace-nowrap ${size()} ${props.class ?? ""}`} aria-label={props.code}>
       <For each={segs()}>
         {(seg, i) => (
           <>
@@ -40,22 +45,16 @@ export function CodeDigits(props: {
             <span
               aria-hidden="true"
               data-treatment={treat(seg.heading)}
+              data-lit={treat(seg.heading) === "hl" ? String(lit()) : undefined}
               classList={{
-                hl: treat(seg.heading) === "hl",
-                // A dashed amber rule (a border, so it also shows under the dropping digits).
+                "hl-sweep": treat(seg.heading) === "hl",
+                hl: treat(seg.heading) === "hl" && !props.lock,
+                "text-ink": seg.heading,
+                "text-ink-2": !seg.heading,
                 "border-b-2 border-dashed border-warn": treat(seg.heading) === "dashed",
               }}
             >
-              <For each={seg.text.split("")}>
-                {(ch) => {
-                  const n = digit++;
-                  return (
-                    <span class={lock() ? "anim-lock" : undefined} style={lock() ? { "animation-delay": `${n * 50}ms` } : undefined}>
-                      {ch}
-                    </span>
-                  );
-                }}
-              </For>
+              {seg.text}
             </span>
           </>
         )}
@@ -64,7 +63,7 @@ export function CodeDigits(props: {
   );
 }
 
-/** A code inside prose: typed, no highlighter. */
+/** A code inside prose. */
 export function InlineCode(props: { children: string; class?: string }) {
   return <span class={`font-code text-[0.94em] whitespace-nowrap ${props.class ?? ""}`}>{props.children}</span>;
 }
