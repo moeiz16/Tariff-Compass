@@ -185,7 +185,7 @@ carries `X-Tariff-Compass-Now` from the one demo clock. Details and latency budg
 | AI core | **DSPy** 3.5 (five-module program) optimised with **GEPA** 0.1; a deterministic offline LM simulator; Groq, Gemini or OpenRouter free tiers when a key is set |
 | Classical ML | **scikit-learn** 1.9 (TF-IDF, logistic regression, linear SVM, temperature calibration), **LightGBM** 4.7, **Optuna** 5, **MLflow** (local tracking and registry), PSI drift |
 | Documents | pypdf (spec sheets), ReportLab (binder PDF) |
-| Web | **SolidStart** 1.5 (SolidJS, TypeScript), **Ark UI** 5.40 with Park UI-style recipes (`tailwind-variants`), **Tailwind CSS** 4.1, TanStack Table, GSAP Flip; Bitter, Source Serif 4 and Spline Sans Mono, self-hosted |
+| Web | **SolidStart** 1.5 (SolidJS, TypeScript), **Ark UI** 5.40 with Park UI-style recipes (`tailwind-variants`), **Tailwind CSS** 4.1, TanStack Table, GSAP Flip; Courier Prime (headings, codes and quoted law, set like a typed ruling letter) and Instrument Sans (reading text and controls), self-hosted |
 | Quality | pytest, Ruff, mypy, `tsc`, Vitest, an evaluation harness with gates, GitHub Actions CI |
 
 Pinned versions and why each was chosen: [ADR 0001](docs/adr/0001-toolchain-and-feasibility.md).

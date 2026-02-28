@@ -17,7 +17,7 @@ Tariff Compass answers one question an importer has to get right on every entry:
 
 A design review of the first version found a generic "house style" under the colours: similar font feel, the same cards, modals and panels, no established component system, and the same page skeleton (top bar + centre column + something on the right). The first version of this design had exactly that skeleton on its results page (reading column + aligned citation rail). This section records what changed. **Where it conflicts with anything below, this section wins.** Sections 5, 6, 8, 9, 10, 12 and 13 are already rewritten to match.
 
-**Kept (the parts that were Tariff Compass's own):** the search-engine concept (front page, the box docking, scope verticals), the 97 chapters, the compass mark and its Seek / Settle / Waver states, the highlighter as the only accent, the receipt-style landed cost, Spline Sans Mono for codes, Source Serif 4 for quoted law, the palette.
+**Kept (the parts that were Tariff Compass's own):** the search-engine concept (front page, the box docking, scope verticals), the 97 chapters, the compass mark and its Seek / Settle / Waver states, the highlighter as the only accent, the receipt-style landed cost, the palette. (Type: see §0b.)
 
 **1. Component system: Ark UI + Park UI-style recipes.** Every interactive part is an **Ark UI for SolidJS** component (`@ark-ui/solid` 5.40.0, headless, from the Chakra team), styled with **Park UI-style slot recipes written in `tailwind-variants`** on our Tailwind 4.1 `@theme` tokens (Park UI itself ships Panda CSS presets; we keep its anatomy and recipe shape, not Panda). The full mapping is in §13. **Verified on Node 21.7.1:** a SolidStart 1.5.1 + Vinxi 0.5.11 (Vite 6.4.6) + Tailwind 4.1.18 + Ark UI 5.40.0 test app type-checks, builds, serves (HTTP 200) and server-renders 12 Ark components (accordion, combobox, dialog, hover-card, menu, pin-input, segment-group, splitter, tabs, toast, tooltip, tree-view). SolidStart 2.x is ruled out (it needs Node ≥ 24 and Vite 8/9). Across the portfolio this is the only Ark/Park system: Kinroot moves to shadcn/ui (React), and the others use Skeleton (Svelte), Nuxt UI (Vue), Mantine (React), Web Awesome (Lit), Angular Material and Fluent UI.
 
@@ -35,9 +35,69 @@ A design review of the first version found a generic "house style" under the col
 
 No card grids anywhere: surfaces are bands (holding), tables (docket, matrix, compare), slips (receipt, drawers, toasts, sheet) and rules.
 
-**3. Typography: the voice is now a slab serif.** Schibsted Grotesk read as "yet another grotesque" next to Hanken Grotesk, Geist and Figtree. The voice (body, headings, UI, wordmark) is now **Bitter** (variable 100–900 with italics), a screen-first slab serif, which gives the product the register of a typed ruling letter. Quoted law stays **Source Serif 4**; codes stay **Spline Sans Mono**. Gutter labels are Bitter italic with a small-caps-style bold heading (not lowercase mono, which is Nightjar's; not mono caps, which is Plotline's). Checked against Kinroot (Spectral, Hanken Grotesk, Red Hat Mono, changing), Nightjar SOC (Geist, Geist Mono), ClaimVoice (Bricolage Grotesque, Figtree), Plotline (Newsreader, IBM Plex Mono): **no project uses a slab**.
+**3. Typography.** Superseded by §0b (typewriter type redo): headings, the wordmark, codes and quoted law are typed in Courier Prime; reading text and controls are Instrument Sans.
 
 **4. Floating layers have one recipe.** Peek, menus, toasts and the sign-off sheet share a Park-style recipe: 1.5 px ink rule, radius 6 (4 for toasts), and a **hard 4 px ink offset** instead of a soft shadow. Drawers are inline, never floating. Dialogs are **sheets that drop from the query strip**, not centred modals. Toasts are small mono slips at the bottom left.
+
+---
+
+## 0b. Typewriter type redo
+
+Across the portfolio too many headings read alike: large, sentence-case, regular-weight serif or slab headings. Tariff Compass spoke in a slab, so its headings looked like Plotline's and Kinroot's. This redo changes the type only. The layout, the ruling-shaped memo pages, the query strip, the highlighter, the palette, the Ark UI components and the motion all stay. **Where this section conflicts with §0.3, §6, §8 (logo), §12 (type row) or §13 (fonts), this section wins.** Those sections are updated to match.
+
+**Heading style category: typewriter.** Every heading is set like a typed CBP ruling letter: capitals for section heads, underlined and followed by a colon ("FACTS:", "ISSUE:", "LAW AND ANALYSIS:", "HOLDING:"), underlined captions with a "RE:" where the page is about one thing (a product, a ruling, a comparison), typed rule lines of hyphens and equals signs, and a typed-letterhead wordmark. Long reading text stays in a sans for legibility. No other project in `TYPE_REGISTRY.md` sets headings in a monospaced typewriter face, underlines them or ends them with a colon.
+
+### Faces
+
+| Role | Face | Package (pinned) | Weights in use |
+|---|---|---|---|
+| **Typed:** headings, the wordmark, codes and amounts, quoted law (heading texts, holdings, ruling letters, listings, spec sheets), the receipt, gutter margin notes ("¶ 1", dates) | **Courier Prime** (a Courier redrawn for screens and long typing; OFL) | `@fontsource/courier-prime` 5.2.8: static 400, 400 italic, 700. No variable version exists. | 400 for quoted law and the receipt, 700 for headings and codes, 400 italic for signatures |
+| **Sans:** reading text, controls, tables, labels | **Instrument Sans** (variable) | `@fontsource-variable/instrument-sans` 5.2.8: the weight axis (400–700) and its italics. The width axis is not loaded. | 400 body, 600–650 labels, buttons and table heads, 700 for strong words; italic for gutter notes |
+
+Tokens: `--font-type` (Courier Prime) and `--font-sans` (Instrument Sans, also the page default). `--font-code` and `--font-law` remain as role aliases of `--font-type`, so a component still says whether it is showing a value or quoting the law. The faces of the earlier versions are retired, and their packages and references have been removed.
+
+### Scale, weight and spacing
+
+| Step | Token · class | Face | Size / leading | Case, weight, spacing, treatment | Used for |
+|---|---|---|---|---|---|
+| Letterhead | `--text-t-letterhead` · `.ty-letterhead` | Courier Prime | clamp(27px, 9vw, 84px) / 1 | CAPITALS, 700, +0.04em; the compass is the "O"; a typed double rule (`====`) the width of the name sits under it | the wordmark on the front page and the signed-in front page; "SIGN IN" at 30–42px |
+| Caption | `--text-t-caption` · `.ty-caption` | Courier Prime | clamp(24px, 2.5vw, 33px) / 1.22 | as written, 700, −0.015em, underlined 2px at 0.2em; optional `RE:` (hidden from screen readers) | page titles: the binder's product, compare ("RE: Your product against NY N321134"), a ruling's subject, the review docket, my products, settings, not found; the landing's story heads at 23–34px |
+| Title | `--text-t-title` · `.ty-title` | Courier Prime | clamp(20px, 1.9vw, 24px) / 1.3 | as written, 700, −0.01em, no underline | Watch headlines, sheet titles, empty states, the Lab's "in use" line and chart sentences. Two typed statements use it bold at their own size: the holding sentence (20px) and the Lab's one-sentence lede (23–33px, with the highlighter on the number) |
+| Head | `--text-t-head` · `.ty-head` | Courier Prime | 15px / 1.3 | CAPITALS, 700, +0.03em, underlined 1.5px at 4px, colon added by CSS | every gutter section head (`.gl b`: HOLDING:, IN SHORT:, FACTS:, ISSUE:, LAW AND ANALYSIS:, LANDED COST:, AUTHORITIES CITED:, IN USE:, SIGN-OFF:, BULLETIN:), decision-record bands (FACTS: · THE CODE: · REASON:), home lists, binder foot, Watch's "what we know / don't", settings blocks (17px) |
+| Sub | `--text-t-sub` · `.ty-sub` | Courier Prime | 13px / 1.35 | CAPITALS, 700, +0.06em, ink-2 | small labels: "the fact that decides it", "Try a sample:", "the next training round will learn", popover titles, the matrix's version heads (14px) |
+| Law | `--text-t-law` · `.ty-law` | Courier Prime | 15.5px / 1.5 (letters 15.5 / 1.65); 14px on phones | as quoted, 400 | heading texts under codes, ruling holdings and letters, listing and spec-sheet quotes, tariff authorities |
+| Codes | `font-code` | Courier Prime | 14.5–40px | 700, grouped 4.2.2.2, heading digits on the highlighter | tariff codes, ruling numbers, rates, amounts; the receipt is 400 |
+| Lede | `--text-lede` | Instrument Sans | 19px / 1.55 | 400, bold words 650 | the landing lede, ¶0 In short |
+| Body | `--text-body` | Instrument Sans | 16px / 1.6 | 400 | reading text, tables, controls |
+| Meta | `--text-meta` | Instrument Sans | 13.5px / 1.45 | 400 (italic in the gutter) | captions, help, gutter notes |
+
+Rules: typed means the product is speaking in the register of a ruling (a heading, a holding, a code) or quoting the law; sans means the product is explaining or asking you to act. Courier Prime's regular strokes are thin, so typed text under 15px is set in ink, ink-2 or muted, never lighter, and codes and heads are always 700. The capitals come from `text-transform`, so the DOM text, the accessible names and the tests keep sentence case, and screen readers don't spell the words out.
+
+### Typed rules and the margin
+
+- **`TypedRule` / `.ty-rule`** prints a run of hyphens in Courier Prime and clips it to its box; `data-double` prints equals signs. **`.ty-ruled`** draws the same run along a band's lower edge in place of a hairline. Hyphens separate memo rows, Lab report sections, Watch bulletin items and the receipt's lines (in ink). Equals signs sit under the letterhead, "SIGN IN", the holding band and the head of a ruling letter. The rules use `--color-rule-type` (#9C9C93 light, #5F5F58 dark). They are decorative, never carry meaning, and are generated content with empty alternative text, so screen readers skip them.
+- **The gutter (`.gl`)** is typed: the paragraph number ("¶ 3"), the date and the context ("Binder · NB-KT-0412") in Courier Prime 13.5px muted, then the head, then the note in Instrument Sans italic. On phones the three run on one line ("¶ 1 FACTS:").
+- **The strip's brand** is the compass plus "TARIFF COMPASS" in Courier Prime 700 capitals at 17px, +0.08em. The initials in the person button are typed as well.
+
+### Screens touched
+
+- **Front page:** letterhead wordmark with the double rule, sans lede; "TRY A SAMPLE:"; the 97-chapter caption head; story sections with gutter heads and underlined typed captions.
+- **Answer memo:** typed gutter heads with colons; typed heading texts and holding sentence; typed Issue (no longer italic); path codes and steps typed; citation drawers and peeks quote holdings typed; the receipt's separators are typed hyphens; "AUTHORITIES CITED" sub-heads are typed capitals over an ink rule.
+- **Compare and ruling:** "RE:" captions; typed fact column; the ruling letter typed in full like the original letter; pane heads in typed capitals.
+- **Review docket:** a new "Review docket" caption (h1); the count typed; decision-record bands FACTS: · THE CODE: · REASON:; quoted listing and spec sheet typed.
+- **Binder:** "RE: <product>" caption; version columns headed in typed capitals; codes bold typed; foot heads typed.
+- **Watch, Lab, sign-in, home, settings, activity, tariff text, rulings, products, not found:** typed captions, titles, heads and new h1s where a page had none (Watch "Bulletin", activity, tariff text, rulings, products, docket).
+- **Phones (390px):** the letterhead scales to about 35px and fits; gutters collapse to one typed line; captions wrap and stay underlined.
+
+### Contrast and accessibility
+
+The palette (§7) is unchanged and both themes stay. New pairs, computed: muted typed margin text on paper / paper-2 6.1 / 5.6:1 (dark 7.2 / 6.6:1); ink-2 quoted law on paper 11.4:1 (dark 11.2:1); ink typed heads 18.9:1 (dark 15.8:1). The typed-rule grey carries no information. Focus rings, keyboard paths, `prefers-reduced-motion` and the 390px layouts are unchanged.
+
+### Verification
+
+Type check, lint, 69 web unit tests, 236 backend tests and the production build pass. The portfolio kit (30 shots, 1440×900 at 2× and 390px at 3×, light and dark) was retaken live against the seeded API with only `Date` frozen at Thu 19 Feb 2026 10:30 Vancouver: no horizontal overflow, console errors or failed calls. The README gallery and the LinkedIn images come from the same run. Before and after: `~/Work/_playbook/design/tariff-compass/shots/type-redo-before-after.png`.
+
+Remaining risk, judged against the other projects' screenshots: the page skeleton is unchanged, so at thumbnail size the answer and docket still read as the same product, which is intended. The smallest typed step (`.ty-sub`, letter-spaced capitals at 13px) is the one place that sits near another project's idiom (Plotline's small mono-capital labels). It is kept rare and always bold slab-serif Courier, and every larger heading is unlike anything else in the portfolio.
 
 ---
 
@@ -150,7 +210,7 @@ The landing's front page at a smaller wordmark, the date line ("Thursday 19 Febr
 - **The memo** (gutter 280 px + measure 820 px; rows separated by hairlines):
   - **¶0 In short:** the plain sentences at 19 px, each ending in citation chips. Pressing a chip opens an **inline drawer** under the paragraph: ruling number, date, status, holding with the supporting words marked, and a mini table "Fact · Yours · The ruling's · ✓ same / ≈ close / ✗ differs", with **Compare side by side**, **Read the ruling** and **This ruling doesn't apply** (the broker's "wrong source" signal). Several drawers can be open.
   - **¶1 Facts:** what the answer rests on, as a definition list; each fact says where it came from ("your description", "read from 'insulated'", "assumed", "not stated"). Read or assumed facts are marked ◇ in amber, and a confirm box asks for them ("It's vacuum-sealed" / "Only air between the walls").
-  - **¶2 Issue:** the question in one italic sentence.
+  - **¶2 Issue:** the question in one typed sentence.
   - **¶3 Law and analysis:** an Ark **Accordion**, one item per step (3.1 Section XX … 3.5 Suffix .00). The **gutter carries the path**: an indented spine with nodes, level name and code, the final node on the highlighter. Each trigger shows the heading text in serif and its GRI chip. The panel holds the reasoning, the quoted text, the struck neighbours ("not 7323 … Set aside: excluded by Section XV, Note 1 [3]") and the Canada note.
   - **¶4 Landed cost:** controls (Into: US / Canada as an Ark SegmentGroup; Made in: China / Vietnam / Mexico; shipment), the stacked bar, then the **receipt** (a perforated mono slip: goods value, lettered charges with rate and amount, n/a lines struck, charges total, landed, per unit, "⚠ = legal status open") beside **lettered reasons** (a, b, c…, each with source, effective date and any legal-status flag) and "What could change this total".
   - **¶5 Authorities cited:** a two-column table of authorities: rulings with status, then the tariff texts relied on (Heading 9617, Section XV Note 1, Heading 7323, GRI 1 and 6).
@@ -159,11 +219,11 @@ The landing's front page at a smaller wordmark, the date line ("Thursday 19 Febr
 Shots: `02-results-light.png` (drawer [1] open), `02-results-full-light.png`, `02-results-analysis-light.png`, `02-results-receipt-light.png`, `02-results-peek-light.png`, `02-results-broker-light.png`, `02-results-loading-light.png`, `02-results-error-light.png`, `02-results-dark.png`.
 
 ### 5.4 Ruling: two-pane compare (`ruling.html`)
-Header in the gutter grid: "‹ Back to the answer / COMPARE / cited as [1]", the title "Your tumbler against NY N321134", and the 19 CFR 177.9(b)(2) sentence quoted. Then a full-width **fact-alignment table** (Fact · your product · Match · the ruling's article), with the match column tinted. Below, an Ark **Splitter**: **Your product** on the left (listing, spec sheet, supplier email, made in, also relied on, with the supporting words marked) and **the ruling** on the right (status in the pane header, the letter in Source Serif with its supporting passages marked in reading order). The handle drags or moves with arrow keys. On phone the alignment table stacks per fact and the panes stack. Shots: `09-compare-light.png`, `09-compare-dark.png`, `11-phone-compare.png`.
+Header in the gutter grid: "‹ Back to the answer / COMPARE / cited as [1]", the title "Your tumbler against NY N321134", and the 19 CFR 177.9(b)(2) sentence quoted. Then a full-width **fact-alignment table** (Fact · your product · Match · the ruling's article), with the match column tinted. Below, an Ark **Splitter**: **Your product** on the left (listing, spec sheet, supplier email, made in, also relied on, with the supporting words marked) and **the ruling** on the right (status in the pane header, the letter typed in Courier Prime, like the original letter, with its supporting passages marked in reading order). The handle drags or moves with arrow keys. On phone the alignment table stacks per fact and the panes stack. Shots: `09-compare-light.png`, `09-compare-dark.png`, `11-phone-compare.png`.
 
 ### 5.5 Broker review: the docket (`review.html`)
 A count line with keyboard hints, then filter chips as an Ark ToggleGroup (All · Classifier unsure · Differs from last code · Ruling changed · Always reviewed). Then a **full-width table** (TanStack Table with Ark controls): Waiting (sorted) · Product + SKU line · Into · Proposed · Why it's here (kind tag + one-line detail) · Value · With. The selected row gets a 4 px highlighter edge and **unfolds into a decision record** spanning the table:
-- **Facts:** the listing and the spec sheet in serif, the deciding phrase on the highlighter ("air-insulated"), file and uploader, and one sentence on what the classifier misread.
+- **Facts:** the listing and the spec sheet typed (quoted), the deciding phrase on the highlighter ("air-insulated"), file and uploader, and one sentence on what the classifier misread.
 - **The code:** the proposed digits in cells with changed ones struck in red, and **your code in a 10-cell Ark PinInput** directly beneath, changed cells on the highlighter (dots are automatic). Under them, the old heading text struck and the new one; "Also change Canada to 7323.93.00.00"; "Relied on NY N256733".
 - **Reason:** an Ark RadioGroup (The product facts differ · A ruling points elsewhere · A heading was read wrongly), a required reason, and **The next training round will learn** in one sentence.
 - **Footer:** Approve as proposed (A) · Ask Northbound a question (Q) · "Recorded in the binder with your name and licence" · **Save correction (C)**, which raises a toast slip "Corrected · NB-KT-0388 → 7323.93.00.80 · binder v3".
@@ -199,17 +259,16 @@ Like a search engine's settings: a short left list and one long page. **Defaults
 No page scrolls sideways (checked in every shot). Shots: `11-phone-landing.png`, `11-phone-results.png`, `11-phone-results-full.png`, `11-phone-results-broker.png`, `11-phone-review.png`, `11-phone-compare.png`, `11-phone-binder.png`, `11-phone-lab.png`.
 ---
 
-## 6. Typefaces (Google Fonts; self-hosted via Fontsource in the build)
+## 6. Typefaces (self-hosted via Fontsource)
 
-| Role | Face | Weights | Where |
-|---|---|---|---|
-| **Voice:** body, headings, UI, wordmark | **Bitter** (variable 100–900, italics 100–900), a screen-first slab serif | 400 body (16.5/1.58), 550–650 labels and buttons, 700–800 headings and the wordmark ("Tariff" at 300 italic, "Compass" at 800); italic for the Issue sentence and gutter notes | everything Tariff Compass says in its own words, like a typed ruling letter |
-| **Law** | **Source Serif 4** (variable, optical size 8–60) | 400 | heading texts, ruling holdings and letters, quoted listings and spec sheets: **anything quoted from someone else** |
-| **Codes** | **Spline Sans Mono** | 500 codes, 600 chips | tariff codes, ruling numbers, rates, amounts, the receipt, GRI chips, fingerprints. **Never used for labels or prose.** |
+See §0b for the full system. In short:
 
-Rules: slab = our voice, transitional serif = quoted authority, mono = a value you could type into a customs form. Gutter labels are Bitter italic with a letter-spaced bold heading (FACTS, ISSUE…): not lowercase mono (Nightjar) and not mono caps (Plotline).
+| Role | Face | Where |
+|---|---|---|
+| **Typed** | **Courier Prime** (400, 400 italic, 700) | headings in the typewriter style (letterhead, captions, titles, capital heads with colons, sub-heads), codes and amounts, quoted law, the receipt, the gutter margin |
+| **Sans** | **Instrument Sans** (variable weight 400–700, italics) | reading text, controls, tables, help and captions |
 
-Portfolio check: Necessa (system sans), Plotline (Newsreader, Fraunces, IBM Plex Mono, JetBrains Mono), Kinroot (Spectral, Hanken Grotesk, Red Hat Mono; being changed), Nightjar SOC (Geist, Geist Mono), ClaimVoice (Bricolage Grotesque, Figtree), and the registry's planned faces for 6–10 (Atkinson Hyperlegible, Libre Caslon, Public Sans, Commit Mono, Archivo, DM Mono, Overpass, Big Shoulders, Mona Sans, Martian Mono). **Bitter, Source Serif 4 and Spline Sans Mono appear nowhere else, and Tariff Compass is the only slab-voiced product.** (The first version used Schibsted Grotesk; it was dropped as too neutral.)
+Rules: typed = the product speaking in the register of a ruling, or quoting the law; sans = the product explaining or asking you to act. Gutter heads are typed capitals, underlined, with a colon (FACTS:), not lowercase mono (Nightjar) and not tracked condensed capitals (Nightjar's new style).
 
 ## 7. Palette (tokens), contrast checked
 
@@ -262,9 +321,9 @@ Accent family: **yellow, hue ≈ 50°**, used only as a highlighter. The registr
 - **Ink buttons, square-ish:** ink fill with paper text, or ink outline; keyboard hints as small `kbd` caps inside docket buttons.
 - **Citation chips:** tiny bordered mono numbers at cap height; open = ink-filled.
 - **Pin cells:** 30 × 38 px code cells; changed cells on the highlighter, struck cells with a red line.
-- **Ditto marks:** unchanged matrix cells show 〃 in the law face.
+- **Ditto marks:** unchanged matrix cells show a typed ditto (a straight double quote in Courier Prime, muted), as on a typewritten form.
 - **Path:** a 2 px ink spine with elbows and 14 px open nodes in the gutter; the final node filled with the highlighter.
-- **Logo:** the compass (ring, four ticks, a two-part needle with a highlighter-yellow north half) in the gutter and as the "o" of the Bitter wordmark.
+- **Logo:** the compass (ring, four ticks, a two-part needle with a highlighter-yellow north half) in the gutter and as the "O" of the typed letterhead wordmark "TARIFF COMPASS" (Courier Prime 700 capitals over a typed double rule).
 
 ## 9. Motion language: "Bearing"
 
@@ -326,7 +385,7 @@ Libraries: none needed; hand-built SVG/CSS from data in Solid components. If sca
 | Page skeleton | sidebar + content + cards | map + floating ledger + inspector | canvas + right drawer | tiles | split transcript ↔ claim file | **Gutter + measure**: full-bleed holding band, then numbered memo rows; the docket, matrix and compare are full-width tables; **no right column on any page** |
 | Landing archetype | Headline left, card right | Scroll story under a huge serif date | Type into the client pin | Console replay of a night | Mirrored waveform you play | **A search engine's front page** with the 97 chapters; Classify narrows them and the page turns into the ruling-shaped answer in place |
 | Primary data idiom | Cards | Map + ledger | Graph canvas | Logs and tiles | Waveform + transcript | **Memo paragraphs with inline citation drawers, a receipt, a docket table, a revision matrix with ditto marks** |
-| Type | System sans | Newsreader / Fraunces + IBM Plex Mono | Spectral + Hanken Grotesk + Red Hat Mono | Geist + Geist Mono | Bricolage Grotesque + Figtree | **Bitter (slab voice) + Source Serif 4 (quoted law) + Spline Sans Mono (codes)** |
+| Type | System sans | Newsreader / Fraunces + IBM Plex Mono | Spectral + Hanken Grotesk + Red Hat Mono | Geist + Geist Mono | Bricolage Grotesque + Figtree | **Courier Prime (typed headings, codes, quoted law) + Instrument Sans (reading text)** |
 | Palette / theme | Grey + indigo | Map paper + slate + orange | Bond grey + oxblood | Night + mint, dark-first | Porcelain + aubergine + orchid | **Pure white + true ink + highlighter yellow as a mark only**; warm-black night reading |
 | Floating layers | soft shadow cards and modals | paper sheets | drawer | palette and tiles | sheets in pills | **Hard 4 px ink offset slips; dialogs as sheets dropping from the query strip; drawers inline** |
 | Motion | 150 ms fades | Self-drawing outlines, fly-to | Unfold, string pull | Ticks, baton, hold | Breathe, settle, pluck, hush | **Bearing**: seek, narrow, settle/waver, dock, lock, mark, stack, redline, drawer, unfold, sheet, slip |
@@ -338,7 +397,7 @@ Libraries: none needed; hand-built SVG/CSS from data in Solid components. If sca
 - The review screen is a full-width docket table with an unfolded three-band record and yellow pin cells.
 - No right column appears anywhere.
 
-The slab voice separates it from every grotesque- or serif-voiced sibling at a glance. Remaining risk: the white, rule-based look depends on the highlighter, the mono codes and the gutter discipline. The implementation must keep the gutter alignment and must not add cards.
+The typewriter headings (§0b) separate it from every serif-, slab-, grotesk- or display-headed sibling at a glance. Remaining risk: the white, rule-based look depends on the highlighter, the mono codes and the gutter discipline. The implementation must keep the gutter alignment and must not add cards.
 
 ### Changes from the §Harmon hypothesis
 1. **Renamed** to Tariff Compass, and the metaphor sharpened into "take a bearing": a heading in customs and a heading on a compass. The compass becomes the logo, the "o" of the wordmark, the loading state (**Seek**) and the confidence signal (**Settle** vs **Waver**).
@@ -367,7 +426,7 @@ The slab voice separates it from every grotesque- or serif-voiced sibling at a g
 | `tailwind-variants` | 4.0.2 | Park UI-style slot recipes |
 | `@tanstack/solid-table` | 8.21.3 | docket, chapter table |
 | `tailwindcss` / `@tailwindcss/vite` | 4.1.18 | peer Vite ^5.2 \|\| ^6 \|\| ^7 |
-| `@fontsource-variable/bitter`, `/source-serif-4`, `/spline-sans-mono` | 5.3.0 / 5.3.1 / 5.3.0 | self-hosted, works offline |
+| `@fontsource/courier-prime`, `@fontsource-variable/instrument-sans` | 5.2.8 / 5.2.8 | self-hosted, works offline |
 | `gsap` | 3.13.0 | only Dock and the chapter-tile morph (Flip), lazy-loaded |
 
 Expected `npm` warnings on Node 21 (harmless, the build passes): EBADENGINE for vite 6.4.6, nitropack 2.13.6, rollup-plugin-visualizer 7.1.3, and vite 8.3.8 (pulled only by `@tanstack/directive-functions-plugin` inside Start; unused by the build). Config: `app.config.ts` = `defineConfig({ vite: { plugins: [tailwindcss()] } })`. Portal-based parts use `Portal` from `solid-js/web`.
@@ -407,14 +466,18 @@ Expected `npm` warnings on Node 21 (harmless, the build passes): EBADENGINE for 
 
 ```css
 @import "tailwindcss";
-@import "@fontsource-variable/bitter";
-@import "@fontsource-variable/source-serif-4";
-@import "@fontsource-variable/spline-sans-mono";
+@import "@fontsource-variable/instrument-sans";
+@import "@fontsource-variable/instrument-sans/wght-italic.css";
+@import "@fontsource/courier-prime/400.css";
+@import "@fontsource/courier-prime/400-italic.css";
+@import "@fontsource/courier-prime/700.css";
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 @theme {
-  --font-voice: "Bitter Variable", ui-serif, Georgia, serif;
-  --font-law: "Source Serif 4 Variable", ui-serif, Georgia, serif;
-  --font-code: "Spline Sans Mono Variable", ui-monospace, monospace;
+  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-type: "Courier Prime", "Courier New", ui-monospace, monospace;
+  --font-code: var(--font-type);
+  --font-law: var(--font-type);
+  /* type scale: --text-t-letterhead, -t-caption, -t-title, -t-head, -t-sub, -t-law, --text-lede, -body, -meta (§0b) */
   --color-paper: #FFFFFF;  --color-paper-2: #F4F4EF; --color-paper-3: #EAEAE3;
   --color-ink: #111111;    --color-ink-2: #3A3A36;   --color-muted: #62625B;
   --color-rule: #D9D9D0;   --color-hi: #FFE14D;      --color-hi-soft: #FFF3A6;
