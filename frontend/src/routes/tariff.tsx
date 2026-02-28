@@ -79,7 +79,9 @@ export default function TariffPage() {
       <div class="gm py-8">
         <div class="gl">
           <span>Search</span>
-          <b>Tariff text</b>
+          <h1 class="not-italic">
+            <b>Tariff text</b>
+          </h1>
           <span class="gl-extra block">the schedule as its own indented outline</span>
         </div>
         <div class="gm-body">
@@ -102,7 +104,7 @@ export default function TariffPage() {
           <Show when={tree()}>
             {(t) => (
               <section class="mt-6" aria-labelledby="outline-h">
-                <h2 id="outline-h" class="text-[15px] font-[750]">
+                <h2 id="outline-h" class="ty-head">
                   {outline()!.line.code} in its place
                 </h2>
                 <p class="text-[14px] text-muted">{outline()!.editionLabel}</p>
@@ -126,7 +128,7 @@ export default function TariffPage() {
                 <Show when={hits()} fallback={<SkeletonLines lines={6} />}>
                   {(h) => (
                     <Show when={h().length} fallback={<EmptyState title="No lines match that">Try a broader word, or the first four digits of a code.</EmptyState>}>
-                      <h2 class="border-b-[1.5px] border-ink pb-2 text-[14px] font-[700] text-ink-2">
+                      <h2 class="ty-sub border-b-[1.5px] border-ink pb-2">
                         {h().length} lines for “{params.q}”
                       </h2>
                       <ul>

@@ -10,6 +10,7 @@ import type { Me, Role } from "~/lib/types";
 import { Brand, CompassMark } from "~/ui/Compass";
 import { MailIcon } from "~/ui/Icons";
 import { button } from "~/ui/recipes";
+import { TypedRule } from "~/ui/Type";
 
 type Step = "email" | "password" | "org";
 
@@ -112,8 +113,11 @@ export default function SignIn() {
       </header>
       <main id="main" class="mx-auto max-w-[780px] px-4 pb-20 pt-[clamp(32px,10vh,120px)] text-center">
         <CompassMark size={56} class="mx-auto" state={busy() ? "seek" : "still"} />
-        <h1 class="mt-6 text-[38px] font-[800] tracking-[-0.02em]">Sign in</h1>
-        <p class="mt-2 text-[18px] text-ink-2">Importers and brokers use the same sign-in. One question at a time, like a search.</p>
+        <h1 class="ty-letterhead mx-auto mt-6 w-fit text-[clamp(30px,4vw,42px)]">
+          Sign in
+          <TypedRule double class="mt-2 text-[16px] text-ink" />
+        </h1>
+        <p class="mt-4 text-[17px] text-ink-2">Importers and brokers use the same sign-in. One question at a time, like a search.</p>
         <Show when={params.ended}>
           <p role="status" class="mx-auto mt-4 max-w-[560px] rounded-[var(--radius-btn)] border border-rule px-3 py-2 text-[15px] text-ink-2">
             Your session ended. Sign in again and you'll come back where you were.
@@ -204,7 +208,7 @@ export default function SignIn() {
           </Match>
           <Match when={step() === "org"}>
             <section class="mx-auto mt-8 max-w-[640px] text-left" aria-labelledby="org-h">
-              <h2 id="org-h" class="text-[18px] font-[750]">
+              <h2 id="org-h" class="ty-title">
                 3 · Which organisation are you working in?
               </h2>
               <ul class="mt-3 border-t border-rule">
@@ -231,7 +235,7 @@ export default function SignIn() {
 
         <Show when={session()?.demoSignIn && session()!.demoPeople.length && step() !== "org"}>
           <section class="mx-auto mt-14 max-w-[720px] border-t-[1.5px] border-ink pt-5 text-left" aria-labelledby="demo-h">
-            <h2 id="demo-h" class="text-[15px] font-[750]">
+            <h2 id="demo-h" class="ty-title text-[17px]">
               Sample organisation: sign in as one of its people
             </h2>
             <p class="mt-1 text-[14.5px] text-muted">Each role sees what its job needs. The data is a labelled sample.</p>

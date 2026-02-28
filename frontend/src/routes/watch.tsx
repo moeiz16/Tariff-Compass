@@ -49,11 +49,11 @@ function Bulletin(props: { item: WatchItemOut }) {
     }
   };
   return (
-    <article id={item().id} class="gm border-b border-rule py-9 max-md:py-7" aria-labelledby={`${item().id}-h`}>
-      <p class="pt-1 font-code text-[15px] font-[650] leading-snug max-[960px]:mb-2">
+    <article id={item().id} class="gm ty-ruled py-9 max-md:py-7" aria-labelledby={`${item().id}-h`}>
+      <p class="pt-1 font-type text-[15px] font-[700] leading-snug max-[960px]:mb-2">
         {item().dateLabel}
         <Show when={item().dateNote}>
-          <span class="block text-[13.5px] font-[400] text-ink-2">{item().dateNote}</span>
+          <span class="block font-sans text-[13.5px] font-[400] text-ink-2">{item().dateNote}</span>
         </Show>
       </p>
       <div class="gm-body">
@@ -65,20 +65,20 @@ function Bulletin(props: { item: WatchItemOut }) {
             {item().affectedCount} of your products
           </span>
         </p>
-        <h2 id={`${item().id}-h`} class="mt-3 text-[clamp(22px,2.4vw,28px)] font-[750] leading-[1.2] tracking-[-0.01em]">
+        <h2 id={`${item().id}-h`} class="ty-title mt-3 text-[clamp(20px,2.1vw,26px)]">
           {item().headline}
         </h2>
-        <p class="mt-2 text-[18px] leading-[1.6] text-ink-2">{item().body}</p>
+        <p class="mt-2 text-[17px] leading-[1.6] text-ink-2">{item().body}</p>
         <Show when={item().knows.length || item().unknowns.length}>
           <div class="mt-5 grid grid-cols-2 rounded-[var(--radius-box)] border border-rule max-md:grid-cols-1">
             <div class="px-5 py-4">
-              <h3 class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">What we know</h3>
+              <h3 class="ty-head">What we know</h3>
               <ul class="mt-2 list-disc space-y-1 pl-5 text-[16px]">
                 <For each={item().knows}>{(k) => <li>{k}</li>}</For>
               </ul>
             </div>
             <div class="border-l border-rule px-5 py-4 max-md:border-l-0 max-md:border-t">
-              <h3 class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">What we don't</h3>
+              <h3 class="ty-head">What we don't</h3>
               <ul class="mt-2 list-disc space-y-1 pl-5 text-[16px]">
                 <For each={item().unknowns}>{(k) => <li>{k}</li>}</For>
               </ul>
@@ -161,7 +161,12 @@ export default function WatchPage() {
   return (
     <AppPage title="Watch" scope="watch" permission="watch:read" query={params.q} placeholder="Search changes: a code, a ruling, a duty" boxLabel="Search changes" onSearch={(q) => setParams({ q: q || undefined })}>
       <div class="gm pt-6">
-        <span />
+        <div class="gl">
+          <span>Watch</span>
+          <h1 class="not-italic">
+            <b>Bulletin</b>
+          </h1>
+        </div>
         <div class="gm-body">
           <p class="text-[15.5px] text-ink-2">
             <Show when={data()} fallback="Opening the bulletin…">
@@ -206,7 +211,7 @@ export default function WatchPage() {
             <For each={items()}>{(i) => <Bulletin item={i} />}</For>
           </Show>
           <section class="mx-8 mb-12 mt-2 border-t-[1.5px] border-ink pt-5 max-md:mx-4" aria-labelledby="checks-h">
-            <h2 id="checks-h" class="text-[15px] font-[750]">
+            <h2 id="checks-h" class="ty-head">
               What Watch checks every morning
             </h2>
             <ul class="mt-3 grid grid-cols-4 gap-6 text-[15px] text-ink-2 max-lg:grid-cols-2 max-sm:grid-cols-1">

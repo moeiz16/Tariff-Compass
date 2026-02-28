@@ -58,7 +58,7 @@ export function LabPage(props: { n?: number }) {
         <Match when={overview() && round()}>
           <Show when={overview()!.inUse}>
             {(u) => (
-              <section class="gm border-b border-rule py-6" aria-labelledby="inuse-h">
+              <section class="gm ty-ruled py-6" aria-labelledby="inuse-h">
                 <div class="gl">
                   <span>Answering questions now</span>
                   <h2 id="inuse-h" class="not-italic">
@@ -66,7 +66,7 @@ export function LabPage(props: { n?: number }) {
                   </h2>
                 </div>
                 <div class="gm-wide flex max-w-[1160px] flex-wrap items-baseline gap-x-6 gap-y-2">
-                  <p class="text-[22px] font-[800] tracking-[-0.01em]">{u().label}</p>
+                  <p class="ty-title">{u().label}</p>
                   <p class="font-code text-[15px] text-ink-2">
                     full code {Math.round(u().fullCode)} in 100 · heading {Math.round(u().heading)} in 100
                   </p>

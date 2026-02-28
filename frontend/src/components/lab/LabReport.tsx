@@ -18,7 +18,7 @@ import { DepthPlot, FrequencyGrid } from "./Charts";
 
 function Section(props: { n: string; label: string; note?: string; children: JSX.Element }) {
   return (
-    <section class="gm border-b border-rule py-9 max-md:py-7">
+    <section class="gm ty-ruled py-9 max-md:py-7">
       <div class="gl">
         <span>{props.n}</span>
         <h2 class="not-italic">
@@ -43,7 +43,7 @@ export function RoundsStrip(props: { lab: LabOut; current: number }) {
             <Steps.Item index={i()} class="border-r border-rule last:border-r-0 max-md:border-b max-md:border-r-0 max-md:last:border-b-0" classList={{ "bg-hi text-hi-ink": r.status === "waiting_signoff" }}>
               <A href={`/lab/rounds/${r.n}`} class="block h-full px-5 py-3.5 no-underline hover:bg-paper-2" classList={{ "hover:bg-hi": r.status === "waiting_signoff", "outline outline-2 -outline-offset-4 outline-ink": r.n === props.current }} aria-current={r.n === props.current ? "page" : undefined}>
                 <span class="flex items-baseline justify-between gap-3">
-                  <b class="text-[17px]">Round {r.n}</b>
+                  <b class="font-type text-[17px] font-[700] uppercase tracking-[0.03em]">Round {r.n}</b>
                   <span class="text-[15px] font-[650]" classList={{ "text-ok": r.status === "live", "text-muted": r.status === "retired" || r.status === "not_made_live" }}>
                     {r.statusLabel}
                   </span>
@@ -191,7 +191,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
   return (
     <>
       <Section n={`Report · round ${r().n}`} label="In one sentence">
-        <p class="max-w-[820px] text-[clamp(28px,3.4vw,44px)] font-[800] leading-[1.12] tracking-[-0.025em]">{highlightLede(r().lede)}</p>
+        <p class="max-w-[860px] font-type text-[clamp(23px,2.6vw,33px)] font-[700] leading-[1.28] tracking-[-0.015em]">{highlightLede(r().lede)}</p>
         <p class="mt-4 max-w-[820px] text-[17px] leading-[1.6] text-ink-2">
           Tested on {r().testCount.toLocaleString("en-US")} rulings issued {dateShort(r().testFrom)} – {dateShort(r().testTo)}, newer than anything it learned from. Data snapshot{" "}
           <span class="font-code">{r().snapshot}</span>. {r().rerunNote}
@@ -251,7 +251,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
                 const s = () => r().signOff.signatures[i];
                 return (
                   <div class="min-h-[140px] px-5 py-4" classList={{ "border-l border-rule max-md:border-l-0 max-md:border-t": i === 1 }}>
-                    <p class="text-[13px] font-[750] uppercase tracking-[0.08em] text-ink-2">Signature {i + 1}</p>
+                    <p class="ty-head">Signature {i + 1}</p>
                     <Show
                       when={s()}
                       fallback={
@@ -272,7 +272,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
                     >
                       {(sig) => (
                         <div class="mt-3">
-                          <p class="font-law text-[26px] italic">{sig().statement}</p>
+                          <p class="font-law text-[22px] italic">{sig().statement}</p>
                           <p class="text-[14.5px] text-ink-2">
                             {sig().name}, {sig().roleLabel.toLowerCase()} · signed {dateTime(sig().signedAt)}
                           </p>

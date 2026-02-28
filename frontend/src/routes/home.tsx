@@ -44,7 +44,7 @@ export default function Home() {
         <main id="main" class="px-8 pb-20 pt-[clamp(28px,8vh,96px)] max-md:px-4">
           <div class="mx-auto max-w-[1060px] text-center">
             <Wordmark size="lg" />
-            <p class="mt-7 text-[18px] text-ink">{home()?.dateLine ?? m()?.snapshot.label ?? ""}</p>
+            <p class="mt-5 font-type text-[16px] text-ink">{home()?.dateLine ?? m()?.snapshot.label ?? ""}</p>
             <Show
               when={can("classify:run")}
               fallback={
@@ -96,7 +96,7 @@ export default function Home() {
           <div class="mx-auto mt-14 grid max-w-[1100px] grid-cols-2 gap-x-14 gap-y-10 max-lg:grid-cols-1">
             <section aria-labelledby="recent-h">
               <div class="flex items-baseline justify-between border-b-[1.5px] border-ink pb-2">
-                <h2 id="recent-h" class="text-[16.5px] font-[700] text-ink-2">
+                <h2 id="recent-h" class="ty-head">
                   Your recent classifications
                 </h2>
                 <A href="/products" class="text-[15px] underline underline-offset-4">
@@ -135,7 +135,7 @@ export default function Home() {
             <Show when={can("watch:read")}>
               <section aria-labelledby="changes-h">
                 <div class="flex items-baseline justify-between border-b-[1.5px] border-ink pb-2">
-                  <h2 id="changes-h" class="text-[16.5px] font-[700] text-ink-2">
+                  <h2 id="changes-h" class="ty-head">
                     What changed that touches your products
                   </h2>
                   <A href="/watch" class="text-[15px] underline underline-offset-4">

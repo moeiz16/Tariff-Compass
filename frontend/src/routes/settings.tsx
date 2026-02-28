@@ -69,7 +69,7 @@ function Block(props: { id: string; title: string; children: JSX.Element; aside?
   return (
     <section id={props.id} aria-labelledby={`${props.id}-h`} class="border-t-[1.5px] border-ink py-8">
       <div class="flex flex-wrap items-baseline justify-between gap-3">
-        <h2 id={`${props.id}-h`} class="text-[24px] font-[750] tracking-[-0.01em]">
+        <h2 id={`${props.id}-h`} class="ty-head text-[17px]">
           {props.title}
         </h2>
         {props.aside}
@@ -198,8 +198,8 @@ export default function SettingsPage() {
           </ul>
         </nav>
         <div class="gm-body max-w-[1000px]">
-          <p class="text-[15px] text-ink-2">{me()?.activeOrg?.name} · settings</p>
-          <h1 class="mt-1 text-[clamp(32px,3.6vw,44px)] font-[800] tracking-[-0.025em]">Settings</h1>
+          <p class="font-type text-[13.5px] text-muted">{me()?.activeOrg?.name} · settings</p>
+          <h1 class="ty-caption mt-1.5">Settings</h1>
 
           <Show when={params.switch && (me()?.orgs.length ?? 0) > 1}>
             <Block id="switch" title="Switch organisation">
@@ -307,7 +307,7 @@ export default function SettingsPage() {
               </div>
             </Show>
             <Show when={canPeople() && invitations()?.length}>
-              <h3 class="mt-6 text-[15px] font-[750]">Invitations waiting</h3>
+              <h3 class="ty-sub mt-6">Invitations waiting</h3>
               <ul class="mt-2">
                 <For each={invitations()}>
                   {(i) => (

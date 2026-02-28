@@ -43,7 +43,9 @@ export default function ActivityPage() {
       <div class="gm py-8">
         <div class="gl">
           <span>Settings</span>
-          <b>Activity record</b>
+          <h1 class="not-italic">
+            <b>Activity record</b>
+          </h1>
           <span class="gl-extra block">every sensitive action, chained</span>
         </div>
         <div class="gm-wide max-w-[1160px]">

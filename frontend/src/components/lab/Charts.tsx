@@ -54,7 +54,7 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
             return (
               <div class="grid grid-cols-[150px_minmax(0,1fr)_150px] items-center gap-x-6 border-b border-rule py-3.5 max-md:grid-cols-[96px_minmax(0,1fr)] max-md:gap-x-3">
                 <div>
-                  <p class="text-[16.5px] font-[700]">{r.levelLabel}</p>
+                  <p class="font-type text-[15px] font-[700] uppercase tracking-[0.03em]">{r.levelLabel}</p>
                   <p class="text-[14px] text-muted">{LEVEL_NOTE[r.level]}</p>
                 </div>
                 <div class="relative h-[20px]">
@@ -126,7 +126,7 @@ export function FrequencyGrid(props: { cell: ConfidenceCell; label: string; fill
       <figcaption class="text-[15.5px] text-ink-2">
         When it said <b class="text-ink">{props.label}</b> ({props.cell.said.toLocaleString("en-US")} times)
       </figcaption>
-      <p class="mt-1 text-[clamp(24px,2.6vw,32px)] font-[800] leading-tight tracking-[-0.015em]">{props.cell.sentence.split(": ").pop()}</p>
+      <p class="ty-title mt-1 text-[clamp(21px,2.2vw,27px)]">{props.cell.sentence.split(": ").pop()}</p>
       <div class="mt-3 grid w-fit grid-cols-[repeat(20,10px)] gap-[5px]" role="img" aria-label={`${props.cell.per100} of 100 ${props.filledMeans}; the rest ${props.restMeans}`}>
         <For each={Array.from({ length: 100 }, (_, i) => i)}>
           {(i) => <span class="h-[10px] w-[10px] rounded-full" classList={{ "bg-ink": i < props.cell.per100, "border-[1.5px] border-bad": i >= props.cell.per100 }} />}

@@ -16,7 +16,7 @@ export default function NotFound() {
       </header>
       <main id="main" class="mx-auto max-w-[640px] px-4 py-24 text-center">
         <CompassMark size={64} class="mx-auto" state="waver" bearing={0} />
-        <h1 class="mt-6 text-[32px] font-[800] tracking-[-0.02em]">We couldn't find that page.</h1>
+        <h1 class="ty-caption mt-6">We couldn't find that page.</h1>
         <p class="mt-2 text-[17px] text-ink-2">The needle has nothing to point at here. The link may be old, or the page may have moved.</p>
         <div class="mt-6 flex justify-center gap-2">
           <A href="/home" class={button()}>
