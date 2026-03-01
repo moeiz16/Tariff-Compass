@@ -1,7 +1,8 @@
-import { A, useSearchParams } from "@solidjs/router";
+import { A, useNavigate, useSearchParams } from "@solidjs/router";
 import { Match, Show, Switch, createResource, createSignal } from "solid-js";
-import { AnswerError, AnswerLoading, AnswerMemo } from "~/components/answer/AnswerMemo";
-import { AppPage } from "~/components/shell/AppPage";
+import { AnswerError, AnswerLoading, AnswerView } from "~/components/answer/AnswerView";
+import { AppPage, PageHead } from "~/components/shell/AppPage";
+import { SearchBox } from "~/components/shell/SearchBox";
 import { answers, meta } from "~/lib/endpoints";
 import { answerCache, useBrokerName } from "~/lib/org";
 import { plainProblem } from "~/lib/problem";
@@ -15,6 +16,8 @@ import { notify } from "~/ui/Toast";
 export default function AnswerPage() {
   const [params, setParams] = useSearchParams<{ id?: string; q?: string; into?: string; from?: string; ev?: string; cite?: string }>();
   const { can, me } = useSession();
+  const navigate = useNavigate();
+  const [asking, setAsking] = createSignal(false);
   const broker = useBrokerName();
   const [override, setOverride] = createSignal<AnswerOut | null>(null);
 
@@ -76,8 +79,58 @@ export default function AnswerPage() {
     }
   };
 
+  const question = () => current()?.query.text ?? params.q ?? "";
+  const intoLabel = (into: string[]) => (into.length > 1 ? "US + Canada" : into[0] === "CA" ? "Canada" : "US");
+  const box = (
+    <SearchBox
+      id="q"
+      mode="classify"
+      size="compact"
+      label="Describe what you're importing"
+      placeholder="Describe what you're importing…"
+      value={params.q ?? current()?.query.text}
+      madeIn={current()?.query.madeIn}
+      into={current()?.query.into}
+      suggestions={recent()?.recent.map((r) => r.queryText)}
+      allowFiles={can("classify:run")}
+      onSubmit={(text, opts) => {
+        if (!can("classify:run")) return;
+        setAsking(false);
+        const p = new URLSearchParams({ q: text, into: opts.into.join(","), from: opts.madeIn });
+        if (opts.evidence.length) p.set("ev", opts.evidence.map((e) => e.id).join(","));
+        navigate(`/answer?${p.toString()}`);
+      }}
+    />
+  );
+
   return (
-    <AppPage title={params.q ? params.q.slice(0, 60) : "Answer"} scope="answer" query={params.q ?? current()?.query.text}>
+    <AppPage title={params.q ? params.q.slice(0, 60) : "Answer"} place="classify" width="narrow">
+      <Show when={question()} fallback={<PageHead title="What are you importing?" />}>
+        <PageHead
+          title={<span class="line-clamp-2 text-[22px] max-sm:text-[19px]">{question()}</span>}
+          meta={
+            <Show when={current()}>
+              {(a) => (
+                <>
+                  <span>Into {intoLabel(a().query.into)}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>From {a().madeInLabel}</span>
+                </>
+              )}
+            </Show>
+          }
+          actions={
+            <Show when={can("classify:run")}>
+              <button type="button" class={button({ tone: "outline", size: "sm" })} aria-expanded={asking()} onClick={() => setAsking((v) => !v)}>
+                {asking() ? "Close" : "New question"}
+              </button>
+            </Show>
+          }
+        />
+      </Show>
+      <Show when={asking() || (!question() && can("classify:run"))}>
+        <div class="anim-rise mb-5">{box}</div>
+      </Show>
       <Switch>
         <Match when={answer.loading && !current()}>
           <AnswerLoading />
@@ -87,67 +140,56 @@ export default function AnswerPage() {
         </Match>
         <Match when={current()} keyed>
           {(a) => (
-            <AnswerMemo
+            <AnswerView
               answer={a}
-              openCites={params.cite ? params.cite.split(",").map(Number) : undefined}
+              openCite={params.cite ? Number(params.cite.split(",")[0]) : undefined}
               caps={{ live: true, canConfirm: can("classify:run"), canSend: can("review:submit"), canFlag: can("review:decide"), brokerName: broker() }}
               onAnswer={(next) => {
                 answerCache.put(next);
                 setOverride(next);
-                notify("Answer re-run with your fact", "The question and your answer are recorded in the binder.");
+                notify("Answer updated", "Your answer is recorded in the binder.");
               }}
               onSend={() => setSending(true)}
               actions={
                 <>
                   <Show when={can("products:write")}>
-                    <button type="button" class={button({ size: "lg" })} disabled={busy()} onClick={() => void save()}>
-                      Save to the product binder
+                    <button type="button" class={button({ size: "md" })} disabled={busy()} onClick={() => void save()}>
+                      Save to binder
                     </button>
                   </Show>
                   <Show when={can("review:submit")}>
-                    <button type="button" class={button({ tone: "ghost", size: "lg" })} onClick={() => setSending(true)}>
-                      Send to {broker()} for review
+                    <button type="button" class={button({ tone: "outline", size: "md" })} onClick={() => setSending(true)}>
+                      Send to {broker()}
                     </button>
                   </Show>
                   <Show when={can("review:decide") && a.reviewItemId}>
-                    <A href={`/review?open=${a.reviewItemId}`} class={button({ size: "lg" })}>
-                      Open it in the review docket
+                    <A href={`/review?open=${a.reviewItemId}`} class={button({ size: "md" })}>
+                      Open in Review
                     </A>
                   </Show>
-                  <p class="text-[14.5px] text-muted">Nothing is filed automatically. A licensed broker approves every code.</p>
                 </>
               }
             />
           )}
         </Match>
-        <Match when={!answer.loading}>
-          <div class="gm py-12">
-            <div class="gl">
-              <b>Answer</b>
-            </div>
-            <div class="gm-body">
-              <EmptyState
-                title={params.q && !can("classify:run") ? "Your role reads answers but doesn't classify" : "Ask about a product"}
-                action={
-                  <Show when={recent()?.recent.length}>
-                    <A href={`/answer?id=${recent()!.recent[0]!.id}`} class={button({ tone: "ghost", size: "sm" })}>
-                      Open your latest answer
-                    </A>
-                  </Show>
-                }
-              >
-                Describe it in the box above, paste a listing, or attach a spec sheet or photo. You get its US and Canadian codes, the rulings that back them and
-                every duty it will carry.
-              </EmptyState>
-            </div>
-          </div>
+        <Match when={!answer.loading && !can("classify:run")}>
+          <EmptyState
+            title="Your role reads answers"
+            action={
+              <Show when={recent()?.recent.length}>
+                <A href={`/answer?id=${recent()!.recent[0]!.id}`} class={button({ tone: "outline", size: "sm" })}>
+                  Open the latest answer
+                </A>
+              </Show>
+            }
+          />
         </Match>
       </Switch>
       <Sheet
         open={sending()}
         onOpenChange={setSending}
         title={`Send to ${broker()} for review`}
-        description="A licensed broker reviews the code before it is used on an entry. Add anything they should know."
+        description="A licensed broker checks the code before it is used on an entry."
       >
         <form
           onSubmit={(e) => {
@@ -155,14 +197,14 @@ export default function AnswerPage() {
             void send();
           }}
         >
-          <label for="send-note" class="text-[13px] font-[650] text-ink-2">
-            Note for the broker (optional)
+          <label for="send-note" class="text-[13px] font-[600] text-ink-2">
+            Note (optional)
           </label>
           <textarea
             id="send-note"
             value={note()}
             onInput={(e) => setNote(e.currentTarget.value)}
-            class="mt-1 min-h-[96px] w-full rounded-[var(--radius-box)] border-[1.5px] border-ink bg-paper px-3 py-2 text-[15.5px] text-ink"
+            class="mt-1 min-h-[96px] w-full rounded-[var(--radius-btn)] border border-rule-2 bg-card px-3 py-2 text-[15px] text-ink outline-none focus:border-ink"
             placeholder="The March order books on Monday."
           />
           <Show when={sheetError()}>
@@ -170,12 +212,12 @@ export default function AnswerPage() {
               {sheetError()}
             </p>
           </Show>
-          <div class="mt-4 flex gap-2">
+          <div class="mt-4 flex justify-end gap-2">
             <button type="submit" class={button()} disabled={busy()}>
               Send for review
             </button>
             <button type="button" class={button({ tone: "ghost" })} onClick={() => setSending(false)}>
-              Not yet
+              Cancel
             </button>
           </div>
         </form>

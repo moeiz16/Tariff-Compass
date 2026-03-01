@@ -1,17 +1,14 @@
 import { Title } from "@solidjs/meta";
 import { A, Navigate, useSearchParams } from "@solidjs/router";
 import { For, Match, Show, Switch, createResource, createSignal, onMount } from "solid-js";
-import { AnswerMemo } from "~/components/answer/AnswerMemo";
-import { The97, narrowFrom, type NarrowState } from "~/components/landing/The97";
-import { PublicFooter, Story } from "~/components/landing/Story";
-import { ThemeButton } from "~/components/shell/QueryStrip";
+import { AnswerLoading, AnswerView } from "~/components/answer/AnswerView";
+import { PublicBar, PublicFooter } from "~/components/landing/Public";
 import { SearchBox } from "~/components/shell/SearchBox";
 import { ApiProblem } from "~/lib/api";
-import { meta, publicApi } from "~/lib/endpoints";
-import { reducedMotion } from "~/lib/motion";
+import { publicApi } from "~/lib/endpoints";
 import { useSession } from "~/lib/session";
 import type { AnswerOut } from "~/lib/types";
-import { Brand, Wordmark, type NeedleState } from "~/ui/Compass";
+import { ScaleIcon, StackIcon, UserCheckIcon } from "~/ui/Icons";
 import { button } from "~/ui/recipes";
 import { EmptyState, ErrorSlip } from "~/ui/States";
 
@@ -22,56 +19,21 @@ function knownToDemo(text: string, samples: { title: string; query: string }[]):
   return samples.some((s) => [...words(`${s.title} ${s.query}`)].some((w) => asked.has(w)));
 }
 
-const wait = (ms: number) => new Promise((r) => setTimeout(r, reducedMotion() ? 0 : ms));
-
-function TopLinks() {
-  return (
-    <nav aria-label="About Tariff Compass" class="flex items-center justify-end gap-7 px-8 pt-5 text-[16px] max-md:gap-4 max-md:px-4 max-md:text-[15px]">
-      <a href="#why" class="text-ink-2 no-underline hover:text-ink max-md:hidden">
-        Why now
-      </a>
-      <a href="#brokers" class="text-ink-2 no-underline hover:text-ink max-md:hidden">
-        For brokers
-      </a>
-      <a href="#measure" class="text-ink-2 no-underline hover:text-ink max-md:hidden">
-        How we measure
-      </a>
-      <ThemeButton />
-      <A href="/signin" class="font-[700] text-ink underline underline-offset-[6px]">
-        Broker sign-in
-      </A>
-    </nav>
-  );
-}
+const FEATURES = [
+  { icon: ScaleIcon, title: "Cited rulings", text: "Every answer names the customs rulings behind it." },
+  { icon: StackIcon, title: "Every duty", text: "Each charge with its source and the date it took effect." },
+  { icon: UserCheckIcon, title: "Broker sign-off", text: "A licensed broker approves each code before it is used." },
+];
 
 export default function Landing() {
   const { me, session } = useSession();
   const [params, setParams] = useSearchParams<{ q?: string }>();
-  const [sections] = createResource(() => meta.sections().catch(() => []));
   const [samples] = createResource(() => publicApi.samples().catch(() => []));
-  const [narrow, setNarrow] = createSignal<NarrowState>({ phase: "idle", losers: [] });
-  const [needle, setNeedle] = createSignal<NeedleState>("still");
   const [answer, setAnswer] = createSignal<AnswerOut | null>(null);
+  const [active, setActive] = createSignal<string | null>(null);
   const [problem, setProblem] = createSignal<unknown>(null);
   const [notInDemo, setNotInDemo] = createSignal(false);
   const [busy, setBusy] = createSignal(false);
-  const [docked, setDocked] = createSignal(false);
-  const [caption, setCaption] = createSignal("");
-
-  const dock = async () => {
-    const el = document.querySelector("[data-flip-id=box]");
-    if (!el || reducedMotion()) {
-      setDocked(true);
-      window.scrollTo({ top: 0 });
-      return;
-    }
-    const [{ gsap }, { Flip }] = await Promise.all([import("gsap"), import("gsap/Flip")]);
-    gsap.registerPlugin(Flip);
-    const state = Flip.getState(el);
-    setDocked(true);
-    window.scrollTo({ top: 0 });
-    requestAnimationFrame(() => Flip.from(state, { targets: "[data-flip-id=box]", duration: 0.46, ease: "power3.out" }));
-  };
 
   const classifyPublic = async (text: string) => {
     const known = samples() ?? (await publicApi.samples().catch(() => []));
@@ -84,11 +46,7 @@ export default function Landing() {
     setBusy(true);
     setProblem(null);
     setNotInDemo(false);
-    setDocked(false);
-    setAnswer(null);
-    setNeedle("seek");
-    setNarrow({ phase: "dim", losers: [] });
-    setCaption("Reading the tariff…");
+    setActive(kind === "sample" ? value : null);
     try {
       const a =
         kind === "sample"
@@ -97,21 +55,9 @@ export default function Landing() {
               throw e;
             })
           : await classifyPublic(value);
-      const { winner, losers } = narrowFrom(a);
-      setNarrow({ phase: "candidates", winner, losers });
-      setCaption(`${losers.length + 1} chapters could hold it…`);
-      await wait(700);
-      setNarrow({ phase: "struck", winner, losers });
-      await wait(650);
-      setNarrow({ phase: "chosen", winner, losers });
-      setCaption(`…one does: Chapter ${winner}.`);
-      setNeedle(a.verdict.word === "strong" ? "settle" : "waver");
-      await wait(900);
+      setAnswer(null);
       setAnswer(a);
-      await dock();
     } catch (e) {
-      setNeedle("still");
-      setNarrow({ phase: "idle", losers: [] });
       if (e instanceof ApiProblem && e.code === "not_in_demo") setNotInDemo(true);
       else setProblem(e);
     } finally {
@@ -120,151 +66,128 @@ export default function Landing() {
   };
 
   onMount(() => {
-    const key = params.q;
     // A sample key ("tumbler", "sleeping-bag") opens that sample; anything else is classified as text.
-    if (key) void (async () => {
+    // With no question, the tumbler's answer is shown as the preview.
+    void (async () => {
       const list = await publicApi.samples().catch(() => []);
-      void run(list.some((s) => s.key === key) ? "sample" : "text", key);
+      const key = params.q ?? list[0]?.key;
+      if (key) void run(list.some((s) => s.key === key) ? "sample" : "text", key);
     })();
   });
 
-  const reset = () => {
-    setDocked(false);
-    setAnswer(null);
-    setNarrow({ phase: "idle", losers: [] });
-    setNeedle("still");
-    setParams({ q: undefined });
-  };
-
-  const box = (hero: boolean) => (
-    <div data-flip-id="box">
-      <SearchBox
-        id={hero ? "q-hero" : "q-strip"}
-        mode="classify"
-        size={hero ? "hero" : "strip"}
-        label="Describe what you're importing"
-        placeholder="Describe what you're importing…"
-        value={answer()?.query.text}
-        madeIn={answer()?.query.madeIn}
-        into={answer()?.query.into}
-        busy={busy()}
-        suggestions={samples()?.map((s) => s.query)}
-        onSubmit={(text) => {
-          const s = samples()?.find((x) => x.query === text || x.title === text);
-          setParams({ q: s ? s.key : text });
-          void run(s ? "sample" : "text", s ? s.key : text);
-        }}
-      />
-    </div>
-  );
-
   return (
     <Show when={!session.loading || session.latest} fallback={<div class="min-h-dvh" />}>
-    <Show when={!me()} fallback={<Navigate href="/home" />}>
-      <Title>Tariff Compass · US and Canadian tariff codes with the rulings behind them</Title>
-      <div id="top" />
-      <Show
-        when={docked() && answer()}
-        fallback={
-          <>
-            <TopLinks />
-            <main id="main" class="px-8 pb-16 pt-[clamp(32px,9vh,110px)] max-md:px-4">
-              <div class="mx-auto max-w-[1060px] text-center">
-                <Wordmark state={needle()} bearing={32} />
-                <p class="mx-auto mt-7 max-w-[720px] text-[clamp(17px,1.5vw,19px)] leading-[1.55] text-ink-2">
-                  Describe a product. Get its <b class="font-[650] text-ink">US and Canadian tariff codes</b>, the <b class="font-[650] text-ink">customs rulings</b>{" "}
-                  that back them, and <b class="font-[650] text-ink">every duty</b> it will carry.
-                </p>
-                <div class="mx-auto mt-8 max-w-[1060px] text-left">{box(true)}</div>
-                <div class="mt-4 flex flex-wrap items-baseline justify-center gap-x-6 gap-y-2 text-[17px]">
-                  <span class="ty-sub text-muted ty-colon">Try a sample</span>
-                  <For each={samples() ?? []}>
-                    {(s) => (
-                      <button
-                        type="button"
-                        class="underline decoration-rule decoration-[3px] underline-offset-[7px] hover:decoration-ink disabled:opacity-60"
-                        disabled={busy()}
-                        onClick={() => {
-                          setParams({ q: s.key });
-                          void run("sample", s.key);
-                        }}
-                      >
-                        {s.title}
-                      </button>
-                    )}
-                  </For>
-                </div>
-                <p class="mt-3 text-[14.5px] text-muted">Samples are illustrations; measured accuracy is in the Lab and in the README.</p>
-              </div>
-              <div class="mx-auto mt-12 max-w-[1000px]">
-                <Switch>
-                  <Match when={notInDemo()}>
-                    <EmptyState
-                      title="The public demo only knows Northbound's sample products."
-                      action={
-                        <>
-                          <button type="button" class={button({ size: "md" })} onClick={() => void run("sample", "tumbler")}>
-                            Try the tumbler
-                          </button>
-                          <A href="/signin" class={button({ tone: "ghost", size: "md" })}>
-                            Sign in
-                          </A>
-                        </>
-                      }
-                    >
-                      Sign in to classify your own products and keep each answer in an audit binder.
-                    </EmptyState>
-                  </Match>
-                  <Match when={problem()}>
-                    <ErrorSlip error={problem()} retry={() => (params.q ? void run("sample", params.q) : undefined)} />
-                  </Match>
-                  <Match when={sections()?.length}>
-                    <The97 sections={sections()!} narrow={narrow()} caption={caption()} />
-                  </Match>
-                </Switch>
-              </div>
-            </main>
-            <Story />
-            <PublicFooter />
-          </>
-        }
-      >
-        <header class="border-b-[1.5px] border-ink">
-          <div class="grid grid-cols-[var(--spacing-gutter)_minmax(0,880px)_1fr] items-center gap-y-2 px-8 py-3.5 max-[960px]:grid-cols-[1fr_auto] max-[960px]:px-4">
-            <button type="button" onClick={reset} class="w-fit text-left" aria-label="Back to the front page">
-              <Brand />
-            </button>
-            <div class="min-w-0 max-[960px]:col-span-2 max-[960px]:row-start-2">{box(false)}</div>
-            <div class="flex items-center justify-end gap-4 pl-6 max-[960px]:col-start-2 max-[960px]:row-start-1">
-              <ThemeButton />
-              <A href="/signin" class="font-[700] underline underline-offset-[6px]">
-                Broker sign-in
-              </A>
-            </div>
-          </div>
-        </header>
+      <Show when={!me()} fallback={<Navigate href="/home" />}>
+        <Title>Tariff Compass · US and Canadian tariff codes with the rulings behind them</Title>
+        <PublicBar
+          onBrand={() => {
+            setParams({ q: undefined });
+            window.scrollTo({ top: 0 });
+          }}
+        />
         <main id="main">
-          <AnswerMemo
-            answer={answer()!}
-            openCites={[1]}
-            caps={{ live: false, canConfirm: false, canSend: false, canFlag: false, brokerName: "Driftwood" }}
-            banner={
-              <div class="gm border-b border-rule bg-paper py-4">
-                <span class="gl"><b>Sample</b></span>
-                <p class="gm-wide text-[16px]">
-                  This is a sample answer for a product from Northbound Goods Co.{" "}
-                  <A href="/signin" class="font-[700] underline underline-offset-4">
-                    Sign in
-                  </A>{" "}
-                  to classify your own and keep each answer in an audit binder. Samples are illustrations; measured accuracy is in the Lab and in the README.
-                </p>
-              </div>
-            }
-          />
+          <section class="mx-auto max-w-[820px] px-6 pb-10 pt-[clamp(40px,9vh,104px)] text-center max-sm:px-4">
+            <h1 class="text-balance text-display font-[600] tracking-[-0.035em]">The right tariff code, with the rulings behind it.</h1>
+            <p class="mx-auto mt-4 max-w-[560px] text-[17px] leading-[1.55] text-muted">US and Canadian codes, every duty it will carry, and a broker's sign-off.</p>
+            <div class="mx-auto mt-8 text-left">
+              <SearchBox
+                id="q-hero"
+                mode="classify"
+                size="hero"
+                label="Describe what you're importing"
+                placeholder="Describe what you're importing…"
+                busy={busy()}
+                suggestions={samples()?.map((s) => s.query)}
+                onSubmit={(text) => {
+                  const s = samples()?.find((x) => x.query === text || x.title === text);
+                  setParams({ q: s ? s.key : text });
+                  void run(s ? "sample" : "text", s ? s.key : text);
+                }}
+              />
+            </div>
+            <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <span class="text-[13px] text-muted">Try</span>
+              <For each={samples() ?? []}>
+                {(s) => (
+                  <button
+                    type="button"
+                    aria-pressed={active() === s.key}
+                    class="h-8 rounded-full border border-rule bg-card px-3.5 text-[13.5px] font-[550] text-ink-2 hover:border-rule-2 hover:text-ink disabled:opacity-60 aria-pressed:border-ink aria-pressed:text-ink"
+                    disabled={busy()}
+                    onClick={() => {
+                      setParams({ q: s.key });
+                      void run("sample", s.key);
+                    }}
+                  >
+                    {s.title}
+                  </button>
+                )}
+              </For>
+            </div>
+          </section>
+
+          <section aria-label="Sample answer" class="mx-auto max-w-[820px] px-6 pb-20 max-sm:px-4">
+            <Switch>
+              <Match when={notInDemo()}>
+                <div class="rounded-[var(--radius-card)] border border-rule bg-card">
+                  <EmptyState
+                    title="The demo knows three sample products"
+                    action={
+                      <>
+                        <button type="button" class={button({ size: "sm" })} onClick={() => void run("sample", "tumbler")}>
+                          Try the tumbler
+                        </button>
+                        <A href="/signin" class={button({ tone: "outline", size: "sm" })}>
+                          Sign in
+                        </A>
+                      </>
+                    }
+                  />
+                </div>
+              </Match>
+              <Match when={problem()}>
+                <ErrorSlip error={problem()} retry={() => void run("sample", params.q ?? "tumbler")} />
+              </Match>
+              <Match when={answer() && !busy()}>
+                <Show when={answer()} keyed>
+                  {(a) => (
+                    <AnswerView
+                      answer={a}
+                      label="Sample answer"
+                      caps={{ live: false, canConfirm: false, canSend: false, canFlag: false, brokerName: "Driftwood" }}
+                      actions={
+                        <A href="/signin" class={button({ size: "md" })}>
+                          Classify your own
+                        </A>
+                      }
+                    />
+                  )}
+                </Show>
+              </Match>
+              <Match when={busy() || !answer()}>
+                <AnswerLoading />
+              </Match>
+            </Switch>
+          </section>
+
+          <section aria-label="What you get" class="border-t border-rule bg-card">
+            <ul class="mx-auto grid max-w-[1120px] grid-cols-3 gap-10 px-6 py-16 max-md:grid-cols-1 max-md:gap-8 max-sm:px-4">
+              <For each={FEATURES}>
+                {(f) => (
+                  <li>
+                    <span class="grid h-10 w-10 place-items-center rounded-[10px] bg-paper-2 text-ink">
+                      <f.icon size={19} />
+                    </span>
+                    <p class="mt-4 text-[16px] font-[600]">{f.title}</p>
+                    <p class="mt-1 text-[14.5px] leading-[1.55] text-muted">{f.text}</p>
+                  </li>
+                )}
+              </For>
+            </ul>
+          </section>
         </main>
         <PublicFooter />
       </Show>
-    </Show>
     </Show>
   );
 }

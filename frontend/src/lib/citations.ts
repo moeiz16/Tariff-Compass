@@ -1,18 +1,17 @@
 /**
- * Inline citation drawers: which drawers are open, and keyboard movement between chips.
- * Several drawers can be open at once; each opens under the paragraph that cites it.
+ * Citations open in the ruling drawer: one ruling at a time, from a numbered chip or a row in the Rulings layer.
+ * `[` and `]` move focus between the chips in reading order.
  */
 import { createSignal } from "solid-js";
 
-export function createCitationState(initial: number[] = []) {
-  const [open, setOpen] = createSignal<number[]>([...initial]);
+export function createCitationState(initial: number | null = null) {
+  const [open, setOpen] = createSignal<number | null>(initial);
   return {
     open,
-    isOpen: (n: number) => open().includes(n),
-    toggle: (n: number) => setOpen((o) => (o.includes(n) ? o.filter((x) => x !== n) : [...o, n].sort((a, b) => a - b))),
-    show: (n: number) => setOpen((o) => (o.includes(n) ? o : [...o, n].sort((a, b) => a - b))),
-    close: (n: number) => setOpen((o) => o.filter((x) => x !== n)),
-    closeAll: () => setOpen([]),
+    isOpen: (n: number) => open() === n,
+    show: (n: number) => setOpen(n),
+    toggle: (n: number) => setOpen((o) => (o === n ? null : n)),
+    close: () => setOpen(null),
   };
 }
 export type CitationState = ReturnType<typeof createCitationState>;

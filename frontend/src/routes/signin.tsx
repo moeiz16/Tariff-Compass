@@ -1,16 +1,16 @@
 import { Title } from "@solidjs/meta";
 import { A, useNavigate, useSearchParams } from "@solidjs/router";
 import { For, Match, Show, Switch, createSignal } from "solid-js";
-import { ThemeButton } from "~/components/shell/QueryStrip";
+import { PublicBar } from "~/components/landing/Public";
 import { ApiProblem } from "~/lib/api";
 import { auth } from "~/lib/endpoints";
 import { plainProblem } from "~/lib/problem";
 import { useSession } from "~/lib/session";
 import type { Me, Role } from "~/lib/types";
-import { Brand, CompassMark } from "~/ui/Compass";
-import { MailIcon } from "~/ui/Icons";
-import { button } from "~/ui/recipes";
-import { TypedRule } from "~/ui/Type";
+import { initials } from "~/lib/format";
+import { CompassMark } from "~/ui/Compass";
+import { ChevronIcon } from "~/ui/Icons";
+import { button, card } from "~/ui/recipes";
 
 type Step = "email" | "password" | "org";
 
@@ -95,162 +95,132 @@ export default function SignIn() {
     }
   };
 
-  const stepNo = () => ({ email: 1, password: 2, org: 3 })[step()];
+  const field =
+    "h-11 w-full rounded-[var(--radius-btn)] border border-rule-2 bg-card px-3.5 text-[15px] text-ink outline-none placeholder:text-muted focus:border-ink aria-[invalid=true]:border-bad";
 
   return (
     <>
       <Title>Sign in · Tariff Compass</Title>
-      <header class="flex items-center justify-between px-8 pt-5 max-md:px-4">
-        <A href="/" class="no-underline" aria-label="Tariff Compass front page">
-          <Brand />
-        </A>
-        <div class="flex items-center gap-4">
-          <ThemeButton />
-          <A href="/" class="text-[15.5px] font-[650] text-ink-2 no-underline hover:text-ink max-sm:hidden">
-            Try a sample without signing in
+      <PublicBar
+        right={
+          <A href="/" class={button({ tone: "ghost", size: "sm" })}>
+            Try a sample
           </A>
+        }
+      />
+      <main id="main" class="mx-auto max-w-[420px] px-4 pb-20 pt-[clamp(24px,8vh,88px)]">
+        <div class="text-center">
+          <CompassMark size={40} class="mx-auto text-ink" state={busy() ? "seek" : "still"} />
+          <h1 class="page-title mt-4">{step() === "org" ? "Choose an organisation" : "Sign in"}</h1>
         </div>
-      </header>
-      <main id="main" class="mx-auto max-w-[780px] px-4 pb-20 pt-[clamp(32px,10vh,120px)] text-center">
-        <CompassMark size={56} class="mx-auto" state={busy() ? "seek" : "still"} />
-        <h1 class="ty-letterhead mx-auto mt-6 w-fit text-[clamp(30px,4vw,42px)]">
-          Sign in
-          <TypedRule double class="mt-2 text-[16px] text-ink" />
-        </h1>
-        <p class="mt-4 text-[17px] text-ink-2">Importers and brokers use the same sign-in. One question at a time, like a search.</p>
         <Show when={params.ended}>
-          <p role="status" class="mx-auto mt-4 max-w-[560px] rounded-[var(--radius-btn)] border border-rule px-3 py-2 text-[15px] text-ink-2">
-            Your session ended. Sign in again and you'll come back where you were.
+          <p role="status" class="mt-4 rounded-[var(--radius-btn)] bg-paper-2 px-3 py-2 text-center text-[13.5px] text-ink-2">
+            Your session ended. Sign in to pick up where you were.
           </p>
         </Show>
 
         <Switch>
           <Match when={step() !== "org"}>
-            <form onSubmit={submit} class="mx-auto mt-8 max-w-[640px] text-left" novalidate>
-              <div class="flex items-center gap-2 rounded-[var(--radius-box)] border-[1.5px] border-ink bg-paper py-1.5 pl-4 pr-1.5 shadow-[var(--shadow-soft)] focus-within:shadow-[0_0_0_4px_var(--color-hi)]">
-                <MailIcon size={18} class="shrink-0 text-muted" />
-                <Show
-                  when={step() === "password"}
-                  fallback={
-                    <>
-                      <label for="email" class="sr-only">
-                        Your work email
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        autocomplete="username"
-                        value={email()}
-                        onInput={(e) => setEmail(e.currentTarget.value)}
-                        placeholder="Your work email"
-                        aria-invalid={!!error()}
-                        aria-describedby={error() ? "signin-error" : undefined}
-                        class="h-12 min-w-0 flex-1 bg-transparent text-[18px] outline-none placeholder:text-muted focus-visible:shadow-none focus-visible:outline-none"
-                        autofocus
-                      />
-                    </>
-                  }
-                >
-                  <label for="password" class="sr-only">
-                    Password for {email()}
+            <form onSubmit={submit} class={card({ class: "mt-6 p-6 max-sm:p-5" })} novalidate>
+              <Show
+                when={step() === "password"}
+                fallback={
+                  <>
+                    <label for="email" class="text-[13px] font-[600] text-ink-2">
+                      Work email
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      autocomplete="username"
+                      value={email()}
+                      onInput={(e) => setEmail(e.currentTarget.value)}
+                      placeholder="name@company.com"
+                      aria-invalid={!!error()}
+                      aria-describedby={error() ? "signin-error" : undefined}
+                      class={`${field} mt-1.5`}
+                      autofocus
+                    />
+                  </>
+                }
+              >
+                <div class="flex items-baseline justify-between gap-3">
+                  <label for="password" class="text-[13px] font-[600] text-ink-2">
+                    Password
                   </label>
-                  <input
-                    ref={input}
-                    id="password"
-                    type="password"
-                    autocomplete="current-password"
-                    value={password()}
-                    onInput={(e) => setPassword(e.currentTarget.value)}
-                    placeholder={`Password for ${email()}`}
-                    aria-invalid={!!error()}
-                    aria-describedby={error() ? "signin-error" : undefined}
-                    class="h-12 min-w-0 flex-1 bg-transparent text-[18px] outline-none placeholder:text-muted focus-visible:shadow-none focus-visible:outline-none"
-                  />
-                </Show>
-                <button type="submit" class={button({ size: "lg" })} disabled={busy()}>
-                  {step() === "email" ? "Continue" : "Sign in"}
-                </button>
-              </div>
-              <ol class="mt-3 flex justify-between text-[14.5px] text-muted" aria-label="Steps">
-                <For each={["Email", "Password or sign-in link", "Your organisation"]}>
-                  {(s, i) => (
-                    <li aria-current={stepNo() === i() + 1 ? "step" : undefined} classList={{ "text-ink font-[650]": stepNo() === i() + 1 }}>
-                      <b>{i() + 1}</b> {s}
-                    </li>
-                  )}
-                </For>
-              </ol>
+                  <button type="button" class="truncate text-[12.5px] text-muted underline underline-offset-4 hover:text-ink" onClick={() => setStep("email")}>
+                    {email()}
+                  </button>
+                </div>
+                <input
+                  ref={input}
+                  id="password"
+                  type="password"
+                  autocomplete="current-password"
+                  value={password()}
+                  onInput={(e) => setPassword(e.currentTarget.value)}
+                  aria-invalid={!!error()}
+                  aria-describedby={error() ? "signin-error" : undefined}
+                  class={`${field} mt-1.5`}
+                />
+              </Show>
               <Show when={error()}>
-                <p id="signin-error" role="alert" class="mt-4 rounded-[var(--radius-box)] border-[1.5px] border-dashed border-ink bg-paper-2 px-4 py-3 text-[15.5px]">
+                <p id="signin-error" role="alert" class="mt-2.5 text-[13.5px] font-[550] text-bad">
                   {error()}
                 </p>
               </Show>
-              <Show when={step() === "password"}>
-                <p class="mt-4 text-center text-[15px] text-ink-2">
-                  <button type="button" class="underline underline-offset-4" onClick={() => setStep("email")}>
-                    Use a different email
-                  </button>
-                </p>
-              </Show>
-            </form>
-            <p class="mx-auto mt-8 max-w-[600px] text-[15.5px] leading-[1.6] text-ink-2">
-              Prefer no password?{" "}
-              <button type="button" class="font-[700] text-ink underline underline-offset-4" onClick={() => setLinkSent(true)}>
-                Email me a sign-in link
+              <button type="submit" class={button({ size: "lg", class: "mt-4 w-full" })} disabled={busy()}>
+                {step() === "email" ? "Continue" : "Sign in"}
               </button>
-              . Sessions end after 30 minutes idle and 12 hours at most, and every sign-in is recorded in your organisation's activity record.
-            </p>
-            <Show when={linkSent()}>
-              <p role="status" class="mt-2 text-[14.5px] text-muted">
-                If that address has an account, a sign-in link is on its way. It works once, for 15 minutes.
+              <p class="mt-3 text-center text-[13px] text-muted">
+                <Show when={!linkSent()} fallback={<span role="status">If that address has an account, a link is on its way.</span>}>
+                  <button type="button" class="underline underline-offset-4 hover:text-ink" onClick={() => setLinkSent(true)}>
+                    Email me a sign-in link
+                  </button>
+                </Show>
               </p>
-            </Show>
+            </form>
           </Match>
           <Match when={step() === "org"}>
-            <section class="mx-auto mt-8 max-w-[640px] text-left" aria-labelledby="org-h">
-              <h2 id="org-h" class="ty-title">
-                3 · Which organisation are you working in?
-              </h2>
-              <ul class="mt-3 border-t border-rule">
-                <For each={me()?.orgs ?? []}>
-                  {(o) => (
-                    <li class="border-b border-rule">
-                      <button type="button" class="flex w-full items-center justify-between gap-4 py-3 text-left hover:bg-paper-2" onClick={() => void chooseOrg(o.id)}>
-                        <span>
-                          <span class="block text-[17px] font-[700]">{o.name}</span>
-                          <span class="text-[14px] text-muted">
-                            {o.roleLabel}
-                            {o.viaBroker ? ` · through ${o.viaBroker}` : ""}
-                          </span>
+            <ul class={card({ class: "mt-6 overflow-hidden" })}>
+              <For each={me()?.orgs ?? []}>
+                {(o) => (
+                  <li class="border-b border-rule last:border-b-0">
+                    <button type="button" class="flex w-full items-center justify-between gap-4 px-5 py-3.5 text-left hover:bg-paper-2" onClick={() => void chooseOrg(o.id)}>
+                      <span>
+                        <span class="block text-[15px] font-[600]">{o.name}</span>
+                        <span class="text-[12.5px] text-muted">
+                          {o.roleLabel}
+                          {o.viaBroker ? ` · through ${o.viaBroker}` : ""}
                         </span>
-                        <span aria-hidden="true">→</span>
-                      </button>
-                    </li>
-                  )}
-                </For>
-              </ul>
-            </section>
+                      </span>
+                      <ChevronIcon size={15} class="-rotate-90 text-muted" />
+                    </button>
+                  </li>
+                )}
+              </For>
+            </ul>
           </Match>
         </Switch>
 
         <Show when={session()?.demoSignIn && session()!.demoPeople.length && step() !== "org"}>
-          <section class="mx-auto mt-14 max-w-[720px] border-t-[1.5px] border-ink pt-5 text-left" aria-labelledby="demo-h">
-            <h2 id="demo-h" class="ty-title text-[17px]">
-              Sample organisation: sign in as one of its people
-            </h2>
-            <p class="mt-1 text-[14.5px] text-muted">Each role sees what its job needs. The data is a labelled sample.</p>
-            <ul class="mt-3 grid grid-cols-2 gap-x-6 max-sm:grid-cols-1">
+          <section class="mt-8" aria-labelledby="demo-h">
+            <p id="demo-h" class="label text-center">
+              Or try as
+            </p>
+            <ul class={card({ class: "mt-3 overflow-hidden" })}>
               <For each={session()!.demoPeople}>
                 {(p) => (
-                  <li class="border-b border-rule">
-                    <button type="button" disabled={busy()} class="flex w-full items-baseline justify-between gap-3 py-3 text-left hover:bg-paper-2" onClick={() => void demo(p.role)}>
-                      <span>
-                        <span class="block text-[16.5px] font-[700]">{p.fullName}</span>
-                        <span class="block text-[14px] text-ink-2">
+                  <li class="border-b border-rule last:border-b-0">
+                    <button type="button" disabled={busy()} class="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-paper-2" onClick={() => void demo(p.role)}>
+                      <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-paper-2 text-[12px] font-[650] text-ink-2">{initials(p.fullName)}</span>
+                      <span class="min-w-0 flex-1">
+                        <span class="block text-[14.5px] font-[600]">{p.fullName}</span>
+                        <span class="block truncate text-[12.5px] text-muted">
                           {p.roleLabel} · {p.orgName}
                         </span>
                       </span>
-                      <span class="text-[14px] font-[650] text-muted">Sign in →</span>
+                      <ChevronIcon size={15} class="-rotate-90 text-muted" />
                     </button>
                   </li>
                 )}
