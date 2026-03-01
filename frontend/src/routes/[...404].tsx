@@ -1,7 +1,8 @@
 import { Title } from "@solidjs/meta";
 import { A } from "@solidjs/router";
 import { HttpStatusCode } from "@solidjs/start";
-import { Brand, CompassMark } from "~/ui/Compass";
+import { PublicBar } from "~/components/landing/Public";
+import { CompassMark } from "~/ui/Compass";
 import { button } from "~/ui/recipes";
 
 export default function NotFound() {
@@ -9,20 +10,16 @@ export default function NotFound() {
     <>
       <Title>Not found · Tariff Compass</Title>
       <HttpStatusCode code={404} />
-      <header class="px-8 pt-5 max-md:px-4">
-        <A href="/" class="no-underline">
-          <Brand />
-        </A>
-      </header>
-      <main id="main" class="mx-auto max-w-[640px] px-4 py-24 text-center">
-        <CompassMark size={64} class="mx-auto" state="waver" bearing={0} />
-        <h1 class="ty-caption mt-6">We couldn't find that page.</h1>
-        <p class="mt-2 text-[17px] text-ink-2">The needle has nothing to point at here. The link may be old, or the page may have moved.</p>
+      <PublicBar />
+      <main id="main" class="mx-auto max-w-[520px] px-4 py-24 text-center">
+        <CompassMark size={48} class="mx-auto text-ink" state="waver" bearing={0} />
+        <h1 class="page-title mt-5">Page not found</h1>
+        <p class="mt-1.5 text-[14.5px] text-muted">The link may be old.</p>
         <div class="mt-6 flex justify-center gap-2">
           <A href="/home" class={button()}>
-            Go to your front page
+            Home
           </A>
-          <A href="/" class={button({ tone: "ghost" })}>
+          <A href="/" class={button({ tone: "outline" })}>
             Try a sample
           </A>
         </div>

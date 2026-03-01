@@ -4,7 +4,7 @@ export function allows(permissions: readonly string[] | undefined | null, permis
   return !!permissions?.includes(permission);
 }
 
-/** The permission each scope in the query strip needs. */
+/** The permission each place in the top bar needs. */
 export const SCOPE_PERMISSION: Record<string, string> = {
   answer: "classify:read",
   rulings: "rulings:read",

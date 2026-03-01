@@ -1,6 +1,6 @@
 /**
- * The box. On Answer it classifies: text (Ark Combobox with past questions and samples as suggestions), Into and
- * From (Ark Select), and a spec sheet or photo (Ark FileUpload). Elsewhere it searches the current scope.
+ * The classify box: text (Ark Combobox with past questions and samples as suggestions), Into and From (Ark Select),
+ * and a spec sheet or photo (Ark FileUpload).
  */
 import { Combobox, createListCollection } from "@ark-ui/solid/combobox";
 import { FileUpload } from "@ark-ui/solid/file-upload";
@@ -38,7 +38,7 @@ interface Props {
   label: string;
   placeholder: string;
   value?: string;
-  size?: "hero" | "strip";
+  size?: "hero" | "compact";
   suggestions?: string[];
   origins?: Labelled[];
   into?: Country[];
@@ -92,7 +92,7 @@ export function SearchBox(props: Props) {
     }
   };
 
-  const pick = "inline-flex h-[34px] items-center gap-1.5 whitespace-nowrap rounded-[var(--radius-btn)] border border-rule bg-paper px-2.5 text-[13.5px] font-[550] text-ink-2 hover:border-ink cursor-pointer";
+  const pick = "inline-flex h-8 items-center gap-1 whitespace-nowrap rounded-full bg-paper-2 px-3 text-[13px] font-[550] text-ink-2 hover:text-ink hover:bg-paper-3 cursor-pointer";
 
   return (
     <form
@@ -104,11 +104,11 @@ export function SearchBox(props: Props) {
       }}
     >
       <div
-        class={`relative flex flex-wrap items-center gap-2 rounded-[var(--radius-box)] border-[1.5px] border-ink bg-paper focus-within:shadow-[0_0_0_4px_var(--color-hi)] ${
-          hero() ? "min-h-[60px] py-1.5 pl-[18px] pr-1.5 shadow-[var(--shadow-soft)] max-sm:pl-3" : "min-h-[50px] py-1 pl-3.5 pr-1"
+        class={`relative flex flex-wrap items-center gap-2 rounded-[var(--radius-card)] border border-rule-2 bg-card shadow-[var(--shadow-card)] transition-[border-color,box-shadow] focus-within:border-ink focus-within:shadow-[0_0_0_4px_rgb(24_24_27/0.06)] ${
+          hero() ? "min-h-[60px] py-2 pl-4 pr-2 max-sm:pl-3" : "min-h-[50px] py-1.5 pl-3.5 pr-1.5"
         }`}
       >
-        <SearchIcon size={18} class="shrink-0 text-muted" />
+        <SearchIcon size={17} class="shrink-0 text-muted" />
         <Combobox.Root
           collection={collection()}
           inputValue={text()}
@@ -145,7 +145,7 @@ export function SearchBox(props: Props) {
                 }
               }}
               class={`w-full min-w-0 border-0 bg-transparent py-2 text-ink outline-none placeholder:text-muted focus-visible:shadow-none focus-visible:outline-none ${
-                hero() ? "text-[19px] max-sm:text-[17px]" : "text-[16.5px]"
+                hero() ? "text-[17px] max-sm:text-[16px]" : "text-[15.5px]"
               }`}
             />
           </Combobox.Control>
@@ -153,12 +153,12 @@ export function SearchBox(props: Props) {
             <Portal>
               <Combobox.Positioner class="z-50">
                 <Combobox.Content class={floating({ class: "max-h-[320px] overflow-auto py-1.5" })}>
-                  <p class="px-3.5 pb-1 pt-0.5 text-[12px] font-[650] text-muted">
+                  <p class="px-3.5 pb-1 pt-1 text-[12px] font-[600] text-muted">
                     {props.mode === "classify" ? "Asked before" : "Suggestions"}
                   </p>
                   <For each={items()}>
                     {(item) => (
-                      <Combobox.Item item={item} class="cursor-pointer px-3.5 py-2 text-[15px] data-[highlighted]:bg-paper-2">
+                      <Combobox.Item item={item} class="mx-1.5 cursor-pointer rounded-[6px] px-2.5 py-2 text-[14.5px] data-[highlighted]:bg-paper-2">
                         <Combobox.ItemText>{item}</Combobox.ItemText>
                       </Combobox.Item>
                     )}
@@ -175,7 +175,7 @@ export function SearchBox(props: Props) {
               <Select.Label class="sr-only">Importing into</Select.Label>
               <Select.Control>
                 <Select.Trigger class={pick}>
-                  <span class="font-[450] text-muted max-sm:hidden">Into</span>
+                  <span class="font-[450] text-muted">Into</span>
                   <Select.ValueText />
                   <ChevronIcon size={12} class="text-muted" />
                 </Select.Trigger>
@@ -185,7 +185,7 @@ export function SearchBox(props: Props) {
                   <Select.Content class={floating({ class: "min-w-[180px] py-1" })}>
                     <For each={INTO_CHOICES}>
                       {(c) => (
-                        <Select.Item item={c} class="flex cursor-pointer items-center justify-between gap-4 px-3 py-2 text-[14.5px] data-[highlighted]:bg-paper-2">
+                        <Select.Item item={c} class="mx-1 flex cursor-pointer items-center justify-between gap-4 rounded-[6px] px-2.5 py-2 text-[14px] data-[highlighted]:bg-paper-2">
                           <Select.ItemText>{c.label}</Select.ItemText>
                           <Select.ItemIndicator>✓</Select.ItemIndicator>
                         </Select.Item>
@@ -200,7 +200,7 @@ export function SearchBox(props: Props) {
               <Select.Label class="sr-only">Made in</Select.Label>
               <Select.Control>
                 <Select.Trigger class={pick}>
-                  <span class="font-[450] text-muted max-sm:hidden">From</span>
+                  <span class="font-[450] text-muted">From</span>
                   <Select.ValueText />
                   <ChevronIcon size={12} class="text-muted" />
                 </Select.Trigger>
@@ -210,7 +210,7 @@ export function SearchBox(props: Props) {
                   <Select.Content class={floating({ class: "min-w-[160px] py-1" })}>
                     <For each={originCollection().items}>
                       {(c) => (
-                        <Select.Item item={c} class="flex cursor-pointer items-center justify-between gap-4 px-3 py-2 text-[14.5px] data-[highlighted]:bg-paper-2">
+                        <Select.Item item={c} class="mx-1 flex cursor-pointer items-center justify-between gap-4 rounded-[6px] px-2.5 py-2 text-[14px] data-[highlighted]:bg-paper-2">
                           <Select.ItemText>{c.label}</Select.ItemText>
                           <Select.ItemIndicator>✓</Select.ItemIndicator>
                         </Select.Item>
@@ -243,7 +243,7 @@ export function SearchBox(props: Props) {
         <button
           type="submit"
           disabled={props.busy}
-          class={button({ size: hero() ? "lg" : "md", class: hero() ? "max-sm:order-4 max-sm:ml-auto max-sm:h-10" : "" })}
+          class={button({ size: hero() ? "lg" : "md", class: `rounded-[10px] ${hero() ? "max-sm:order-4 max-sm:ml-auto max-sm:h-10" : ""}` })}
         >
           {props.mode === "classify" ? "Classify" : "Search"}
         </button>
@@ -252,7 +252,7 @@ export function SearchBox(props: Props) {
         <div class="mt-2 flex flex-wrap items-center gap-2 text-[13.5px]">
           <For each={evidence()}>
             {(ev) => (
-              <span class="inline-flex items-center gap-1.5 rounded-[var(--radius-btn)] border border-ink px-2 py-0.5">
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-paper-2 px-2.5 py-1">
                 <PaperclipIcon size={13} />
                 <span class="font-code text-[12.5px]">{ev.fileName}</span>
                 <span class="text-muted">· {ev.kindLabel}{ev.certain ? "" : ", details unclear"}</span>
