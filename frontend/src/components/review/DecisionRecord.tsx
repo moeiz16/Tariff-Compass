@@ -1,6 +1,6 @@
 /**
- * The open docket row unfolds into a decision record in three bands: Facts · The code · Reason. The broker
- * approves, corrects (PinInput + reason + what the next training round will learn) or asks the importer.
+ * The decision drawer's body: Facts, Your code and Reason, with the actions in a footer that stays in view.
+ * The broker approves, corrects (PinInput + reason + what the next training round will learn) or asks the importer.
  */
 import { RadioGroup } from "@ark-ui/solid/radio-group";
 import { Checkbox } from "@ark-ui/solid/checkbox";
@@ -11,7 +11,7 @@ import { dateShort, digitsOf, groupCode } from "~/lib/format";
 import { plainProblem } from "~/lib/problem";
 import type { DecisionOut, DecisionRecord as Record_, ReasonKind } from "~/lib/types";
 import { Kbd, Marked } from "~/ui/Marked";
-import { button, radioCard } from "~/ui/recipes";
+import { button, checkbox, field, radioCard } from "~/ui/recipes";
 import { RulingStatus } from "~/ui/Status";
 import { CodePins } from "./CodePins";
 
@@ -132,53 +132,55 @@ export function DecisionRecordView(props: {
   const specPhrases = () => r().decidingPhrases.filter((d) => d.source === "spec_sheet").map((d) => d.span);
   const listingPhrases = () => r().decidingPhrases.filter((d) => d.source === "listing").map((d) => d.span);
   const rc = radioCard();
+  const ch = checkbox();
+  const f = field();
+  const quote = "mt-1.5 rounded-[8px] bg-paper-2 px-3.5 py-2.5 text-[14.5px] leading-[1.6] text-ink";
 
   return (
-    <div class="border-y border-rule bg-paper-2 anim-drawer" role="region" aria-label={`Decision record for ${r().row.productTitle}`}>
-      <div class="grid grid-cols-[minmax(0,0.9fr)_minmax(470px,1.2fr)_minmax(0,0.9fr)] max-xl:grid-cols-2 max-md:grid-cols-1">
-        <section class="border-r border-rule px-6 py-5 max-md:border-r-0 max-md:border-b max-md:px-4" aria-label="Facts">
-          <h3 class="ty-head">Facts</h3>
-          <p class="mt-3 text-[14px] text-muted">Listing says</p>
-          <p class="ty-law text-[16px]">
-            “<Marked text={r().listing} spans={listingPhrases()} />”
+    <div class="flex min-h-full flex-col" role="region" aria-label={`Decision record for ${r().row.productTitle}`}>
+      <div class="flex-1 space-y-8 pb-6">
+        <section aria-label="Facts">
+          <p class="label">Listing</p>
+          <p class={quote}>
+            <Marked text={r().listing} spans={listingPhrases()} />
           </p>
           <Show when={r().specSheetFile}>
-            <p class="mt-4 text-[14px] text-muted">Spec sheet says</p>
-            <p class="ty-law text-[16px]">
-              “<Marked text={r().specSheet} spans={specPhrases()} />”
+            <p class="label mt-4 flex flex-wrap items-baseline justify-between gap-2">
+              Spec sheet
+              <span class="text-[12px] font-[450]">
+                {r().specSheetFile}
+                {r().uploadedBy ? ` · ${r().uploadedBy}` : ""}
+                {r().uploadedAt ? `, ${dateShort(r().uploadedAt!)}` : ""}
+              </span>
             </p>
-            <p class="mt-1 text-[13.5px] text-muted">
-              {r().specSheetFile}
-              {r().uploadedBy ? ` · uploaded by ${r().uploadedBy}` : ""}
-              {r().uploadedAt ? `, ${dateShort(r().uploadedAt!)}` : ""}
+            <p class={quote}>
+              <Marked text={r().specSheet} spans={specPhrases()} />
             </p>
           </Show>
           <Show when={r().misread}>
-            <p class="mt-4 text-[16px] leading-[1.55]">{r().misread}</p>
+            <p class="mt-3 text-[14px] text-ink-2">{r().misread}</p>
           </Show>
           <Show when={r().rulingChange}>
             {(c) => (
-              <p class="mt-4 text-[15px]">
+              <p class="mt-3 text-[14px]">
                 <RulingStatus status={c()} long />
               </p>
             )}
           </Show>
           <Show when={r().rule}>
-            <p class="mt-4 text-[15px]">
-              <b>Always reviewed:</b> {r().rule}
-            </p>
+            <p class="mt-3 text-[14px] text-ink-2">Always reviewed: {r().rule}</p>
           </Show>
           <Show when={r().questions.length}>
-            <div class="mt-4 border-t border-rule pt-3">
+            <div class="mt-4 space-y-3">
               <For each={r().questions}>
                 {(q) => (
-                  <div class="mb-3 text-[15px]">
+                  <div class="text-[14px]">
                     <p>
-                      <b>{q.askedBy}</b> asked: “{q.text}”
+                      <span class="font-[600]">{q.askedBy}</span>: “{q.text}”
                     </p>
-                    <Show when={q.answer} fallback={<p class="text-warn">Waiting for {props.importerName}'s answer.</p>}>
-                      <p>
-                        <b>{q.answeredBy}</b> answered: “{q.answer}”
+                    <Show when={q.answer} fallback={<p class="mt-0.5 text-warn">Waiting for {props.importerName}</p>}>
+                      <p class="mt-0.5">
+                        <span class="font-[600]">{q.answeredBy}</span>: “{q.answer}”
                       </p>
                     </Show>
                   </div>
@@ -188,70 +190,67 @@ export function DecisionRecordView(props: {
           </Show>
         </section>
 
-        <section class="border-r border-rule px-6 py-5 max-xl:border-r-0 max-md:border-b max-md:px-4" aria-label="The code">
-          <h3 class="ty-head">The code</h3>
+        <section aria-label="The code">
+          <p class="label">The code</p>
           <Show
             when={props.canDecide}
             fallback={
-              <p class="mt-3 font-code text-[22px] font-[700]">
-                {proposed()} <span class="block font-sans text-[14px] font-[400] text-muted">proposed; a licensed broker decides</span>
+              <p class="mt-2 font-code text-[22px] font-[500]">
+                {proposed()} <span class="ml-2 font-sans text-[13px] font-[450] text-muted">proposed · a broker decides</span>
               </p>
             }
           >
             <div class="mt-3">
               <CodePins proposed={proposed()} value={pins()} onChange={setPins} invalid={!!errors().code} describedBy="pin-help" ref={(el) => (firstPin = el)} />
-              <p id="pin-help" class="mt-2 text-[13px]" classList={{ "text-bad font-[600]": !!errors().code, "text-muted": !errors().code }}>
-                {errors().code ?? "Type or paste your ten digits; the dots are automatic."}
+              <p id="pin-help" class="mt-2 text-[12.5px]" classList={{ "text-bad font-[600]": !!errors().code, "text-muted": !errors().code }}>
+                {errors().code ?? "Type or paste ten digits."}
               </p>
             </div>
-            <div class="mt-3 space-y-1 text-[15.5px]">
-              <Show when={typed().length === 10 && digitsOf(proposed()) !== typed()}>
-                <p class="ty-law text-muted line-through">{r().row.proposedUs?.text ?? r().row.proposedCa?.text}</p>
-                <p class="ty-law">{line()?.line.fullText ?? (line.loading ? "Looking up that line…" : "That line wasn't found in the tariff in force.")}</p>
-              </Show>
-            </div>
+            <Show when={typed().length === 10 && digitsOf(proposed()) !== typed()}>
+              <div class="mt-3 space-y-1 text-[14px]">
+                <p class="text-muted line-through">{r().row.proposedUs?.text ?? r().row.proposedCa?.text}</p>
+                <p>{line()?.line.fullText ?? (line.loading ? "Looking up that line…" : "That line isn't in the tariff in force.")}</p>
+              </div>
+            </Show>
             <Show when={r().row.proposedUs && r().row.into !== "US"}>
-              <Checkbox.Root checked={alsoCa()} onCheckedChange={(d) => setAlsoCa(d.checked === true)} class="mt-3 flex cursor-pointer items-center gap-2.5 text-[15px]">
-                <Checkbox.Control class="grid h-[18px] w-[18px] place-items-center rounded-[3px] border-[1.5px] border-ink bg-paper data-[state=checked]:bg-ink data-[state=checked]:text-paper">
+              <Checkbox.Root checked={alsoCa()} onCheckedChange={(d) => setAlsoCa(d.checked === true)} class={`${ch.root()} mt-3`}>
+                <Checkbox.Control class={ch.control()}>
                   <Checkbox.Indicator>✓</Checkbox.Indicator>
                 </Checkbox.Control>
                 <Checkbox.Label>
-                  Also change Canada to{" "}
-                  <Show when={typed().length === 10} fallback="the matching item">
-                    <span class="font-code font-[700]">{canadaFor(typed())}</span>
+                  Also change Canada
+                  <Show when={typed().length === 10}>
+                    {" "}to <span class="font-code">{canadaFor(typed())}</span>
                   </Show>
                 </Checkbox.Label>
                 <Checkbox.HiddenInput />
               </Checkbox.Root>
             </Show>
             <Show when={r().rulingsRelied.length}>
-              <p class="mt-3 text-[15px] text-muted">
-                Relied on{" "}
-                <For each={r().rulingsRelied}>
-                  {(x) => <span class="ml-1 rounded-[var(--radius-btn)] border-[1.5px] border-ink px-2 py-0.5 font-code text-[13px] font-[650] text-ink">{x.id}</span>}
-                </For>
+              <p class="mt-3 flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
+                Relied on
+                <For each={r().rulingsRelied}>{(x) => <span class="rounded-full bg-paper-2 px-2 py-0.5 font-code text-[12px] text-ink-2">{x.id}</span>}</For>
               </p>
             </Show>
           </Show>
         </section>
 
-        <section class="px-6 py-5 max-xl:col-span-2 max-xl:border-t max-xl:border-rule max-md:col-span-1 max-md:px-4" aria-label="Reason">
-          <h3 class="ty-head">Reason</h3>
+        <section aria-label="Reason">
           <Show
             when={props.canDecide}
             fallback={
-              <Show when={props.canAnswer && r().questions.some((q) => !q.answer)} fallback={<p class="mt-3 text-[15.5px] text-ink-2">{r().row.detail}</p>}>
+              <Show when={props.canAnswer && r().questions.some((q) => !q.answer)}>
                 <form
-                  class="mt-3 space-y-2"
+                  class="space-y-2"
                   onSubmit={(e) => {
                     e.preventDefault();
                     void sendAnswer();
                   }}
                 >
-                  <label for="answer-box" class="text-[14px] font-[650]">
-                    Your answer to the broker
+                  <label for="answer-box" class={f.label()}>
+                    Your answer
                   </label>
-                  <textarea id="answer-box" value={answer()} onInput={(e) => setAnswer(e.currentTarget.value)} class="min-h-[90px] w-full rounded-[var(--radius-box)] border-[1.5px] border-ink bg-paper px-3 py-2 text-[15.5px]" />
+                  <textarea id="answer-box" value={answer()} onInput={(e) => setAnswer(e.currentTarget.value)} class={f.textarea()} />
                   <button type="submit" class={button({ size: "sm" })} disabled={busy() === "answer"}>
                     Send the answer
                   </button>
@@ -259,7 +258,8 @@ export function DecisionRecordView(props: {
               </Show>
             }
           >
-            <RadioGroup.Root value={reasonKind() ?? undefined} onValueChange={(d) => setReasonKind(d.value as ReasonKind)} class={`${rc.root()} mt-3`} aria-invalid={!!errors().reasonKind}>
+            <p class="label">Reason</p>
+            <RadioGroup.Root value={reasonKind() ?? undefined} onValueChange={(d) => setReasonKind(d.value as ReasonKind)} class={`${rc.root()} mt-2`} aria-invalid={!!errors().reasonKind}>
               <RadioGroup.Label class="sr-only">What kind of correction</RadioGroup.Label>
               <For each={REASONS}>
                 {(o) => (
@@ -274,7 +274,7 @@ export function DecisionRecordView(props: {
             <Show when={errors().reasonKind}>
               <p class="mt-1 text-[13px] font-[600] text-bad">{errors().reasonKind}</p>
             </Show>
-            <label for={`reason-${r().row.id}`} class="mt-3 block text-[13px] font-[650] text-ink-2">
+            <label for={`reason-${r().row.id}`} class="sr-only">
               Reason (required for a correction)
             </label>
             <textarea
@@ -284,39 +284,40 @@ export function DecisionRecordView(props: {
               onInput={(e) => setReason(e.currentTarget.value)}
               aria-invalid={!!errors().reason}
               aria-describedby={errors().reason ? `reason-err-${r().row.id}` : undefined}
-              placeholder="What the facts or the ruling show, in a sentence a colleague would accept…"
-              class="mt-1 min-h-[96px] w-full rounded-[var(--radius-box)] border-[1.5px] border-ink bg-paper px-3 py-2 text-[15.5px] leading-[1.5]"
+              placeholder="What the facts or the ruling show…"
+              class={`${f.textarea()} mt-2.5`}
             />
             <Show when={errors().reason}>
               <p id={`reason-err-${r().row.id}`} class="mt-1 text-[13px] font-[600] text-bad">
                 {errors().reason}
               </p>
             </Show>
-            <div class="mt-4 border-l-[3px] border-ink pl-4">
-              <p class="ty-sub">The next training round will learn</p>
-              <p class="mt-1 text-[15.5px] leading-[1.55]" aria-live="polite">
-                {lesson() || "Type your code and a reason; the lesson it teaches appears here."}
-              </p>
-            </div>
+            <Show when={lesson()}>
+              <div class="mt-3 rounded-[8px] bg-hi-soft px-3.5 py-2.5">
+                <p class="text-[12.5px] font-[600] text-ink-2">Next round learns</p>
+                <p class="mt-0.5 text-[14px] leading-[1.55]" aria-live="polite">
+                  {lesson()}
+                </p>
+              </div>
+            </Show>
           </Show>
         </section>
+        <Show when={errors().form}>
+          <p role="alert" class="text-[14px] font-[600] text-bad">
+            {errors().form}
+          </p>
+        </Show>
       </div>
-      <Show when={errors().form}>
-        <p role="alert" class="px-6 pb-2 text-[14.5px] font-[600] text-bad">
-          {errors().form}
-        </p>
-      </Show>
       <Show when={props.canDecide}>
-        <footer class="flex flex-wrap items-center gap-3 border-t border-rule px-6 py-3.5 max-md:px-4">
-          <button type="button" class={button({ tone: "ghost", size: "md" })} disabled={!!busy()} onClick={() => void decide("approve")}>
-            Approve as proposed <Kbd>A</Kbd>
+        <footer class="sticky bottom-0 -mx-6 -mb-5 flex flex-wrap items-center gap-2 border-t border-rule bg-card px-6 py-3.5 max-sm:-mx-4 max-sm:px-4">
+          <button type="button" class={button({ tone: "outline", size: "md" })} disabled={!!busy()} onClick={() => void decide("approve")}>
+            Approve <Kbd>A</Kbd>
           </button>
           <button type="button" class={button({ tone: "ghost", size: "md" })} onClick={() => props.onAsk()}>
-            Ask {props.importerName} a question <Kbd>Q</Kbd>
+            Ask <Kbd>Q</Kbd>
           </button>
-          <span class="ml-auto text-[14px] text-muted max-md:ml-0 max-md:w-full">Recorded in the binder with your name and licence</span>
-          <button type="button" class={button({ size: "md" })} disabled={!!busy()} onClick={() => void decide("correct")}>
-            {busy() === "correct" ? "Saving…" : "Save correction"} <Kbd>C</Kbd>
+          <button type="button" class={button({ size: "md", class: "ml-auto" })} disabled={!!busy()} onClick={() => void decide("correct")}>
+            {busy() === "correct" ? "Saving…" : "Save correction"} <Kbd class="border-white/30 bg-transparent text-card/80">C</Kbd>
           </button>
         </footer>
       </Show>

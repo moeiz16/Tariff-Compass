@@ -1,6 +1,6 @@
 /**
  * Correct one digit: the proposed code in cells, and the broker's code in a 10-cell Ark PinInput directly under it,
- * digit-aligned. Changed cells sit on the highlighter; the proposed digits they replace are struck in red.
+ * digit-aligned. Changed cells are marked; the proposed digits they replace are struck in red.
  */
 import { PinInput } from "@ark-ui/solid/pin-input";
 import { For, Show } from "solid-js";
@@ -15,13 +15,13 @@ export function CodePins(props: { proposed: string; value: string[]; onChange: (
   return (
     <div class="space-y-2">
       <div class="flex items-center gap-3 max-sm:flex-col max-sm:items-start max-sm:gap-1">
-        <span class="w-[64px] shrink-0 text-[13px] font-[650] text-ink-2 max-sm:w-auto">Proposed</span>
+        <span class="w-[72px] shrink-0 text-[12.5px] font-[550] text-muted max-sm:w-auto">Proposed</span>
         <div class={p.root()} aria-label={`Proposed code ${props.proposed}`} role="img">
           <For each={cells()}>
             {(c) => (
               <>
                 <span
-                  class="grid h-[38px] w-[30px] shrink-0 place-items-center rounded-[3px] border border-rule bg-paper font-code text-[19px] text-ink-2 max-sm:h-[32px] max-sm:w-[24px] max-sm:text-[15px]"
+                  class="grid h-[40px] w-[30px] shrink-0 place-items-center rounded-[6px] bg-paper-2 font-code text-[18px] text-ink-2 max-sm:h-[34px] max-sm:w-[24px] max-sm:text-[15px]"
                   classList={{ "strike-bad": c.changed }}
                   aria-hidden="true"
                 >
@@ -48,7 +48,7 @@ export function CodePins(props: { proposed: string; value: string[]; onChange: (
         invalid={props.invalid}
         class="flex items-center gap-3 max-sm:flex-col max-sm:items-start max-sm:gap-1"
       >
-        <PinInput.Label class="w-[64px] shrink-0 text-[13px] font-[650] text-ink-2 max-sm:w-auto">Yours</PinInput.Label>
+        <PinInput.Label class="w-[72px] shrink-0 text-[12.5px] font-[550] text-muted max-sm:w-auto">Your code</PinInput.Label>
         <PinInput.Control
           class={p.root()}
           aria-describedby={props.describedBy}
