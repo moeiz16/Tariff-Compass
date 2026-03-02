@@ -1,16 +1,16 @@
 import { useSearchParams } from "@solidjs/router";
 import { useSession } from "~/lib/session";
 import { For, Show, createResource, createSignal } from "solid-js";
-import { AppPage } from "~/components/shell/AppPage";
+import { AppPage, PageHead, PageSearch } from "~/components/shell/AppPage";
 import { download } from "~/lib/api";
 import { audit } from "~/lib/endpoints";
-import { dateTime, plural } from "~/lib/format";
+import { dateTime } from "~/lib/format";
 import { plainProblem } from "~/lib/problem";
 import { today } from "~/lib/clock";
 import type { ChainOut } from "~/lib/types";
 import { FailIcon, OkIcon } from "~/ui/Icons";
 import { Pager } from "~/ui/Pager";
-import { button } from "~/ui/recipes";
+import { button, card, tag } from "~/ui/recipes";
 import { EmptyState, ErrorSlip, SkeletonLines } from "~/ui/States";
 import { notify } from "~/ui/Toast";
 
@@ -39,78 +39,78 @@ export default function ActivityPage() {
     }
   };
   return (
-    <AppPage title="Activity record" scope="none" permission="audit:read" query={params.actor} placeholder="Search activity: a person, a product, a code" boxLabel="Search the activity record" onSearch={(q) => setParams({ actor: q || undefined, page: undefined })}>
-      <div class="gm py-8">
-        <div class="gl">
-          <span>Settings</span>
-          <h1 class="not-italic">
-            <b>Activity record</b>
-          </h1>
-          <span class="gl-extra block">every sensitive action, chained</span>
-        </div>
-        <div class="gm-wide max-w-[1160px]">
-          <div class="flex flex-wrap items-center gap-3">
-            <button type="button" class={button({ size: "md" })} disabled={checking()} onClick={() => void verify()}>
-              {checking() ? "Checking the chain…" : "Verify the chain"}
+    <AppPage title="Activity" place="none" permission="audit:read" width="wide">
+      <PageHead
+        title="Activity"
+        meta={
+          <Show when={chain()} fallback={<span>Every sensitive action, chained</span>}>
+            {(c) => (
+              <span role="status" class={tag({ tone: c().ok ? "ok" : "bad" })}>
+                {c().ok ? <OkIcon size={13} /> : <FailIcon size={13} />}
+                {c().ok ? "Chain verified" : `Altered at #${c().brokenAt ?? "?"}`}
+              </span>
+            )}
+          </Show>
+        }
+        actions={
+          <>
+            <PageSearch label="Search the activity" placeholder="A person, a product, a code" value={params.actor} onSearch={(q) => setParams({ actor: q || undefined, page: undefined })} class="w-[260px] max-sm:w-full" />
+            <button type="button" class={button({ tone: "outline", size: "md" })} disabled={checking()} onClick={() => void verify()} title="Each entry carries a fingerprint of the one before it">
+              {checking() ? "Checking…" : "Verify the chain"}
             </button>
             <button type="button" class={button({ tone: "ghost", size: "md" })} onClick={() => void exportCsv()}>
-              Export as CSV
+              CSV
             </button>
-            <Show when={chain()}>
-              {(c) => (
-                <p role="status" class="inline-flex items-center gap-2 text-[15.5px] font-[650]" classList={{ "text-ok": c().ok, "text-bad": !c().ok }}>
-                  {c().ok ? <OkIcon size={16} /> : <FailIcon size={16} />}
-                  {c().sentence}
-                  <Show when={!c().ok && c().brokenAt}> (first altered entry: #{c().brokenAt})</Show>
-                </p>
-              )}
-            </Show>
-          </div>
-          <p class="mt-3 text-[15px] text-ink-2">
-            Each entry carries a fingerprint of the one before it, so changing or deleting an old entry breaks the chain from that point on.
-          </p>
-          <Show when={!rows.error} fallback={<div class="mt-6"><ErrorSlip error={rows.error} retry={refetch} /></div>}>
-            <Show when={rows()} fallback={<SkeletonLines class="mt-6" lines={10} />}>
-              {(r) => (
-                <Show when={r().items.length} fallback={<div class="mt-6"><EmptyState title="Nothing recorded that matches">Clear the search to see every entry.</EmptyState></div>}>
-                  <p class="mt-6 text-[14.5px] text-muted">{plural(r().total, "entry", "entries")}, newest first</p>
-                  <div class="mt-2 overflow-x-auto">
-                    <table class="w-full min-w-[760px] border-collapse text-left">
-                      <thead>
-                        <tr class="border-b-[1.5px] border-ink text-[14px] text-ink-2">
-                          <th class="py-2 pr-3 font-[650]">When</th>
-                          <th class="py-2 pr-3 font-[650]">Who</th>
-                          <th class="py-2 pr-3 font-[650]">What</th>
-                          <th class="py-2 font-[650]">Fingerprint</th>
+          </>
+        }
+      />
+      <Show when={!rows.error} fallback={<ErrorSlip error={rows.error} retry={refetch} />}>
+        <Show when={rows()} fallback={<SkeletonLines lines={10} />}>
+          {(r) => (
+            <Show
+              when={r().items.length}
+              fallback={
+                <div class={card()}>
+                  <EmptyState title="Nothing matches" />
+                </div>
+              }
+            >
+              <div class={card({ class: "overflow-x-auto" })}>
+                <table class="w-full min-w-[760px] border-collapse text-left">
+                  <caption class="sr-only">{r().total} entries, newest first</caption>
+                  <thead>
+                    <tr class="border-b border-rule bg-paper-2/50 text-[12.5px] text-muted">
+                      <th class="px-5 py-2.5 font-[600]">When</th>
+                      <th class="px-5 py-2.5 font-[600]">Who</th>
+                      <th class="px-5 py-2.5 font-[600]">What</th>
+                      <th class="px-5 py-2.5 text-right font-[600]">Fingerprint</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <For each={r().items}>
+                      {(a) => (
+                        <tr class="border-b border-rule align-top text-[14px] last:border-b-0">
+                          <td class="whitespace-nowrap px-5 py-3 text-muted">{dateTime(a.at)}</td>
+                          <td class="px-5 py-3">
+                            {a.actorName}
+                            <span class="block text-[12.5px] text-muted">{a.actorRoleLabel}</span>
+                          </td>
+                          <td class="px-5 py-3">
+                            <span class="font-[600]">{a.actionLabel}</span>
+                            <span class="block text-[13px] text-ink-2">{a.summary}</span>
+                          </td>
+                          <td class="px-5 py-3 text-right font-code text-[12px] text-muted">{a.fingerprint}</td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        <For each={r().items}>
-                          {(a) => (
-                            <tr class="border-b border-rule align-top">
-                              <td class="whitespace-nowrap py-2.5 pr-3 text-[14.5px]">{dateTime(a.at)}</td>
-                              <td class="py-2.5 pr-3 text-[15px]">
-                                {a.actorName}
-                                <span class="block text-[13px] text-muted">{a.actorRoleLabel}</span>
-                              </td>
-                              <td class="py-2.5 pr-3 text-[15px]">
-                                <b class="font-[650]">{a.actionLabel}</b>
-                                <span class="block text-ink-2">{a.summary}</span>
-                              </td>
-                              <td class="py-2.5 font-code text-[13px] text-ink-2">{a.fingerprint}</td>
-                            </tr>
-                          )}
-                        </For>
-                      </tbody>
-                    </table>
-                  </div>
-                  <Pager count={r().total} pageSize={r().pageSize} page={page()} onPage={(n) => setParams({ page: String(n) })} label="Pages of the activity record" />
-                </Show>
-              )}
+                      )}
+                    </For>
+                  </tbody>
+                </table>
+              </div>
+              <Pager count={r().total} pageSize={r().pageSize} page={page()} onPage={(n) => setParams({ page: String(n) })} label="Pages of the activity record" />
             </Show>
-          </Show>
-        </div>
-      </div>
+          )}
+        </Show>
+      </Show>
     </AppPage>
   );
 }

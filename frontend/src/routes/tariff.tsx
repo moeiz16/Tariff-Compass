@@ -3,11 +3,12 @@ import { TreeView, createTreeCollection } from "@ark-ui/solid/tree-view";
 import { useSearchParams } from "@solidjs/router";
 import { For, Show, createMemo, createResource } from "solid-js";
 import { AppPage } from "~/components/shell/AppPage";
+import { LibraryHead } from "~/components/shell/Library";
 import { useSigned } from "~/lib/session";
 import { tariff } from "~/lib/endpoints";
 import type { Country, TariffLineOut, TariffOutline } from "~/lib/types";
 import { ChevronIcon } from "~/ui/Icons";
-import { segment } from "~/ui/recipes";
+import { card, segment } from "~/ui/recipes";
 import { EmptyState, ErrorSlip, SkeletonLines } from "~/ui/States";
 
 interface Node {
@@ -25,12 +26,12 @@ function outlineTree(o: TariffOutline): Node {
 function OutlineNode(props: { node: Node; indexPath: number[]; selected: string }) {
   const label = () => (
     <span class="flex min-w-0 flex-1 items-baseline gap-3">
-      <span class="w-[118px] shrink-0 font-code text-[14.5px] font-[600]" classList={{ hl: props.node.id === props.selected }}>
+      <span class="w-[118px] shrink-0 font-code max-sm:w-[86px] text-[13.5px] font-[500]" classList={{ "hl font-[600]": props.node.id === props.selected }}>
         {props.node.line.code}
       </span>
-      <span class="min-w-0 flex-1 font-law text-[16.5px] leading-snug">{props.node.line.text}</span>
+      <span class="min-w-0 flex-1 text-[14.5px] leading-snug text-ink-2">{props.node.line.text}</span>
       <Show when={props.node.line.generalRate}>
-        <span class="shrink-0 font-code text-[13.5px] text-ink-2">{props.node.line.generalRate}</span>
+        <span class="shrink-0 font-code text-[12.5px] text-muted">{props.node.line.generalRate}</span>
       </Show>
     </span>
   );
@@ -39,15 +40,15 @@ function OutlineNode(props: { node: Node; indexPath: number[]; selected: string 
       <Show
         when={props.node.children?.length}
         fallback={
-          <TreeView.Item class="flex cursor-default items-baseline gap-2 border-b border-rule py-2 pl-[calc(var(--depth)*22px)] data-[selected]:bg-paper-2">
+          <TreeView.Item class="flex cursor-default items-baseline gap-2 border-b border-rule py-2.5 pl-[calc(var(--depth)*20px)] pr-4 last:border-b-0 data-[selected]:bg-hi-soft/50">
             <span class="w-4" />
             <TreeView.ItemText class="flex min-w-0 flex-1">{label()}</TreeView.ItemText>
           </TreeView.Item>
         }
       >
         <TreeView.Branch>
-          <TreeView.BranchControl class="flex cursor-pointer items-baseline gap-2 border-b border-rule py-2 pl-[calc(var(--depth)*22px)] hover:bg-paper-2">
-            <TreeView.BranchIndicator class="w-4 transition-transform data-[state=closed]:-rotate-90">
+          <TreeView.BranchControl class="flex cursor-pointer items-baseline gap-2 border-b border-rule py-2.5 pl-[calc(var(--depth)*20px)] pr-4 hover:bg-paper-2/60">
+            <TreeView.BranchIndicator class="w-4 text-muted transition-transform data-[state=closed]:-rotate-90">
               <ChevronIcon size={14} />
             </TreeView.BranchIndicator>
             <TreeView.BranchText class="flex min-w-0 flex-1">{label()}</TreeView.BranchText>
@@ -75,83 +76,88 @@ export default function TariffPage() {
   });
   const s = segment();
   return (
-    <AppPage title="Tariff text" scope="tariff" permission="tariff:read" query={params.q} placeholder="Search the tariff: a word or a code" boxLabel="Search the tariff schedule" onSearch={(q) => setParams({ q: q || undefined, line: undefined })}>
-      <div class="gm py-8">
-        <div class="gl">
-          <span>Search</span>
-          <h1 class="not-italic">
-            <b>Tariff text</b>
-          </h1>
-          <span class="gl-extra block">the schedule as its own indented outline</span>
-        </div>
-        <div class="gm-body">
-          <SegmentGroup.Root value={country()} onValueChange={(d) => setParams({ c: d.value === "CA" ? "CA" : undefined, line: undefined })} class="flex items-center gap-3">
-            <SegmentGroup.Label class="text-[13px] font-[700] text-ink-2">Schedule</SegmentGroup.Label>
-            <div class={s.root()}>
-              <SegmentGroup.Indicator class={s.indicator()} />
-              <For each={[{ v: "US", l: "HTSUS" }, { v: "CA", l: "Canada's Customs Tariff" }]}>
-                {(o) => (
-                  <SegmentGroup.Item value={o.v} class={s.item()}>
-                    <SegmentGroup.ItemText>{o.l}</SegmentGroup.ItemText>
-                    <SegmentGroup.ItemControl />
-                    <SegmentGroup.ItemHiddenInput />
-                  </SegmentGroup.Item>
-                )}
-              </For>
-            </div>
-          </SegmentGroup.Root>
-
-          <Show when={tree()}>
-            {(t) => (
-              <section class="mt-6" aria-labelledby="outline-h">
-                <h2 id="outline-h" class="ty-head">
-                  {outline()!.line.code} in its place
-                </h2>
-                <p class="text-[14px] text-muted">{outline()!.editionLabel}</p>
-                <TreeView.Root collection={t()} defaultExpandedValue={t().getBranchValues()} selectedValue={[outline()!.line.digits]} class="mt-3 border-t-[1.5px] border-ink" aria-label="Tariff outline">
-                  <TreeView.Tree>
-                    <For each={t().rootNode.children}>{(n, i) => <OutlineNode node={n} indexPath={[i()]} selected={outline()!.line.digits} />}</For>
-                  </TreeView.Tree>
-                </TreeView.Root>
-                <Show when={outline()!.notes.length}>
-                  <ul class="mt-3 space-y-1 text-[15px] text-ink-2">
-                    <For each={outline()!.notes}>{(n) => <li class="font-law">{n}</li>}</For>
-                  </ul>
-                </Show>
-              </section>
+    <AppPage title="Tariff text" place="library" permission="tariff:read" width="default">
+      <LibraryHead active="tariff" query={params.q} placeholder="A word or a code" onSearch={(q) => setParams({ q: q || undefined, line: undefined })} />
+      <SegmentGroup.Root value={country()} onValueChange={(d) => setParams({ c: d.value === "CA" ? "CA" : undefined, line: undefined })} class="mb-5 flex items-center gap-2.5">
+        <SegmentGroup.Label class="text-[12.5px] font-[550] text-muted">Schedule</SegmentGroup.Label>
+        <div class={s.root()}>
+          <SegmentGroup.Indicator class={s.indicator()} />
+          <For each={[{ v: "US", l: "United States" }, { v: "CA", l: "Canada" }]}>
+            {(o) => (
+              <SegmentGroup.Item value={o.v} class={s.item()}>
+                <SegmentGroup.ItemText>{o.l}</SegmentGroup.ItemText>
+                <SegmentGroup.ItemControl />
+                <SegmentGroup.ItemHiddenInput />
+              </SegmentGroup.Item>
             )}
-          </Show>
+          </For>
+        </div>
+      </SegmentGroup.Root>
 
-          <section class="mt-8" aria-label="Matching lines">
-            <Show when={params.q} fallback={<EmptyState title="Search the schedule">Type a word (“vacuum”) or a code (“9617”) in the box. Results are the schedule's own lines, with their rates.</EmptyState>}>
-              <Show when={!hits.error} fallback={<ErrorSlip error={hits.error} retry={refetch} />}>
-                <Show when={hits()} fallback={<SkeletonLines lines={6} />}>
-                  {(h) => (
-                    <Show when={h().length} fallback={<EmptyState title="No lines match that">Try a broader word, or the first four digits of a code.</EmptyState>}>
-                      <h2 class="ty-sub border-b-[1.5px] border-ink pb-2">
-                        {h().length} lines for “{params.q}”
-                      </h2>
-                      <ul>
-                        <For each={h()}>
-                          {(l) => (
-                            <li class="border-b border-rule">
-                              <button type="button" class="flex w-full items-baseline gap-3 py-2.5 text-left hover:bg-paper-2" style={{ "padding-left": `${l.indent * 16}px` }} onClick={() => setParams({ line: l.code })}>
-                                <span class="w-[118px] shrink-0 font-code text-[14.5px] font-[600]">{l.code}</span>
-                                <span class="min-w-0 flex-1 font-law text-[16.5px]">{l.fullText}</span>
-                                <span class="shrink-0 font-code text-[13.5px] text-ink-2">{l.generalRate}</span>
-                              </button>
-                            </li>
-                          )}
-                        </For>
-                      </ul>
-                    </Show>
-                  )}
-                </Show>
-              </Show>
+      <Show when={tree()}>
+        {(t) => (
+          <section class="mb-6" aria-label={`${outline()!.line.code} in its place`}>
+            <p class="mb-2 text-[12.5px] text-muted">{outline()!.editionLabel}</p>
+            <TreeView.Root collection={t()} defaultExpandedValue={t().getBranchValues()} selectedValue={[outline()!.line.digits]} class={card({ class: "overflow-hidden pl-3" })} aria-label="Tariff outline">
+              <TreeView.Tree>
+                <For each={t().rootNode.children}>{(n, i) => <OutlineNode node={n} indexPath={[i()]} selected={outline()!.line.digits} />}</For>
+              </TreeView.Tree>
+            </TreeView.Root>
+            <Show when={outline()!.notes.length}>
+              <ul class="mt-3 space-y-1 text-[13.5px] text-muted">
+                <For each={outline()!.notes}>{(n) => <li>{n}</li>}</For>
+              </ul>
             </Show>
           </section>
-        </div>
-      </div>
+        )}
+      </Show>
+
+      <section aria-label="Matching lines">
+        <Show
+          when={params.q}
+          fallback={
+            <div class={card()}>
+              <EmptyState title="Search the schedule">Try “vacuum” or “9617”.</EmptyState>
+            </div>
+          }
+        >
+          <Show when={!hits.error} fallback={<ErrorSlip error={hits.error} retry={refetch} />}>
+            <Show when={hits()} fallback={<SkeletonLines lines={6} />}>
+              {(h) => (
+                <Show
+                  when={h().length}
+                  fallback={
+                    <div class={card()}>
+                      <EmptyState title="No lines match" />
+                    </div>
+                  }
+                >
+                  <p class="mb-2 text-[13px] text-muted">{h().length} lines</p>
+                  <ul class={card({ class: "overflow-hidden" })}>
+                    <For each={h()}>
+                      {(l) => (
+                        <li class="border-b border-rule last:border-b-0">
+                          <button
+                            type="button"
+                            class="flex w-full items-baseline gap-3 py-2.5 pr-5 text-left hover:bg-paper-2/60"
+                            classList={{ "bg-hi-soft/40": params.line === l.code }}
+                            style={{ "padding-left": `${20 + l.indent * 16}px` }}
+                            onClick={() => setParams({ line: l.code })}
+                          >
+                            <span class="w-[118px] shrink-0 font-code max-sm:w-[86px] text-[13.5px] font-[500]">{l.code}</span>
+                            <span class="min-w-0 flex-1 text-[14.5px] text-ink-2">{l.fullText}</span>
+                            <span class="shrink-0 font-code text-[12.5px] text-muted">{l.generalRate}</span>
+                          </button>
+                        </li>
+                      )}
+                    </For>
+                  </ul>
+                </Show>
+              )}
+            </Show>
+          </Show>
+        </Show>
+      </section>
     </AppPage>
   );
 }

@@ -1,9 +1,10 @@
 import { Select, createListCollection } from "@ark-ui/solid/select";
 import { Switch } from "@ark-ui/solid/switch";
+import { Tabs } from "@ark-ui/solid/tabs";
 import { A, useNavigate, useSearchParams } from "@solidjs/router";
-import { For, Show, createResource, createSignal, type JSX } from "solid-js";
+import { For, Show, createResource, createSignal } from "solid-js";
 import { Portal } from "solid-js/web";
-import { AppPage } from "~/components/shell/AppPage";
+import { AppPage, PageHead } from "~/components/shell/AppPage";
 import { auth, meta, org, rules } from "~/lib/endpoints";
 import { now } from "~/lib/clock";
 import { dateShort } from "~/lib/format";
@@ -11,7 +12,8 @@ import { plainProblem } from "~/lib/problem";
 import { useSession, useSigned } from "~/lib/session";
 import type { MemberOut, Role } from "~/lib/types";
 import { ChevronIcon } from "~/ui/Icons";
-import { button, floating } from "~/ui/recipes";
+import { button, card, field, floating, tag } from "~/ui/recipes";
+import { Tip } from "~/ui/Tip";
 import { Sheet } from "~/ui/Sheet";
 import { ErrorSlip, SkeletonLines } from "~/ui/States";
 import { notify } from "~/ui/Toast";
@@ -29,17 +31,17 @@ function RoleSelect(props: { value: Role; onChange: (r: Role) => void; label: st
     <Select.Root collection={roleCollection} value={[props.value]} onValueChange={(d) => d.value[0] && props.onChange(d.value[0] as Role)} disabled={props.disabled} positioning={{ gutter: 6 }}>
       <Select.Label class="sr-only">{props.label}</Select.Label>
       <Select.Control>
-        <Select.Trigger class="inline-flex h-9 items-center gap-2 rounded-[var(--radius-btn)] border border-rule bg-paper px-2.5 text-[14.5px] hover:border-ink disabled:opacity-60">
+        <Select.Trigger class="inline-flex h-9 items-center gap-2 rounded-[var(--radius-btn)] border border-rule-2 bg-card px-2.5 text-[14px] hover:border-ink disabled:opacity-60">
           <Select.ValueText />
           <ChevronIcon size={12} />
         </Select.Trigger>
       </Select.Control>
       <Portal>
         <Select.Positioner class="z-50">
-          <Select.Content class={floating({ class: "min-w-[220px] py-1" })}>
+          <Select.Content class={floating({ class: "min-w-[220px] p-1" })}>
             <For each={ROLE_ITEMS}>
               {(r) => (
-                <Select.Item item={r} class="flex cursor-pointer justify-between gap-3 px-3 py-2 text-[14.5px] data-[highlighted]:bg-paper-2">
+                <Select.Item item={r} class="flex cursor-pointer justify-between gap-3 rounded-[6px] px-2.5 py-2 text-[14px] data-[highlighted]:bg-paper-2">
                   <Select.ItemText>{r.label}</Select.ItemText>
                   <Select.ItemIndicator>✓</Select.ItemIndicator>
                 </Select.Item>
@@ -56,26 +58,12 @@ function RoleSelect(props: { value: Role; onChange: (r: Role) => void; label: st
 function Toggle(props: { checked: boolean; onChange: (v: boolean) => void; label: string; disabled?: boolean }) {
   return (
     <Switch.Root checked={props.checked} onCheckedChange={(d) => props.onChange(d.checked)} disabled={props.disabled} class="inline-flex cursor-pointer items-center gap-3 data-[disabled]:cursor-default">
-      <Switch.Control class="relative h-[24px] w-[42px] rounded-full border-[1.5px] border-ink bg-paper transition-colors data-[state=checked]:bg-ink">
-        <Switch.Thumb class="block h-[16px] w-[16px] translate-x-[3px] translate-y-[2.5px] rounded-full bg-ink transition-transform data-[state=checked]:translate-x-[20px] data-[state=checked]:bg-paper" />
+      <Switch.Control class="relative h-[22px] w-[38px] shrink-0 rounded-full bg-paper-3 transition-colors data-[state=checked]:bg-ink">
+        <Switch.Thumb class="block h-[18px] w-[18px] translate-x-[2px] translate-y-[2px] rounded-full bg-card shadow-[var(--shadow-card)] transition-transform data-[state=checked]:translate-x-[18px]" />
       </Switch.Control>
-      <Switch.Label class="text-[15.5px]">{props.label}</Switch.Label>
+      <Switch.Label class="text-[14px]">{props.label}</Switch.Label>
       <Switch.HiddenInput />
     </Switch.Root>
-  );
-}
-
-function Block(props: { id: string; title: string; children: JSX.Element; aside?: JSX.Element }) {
-  return (
-    <section id={props.id} aria-labelledby={`${props.id}-h`} class="border-t-[1.5px] border-ink py-8">
-      <div class="flex flex-wrap items-baseline justify-between gap-3">
-        <h2 id={`${props.id}-h`} class="ty-head text-[17px]">
-          {props.title}
-        </h2>
-        {props.aside}
-      </div>
-      <div class="mt-4">{props.children}</div>
-    </section>
   );
 }
 
@@ -166,158 +154,160 @@ export default function SettingsPage() {
     void refetchRules();
   };
 
-  const NAV = [
-    ["defaults", "Defaults"],
-    ["people", "People and roles"],
-    ["broker", "Your broker"],
-    ["rules", "Always-review rules"],
-    ["records", "Records"],
-  ];
+  const f = field();
+  const row = "flex flex-wrap items-center justify-between gap-3 border-b border-rule px-5 py-3.5 last:border-b-0 max-sm:px-4";
+  const tabItem =
+    "w-full cursor-pointer rounded-[8px] px-3 py-2 text-left text-[14px] font-[550] text-muted hover:bg-paper-2 hover:text-ink data-[selected]:bg-paper-2 data-[selected]:text-ink max-md:w-auto max-md:whitespace-nowrap";
 
   return (
-    <AppPage title="Settings" scope="none" placeholder="Search rulings: a product, a code, a ruling number" boxLabel="Search the rulings" onSearch={(q) => navigate(`/rulings?q=${encodeURIComponent(q)}`)}>
-      <div class="gm py-8">
-        <nav aria-label="Settings sections" class="max-[960px]:mb-4">
-          <ul class="sticky top-4 space-y-3 text-[16.5px] max-[960px]:static max-[960px]:flex max-[960px]:flex-wrap max-[960px]:gap-x-4 max-[960px]:gap-y-1 max-[960px]:space-y-0">
-            <For each={NAV}>
-              {([id, label]) => (
-                <li>
-                  <a href={`#${id}`} class="text-ink-2 no-underline hover:text-ink">
-                    {label}
-                  </a>
-                </li>
-              )}
-            </For>
-            <Show when={can("audit:read")}>
-              <li>
-                <A href="/activity" class="font-[700] text-ink no-underline hover:underline">
-                  Activity record
-                </A>
-              </li>
-            </Show>
-          </ul>
-        </nav>
-        <div class="gm-body max-w-[1000px]">
-          <p class="font-type text-[13.5px] text-muted">{me()?.activeOrg?.name} · settings</p>
-          <h1 class="ty-caption mt-1.5">Settings</h1>
+    <AppPage title="Settings" place="none" width="default">
+      <PageHead title="Settings" meta={<span>{me()?.activeOrg?.name}</span>} />
+      <Tabs.Root defaultValue={params.switch && (me()?.orgs.length ?? 0) > 1 ? "switch" : "defaults"} orientation="vertical" class="grid grid-cols-[200px_minmax(0,1fr)] gap-8 max-md:grid-cols-1 max-md:gap-4">
+        <Tabs.List class="flex flex-col gap-0.5 max-md:flex-row max-md:flex-wrap" aria-label="Settings">
+          <Show when={(me()?.orgs.length ?? 0) > 1}>
+            <Tabs.Trigger value="switch" class={tabItem}>
+              Organisation
+            </Tabs.Trigger>
+          </Show>
+          <Tabs.Trigger value="defaults" class={tabItem}>
+            Defaults
+          </Tabs.Trigger>
+          <Tabs.Trigger value="people" class={tabItem}>
+            People
+          </Tabs.Trigger>
+          <Tabs.Trigger value="broker" class={tabItem}>
+            Broker
+          </Tabs.Trigger>
+          <Tabs.Trigger value="rules" class={tabItem}>
+            Review rules
+          </Tabs.Trigger>
+          <Tabs.Trigger value="records" class={tabItem}>
+            Records
+          </Tabs.Trigger>
+        </Tabs.List>
 
-          <Show when={params.switch && (me()?.orgs.length ?? 0) > 1}>
-            <Block id="switch" title="Switch organisation">
-              <ul>
+        <div class="min-w-0">
+          <Show when={(me()?.orgs.length ?? 0) > 1}>
+            <Tabs.Content value="switch">
+              <ul class={card({ class: "overflow-hidden" })}>
                 <For each={me()!.orgs}>
                   {(o) => (
-                    <li class="flex items-center justify-between border-b border-rule py-2.5">
+                    <li class={row}>
                       <span>
-                        <b>{o.name}</b> <span class="text-muted">· {o.roleLabel}</span>
+                        <span class="block text-[14.5px] font-[600]">{o.name}</span>
+                        <span class="text-[12.5px] text-muted">{o.roleLabel}</span>
                       </span>
-                      <Show when={o.id !== me()!.activeOrg?.id} fallback={<span class="text-[14px] text-muted">Current</span>}>
+                      <Show when={o.id !== me()!.activeOrg?.id} fallback={<span class={tag({ tone: "ink" })}>Current</span>}>
                         <button
                           type="button"
-                          class={button({ tone: "ghost", size: "sm" })}
+                          class={button({ tone: "outline", size: "sm" })}
                           onClick={async () => {
                             await auth.switchOrg(o.id);
                             await reload();
                             navigate("/home");
                           }}
                         >
-                          Work in {o.name}
+                          Switch
                         </button>
                       </Show>
                     </li>
                   )}
                 </For>
               </ul>
-            </Block>
+            </Tabs.Content>
           </Show>
 
-          <Block id="defaults" title="Defaults for new questions">
+          <Tabs.Content value="defaults">
             <Show when={!settings.error} fallback={<ErrorSlip error={settings.error} retry={refetch} />}>
               <Show when={settings()} fallback={<SkeletonLines lines={4} />}>
-                {(s) => (
-                  <dl class="grid grid-cols-[220px_minmax(0,1fr)] gap-x-6 gap-y-3 text-[16px] max-sm:grid-cols-1">
-                    <dt class="text-muted">Importing into</dt>
-                    <dd>{s().into.map((c) => (c === "US" ? "United States" : "Canada")).join(" and ")}</dd>
-                    <dt class="text-muted">Usually made in</dt>
-                    <dd>{originLabel(s().madeIn)}</dd>
-                    <dt class="text-muted">Ports</dt>
-                    <dd>{s().ports.join(", ")}</dd>
-                    <dt class="text-muted">Always send to a broker</dt>
-                    <dd>
-                      <Toggle checked={s().alwaysSendToBroker} disabled={!canManage()} onChange={(v) => void patchSettings({ alwaysSendToBroker: v })} label={s().alwaysSendToBroker ? "Every answer goes to the broker" : "Only the always-review rules and unsure answers"} />
-                    </dd>
+                {(st) => (
+                  <dl class={card({ class: "overflow-hidden" })}>
+                    <div class={row}>
+                      <dt class="text-[14px] text-muted">Importing into</dt>
+                      <dd class="text-[14px]">{st().into.map((c) => (c === "US" ? "United States" : "Canada")).join(" and ")}</dd>
+                    </div>
+                    <div class={row}>
+                      <dt class="text-[14px] text-muted">Usually made in</dt>
+                      <dd class="text-[14px]">{originLabel(st().madeIn)}</dd>
+                    </div>
+                    <div class={row}>
+                      <dt class="text-[14px] text-muted">Ports</dt>
+                      <dd class="text-[14px]">{st().ports.join(", ")}</dd>
+                    </div>
+                    <div class={row}>
+                      <dt class="text-[14px] text-muted">Send every answer to the broker</dt>
+                      <dd>
+                        <Toggle checked={st().alwaysSendToBroker} disabled={!canManage()} onChange={(v) => void patchSettings({ alwaysSendToBroker: v })} label={st().alwaysSendToBroker ? "On" : "Off"} />
+                      </dd>
+                    </div>
                   </dl>
                 )}
               </Show>
             </Show>
-          </Block>
+          </Tabs.Content>
 
-          <Block
-            id="people"
-            title="People and roles"
-            aside={
-              <Show when={canPeople()}>
-                <button type="button" class={button({ tone: "ghost", size: "sm" })} onClick={() => { setInviteLink(""); setEmail(""); setInviting(true); }}>
-                  Invite someone
+          <Tabs.Content value="people">
+            <Show when={canPeople()}>
+              <div class="mb-3 flex justify-end">
+                <button
+                  type="button"
+                  class={button({ size: "sm" })}
+                  onClick={() => {
+                    setInviteLink("");
+                    setEmail("");
+                    setInviting(true);
+                  }}
+                >
+                  Invite
                 </button>
-              </Show>
-            }
-          >
-            <Show when={members()} fallback={<SkeletonLines lines={5} />}>
-              <div class="overflow-x-auto">
-                <table class="w-full min-w-[640px] border-collapse text-left">
-                  <thead>
-                    <tr class="border-b-[1.5px] border-ink text-[14px] text-ink-2">
-                      <th class="py-2 pr-3 font-[650]">Person</th>
-                      <th class="py-2 pr-3 font-[650]">Role</th>
-                      <th class="py-2 pr-3 font-[650]">Can</th>
-                      <Show when={canPeople()}>
-                        <th class="py-2 font-[650]"><span class="sr-only">Actions</span></th>
-                      </Show>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <For each={members()}>
-                      {(m) => (
-                        <tr class="border-b border-rule align-top">
-                          <td class="py-3 pr-3 text-[15.5px]">
-                            {m.user.fullName}
-                            {m.viaBroker ? ` · ${m.viaBroker.split(" ")[0]}` : ""}
-                            <span class="block text-[13.5px] text-muted">{m.title}</span>
-                          </td>
-                          <td class="py-3 pr-3 text-[15px]">
-                            <Show when={canPeople() && !m.viaBroker} fallback={m.roleLabel}>
-                              <RoleSelect value={m.role} label={`Role for ${m.user.fullName}`} onChange={(r) => void changeRole(m, r)} disabled={m.user.id === me()?.user.id} />
-                            </Show>
-                          </td>
-                          <td class="py-3 pr-3 text-[15px] text-ink-2">{describe(m.role)}</td>
-                          <Show when={canPeople()}>
-                            <td class="py-3 text-right">
-                              <Show when={m.user.id !== me()?.user.id && !m.viaBroker}>
-                                <button type="button" class="text-[14px] text-bad underline underline-offset-4" onClick={() => setRemoving(m)}>
-                                  Remove
-                                </button>
-                              </Show>
-                            </td>
-                          </Show>
-                        </tr>
-                      )}
-                    </For>
-                  </tbody>
-                </table>
               </div>
             </Show>
+            <Show when={members()} fallback={<SkeletonLines lines={5} />}>
+              <ul class={card({ class: "overflow-hidden" })}>
+                <For each={members()}>
+                  {(m) => (
+                    <li class={row}>
+                      <span class="min-w-0">
+                        <span class="block text-[14.5px] font-[600]">
+                          {m.user.fullName}
+                          {m.viaBroker ? <span class="font-[450] text-muted"> · {m.viaBroker.split(" ")[0]}</span> : null}
+                        </span>
+                        <span class="text-[12.5px] text-muted">{m.title}</span>
+                      </span>
+                      <span class="flex items-center gap-3">
+                        <Show
+                          when={canPeople() && !m.viaBroker}
+                          fallback={
+                            <Tip label={describe(m.role)}>
+                              <span class={tag({ tone: "ink" })}>{m.roleLabel}</span>
+                            </Tip>
+                          }
+                        >
+                          <RoleSelect value={m.role} label={`Role for ${m.user.fullName}`} onChange={(r) => void changeRole(m, r)} disabled={m.user.id === me()?.user.id} />
+                        </Show>
+                        <Show when={canPeople() && m.user.id !== me()?.user.id && !m.viaBroker}>
+                          <button type="button" class={button({ tone: "ghost", size: "xs", class: "text-bad hover:text-bad" })} onClick={() => setRemoving(m)}>
+                            Remove
+                          </button>
+                        </Show>
+                      </span>
+                    </li>
+                  )}
+                </For>
+              </ul>
+            </Show>
             <Show when={canPeople() && invitations()?.length}>
-              <h3 class="ty-sub mt-6">Invitations waiting</h3>
-              <ul class="mt-2">
+              <p class="label mb-2 mt-6">Invitations</p>
+              <ul class={card({ class: "overflow-hidden" })}>
                 <For each={invitations()}>
                   {(i) => (
-                    <li class="flex flex-wrap items-center justify-between gap-2 border-b border-rule py-2 text-[15px]">
-                      <span>
-                        {i.email} · {i.roleLabel} <span class="text-muted">· {expiresIn(i.expiresAt)}</span>
+                    <li class={row}>
+                      <span class="text-[14px]">
+                        {i.email} <span class="text-muted">· {i.roleLabel} · {expiresIn(i.expiresAt)}</span>
                       </span>
                       <button
                         type="button"
-                        class="text-[14px] underline underline-offset-4"
+                        class={button({ tone: "ghost", size: "xs" })}
                         onClick={async () => {
                           await org.revokeInvitation(i.id).catch((e) => notify("Not withdrawn", plainProblem(e).message, "error"));
                           void refetchInv();
@@ -330,62 +320,64 @@ export default function SettingsPage() {
                 </For>
               </ul>
             </Show>
-          </Block>
+          </Tabs.Content>
 
-          <Block id="broker" title="Your broker">
-            <For each={brokers() ?? []} fallback={<p class="text-[15.5px] text-ink-2">No broker firm is engaged yet.</p>}>
+          <Tabs.Content value="broker">
+            <For each={brokers() ?? []} fallback={<div class={card({ class: "px-5 py-6 text-[14px] text-muted" })}>No broker firm yet</div>}>
               {(e) => (
-                <div class="text-[16px]">
-                  <p>
-                    <b>{e.brokerOrg}</b> handles {e.countriesLabel} for {e.importerOrg}, since {dateShort(e.startedOn)}.
-                  </p>
-                  <ul class="mt-2">
+                <section class={card({ class: "overflow-hidden" })}>
+                  <div class="border-b border-rule px-5 py-4">
+                    <p class="text-[15px] font-[600]">{e.brokerOrg}</p>
+                    <p class="text-[12.5px] text-muted">
+                      {e.countriesLabel} · since {dateShort(e.startedOn)}
+                    </p>
+                  </div>
+                  <ul>
                     <For each={e.people}>
                       {(p) => (
-                        <li class="border-b border-rule py-2 text-[15px]">
-                          {p.user.fullName} <span class="text-muted">· {p.title}</span>
+                        <li class={row}>
+                          <span class="text-[14px]">
+                            {p.user.fullName} <span class="text-muted">· {p.title}</span>
+                          </span>
                           <Show when={p.user.licence}>
-                            <span class="ml-2 font-code text-[13px] text-ink-2">{p.user.licence}</span>
+                            <span class="font-code text-[12px] text-muted">{p.user.licence}</span>
                           </Show>
                         </li>
                       )}
                     </For>
                   </ul>
-                </div>
+                </section>
               )}
             </For>
-          </Block>
+          </Tabs.Content>
 
-          <Block id="rules" title="Always-review rules">
-            <p class="text-[15.5px] text-ink-2">Products matching a rule go to the broker even when the classifier is sure.</p>
-            <ul class="mt-3">
+          <Tabs.Content value="rules">
+            <ul class={card({ class: "overflow-hidden" })}>
               <For each={ruleList() ?? []}>
                 {(r) => (
-                  <li class="flex flex-wrap items-center justify-between gap-3 border-b border-rule py-2.5">
-                    <span class="text-[15.5px]">
-                      {r.label} <span class="text-[13.5px] text-muted">· {r.kindLabel.toLowerCase()} · {r.matches} products now</span>
+                  <li class={row}>
+                    <span class="min-w-0">
+                      <span class="block text-[14.5px]">{r.label}</span>
+                      <span class="text-[12.5px] text-muted">
+                        {r.kindLabel} · {r.matches} products
+                      </span>
                     </span>
-                    <Toggle
-                      checked={r.active}
-                      disabled={!can("rules:manage")}
-                      label={r.active ? "On" : "Off"}
-                      onChange={(v) => void toggleRule(r.id, v)}
-                    />
+                    <Toggle checked={r.active} disabled={!can("rules:manage")} label={r.active ? "On" : "Off"} onChange={(v) => void toggleRule(r.id, v)} />
                   </li>
                 )}
               </For>
             </ul>
             <Show when={can("rules:manage")}>
               <form
-                class="mt-4 flex flex-wrap items-end gap-2"
+                class={card({ class: "mt-4 flex flex-wrap items-end gap-2 p-4" })}
                 onSubmit={(e) => {
                   e.preventDefault();
                   void addRule();
                 }}
               >
-                <label class="text-[13px] font-[650] text-ink-2">
+                <label class={f.label()}>
                   Kind
-                  <select value={newRule().kind} onChange={(e) => setNewRule({ ...newRule(), kind: e.currentTarget.value })} class="mt-1 block h-10 rounded-[var(--radius-btn)] border-[1.5px] border-ink bg-paper px-2 text-[15px] font-[400] text-ink">
+                  <select value={newRule().kind} onChange={(e) => setNewRule({ ...newRule(), kind: e.currentTarget.value })} class={f.input({ class: "mt-1 block w-auto font-[400]" })}>
                     <option value="keyword">Keyword</option>
                     <option value="heading">Heading</option>
                     <option value="chapter">Chapter</option>
@@ -394,50 +386,62 @@ export default function SettingsPage() {
                     <option value="origin">Origin</option>
                   </select>
                 </label>
-                <label class="text-[13px] font-[650] text-ink-2">
+                <label class={f.label()}>
                   Value
-                  <input value={newRule().value} onInput={(e) => setNewRule({ ...newRule(), value: e.currentTarget.value })} class="mt-1 block h-10 w-[150px] rounded-[var(--radius-btn)] border-[1.5px] border-ink bg-paper px-2 text-[15px] font-[400] text-ink" placeholder="lithium" />
+                  <input value={newRule().value} onInput={(e) => setNewRule({ ...newRule(), value: e.currentTarget.value })} class={f.input({ class: "mt-1 block w-[140px] font-[400]" })} placeholder="lithium" />
                 </label>
-                <label class="min-w-[220px] flex-1 text-[13px] font-[650] text-ink-2">
+                <label class={f.label({ class: "min-w-[200px] flex-1" })}>
                   Label
-                  <input value={newRule().label} onInput={(e) => setNewRule({ ...newRule(), label: e.currentTarget.value })} class="mt-1 block h-10 w-full rounded-[var(--radius-btn)] border-[1.5px] border-ink bg-paper px-2 text-[15px] font-[400] text-ink" placeholder="Anything with lithium cells" />
+                  <input value={newRule().label} onInput={(e) => setNewRule({ ...newRule(), label: e.currentTarget.value })} class={f.input({ class: "mt-1 block font-[400]" })} placeholder="Anything with lithium cells" />
                 </label>
                 <button type="submit" class={button({ size: "md" })}>
-                  Add rule
+                  Add
                 </button>
               </form>
             </Show>
-          </Block>
+          </Tabs.Content>
 
-          <Block id="records" title="Records">
+          <Tabs.Content value="records">
             <Show when={settings()}>
-              {(s) => (
-                <div class="space-y-2 text-[16px] leading-[1.6]">
-                  <p>{s().retentionNote ?? `Each binder is kept ${s().retentionYears} years after the product's latest entry (19 CFR 163.4).`}</p>
-                  <p class="text-ink-2">{s().deletingNote}</p>
+              {(st) => (
+                <dl class={card({ class: "overflow-hidden" })}>
+                  <div class={`${row} items-start`}>
+                    <dt class="text-[14px] text-muted">Kept for</dt>
+                    <dd class="max-w-[440px] text-right text-[14px]">
+                      {st().retentionYears} years
+                      <Show when={st().retentionNote}>
+                        <span class="mt-0.5 block text-[12.5px] text-muted">{st().retentionNote}</span>
+                      </Show>
+                    </dd>
+                  </div>
+                  <div class={`${row} items-start`}>
+                    <dt class="text-[14px] text-muted">Deleting</dt>
+                    <dd class="max-w-[440px] text-right text-[13.5px] text-ink-2">{st().deletingNote}</dd>
+                  </div>
                   <Show when={can("audit:read")}>
-                    <p>
-                      Every sensitive action is in the{" "}
-                      <A href="/activity" class="underline underline-offset-4">
-                        activity record
-                      </A>
-                      , chained so any change to an old entry shows.
-                    </p>
+                    <div class={row}>
+                      <dt class="text-[14px] text-muted">Activity</dt>
+                      <dd>
+                        <A href="/activity" class={button({ tone: "outline", size: "sm" })}>
+                          Open
+                        </A>
+                      </dd>
+                    </div>
                   </Show>
-                </div>
+                </dl>
               )}
             </Show>
-          </Block>
+          </Tabs.Content>
         </div>
-      </div>
+      </Tabs.Root>
 
-      <Sheet open={inviting()} onOpenChange={setInviting} title="Invite someone" description="They get a link that works once, for seven days. Their role decides what they can see and do.">
+      <Sheet open={inviting()} onOpenChange={setInviting} title="Invite someone" description="The link works once, for seven days.">
         <Show
           when={!inviteLink()}
           fallback={
             <div>
-              <p class="text-[15.5px]">Send this link to {email()}. It is shown only once.</p>
-              <p class="mt-2 break-all rounded-[var(--radius-btn)] border border-rule bg-paper-2 px-3 py-2 font-code text-[13px]">{inviteLink()}</p>
+              <p class="text-[14px]">Send this link to {email()}. It is shown once.</p>
+              <p class="mt-2 break-all rounded-[var(--radius-btn)] bg-paper-2 px-3 py-2 font-code text-[12.5px]">{inviteLink()}</p>
               <button type="button" class={button({ size: "md", class: "mt-4" })} onClick={() => setInviting(false)}>
                 Done
               </button>
@@ -451,37 +455,37 @@ export default function SettingsPage() {
               void invite();
             }}
           >
-            <label class="block text-[13px] font-[650] text-ink-2">
+            <label class={f.label({ class: "block" })}>
               Work email
-              <input type="email" value={email()} onInput={(e) => setEmail(e.currentTarget.value)} aria-invalid={!!inviteError()} class="mt-1 h-11 w-full rounded-[var(--radius-btn)] border-[1.5px] border-ink bg-paper px-3 text-[15.5px] font-[400] text-ink" />
+              <input type="email" value={email()} onInput={(e) => setEmail(e.currentTarget.value)} aria-invalid={!!inviteError()} class={f.input({ class: "mt-1 font-[400]" })} />
             </label>
-            <div class="flex items-center gap-3 text-[13px] font-[650] text-ink-2">
+            <div class="flex items-center gap-3 text-[13px] font-[600] text-ink-2">
               Role <RoleSelect value={inviteRole()} label="Role for the invitation" onChange={setInviteRole} />
             </div>
-            <p class="text-[14px] text-muted">{describe(inviteRole())}</p>
+            <p class="text-[13px] text-muted">{describe(inviteRole())}</p>
             <Show when={inviteError()}>
               <p role="alert" class="text-[14px] font-[600] text-bad">
                 {inviteError()}
               </p>
             </Show>
-            <div class="flex gap-2">
-              <button type="submit" class={button()}>
-                Send invitation
-              </button>
+            <div class="flex justify-end gap-2">
               <button type="button" class={button({ tone: "ghost" })} onClick={() => setInviting(false)}>
-                Not yet
+                Cancel
+              </button>
+              <button type="submit" class={button()}>
+                Send
               </button>
             </div>
           </form>
         </Show>
       </Sheet>
-      <Sheet open={!!removing()} onOpenChange={(o) => !o && setRemoving(null)} role="alertdialog" title={`Remove ${removing()?.user.fullName ?? ""}?`} description="They lose access right away. Their past decisions stay in every binder and in the activity record.">
-        <div class="flex gap-2">
+      <Sheet open={!!removing()} onOpenChange={(o) => !o && setRemoving(null)} role="alertdialog" title={`Remove ${removing()?.user.fullName ?? ""}?`} description="Access ends now. Their past decisions stay in the record.">
+        <div class="flex justify-end gap-2">
+          <button type="button" class={button({ tone: "ghost" })} onClick={() => setRemoving(null)}>
+            Cancel
+          </button>
           <button type="button" class={button({ tone: "danger" })} onClick={() => void remove()}>
             Remove
-          </button>
-          <button type="button" class={button({ tone: "ghost" })} onClick={() => setRemoving(null)}>
-            Keep them
           </button>
         </div>
       </Sheet>

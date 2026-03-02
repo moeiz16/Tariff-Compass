@@ -1,20 +1,20 @@
 import { Progress } from "@ark-ui/solid/progress";
-import { useNavigate } from "@solidjs/router";
 import { Match, Show, Switch, createResource, createSignal } from "solid-js";
 import { LabReport, RoundsStrip } from "~/components/lab/LabReport";
-import { AppPage } from "~/components/shell/AppPage";
+import { AppPage, PageHead } from "~/components/shell/AppPage";
 import { lab, waitForJob } from "~/lib/endpoints";
 import { plainProblem } from "~/lib/problem";
 import { useSession } from "~/lib/session";
 import type { JobOut } from "~/lib/types";
-import { button } from "~/ui/recipes";
+import { button, card } from "~/ui/recipes";
+import { Tip } from "~/ui/Tip";
+import { InfoIcon } from "~/ui/Icons";
 import { EmptyState, ErrorSlip, PageLoading } from "~/ui/States";
 import { notify } from "~/ui/Toast";
 
 /** The lab page for the candidate round (or a chosen round). */
 export function LabPage(props: { n?: number }) {
   const { me, can } = useSession();
-  const navigate = useNavigate();
   // Never ask for what the role can't see: no lab:read, no request.
   const [overview, { refetch: refetchLab }] = createResource(() => (can("lab:read") ? true : null), () => lab.get());
   // Show the chosen round, else the challenger waiting for sign-off, else the round in use, else the latest round.
@@ -37,63 +37,70 @@ export function LabPage(props: { n?: number }) {
   };
 
   return (
-    <AppPage title="Lab" scope="lab" permission="lab:read" placeholder="Search rounds, chapters or rulings" boxLabel="Search the lab" onSearch={(q) => navigate(`/rulings?q=${encodeURIComponent(q)}`)}>
+    <AppPage title="Lab" place="lab" permission="lab:read" width="default">
+      <PageHead
+        title="Lab"
+        meta={<Show when={overview()}>{(o) => <span>{o().correctionsWaiting} broker corrections waiting</span>}</Show>}
+        actions={
+          <Show when={can("lab:run") && overview()}>
+            <button type="button" class={button({ tone: "outline", size: "md" })} disabled={!!job()} onClick={() => void start()}>
+              Start round {(overview()!.rounds.at(-1)?.n ?? 0) + 1}
+            </button>
+          </Show>
+        }
+      />
+      <Show when={job()}>
+        {(j) => (
+          <Progress.Root value={Math.round(j().progress * 100)} class="mb-4 max-w-[360px]">
+            <Progress.Label class="text-[13px] text-muted">{j().message || "Training…"}</Progress.Label>
+            <Progress.Track class="mt-1 h-1.5 overflow-hidden rounded-full bg-paper-3">
+              <Progress.Range class="h-full rounded-full bg-ink" />
+            </Progress.Track>
+          </Progress.Root>
+        )}
+      </Show>
       <Switch>
         <Match when={overview.error || round.error}>
-          <div class="gm py-10">
-            <div class="gl" />
-            <div class="gm-body">
-              <ErrorSlip error={overview.error ?? round.error} retry={() => (overview.error ? refetchLab() : refetch())} />
-            </div>
-          </div>
+          <ErrorSlip error={overview.error ?? round.error} retry={() => (overview.error ? refetchLab() : refetch())} />
         </Match>
         <Match when={overview() && !overview()!.rounds.length}>
-          <div class="gm py-10">
-            <div class="gl" />
-            <div class="gm-body">
-              <EmptyState title="No training rounds yet">The first round is tested on the newest rulings and reported here before anyone can make it live.</EmptyState>
-            </div>
+          <div class={card()}>
+            <EmptyState title="No training rounds yet" />
           </div>
         </Match>
         <Match when={overview() && round()}>
           <Show when={overview()!.inUse}>
             {(u) => (
-              <section class="gm ty-ruled py-6" aria-labelledby="inuse-h">
-                <div class="gl">
-                  <span>Answering questions now</span>
-                  <h2 id="inuse-h" class="not-italic">
-                    <b>In use</b>
-                  </h2>
-                </div>
-                <div class="gm-wide flex max-w-[1160px] flex-wrap items-baseline gap-x-6 gap-y-2">
-                  <p class="ty-title">{u().label}</p>
-                  <p class="font-code text-[15px] text-ink-2">
-                    full code {Math.round(u().fullCode)} in 100 · heading {Math.round(u().heading)} in 100
-                  </p>
-                  <p class="w-full max-w-[860px] text-[16.5px] leading-[1.6] text-ink-2">{u().sentence}</p>
+              <section class={card({ class: "mb-8 p-6 max-sm:p-5" })} aria-labelledby="inuse-h">
+                <p id="inuse-h" class="label flex items-center gap-1.5">
+                  In use
+                  <Tip label={u().sentence}>
+                    <InfoIcon size={13} />
+                  </Tip>
+                </p>
+                <div class="mt-2 flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+                  <p class="text-[24px] font-[600] tracking-[-0.02em]">{u().label}</p>
+                  <dl class="flex gap-10">
+                    <div>
+                      <dt class="text-[12.5px] text-muted">Heading</dt>
+                      <dd class="font-code text-[28px] font-[500] leading-none tracking-[-0.02em]">
+                        {Math.round(u().heading)}
+                        <span class="text-[13px] text-muted"> in 100</span>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt class="text-[12.5px] text-muted">Full code</dt>
+                      <dd class="font-code text-[28px] font-[500] leading-none tracking-[-0.02em]">
+                        {Math.round(u().fullCode)}
+                        <span class="text-[13px] text-muted"> in 100</span>
+                      </dd>
+                    </div>
+                  </dl>
                 </div>
               </section>
             )}
           </Show>
           <RoundsStrip lab={overview()!} current={round()!.n} />
-          <Show when={can("lab:run")}>
-            <div class="flex flex-wrap items-center justify-end gap-3 px-8 pt-3 max-md:px-4">
-              <Show when={job()}>
-                {(j) => (
-                  <Progress.Root value={Math.round(j().progress * 100)} class="w-[320px]">
-                    <Progress.Label class="text-[14px] text-ink-2">{j().message || "Training…"}</Progress.Label>
-                    <Progress.Track class="mt-1 h-2 overflow-hidden rounded-[2px] border border-ink">
-                      <Progress.Range class="h-full bg-ink" />
-                    </Progress.Track>
-                  </Progress.Root>
-                )}
-              </Show>
-              <button type="button" class={button({ tone: "ghost", size: "sm" })} disabled={!!job()} onClick={() => void start()}>
-                Start training round {(overview()!.rounds.at(-1)?.n ?? 0) + 1}
-              </button>
-              <span class="text-[14px] text-muted">{overview()!.correctionsWaiting} broker corrections waiting</span>
-            </div>
-          </Show>
           <LabReport
             lab={overview()!}
             round={round()!}
@@ -105,10 +112,9 @@ export function LabPage(props: { n?: number }) {
           />
         </Match>
         <Match when={true}>
-          <PageLoading label="Opening the lab report…" />
+          <PageLoading label="Opening the lab…" />
         </Match>
       </Switch>
     </AppPage>
   );
 }
-

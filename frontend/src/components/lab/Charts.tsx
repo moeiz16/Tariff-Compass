@@ -9,7 +9,7 @@ const LEVEL_NOTE: Record<string, string> = { chapter: "first 2 digits", heading:
 
 function Mark(props: { kind: "ring" | "half" | "filled"; at: number }) {
   return (
-    <span class="absolute top-1/2 h-[15px] w-[15px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[2px] border-ink" style={{ left: `${props.at}%` }} classList={{ "bg-paper": props.kind === "ring", "bg-ink": props.kind === "filled" }}>
+    <span class="absolute top-1/2 h-[15px] w-[15px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[2px] border-ink" style={{ left: `${props.at}%` }} classList={{ "bg-card": props.kind === "ring", "bg-ink": props.kind === "filled" }}>
       <Show when={props.kind === "half"}>
         <span class="absolute inset-y-0 left-0 w-1/2 rounded-l-full bg-ink" />
       </Show>
@@ -20,27 +20,27 @@ function Mark(props: { kind: "ring" | "half" | "filled"; at: number }) {
 export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: number }) {
   return (
     <figure>
-      <figcaption class="flex flex-wrap gap-x-6 gap-y-1 text-[15px]">
+      <figcaption class="flex flex-wrap gap-x-5 gap-y-1 text-[12.5px] text-muted">
         <span class="inline-flex items-center gap-2">
-          <span class="h-3 w-3 rounded-full border-[2px] border-ink" /> Word matching (the yardstick)
+          <span class="h-3 w-3 rounded-full border-[2px] border-ink" /> Word matching
         </span>
         <Show when={props.liveN}>
           <span class="inline-flex items-center gap-2">
             <span class="relative h-3 w-3 overflow-hidden rounded-full border-[2px] border-ink">
               <span class="absolute inset-y-0 left-0 w-1/2 bg-ink" />
             </span>{" "}
-            Round {props.liveN}, live now
+            Round {props.liveN}, live
           </span>
         </Show>
         <span class="inline-flex items-center gap-2">
           <span class="h-3 w-3 rounded-full bg-ink" /> Round {props.n}
         </span>
         <span class="inline-flex items-center gap-2">
-          <span class="h-2.5 w-5 bg-hi" /> What round {props.n} adds
+          <span class="h-2.5 w-5 bg-hi" /> Gain
         </span>
         <Show when={props.rows.some((r) => r.candidate < (r.live ?? r.wordMatching))}>
           <span class="inline-flex items-center gap-2">
-            <span class="h-2.5 w-5 border-[1.5px] border-bad" /> What it loses
+            <span class="h-2.5 w-5 border-[1.5px] border-bad" /> Loss
           </span>
         </Show>
       </figcaption>
@@ -52,10 +52,10 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
             const lo = () => Math.min(base(), r.candidate);
             const hi = () => Math.max(base(), r.candidate);
             return (
-              <div class="grid grid-cols-[150px_minmax(0,1fr)_150px] items-center gap-x-6 border-b border-rule py-3.5 max-md:grid-cols-[96px_minmax(0,1fr)] max-md:gap-x-3">
+              <div class="grid grid-cols-[120px_minmax(0,1fr)_120px] items-center gap-x-6 border-b border-rule py-3.5 last:border-b-0 max-md:grid-cols-[96px_minmax(0,1fr)] max-md:gap-x-3">
                 <div>
-                  <p class="font-type text-[15px] font-[700] uppercase tracking-[0.03em]">{r.levelLabel}</p>
-                  <p class="text-[14px] text-muted">{LEVEL_NOTE[r.level]}</p>
+                  <p class="text-[14px] font-[600]">{r.levelLabel}</p>
+                  <p class="text-[12px] text-muted">{LEVEL_NOTE[r.level]}</p>
                 </div>
                 <div class="relative h-[20px]">
                   <span class="absolute inset-x-0 top-1/2 h-px bg-rule" />
@@ -64,7 +64,7 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
                   </Show>
                   <span
                     class="absolute top-1/2 h-[9px] -translate-y-1/2"
-                    classList={{ "bg-hi": r.candidate >= base(), "border-[1.5px] border-bad bg-paper": r.candidate < base() }}
+                    classList={{ "bg-hi": r.candidate >= base(), "border-[1.5px] border-bad bg-card": r.candidate < base() }}
                     style={{ left: `${lo()}%`, width: `${hi() - lo()}%` }}
                   />
                   <Mark kind="ring" at={r.wordMatching} />
@@ -73,14 +73,14 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
                   </Show>
                   <Mark kind="filled" at={r.candidate} />
                 </div>
-                <p class="text-right font-code text-[16px] max-md:col-span-2 max-md:text-left max-md:text-[14px]">
+                <p class="text-right font-code text-[14px] text-ink-2 max-md:col-span-2 max-md:text-left max-md:text-[13px]">
                   {Math.round(r.wordMatching)} · {r.live === null || r.live === undefined ? "–" : Math.round(r.live)} · <b>{Math.round(r.candidate)}</b>
                 </p>
               </div>
             );
           }}
         </For>
-        <div class="grid grid-cols-[150px_minmax(0,1fr)_150px] gap-x-6 pt-2 font-code text-[12.5px] text-muted max-md:grid-cols-[96px_minmax(0,1fr)] max-md:gap-x-3">
+        <div class="grid grid-cols-[120px_minmax(0,1fr)_120px] gap-x-6 pt-2 font-code text-[11.5px] text-muted max-md:grid-cols-[96px_minmax(0,1fr)] max-md:gap-x-3">
           <span />
           <span class="relative h-4">
             <For each={[0, 25, 50, 75, 100]}>{(t) => <span class="absolute -translate-x-1/2" style={{ left: `${t}%` }}>{t}</span>}</For>
@@ -88,10 +88,10 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
         </div>
       </div>
       <details class="mt-4">
-        <summary class="cursor-pointer text-[14.5px] text-ink-2 underline underline-offset-4">Table view, with the classifier before training</summary>
-        <table class="mt-2 w-full max-w-[640px] border-collapse text-left text-[15px]">
+        <summary class="cursor-pointer text-[13px] text-muted hover:text-ink">Table</summary>
+        <table class="mt-2 w-full max-w-[640px] border-collapse text-left text-[13.5px]">
           <thead>
-            <tr class="border-b-[1.5px] border-ink text-[13.5px] text-ink-2">
+            <tr class="border-b border-rule text-[12px] text-muted">
               <th class="py-1.5 pr-3 font-[650]">Depth</th>
               <th class="py-1.5 pr-3 text-right font-[650]">Word matching</th>
               <th class="py-1.5 pr-3 text-right font-[650]">Before training</th>
@@ -113,7 +113,7 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
             </For>
           </tbody>
         </table>
-        <p class="mt-1 text-[13.5px] text-muted">Right out of 100 rulings it hasn't seen.</p>
+        <p class="mt-1 text-[12px] text-muted">Right out of 100 rulings it hasn't seen.</p>
       </details>
     </figure>
   );
@@ -123,16 +123,16 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
 export function FrequencyGrid(props: { cell: ConfidenceCell; label: string; filledMeans: string; restMeans: string }) {
   return (
     <figure>
-      <figcaption class="text-[15.5px] text-ink-2">
+      <figcaption class="text-[13px] text-muted">
         When it said <b class="text-ink">{props.label}</b> ({props.cell.said.toLocaleString("en-US")} times)
       </figcaption>
-      <p class="ty-title mt-1 text-[clamp(21px,2.2vw,27px)]">{props.cell.sentence.split(": ").pop()}</p>
+      <p class="mt-1 text-[18px] font-[600] tracking-[-0.01em]">{props.cell.sentence.split(": ").pop()}</p>
       <div class="mt-3 grid w-fit grid-cols-[repeat(20,10px)] gap-[5px]" role="img" aria-label={`${props.cell.per100} of 100 ${props.filledMeans}; the rest ${props.restMeans}`}>
         <For each={Array.from({ length: 100 }, (_, i) => i)}>
           {(i) => <span class="h-[10px] w-[10px] rounded-full" classList={{ "bg-ink": i < props.cell.per100, "border-[1.5px] border-bad": i >= props.cell.per100 }} />}
         </For>
       </div>
-      <p class="mt-2 text-[13.5px] text-muted">
+      <p class="mt-2 text-[12px] text-muted">
         Filled: {props.filledMeans}. Red ring: {props.restMeans}.
       </p>
     </figure>

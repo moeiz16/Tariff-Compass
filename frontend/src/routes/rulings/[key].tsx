@@ -1,20 +1,23 @@
+import { Collapsible } from "@ark-ui/solid/collapsible";
 import { Splitter } from "@ark-ui/solid/splitter";
-import { A, useNavigate, useParams, useSearchParams } from "@solidjs/router";
+import { Tabs } from "@ark-ui/solid/tabs";
+import { A, useParams, useSearchParams } from "@solidjs/router";
 import { For, Match, Show, Switch, createResource } from "solid-js";
-import { AppPage } from "~/components/shell/AppPage";
-import { useSigned } from "~/lib/session";
+import { AppPage, PageHead } from "~/components/shell/AppPage";
 import { rulings } from "~/lib/endpoints";
 import { dateShort } from "~/lib/format";
+import { useSigned } from "~/lib/session";
 import type { CompareOut, RulingDetail } from "~/lib/types";
+import { ChevronIcon, ExternalIcon } from "~/ui/Icons";
 import { Marked } from "~/ui/Marked";
-import { Re, TypedRule } from "~/ui/Type";
-import { PageLoading, ErrorSlip } from "~/ui/States";
+import { button, card, tabs } from "~/ui/recipes";
+import { ErrorSlip, PageLoading } from "~/ui/States";
 import { MatchMark, RulingStatus } from "~/ui/Status";
 
 function Letter(props: { ruling: RulingDetail; marked?: { start: number; end: number }[] }) {
   const paras = () => (props.ruling.paragraphs.length ? props.ruling.paragraphs : [{ start: 0, end: props.ruling.text.length }]);
   return (
-    <div class="space-y-4 font-law text-[15.5px] leading-[1.65] max-sm:text-[14px]">
+    <div class="space-y-4 text-[15px] leading-[1.7] text-ink-2 max-sm:text-[14px]">
       <For each={paras()}>
         {(p) => {
           const text = props.ruling.text.slice(p.start, p.end);
@@ -30,184 +33,199 @@ function Letter(props: { ruling: RulingDetail; marked?: { start: number; end: nu
   );
 }
 
-function Compare(props: { c: CompareOut; answerId: string }) {
+/** Your product against the ruling: the facts one by one, then both texts side by side. */
+function CompareTab(props: { c: CompareOut }) {
   const r = () => props.c.ruling;
   return (
-    <>
-      <section class="gm py-8">
-        <div class="gl">
-          <A href={`/answer?id=${props.answerId}`} class="font-sans text-[14px] underline underline-offset-4">
-            ‹ Back to the answer
-          </A>
-          <b>Compare</b>
-          <Show when={props.c.citedAs}>
-            <span>cited as [{props.c.citedAs}]</span>
-          </Show>
-        </div>
-        <div class="gm-body">
-          <h1 class="ty-caption">
-            <Re />
-            Your product against {r().id}
-          </h1>
-          <blockquote class="mt-4 border-l-[3px] border-ink pl-4">
-            <p class="ty-law text-[16px]">{props.c.ruleQuote}</p>
-            <p class="mt-1 text-[14px] text-muted">
-              {props.c.ruleQuote.includes("177.9") ? "" : "19 CFR 177.9(b)(2): "}A classification ruling applies only to articles identical to the ones it describes, so the facts below are
-              compared one by one.
-            </p>
-          </blockquote>
-        </div>
-      </section>
-      <section class="px-8 max-md:px-4" aria-labelledby="align-h">
-        <h2 id="align-h" class="sr-only">
-          The facts, side by side
-        </h2>
-        <div class="overflow-hidden rounded-[var(--radius-box)] border-[1.5px] border-ink">
-          <table class="w-full border-collapse text-left max-md:block">
-            <thead class="bg-paper-2 text-[14px] text-ink-2 max-md:hidden">
-              <tr class="border-b-[1.5px] border-ink">
-                <th class="px-4 py-3 font-[650]">Fact</th>
-                <th class="px-4 py-3 font-[650]">{props.c.productTitle}</th>
-                <th class="px-4 py-3 text-center font-[650]">Match</th>
-                <th class="px-4 py-3 font-[650]">The article in {r().id}</th>
-              </tr>
-            </thead>
-            <tbody class="max-md:block">
-              <For each={props.c.alignment}>
-                {(f) => (
-                  <tr class="border-b border-rule align-top last:border-b-0 max-md:block max-md:px-4 max-md:py-3">
-                    <th scope="row" class="px-4 py-3 text-[16px] font-[650] max-md:block max-md:p-0">{f.fact}</th>
-                    <td class="px-4 py-3 text-[16px] max-md:block max-md:p-0 max-md:pt-1">
-                      <span class="hidden text-[13px] text-muted max-md:inline">Yours: </span>
-                      {f.yours}
-                    </td>
-                    <td class="bg-paper-2 px-4 py-3 text-center max-md:inline-block max-md:bg-transparent max-md:p-0 max-md:pt-1">
-                      <MatchMark match={f.match} label={f.matchLabel} />
-                    </td>
-                    <td class="px-4 py-3 font-law text-[15.5px] max-md:block max-md:p-0 max-md:pt-1">
-                      <span class="hidden font-sans text-[13px] text-muted max-md:inline">The ruling's: </span>
-                      {f.theirs}
-                    </td>
-                  </tr>
-                )}
-              </For>
-            </tbody>
-          </table>
-        </div>
-      </section>
-      <section class="px-8 py-8 max-md:px-4" aria-label="Your evidence and the ruling letter">
-        <Splitter.Root
-          panels={[
-            { id: "yours", minSize: 25, maxSize: 75 },
-            { id: "ruling", minSize: 25, maxSize: 75 },
-          ]}
-          defaultSize={[50, 50]}
-          class="flex min-h-[420px] max-md:!flex-col"
-        >
-          <Splitter.Panel id="yours" class="min-w-0 overflow-auto pr-6 max-md:!w-full max-md:pr-0">
-            <h3 class="ty-head flex flex-wrap items-baseline justify-between gap-2 border-b-[1.5px] border-ink pb-2 no-underline after:hidden">
-              Your product
-              <span class="font-code text-[13px] normal-case tracking-normal text-ink-2">{props.c.madeInLabel}</span>
-            </h3>
-            <dl class="mt-3">
-              <For each={props.c.evidence}>
-                {(e) => (
-                  <div class="grid grid-cols-[130px_minmax(0,1fr)] gap-x-4 border-b border-rule py-3 max-sm:grid-cols-1">
-                    <dt class="text-[15px] text-muted">{e.label}</dt>
-                    <dd class="ty-law">
-                      “<Marked text={e.text} spans={e.marked} />”
-                    </dd>
-                  </div>
-                )}
-              </For>
-            </dl>
-          </Splitter.Panel>
-          <Splitter.ResizeTrigger
-            id="yours:ruling"
-            aria-label="Resize the two panes"
-            class="relative w-[14px] shrink-0 cursor-col-resize before:absolute before:inset-y-0 before:left-1/2 before:w-[1.5px] before:-translate-x-1/2 before:bg-rule hover:before:bg-ink data-[focus]:before:bg-ink max-md:hidden"
-          />
-          <Splitter.Panel id="ruling" class="min-w-0 overflow-auto pl-6 max-md:!w-full max-md:pl-0 max-md:pt-8">
-            <h3 class="ty-head flex flex-wrap items-baseline justify-between gap-2 border-b-[1.5px] border-ink pb-2 no-underline after:hidden">
-              {r().id} · {dateShort(r().issued)}
-              <span class="normal-case tracking-normal">
-                <RulingStatus status={r().status} />
-              </span>
-            </h3>
-            <div class="mt-3">
-              <Letter ruling={r()} marked={props.c.rulingMarked} />
-            </div>
-          </Splitter.Panel>
-        </Splitter.Root>
-      </section>
-    </>
+    <div class="space-y-4">
+      <div class={card({ class: "overflow-hidden" })}>
+        <table class="w-full border-collapse text-left max-md:block">
+          <caption class="sr-only">Your product's facts against the ruling's article</caption>
+          <thead class="border-b border-rule bg-paper-2/50 text-[12.5px] text-muted max-md:hidden">
+            <tr>
+              <th class="px-5 py-2.5 font-[600]">Fact</th>
+              <th class="px-5 py-2.5 font-[600]">Yours</th>
+              <th class="px-5 py-2.5 font-[600]">{r().id}</th>
+              <th class="px-5 py-2.5 font-[600]">
+                <span class="sr-only">Match</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="max-md:block">
+            <For each={props.c.alignment}>
+              {(f) => (
+                <tr class="border-b border-rule align-top text-[14.5px] last:border-b-0 max-md:block max-md:px-4 max-md:py-3">
+                  <th scope="row" class="px-5 py-3 font-[550] text-muted max-md:block max-md:p-0">
+                    {f.fact}
+                  </th>
+                  <td class="px-5 py-3 max-md:block max-md:p-0 max-md:pt-1">
+                    <span class="hidden text-[12.5px] text-muted max-md:inline">Yours · </span>
+                    {f.yours}
+                  </td>
+                  <td class="px-5 py-3 text-ink-2 max-md:block max-md:p-0 max-md:pt-1">
+                    <span class="hidden text-[12.5px] text-muted max-md:inline">Ruling · </span>
+                    {f.theirs}
+                  </td>
+                  <td class="px-5 py-3 text-right max-md:block max-md:p-0 max-md:pt-1 max-md:text-left">
+                    <MatchMark match={f.match} label={f.matchLabel} />
+                  </td>
+                </tr>
+              )}
+            </For>
+          </tbody>
+        </table>
+      </div>
+      <Collapsible.Root>
+        <Collapsible.Trigger class={button({ tone: "outline", size: "sm", class: "group" })}>
+          Side by side
+          <ChevronIcon size={13} class="transition-transform group-data-[state=open]:rotate-180" />
+        </Collapsible.Trigger>
+        <Collapsible.Content class="fold">
+          <section class={card({ class: "mt-4 p-5 max-sm:p-4" })} aria-label="Your evidence and the ruling letter">
+            <Splitter.Root
+              panels={[
+                { id: "yours", minSize: 25, maxSize: 75 },
+                { id: "ruling", minSize: 25, maxSize: 75 },
+              ]}
+              defaultSize={[45, 55]}
+              class="flex min-h-[380px] max-md:!flex-col"
+            >
+              <Splitter.Panel id="yours" class="min-w-0 overflow-auto pr-5 max-md:!w-full max-md:pr-0">
+                <p class="label flex justify-between gap-2">
+                  {props.c.productTitle}
+                  <span class="font-[450]">{props.c.madeInLabel}</span>
+                </p>
+                <dl class="mt-3 space-y-4">
+                  <For each={props.c.evidence}>
+                    {(e) => (
+                      <div>
+                        <dt class="text-[12.5px] text-muted">{e.label}</dt>
+                        <dd class="mt-1 text-[14.5px] leading-[1.6]">
+                          <Marked text={e.text} spans={e.marked} />
+                        </dd>
+                      </div>
+                    )}
+                  </For>
+                </dl>
+              </Splitter.Panel>
+              <Splitter.ResizeTrigger
+                id="yours:ruling"
+                aria-label="Resize the two panes"
+                class="relative w-[14px] shrink-0 cursor-col-resize before:absolute before:inset-y-0 before:left-1/2 before:w-px before:-translate-x-1/2 before:bg-rule hover:before:bg-ink-2 data-[focus]:before:bg-ink max-md:hidden"
+              />
+              <Splitter.Panel id="ruling" class="min-w-0 overflow-auto pl-5 max-md:!w-full max-md:pl-0 max-md:pt-6">
+                <p class="label">{r().id}</p>
+                <div class="mt-3">
+                  <Letter ruling={r()} marked={props.c.rulingMarked} />
+                </div>
+              </Splitter.Panel>
+            </Splitter.Root>
+          </section>
+        </Collapsible.Content>
+      </Collapsible.Root>
+    </div>
   );
 }
 
-function Reader(props: { r: RulingDetail }) {
+function RulingView(props: { r: RulingDetail; compare?: CompareOut; answerId?: string }) {
+  const t = tabs();
+  const related = () => props.r.related.length + props.r.alsoCitedIn.length;
+  const row = "flex items-center justify-between gap-4 border-b border-rule px-5 py-3 text-[14px] last:border-b-0";
   return (
-    <section class="gm py-8">
-      <div class="gl">
-        <A href="/rulings" class="font-sans text-[14px] underline underline-offset-4">
-          ‹ Rulings
-        </A>
-        <b>Ruling</b>
-        <span>{props.r.category}</span>
-      </div>
-      <div class="gm-body">
-        <p class="flex flex-wrap items-baseline gap-3">
-          <span class="font-code text-[15px] font-[700]">{props.r.id}</span>
-          <span class="text-[14.5px] text-muted">{dateShort(props.r.issued)}</span>
-          <RulingStatus status={props.r.status} long />
+    <>
+      <p class="mb-2 text-[13px]">
+        <Show
+          when={props.answerId}
+          fallback={
+            <A href="/rulings" class="text-muted no-underline hover:text-ink">
+              Library
+            </A>
+          }
+        >
+          <A href={`/answer?id=${props.answerId}`} class="text-muted no-underline hover:text-ink">
+            Back to the answer
+          </A>
+        </Show>
+      </p>
+      <PageHead
+        title={<span class="font-code tracking-[-0.01em]">{props.r.id}</span>}
+        meta={
+          <>
+            <RulingStatus status={props.r.status} long />
+            <span aria-hidden="true">·</span>
+            <span>{dateShort(props.r.issued)}</span>
+            <Show when={props.compare?.citedAs}>
+              <span aria-hidden="true">·</span>
+              <span>Cited as {props.compare!.citedAs}</span>
+            </Show>
+          </>
+        }
+        actions={
+          <a href={props.r.sourceUrl} target="_blank" rel="noreferrer" class={button({ tone: "ghost", size: "sm" })}>
+            CBP CROSS <ExternalIcon size={13} />
+          </a>
+        }
+      />
+      <section class={card({ class: "p-6 max-sm:p-5" })} aria-label="Holding">
+        <p class="text-[15px] font-[600]">{props.r.subject}</p>
+        <p class="mt-3 border-l-2 border-hi pl-3.5 text-[15px] leading-[1.65] text-ink-2">{props.r.holding}</p>
+        <p class="mt-3 text-[12.5px] text-muted">
+          <span class="font-code">{props.r.codes.join(" · ")}</span>
         </p>
-        <h1 class="ty-caption mt-2">
-          <Re />
-          {props.r.subject}
-        </h1>
-        <p class="mt-3 text-[15.5px] text-ink-2">
-          Codes in the letter: <span class="font-code">{props.r.codes.join(" · ")}</span> (CBP prints <span class="font-code">{props.r.codeAsQuoted}</span>)
-        </p>
-        <div class="mt-6">
-          <TypedRule double class="mb-5 text-ink" />
-          <Letter ruling={props.r} marked={[]} />
-        </div>
-        <Show when={props.r.related.length}>
-          <h2 class="ty-head mt-8 block">Related rulings</h2>
-          <ul class="mt-2">
+      </section>
+      <Tabs.Root defaultValue={props.compare ? "compare" : "letter"} class="mt-8">
+        <Tabs.List class={t.list()}>
+          <Show when={props.compare}>
+            <Tabs.Trigger value="compare" class={t.trigger()}>
+              Compare
+            </Tabs.Trigger>
+          </Show>
+          <Tabs.Trigger value="letter" class={t.trigger()}>
+            Letter
+          </Tabs.Trigger>
+          <Show when={related()}>
+            <Tabs.Trigger value="related" class={t.trigger()}>
+              Related <span class={t.count()}>{related()}</span>
+            </Tabs.Trigger>
+          </Show>
+          <Tabs.Indicator class={t.indicator({ class: "w-[var(--width)] left-[var(--left)]" })} />
+        </Tabs.List>
+        <Show when={props.compare}>
+          <Tabs.Content value="compare" class="mt-4">
+            <CompareTab c={props.compare!} />
+          </Tabs.Content>
+        </Show>
+        <Tabs.Content value="letter" class="mt-4">
+          <div class={card({ class: "p-6 max-sm:p-5" })}>
+            <Letter ruling={props.r} marked={props.compare?.rulingMarked ?? []} />
+          </div>
+        </Tabs.Content>
+        <Tabs.Content value="related" class="mt-4">
+          <ul class={card({ class: "overflow-hidden" })}>
             <For each={props.r.related}>
               {(x) => (
-                <li class="border-b border-rule py-2 text-[15.5px]">
-                  {x.relationLabel}{" "}
-                  <A href={`/rulings/${x.key}`} class="font-code underline underline-offset-4">
+                <li class={row}>
+                  <span class="text-muted">{x.relationLabel}</span>
+                  <A href={`/rulings/${x.key}`} class="font-code no-underline hover:underline">
                     {x.id}
                   </A>
                 </li>
               )}
             </For>
-          </ul>
-        </Show>
-        <Show when={props.r.alsoCitedIn.length}>
-          <h2 class="ty-head mt-8 block">Relied on in your binders</h2>
-          <ul class="mt-2">
             <For each={props.r.alsoCitedIn}>
               {(p) => (
-                <li class="border-b border-rule py-2 text-[15.5px]">
-                  <A href={`/products/${p.sku}`} class="underline underline-offset-4">
+                <li class={row}>
+                  <span class="text-muted">In your binder</span>
+                  <A href={`/products/${p.sku}`} class="no-underline hover:underline">
                     {p.title}
-                  </A>{" "}
-                  <span class="font-code text-[13px] text-muted">{p.sku}</span>
+                  </A>
                 </li>
               )}
             </For>
           </ul>
-        </Show>
-        <p class="mt-8 text-[14.5px]">
-          <a href={props.r.sourceUrl} target="_blank" rel="noreferrer" class="underline underline-offset-4">
-            The ruling on CBP CROSS
-          </a>
-        </p>
-      </div>
-    </section>
+        </Tabs.Content>
+      </Tabs.Root>
+    </>
   );
 }
 
@@ -215,34 +233,21 @@ export default function RulingPage() {
   const signed = useSigned();
   const params = useParams<{ key: string }>();
   const [search] = useSearchParams<{ answerId?: string; n?: string }>();
-  const navigate = useNavigate();
   const [data, { refetch }] = createResource(
     signed(() => ({ key: params.key, answerId: search.answerId, n: search.n })),
-    async (k) =>
-      k.answerId ? { kind: "compare" as const, c: await rulings.compare(k.key, k.answerId, k.n ? Number(k.n) : undefined) } : { kind: "reader" as const, r: await rulings.get(k.key) },
+    async (k) => {
+      if (!k.answerId) return { r: await rulings.get(k.key), c: undefined };
+      const c = await rulings.compare(k.key, k.answerId, k.n ? Number(k.n) : undefined);
+      return { r: c.ruling, c };
+    },
   );
-  const title = () => {
-    const d = data();
-    return d ? (d.kind === "compare" ? `Compare with ${d.c.ruling.id}` : d.r.id) : "Ruling";
-  };
   return (
-    <AppPage title={title()} scope="rulings" permission="rulings:read" placeholder="Search rulings: a product, a code, a ruling number" boxLabel="Search the customs rulings" onSearch={(q) => navigate(`/rulings?q=${encodeURIComponent(q)}`)}>
+    <AppPage title={data()?.r.id ?? "Ruling"} place="library" permission="rulings:read" width="default">
       <Switch>
         <Match when={data.error}>
-          <div class="gm py-10">
-            <div class="gl" />
-            <div class="gm-body">
-              <ErrorSlip error={data.error} retry={refetch} />
-            </div>
-          </div>
+          <ErrorSlip error={data.error} retry={refetch} />
         </Match>
-        <Match when={data()}>
-          {(d) => (
-            <Show when={d().kind === "compare"} fallback={<Reader r={(d() as { r: RulingDetail }).r} />}>
-              <Compare c={(d() as { c: CompareOut }).c} answerId={search.answerId!} />
-            </Show>
-          )}
-        </Match>
+        <Match when={data()}>{(d) => <RulingView r={d().r} compare={d().c} answerId={search.answerId} />}</Match>
         <Match when={data.loading}>
           <PageLoading label="Opening the ruling…" />
         </Match>
