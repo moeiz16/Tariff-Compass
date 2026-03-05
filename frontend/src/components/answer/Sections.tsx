@@ -162,11 +162,20 @@ export function FactsLayer(props: { answer: AnswerOut }) {
           <div class="grid grid-cols-[180px_minmax(0,1fr)] items-baseline gap-x-5 py-2.5 max-sm:grid-cols-1">
             <dt class="text-[13.5px] text-muted">{f.label}</dt>
             <dd class="flex flex-wrap items-center gap-2 text-[14.5px]">
-              <span classList={{ "font-[600]": f.decides }}>{f.value}</span>
-              <Tip label={f.sourceNote || f.sourceLabel}>
-                <span class={tag({ tone: SOURCE_TONE[f.source] })}>{f.sourceLabel || "Stated"}</span>
-              </Tip>
-              <Show when={f.decides}>
+              <span classList={{ "font-[600]": f.decides, "text-muted": f.decides && f.source !== "stated" }}>{f.value}</span>
+              <Show
+                when={f.decides && f.source !== "stated"}
+                fallback={
+                  <Tip label={f.sourceNote || f.sourceLabel}>
+                    <span class={tag({ tone: SOURCE_TONE[f.source] })}>{f.sourceLabel || "Stated"}</span>
+                  </Tip>
+                }
+              >
+                <Tip label={f.sourceNote || f.sourceLabel}>
+                  <span class={tag({ tone: "warn" })}>To check · decides it</span>
+                </Tip>
+              </Show>
+              <Show when={f.decides && f.source === "stated"}>
                 <span class={tag({ tone: "hi", class: "font-sans" })}>Decides it</span>
               </Show>
             </dd>
@@ -219,9 +228,9 @@ export function DecidingQuestion(props: { answer: AnswerOut; canConfirm: boolean
         </p>
         <Show
           when={props.canConfirm && !props.answer.sample}
-          fallback={<p class="mt-1.5 pl-[25px] text-[13px] text-muted">{props.answer.sample ? "Sign in to answer it." : "Only people who classify can answer it."}</p>}
+          fallback={<p class="mt-1.5 pl-[25px] text-[13px] text-muted max-sm:pl-0">{props.answer.sample ? "Sign in to answer it." : "Only people who classify can answer it."}</p>}
         >
-          <div class="mt-3 flex flex-wrap gap-2 pl-[25px]">
+          <div class="mt-3 flex flex-wrap gap-2 pl-[25px] max-sm:pl-0">
             <Show
               when={q()}
               fallback={
@@ -237,10 +246,16 @@ export function DecidingQuestion(props: { answer: AnswerOut; canConfirm: boolean
             >
               <For each={q()!.options}>
                 {(o) => (
-                  <button type="button" class={button({ tone: "outline", size: "sm" })} disabled={!!busy()} onClick={() => void confirm(q()!.factKey, o.key)}>
-                    {busy() === o.key ? "Re-running…" : o.label}
+                  <button
+                    type="button"
+                    title={o.label}
+                    class={button({ tone: "outline", size: "sm", class: "h-auto min-h-9 max-w-full whitespace-normal py-1.5 text-left max-sm:w-full max-sm:justify-between" })}
+                    disabled={!!busy()}
+                    onClick={() => void confirm(q()!.factKey, o.key)}
+                  >
+                    <span class="min-w-0">{busy() === o.key ? "Re-running…" : o.label.length > 56 ? `${o.label.slice(0, 54)}…` : o.label}</span>
                     <Show when={o.leadsTo}>
-                      <span class="font-code text-[11.5px] text-muted">→ {o.leadsTo}</span>
+                      <span class="shrink-0 font-code text-[11.5px] text-muted">→ {o.leadsTo}</span>
                     </Show>
                   </button>
                 )}

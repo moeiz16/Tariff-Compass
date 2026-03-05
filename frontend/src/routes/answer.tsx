@@ -145,12 +145,16 @@ export default function AnswerPage() {
               openCite={params.cite ? Number(params.cite.split(",")[0]) : undefined}
               caps={{ live: true, canConfirm: can("classify:run"), canSend: can("review:submit"), canFlag: can("review:decide"), brokerName: broker() }}
               onAnswer={(next) => {
+                const before = a.us?.code ?? a.ca?.code;
+                const after = next.us?.code ?? next.ca?.code;
                 answerCache.put(next);
                 setOverride(next);
-                notify("Answer updated", "Your answer is recorded in the binder.");
+                if (after && after !== before) notify(`Changed to ${after}`, "Your answer is recorded.");
+                else notify("Recorded", `The code stays ${after ?? ""}. ${broker()} can confirm it.`, "info");
               }}
               onSend={() => setSending(true)}
               actions={
+                (can("products:write") || can("review:submit") || (can("review:decide") && !!a.reviewItemId)) && (
                 <>
                   <Show when={can("products:write")}>
                     <button type="button" class={button({ size: "md" })} disabled={busy()} onClick={() => void save()}>
@@ -168,6 +172,7 @@ export default function AnswerPage() {
                     </A>
                   </Show>
                 </>
+                )
               }
             />
           )}

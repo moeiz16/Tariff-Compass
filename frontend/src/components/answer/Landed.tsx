@@ -196,7 +196,7 @@ function ShipmentPopover(props: { cost: LandedCostOut | null; onApply: (v: { val
   const input = "mt-1 h-9 w-full rounded-[var(--radius-btn)] border border-rule-2 bg-card px-3 text-[14px] text-ink outline-none focus:border-ink";
   return (
     <div class="flex items-center gap-2 text-[13.5px]">
-      <Show when={props.cost} fallback={<span class="text-muted">No shipment yet</span>}>
+      <Show when={props.cost}>
         {(c) => (
           <span class="text-ink-2">
             {c().quantity.toLocaleString("en-US")} units · {money({ amount: (Number(c().value.amount) / Math.max(1, c().quantity)).toFixed(2), currency: c().value.currency })} each ·{" "}
@@ -206,7 +206,7 @@ function ShipmentPopover(props: { cost: LandedCostOut | null; onApply: (v: { val
       </Show>
       <Show when={!props.disabled}>
         <Popover.Root open={open()} onOpenChange={(d) => setOpen(d.open)} positioning={{ placement: "bottom-start", gutter: 8 }}>
-          <Popover.Trigger class={button({ tone: "quiet", size: "xs" })}>Change</Popover.Trigger>
+          <Popover.Trigger class={props.cost ? button({ tone: "quiet", size: "xs" }) : button({ size: "sm" })}>{props.cost ? "Change" : "Add shipment"}</Popover.Trigger>
           <Portal>
             <Popover.Positioner class="z-50">
               <Popover.Content class={floating({ class: "w-[280px] p-4" })}>
@@ -364,7 +364,7 @@ export function CostLayer(props: { answer: AnswerOut; live: boolean; state: Land
 
       <Show
         when={st().cost()}
-        fallback={<p class="text-[14px] text-muted">{props.live ? "Add a shipment to see every duty it will carry." : "The landed cost appears when the answer has a shipment."}</p>}
+        fallback={<Show when={!props.live}><p class="text-[14px] text-muted">No shipment on this answer.</p></Show>}
       >
         {(c) => (
           <div aria-busy={st().loading()} classList={{ "opacity-60": st().loading() }} class="space-y-5 transition-opacity">

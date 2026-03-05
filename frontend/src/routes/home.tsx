@@ -21,7 +21,7 @@ export default function Home() {
   const row = "flex items-center gap-4 border-b border-rule px-5 py-3.5 no-underline last:border-b-0 hover:bg-paper-2/60 max-sm:px-4";
 
   return (
-    <AppPage title="Home" place="classify" width="narrow">
+    <AppPage title="Home" place={can("classify:run") ? "classify" : "none"} width="narrow">
       <div class="pt-[clamp(8px,5vh,48px)] text-center">
         <h1 class="text-[clamp(28px,3.2vw,36px)] font-[600] leading-[1.15] tracking-[-0.025em]">
           {can("classify:run") ? "What are you importing?" : `Welcome, ${me()?.user.fullName.split(" ")[0] ?? ""}`}
@@ -35,7 +35,7 @@ export default function Home() {
             mode="classify"
             size="hero"
             label="Describe a product, paste a listing, or attach a spec sheet"
-            placeholder="Describe a product or paste a listing…"
+            placeholder="Describe a product…"
             suggestions={home()?.recent.map((r) => r.queryText)}
             origins={m()?.origins}
             allowFiles
@@ -69,7 +69,7 @@ export default function Home() {
               {(h) => (
                 <Show when={h().recent.length} fallback={<EmptyState title="Nothing classified yet" />}>
                   <ul class={card({ class: "overflow-hidden" })}>
-                    <For each={h().recent.slice(0, 6)}>
+                    <For each={h().recent.filter((r, i, all) => all.findIndex((x) => x.queryText === r.queryText) === i).slice(0, 6)}>
                       {(r) => (
                         <li>
                           <A href={`/answer?id=${r.id}&q=${encodeURIComponent(r.queryText)}`} class={row}>

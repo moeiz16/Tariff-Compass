@@ -31,12 +31,7 @@ export interface AnswerCapabilities {
 function CodeBlock(props: { code: CodeOut; words: ReturnType<typeof depthWords>; lock: boolean }) {
   return (
     <div class="min-w-0">
-      <p class="flex items-center gap-2 text-[13px] font-[550] text-muted">
-        {props.code.countryLabel}
-        <Show when={props.code.leaning}>
-          <span class="text-warn">· leaning</span>
-        </Show>
-      </p>
+      <p class="text-[13px] font-[550] text-muted">{props.code.countryLabel}</p>
       <div class="mt-2 flex items-center gap-2">
         <CodeDigits code={props.code.code} treatment={digitTreatment(props.code, props.words)} lock={props.lock} size="xl" />
         <Clipboard.Root value={props.code.code}>
@@ -114,7 +109,7 @@ export function AnswerCard(props: {
           <Claim text={first()!.text} cites={first()!.cites} answer={a()} state={props.state} />
         </Show>
       </p>
-      <Show when={a().alternative}>
+      <Show when={!a().decidingQuestion && a().alternative}>
         {(alt) => (
           <p class="mt-2 text-[14px] text-muted">
             Also possible <span class="font-code text-ink-2">{alt().code.code}</span>, {alt().condition}
@@ -217,7 +212,7 @@ export function AnswerView(props: {
           </LayerRow>
         </Accordion.Root>
       </section>
-      <p class="px-1 text-[12.5px] text-muted">{a().snapshotLabel} · A licensed broker approves every code before it is used.</p>
+      <p class="px-1 text-[12.5px] text-muted">{a().snapshotLabel}</p>
       <RulingDrawer rulings={a().rulings} state={state} answerId={a().sample ? undefined : a().id} canFlag={props.caps.canFlag} sample={a().sample} />
     </div>
   );
