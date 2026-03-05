@@ -13,6 +13,7 @@ import type { DecisionOut, DecisionRecord as Record_, ReasonKind } from "~/lib/t
 import { Kbd, Marked } from "~/ui/Marked";
 import { button, checkbox, field, radioCard } from "~/ui/recipes";
 import { RulingStatus } from "~/ui/Status";
+import { CodeDigits } from "~/ui/Code";
 import { CodePins } from "./CodePins";
 
 const REASONS: { value: ReasonKind; label: string }[] = [
@@ -46,6 +47,12 @@ export function DecisionRecordView(props: {
   const [errors, setErrors] = createSignal<Record<string, string>>({});
   const [busy, setBusy] = createSignal<string | null>(null);
   const [answer, setAnswer] = createSignal("");
+  // The correction form stays folded until the broker chooses to correct.
+  const [correcting, setCorrecting] = createSignal(false);
+  const startCorrecting = () => {
+    setCorrecting(true);
+    queueMicrotask(() => firstPin?.focus());
+  };
   let firstPin: HTMLInputElement | undefined;
   let reasonBox: HTMLTextAreaElement | undefined;
 
@@ -123,6 +130,7 @@ export function DecisionRecordView(props: {
     approve: () => props.canDecide && void decide("approve"),
     correct: () => {
       if (!props.canDecide) return;
+      if (!correcting()) return startCorrecting();
       if (typed().length === 10 && reason().trim().length >= 10 && reasonKind()) void decide("correct");
       else firstPin?.focus();
     },
@@ -191,16 +199,33 @@ export function DecisionRecordView(props: {
         </section>
 
         <section aria-label="The code">
-          <p class="label">The code</p>
-          <Show
-            when={props.canDecide}
-            fallback={
-              <p class="mt-2 font-code text-[22px] font-[500]">
-                {proposed()} <span class="ml-2 font-sans text-[13px] font-[450] text-muted">proposed · a broker decides</span>
-              </p>
-            }
-          >
-            <div class="mt-3">
+          <p class="label">Proposed</p>
+          <div class="mt-2 grid grid-cols-2 gap-4 max-sm:grid-cols-1">
+            <Show when={r().row.proposedUs}>
+              {(c) => (
+                <div>
+                  <p class="text-[12px] text-muted">United States</p>
+                  <CodeDigits code={c().code} size="lg" leaning={c().leaning} />
+                </div>
+              )}
+            </Show>
+            <Show when={r().row.proposedCa}>
+              {(c) => (
+                <div>
+                  <p class="text-[12px] text-muted">Canada</p>
+                  <CodeDigits code={c().code} size="lg" leaning={c().leaning} />
+                </div>
+              )}
+            </Show>
+          </div>
+          <Show when={r().rulingsRelied.length}>
+            <p class="mt-3 flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
+              Relied on
+              <For each={r().rulingsRelied}>{(x) => <span class="rounded-full bg-paper-2 px-2 py-0.5 font-code text-[12px] text-ink-2">{x.id}</span>}</For>
+            </p>
+          </Show>
+          <Show when={props.canDecide && correcting()}>
+            <div class="mt-5">
               <CodePins proposed={proposed()} value={pins()} onChange={setPins} invalid={!!errors().code} describedBy="pin-help" ref={(el) => (firstPin = el)} />
               <p id="pin-help" class="mt-2 text-[12.5px]" classList={{ "text-bad font-[600]": !!errors().code, "text-muted": !errors().code }}>
                 {errors().code ?? "Type or paste ten digits."}
@@ -226,20 +251,14 @@ export function DecisionRecordView(props: {
                 <Checkbox.HiddenInput />
               </Checkbox.Root>
             </Show>
-            <Show when={r().rulingsRelied.length}>
-              <p class="mt-3 flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
-                Relied on
-                <For each={r().rulingsRelied}>{(x) => <span class="rounded-full bg-paper-2 px-2 py-0.5 font-code text-[12px] text-ink-2">{x.id}</span>}</For>
-              </p>
-            </Show>
           </Show>
         </section>
 
         <section aria-label="Reason">
           <Show
-            when={props.canDecide}
+            when={props.canDecide && correcting()}
             fallback={
-              <Show when={props.canAnswer && r().questions.some((q) => !q.answer)}>
+              <Show when={!props.canDecide && props.canAnswer && r().questions.some((q) => !q.answer)}>
                 <form
                   class="space-y-2"
                   onSubmit={(e) => {
@@ -310,15 +329,29 @@ export function DecisionRecordView(props: {
       </div>
       <Show when={props.canDecide}>
         <footer class="sticky bottom-0 -mx-6 -mb-5 flex flex-wrap items-center gap-2 border-t border-rule bg-card px-6 py-3.5 max-sm:-mx-4 max-sm:px-4">
-          <button type="button" class={button({ tone: "outline", size: "md" })} disabled={!!busy()} onClick={() => void decide("approve")}>
-            Approve <Kbd>A</Kbd>
-          </button>
-          <button type="button" class={button({ tone: "ghost", size: "md" })} onClick={() => props.onAsk()}>
-            Ask <Kbd>Q</Kbd>
-          </button>
-          <button type="button" class={button({ size: "md", class: "ml-auto" })} disabled={!!busy()} onClick={() => void decide("correct")}>
-            {busy() === "correct" ? "Saving…" : "Save correction"} <Kbd class="border-white/30 bg-transparent text-card/80">C</Kbd>
-          </button>
+          <Show
+            when={correcting()}
+            fallback={
+              <>
+                <button type="button" class={button({ tone: "ghost", size: "md" })} onClick={() => props.onAsk()}>
+                  Ask <Kbd>Q</Kbd>
+                </button>
+                <button type="button" class={button({ tone: "outline", size: "md", class: "ml-auto" })} onClick={startCorrecting}>
+                  Correct <Kbd>C</Kbd>
+                </button>
+                <button type="button" class={button({ size: "md" })} disabled={!!busy()} onClick={() => void decide("approve")}>
+                  {busy() === "approve" ? "Approving…" : "Approve"} <Kbd class="border-white/30 bg-transparent text-card/80">A</Kbd>
+                </button>
+              </>
+            }
+          >
+            <button type="button" class={button({ tone: "ghost", size: "md" })} onClick={() => setCorrecting(false)}>
+              Cancel
+            </button>
+            <button type="button" class={button({ size: "md", class: "ml-auto" })} disabled={!!busy()} onClick={() => void decide("correct")}>
+              {busy() === "correct" ? "Saving…" : "Save correction"} <Kbd class="border-white/30 bg-transparent text-card/80">C</Kbd>
+            </button>
+          </Show>
         </footer>
       </Show>
     </div>

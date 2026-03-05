@@ -25,6 +25,9 @@ const KIND_TONE: Record<ReviewRow["kind"], { tone: "warn" | "ink" | "bad" | "mut
   requested: { tone: "ink", icon: "ask" },
 };
 
+/** The reason in plain words ("Classifier unsure" → "Unsure"). */
+const kindWord = (label: string) => label.replace(/^Classifier unsure$/i, "Unsure");
+
 const FILTERS: { value: DocketFilter; label: string; count: "all" | "unsure" | "differs" | "rulingChanged" | "always" | "ca" }[] = [
   { value: "all", label: "All", count: "all" },
   { value: "unsure", label: "Unsure", count: "unsure" },
@@ -242,13 +245,13 @@ export default function ReviewPage() {
                           </td>
                           <td class="px-5 py-3.5 max-md:order-first max-md:hidden">
                             <KindTag tone={tone.tone} icon={tone.icon}>
-                              {r.kindLabel}
+                              {kindWord(r.kindLabel)}
                             </KindTag>
                           </td>
                           <td class="whitespace-nowrap px-5 py-3.5 text-right text-[13px] text-muted max-md:p-0">{r.waitingLabel}</td>
                           <td class="hidden max-md:col-span-2 max-md:block max-md:p-0">
                             <KindTag tone={tone.tone} icon={tone.icon}>
-                              {r.kindLabel}
+                              {kindWord(r.kindLabel)}
                             </KindTag>
                           </td>
                         </tr>
@@ -285,11 +288,11 @@ export default function ReviewPage() {
                 <span>Into {r().intoLabel}</span>
                 <Show when={r().value}>
                   <span aria-hidden="true">·</span>
-                  <span>{money(r().value!, { cents: false })}</span>
+                  <span>Shipment {money(r().value!, { cents: false })}</span>
                 </Show>
                 <span aria-hidden="true">·</span>
                 <KindTag tone={KIND_TONE[r().kind].tone} icon={KIND_TONE[r().kind].icon}>
-                  {r().kindLabel}
+                  {kindWord(r().kindLabel)}
                 </KindTag>
               </>
             )}
