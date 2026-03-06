@@ -13,7 +13,7 @@ const caps = { live: false, canConfirm: false, canSend: false, canFlag: false, b
 describe("the answer card", () => {
   it("leads with the word, both codes and one line of why", () => {
     render(inRouter(() => <AnswerCard answer={tumblerAnswer()} state={createCitationState()} />));
-    expect(screen.getByText("Strong match")).toBeTruthy();
+    expect(screen.getByText("Confident")).toBeTruthy();
     expect(screen.getByLabelText("9617.00.10.00")).toBeTruthy();
     expect(screen.getByLabelText("9617.00.00.00")).toBeTruthy();
     expect(screen.getByText(/heading 9617 names vacuum vessels outright/)).toBeTruthy();
@@ -33,6 +33,19 @@ describe("the answer card", () => {
     const us = screen.getByLabelText("9617.00.10.00");
     const groups = Array.from(us.querySelectorAll("[data-treatment]")).map((g) => g.getAttribute("data-treatment"));
     expect(groups).toEqual(["hl", "dashed", "dashed", "dashed"]);
+  });
+});
+
+describe("the deciding question", () => {
+  it("offers answers without promising a code", () => {
+    render(inRouter(() => <AnswerCard answer={bottleAnswer()} state={createCitationState()} caps={{ ...caps, canConfirm: true }} />));
+    const buttons = screen.getAllByRole("button").map((b) => b.textContent ?? "");
+    expect(buttons.some((t) => /\d{4}\.\d{2}/.test(t))).toBe(false);
+  });
+
+  it("says what you answered once it is re-run, and who confirms it", () => {
+    render(inRouter(() => <AnswerCard answer={bottleAnswer()} state={createCitationState()} caps={caps} said="Under one litre" />));
+    expect(screen.getByText("You said: Under one litre · Driftwood to confirm")).toBeTruthy();
   });
 });
 
