@@ -317,6 +317,7 @@ export default function ReviewPage() {
               canDecide={canDecide()}
               canAnswer={can("review:answer")}
               importerName={importerName()}
+              detail={openRow()?.detail}
               handle={(h) => (handle = h)}
               onAsk={() => setAsking(true)}
               onDecided={(out) => afterDecision(out.toast)}

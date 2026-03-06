@@ -16,13 +16,32 @@ import { MatchMark, RulingStatus } from "~/ui/Status";
 
 function Letter(props: { ruling: RulingDetail; marked?: { start: number; end: number }[] }) {
   const paras = () => {
-    if (props.ruling.paragraphs.length) return props.ruling.paragraphs;
+    if (props.ruling.paragraphs.length > 1) return props.ruling.paragraphs;
     // No paragraph map: split on blank lines (or single breaks), keeping offsets for the marked spans.
     const out: { start: number; end: number }[] = [];
     const re = /[^\n]+(?:\n(?!\s*\n)[^\n]+)*/g;
     let m: RegExpExecArray | null;
     while ((m = re.exec(props.ruling.text))) if (m[0].trim()) out.push({ start: m.index, end: m.index + m[0].length });
-    return out.length ? out : [{ start: 0, end: props.ruling.text.length }];
+    if (out.length > 1) return out;
+    // One block: break at the letter's own markers and every few sentences, keeping offsets.
+    const text = props.ruling.text;
+    const cuts = new Set<number>([0]);
+    const marker = /(?:Dear [^:]{2,60}:|FACTS:|ISSUE:|LAW AND ANALYSIS:|HOLDING:|Sincerely,)/g;
+    while ((m = marker.exec(text))) if (m.index > 0) cuts.add(m.index);
+    const sentence = /[.;:]\s+(?=[A-Z(“"])/g;
+    let count = 0;
+    let last = 0;
+    while ((m = sentence.exec(text))) {
+      const at = m.index + m[0].length;
+      if ([...cuts].some((c) => c > last && c <= at)) count = 0;
+      if (++count >= 4) {
+        cuts.add(at);
+        count = 0;
+      }
+      last = at;
+    }
+    const sorted = [...cuts].sort((a, b) => a - b);
+    return sorted.map((c, i) => ({ start: c, end: sorted[i + 1] ?? text.length })).filter((p) => text.slice(p.start, p.end).trim());
   };
   return (
     <div class="space-y-4 text-[15px] leading-[1.7] text-ink-2 max-sm:text-[14px]">

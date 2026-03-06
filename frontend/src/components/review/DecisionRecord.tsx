@@ -33,6 +33,8 @@ export function DecisionRecordView(props: {
   canDecide: boolean;
   canAnswer: boolean;
   importerName: string;
+  /** The queue row's one-line reason, already shown above the record. */
+  detail?: string;
   onDecided: (d: DecisionOut) => void;
   onAsk: () => void;
   onConflict: (message: string) => void;
@@ -168,7 +170,7 @@ export function DecisionRecordView(props: {
           <Show when={r().misread}>
             <p class="mt-3 text-[14px] text-ink-2">{r().misread}</p>
           </Show>
-          <Show when={r().rulingChange}>
+          <Show when={r().rulingChange?.byId && props.detail?.includes(r().rulingChange!.byId!) ? null : r().rulingChange}>
             {(c) => (
               <p class="mt-3 text-[14px]">
                 <RulingStatus status={c()} long />
@@ -199,6 +201,7 @@ export function DecisionRecordView(props: {
         </section>
 
         <section aria-label="The code">
+          <Show when={!correcting()}>
           <p class="label">Proposed</p>
           <div class="mt-2 grid grid-cols-2 gap-4 max-sm:grid-cols-1">
             <Show when={r().row.proposedUs}>
@@ -218,9 +221,10 @@ export function DecisionRecordView(props: {
               )}
             </Show>
           </div>
-          <Show when={r().rulingsRelied.length}>
+          </Show>
+          <Show when={r().rulingsRelied.length && !correcting()}>
             <p class="mt-3 flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
-              Relied on
+              {r().rulingChange ? "Now supported by" : "Relied on"}
               <For each={r().rulingsRelied}>{(x) => <span class="rounded-full bg-paper-2 px-2 py-0.5 font-code text-[12px] text-ink-2">{x.id}</span>}</For>
             </p>
           </Show>

@@ -104,7 +104,8 @@ export function Nav(props: { active: Place }) {
     <nav aria-label="Places" class="flex items-center gap-1 max-[860px]:hidden">
       <For each={visible()}>
         {(p) => (
-          <A
+          // A plain anchor (the router still handles it): <A> would mark itself current by URL, not by place.
+          <a
             href={p.href}
             aria-current={props.active === p.key ? "page" : undefined}
             class="relative inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-[14px] font-[550] text-muted no-underline hover:bg-paper-2 hover:text-ink aria-[current=page]:bg-paper-2 aria-[current=page]:text-ink"
@@ -113,7 +114,7 @@ export function Nav(props: { active: Place }) {
             <Show when={p.key === "review" && counts()?.review}>
               <span class="rounded-full bg-ink px-1.5 text-[11px] font-[650] leading-[17px] text-card">{counts()!.review}</span>
             </Show>
-          </A>
+          </a>
         )}
       </For>
     </nav>

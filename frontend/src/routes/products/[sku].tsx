@@ -294,10 +294,10 @@ export default function BinderPage() {
                   <Tabs.Content value="record" class="mt-4">
                     <dl class={card({ class: "divide-y divide-rule" })}>
                       <div class={row}>
-                        <dt class="text-muted">Chain</dt>
+                        <dt class="text-muted">Record</dt>
                         <dd class="flex items-center gap-1.5" classList={{ "text-ok": b().record.chainVerified, "text-bad": !b().record.chainVerified }}>
                           <OkIcon size={14} />
-                          {b().record.chainVerified ? "Verified" : "Check failed"} · {dateTime(b().record.checkedAt)}
+                          {b().record.chainVerified ? "Intact" : "Changed"} · checked {dateTime(b().record.checkedAt)}
                         </dd>
                       </div>
                       <div class={row}>

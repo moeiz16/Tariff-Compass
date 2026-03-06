@@ -43,11 +43,11 @@ export default function ActivityPage() {
       <PageHead
         title="Activity"
         meta={
-          <Show when={chain()} fallback={<span>Tamper-evident record</span>}>
+          <Show when={chain()}>
             {(c) => (
               <span role="status" class={tag({ tone: c().ok ? "ok" : "bad" })}>
                 {c().ok ? <OkIcon size={13} /> : <FailIcon size={13} />}
-                {c().ok ? "Chain verified" : `Altered at #${c().brokenAt ?? "?"}`}
+                {c().ok ? "Record intact" : `Changed at entry ${c().brokenAt ?? "?"}`}
               </span>
             )}
           </Show>
@@ -55,8 +55,8 @@ export default function ActivityPage() {
         actions={
           <>
             <PageSearch label="Search the activity" placeholder="A person, a product, a code" value={params.actor} onSearch={(q) => setParams({ actor: q || undefined, page: undefined })} class="w-[260px] max-sm:w-full" />
-            <button type="button" class={button({ tone: "outline", size: "md" })} disabled={checking()} onClick={() => void verify()} title="Each entry carries a fingerprint of the one before it">
-              {checking() ? "Checking…" : "Verify the chain"}
+            <button type="button" class={button({ tone: "outline", size: "md" })} disabled={checking()} onClick={() => void verify()} title="Checks that no entry was changed or deleted">
+              {checking() ? "Checking…" : "Check record"}
             </button>
             <button type="button" class={button({ tone: "ghost", size: "md" })} onClick={() => void exportCsv()}>
               CSV
@@ -76,30 +76,32 @@ export default function ActivityPage() {
               }
             >
               <div class={card({ class: "overflow-x-auto" })}>
-                <table class="w-full min-w-[760px] border-collapse text-left">
+                <table class="w-full min-w-[640px] border-collapse text-left">
                   <caption class="sr-only">{r().total} entries, newest first</caption>
                   <thead>
                     <tr class="border-b border-rule bg-paper-2/50 text-[12.5px] text-muted">
                       <th class="px-5 py-2.5 font-[600]">When</th>
                       <th class="px-5 py-2.5 font-[600]">Who</th>
                       <th class="px-5 py-2.5 font-[600]">What</th>
-                      <th class="px-5 py-2.5 text-right font-[600]">Fingerprint</th>
                     </tr>
                   </thead>
                   <tbody>
                     <For each={r().items}>
                       {(a) => (
                         <tr class="border-b border-rule align-top text-[14px] last:border-b-0">
-                          <td class="whitespace-nowrap px-5 py-3 text-muted">{dateTime(a.at)}</td>
+                          <td class="whitespace-nowrap px-5 py-3 text-muted" title={`Fingerprint ${a.fingerprint}`}>
+                            {dateTime(a.at)}
+                          </td>
                           <td class="px-5 py-3">
                             {a.actorName}
                             <span class="block text-[12.5px] text-muted">{a.actorRoleLabel}</span>
                           </td>
                           <td class="px-5 py-3">
                             <span class="font-[600]">{a.actionLabel}</span>
-                            <span class="block text-[13px] text-ink-2">{a.summary}</span>
+                            <Show when={a.summary.toLowerCase() !== `${a.actorName} ${a.actionLabel}`.toLowerCase()}>
+                              <span class="block text-[13px] text-ink-2">{a.summary}</span>
+                            </Show>
                           </td>
-                          <td class="px-5 py-3 text-right font-code text-[12px] text-muted">{a.fingerprint}</td>
                         </tr>
                       )}
                     </For>
