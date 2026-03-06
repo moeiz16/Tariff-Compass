@@ -61,7 +61,13 @@ export function Drawer(props: {
 }) {
   const d = drawer();
   return (
-    <Dialog.Root open={props.open} onOpenChange={(e) => props.onOpenChange(e.open)} lazyMount unmountOnExit>
+    <Dialog.Root
+      open={props.open}
+      onOpenChange={(e) => props.onOpenChange(e.open)}
+      lazyMount
+      unmountOnExit
+      initialFocusEl={() => document.querySelector<HTMLElement>("[data-drawer-body]")}
+    >
       <Portal>
         <Dialog.Backdrop class={d.backdrop()} />
         <Dialog.Positioner class={d.positioner()}>
@@ -75,7 +81,9 @@ export function Drawer(props: {
                 <CloseIcon size={12} />
               </Dialog.CloseTrigger>
             </header>
-            <div class={d.body()}>{props.children}</div>
+            <div class={`${d.body()} outline-none`} data-drawer-body tabIndex={-1}>
+              {props.children}
+            </div>
             {props.footer ? <footer class={d.foot()}>{props.footer}</footer> : null}
           </Dialog.Content>
         </Dialog.Positioner>

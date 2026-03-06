@@ -15,7 +15,15 @@ import { ErrorSlip, PageLoading } from "~/ui/States";
 import { MatchMark, RulingStatus } from "~/ui/Status";
 
 function Letter(props: { ruling: RulingDetail; marked?: { start: number; end: number }[] }) {
-  const paras = () => (props.ruling.paragraphs.length ? props.ruling.paragraphs : [{ start: 0, end: props.ruling.text.length }]);
+  const paras = () => {
+    if (props.ruling.paragraphs.length) return props.ruling.paragraphs;
+    // No paragraph map: split on blank lines (or single breaks), keeping offsets for the marked spans.
+    const out: { start: number; end: number }[] = [];
+    const re = /[^\n]+(?:\n(?!\s*\n)[^\n]+)*/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(props.ruling.text))) if (m[0].trim()) out.push({ start: m.index, end: m.index + m[0].length });
+    return out.length ? out : [{ start: 0, end: props.ruling.text.length }];
+  };
   return (
     <div class="space-y-4 text-[15px] leading-[1.7] text-ink-2 max-sm:text-[14px]">
       <For each={paras()}>
@@ -170,7 +178,7 @@ function RulingView(props: { r: RulingDetail; compare?: CompareOut; answerId?: s
         <p class="text-[15px] font-[600]">{props.r.subject}</p>
         <p class="mt-3 border-l-2 border-hi pl-3.5 text-[15px] leading-[1.65] text-ink-2">{props.r.holding}</p>
         <p class="mt-3 text-[12.5px] text-muted">
-          <span class="font-code">{props.r.codes.join(" · ")}</span>
+          Codes in the ruling <span class="font-code text-ink-2">{props.r.codes.join(" · ")}</span>
         </p>
       </section>
       <Tabs.Root defaultValue={props.compare ? "compare" : "letter"} class="mt-8">

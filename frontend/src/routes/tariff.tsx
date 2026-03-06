@@ -141,11 +141,12 @@ export default function TariffPage() {
                             type="button"
                             class="flex w-full items-baseline gap-3 py-2.5 pr-5 text-left hover:bg-paper-2/60"
                             classList={{ "bg-hi-soft/40": params.line === l.code }}
-                            style={{ "padding-left": `${20 + l.indent * 16}px` }}
+                            style={{ "padding-left": "20px" }}
+                            title={l.fullText}
                             onClick={() => setParams({ line: l.code })}
                           >
                             <span class="w-[118px] shrink-0 font-code max-sm:w-[86px] text-[13.5px] font-[500]">{l.code}</span>
-                            <span class="min-w-0 flex-1 text-[14.5px] text-ink-2">{l.fullText}</span>
+                            <span class="min-w-0 flex-1 truncate text-[14.5px] text-ink-2">{l.text}</span>
                             <span class="shrink-0 font-code text-[12.5px] text-muted">{l.generalRate}</span>
                           </button>
                         </li>

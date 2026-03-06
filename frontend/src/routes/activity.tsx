@@ -43,7 +43,7 @@ export default function ActivityPage() {
       <PageHead
         title="Activity"
         meta={
-          <Show when={chain()} fallback={<span>Every sensitive action, chained</span>}>
+          <Show when={chain()} fallback={<span>Tamper-evident record</span>}>
             {(c) => (
               <span role="status" class={tag({ tone: c().ok ? "ok" : "bad" })}>
                 {c().ok ? <OkIcon size={13} /> : <FailIcon size={13} />}

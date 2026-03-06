@@ -216,7 +216,7 @@ export default function SignIn() {
                       <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-paper-2 text-[12px] font-[650] text-ink-2">{initials(p.fullName)}</span>
                       <span class="min-w-0 flex-1">
                         <span class="block text-[14.5px] font-[600]">{p.fullName}</span>
-                        <span class="block truncate text-[12.5px] text-muted">
+                        <span class="block text-[12.5px] text-muted">
                           {p.roleLabel} · {p.orgName}
                         </span>
                       </span>

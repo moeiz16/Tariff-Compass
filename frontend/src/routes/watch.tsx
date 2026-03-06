@@ -71,7 +71,7 @@ function Item(props: { item: WatchItemOut }) {
           </span>
           <span class="mt-1.5 block text-[15px] font-[600] leading-snug">{item().headline}</span>
         </span>
-        <span class={tag({ tone: "hi", class: "mt-0.5 font-sans" })}>
+        <span class={tag({ tone: "ink", class: "mt-0.5" })}>
           {item().affectedCount} {item().affectedCount === 1 ? "product" : "products"}
         </span>
         <Accordion.ItemIndicator class="mt-1 text-muted transition-transform duration-200 data-[state=open]:rotate-180">

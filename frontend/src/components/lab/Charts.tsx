@@ -35,9 +35,11 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
         <span class="inline-flex items-center gap-2">
           <span class="h-3 w-3 rounded-full bg-ink" /> Round {props.n}
         </span>
-        <span class="inline-flex items-center gap-2">
-          <span class="h-2.5 w-5 bg-hi" /> Gain
-        </span>
+        <Show when={props.rows.some((r) => r.candidate > (r.live ?? r.wordMatching))}>
+          <span class="inline-flex items-center gap-2">
+            <span class="h-2.5 w-5 bg-hi" /> Gain
+          </span>
+        </Show>
         <Show when={props.rows.some((r) => r.candidate < (r.live ?? r.wordMatching))}>
           <span class="inline-flex items-center gap-2">
             <span class="h-2.5 w-5 border-[1.5px] border-bad" /> Loss
@@ -120,16 +122,17 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
 }
 
 /** 100 dots: filled = the outcome named in the sentence, ringed in red = the rest. */
-export function FrequencyGrid(props: { cell: ConfidenceCell; label: string; filledMeans: string; restMeans: string }) {
+export function FrequencyGrid(props: { cell: ConfidenceCell; label: string; filledMeans: string; restMeans: string; filled?: number }) {
+  const n = () => props.filled ?? props.cell.per100;
   return (
     <figure>
       <figcaption class="text-[13px] text-muted">
         When it said <b class="text-ink">{props.label}</b> ({props.cell.said.toLocaleString("en-US")} times)
       </figcaption>
       <p class="mt-1 text-[18px] font-[600] tracking-[-0.01em]">{props.cell.sentence.split(": ").pop()}</p>
-      <div class="mt-3 grid w-fit grid-cols-[repeat(20,10px)] gap-[5px]" role="img" aria-label={`${props.cell.per100} of 100 ${props.filledMeans}; the rest ${props.restMeans}`}>
+      <div class="mt-3 grid w-fit grid-cols-[repeat(20,10px)] gap-[5px]" role="img" aria-label={`${n()} of 100 ${props.filledMeans}; the rest ${props.restMeans}`}>
         <For each={Array.from({ length: 100 }, (_, i) => i)}>
-          {(i) => <span class="h-[10px] w-[10px] rounded-full" classList={{ "bg-ink": i < props.cell.per100, "border-[1.5px] border-bad": i >= props.cell.per100 }} />}
+          {(i) => <span class="h-[10px] w-[10px] rounded-full" classList={{ "bg-ink": i < n(), "border-[1.5px] border-bad": i >= n() }} />}
         </For>
       </div>
       <p class="mt-2 text-[12px] text-muted">

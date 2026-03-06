@@ -13,7 +13,8 @@ import { plainProblem } from "~/lib/problem";
 import { useSession, useSigned } from "~/lib/session";
 import type { BinderOut, BinderRow, BinderVersion, ExportResult, JobOut } from "~/lib/types";
 import { CodeDigits } from "~/ui/Code";
-import { ChevronIcon, OkIcon } from "~/ui/Icons";
+import { ChevronIcon, InfoIcon, OkIcon } from "~/ui/Icons";
+import { Tip } from "~/ui/Tip";
 import { button, card, floating, tabs } from "~/ui/recipes";
 import { StandingTag } from "~/ui/Standing";
 import { EmptyState, ErrorSlip, PageLoading } from "~/ui/States";
@@ -103,10 +104,6 @@ export function History(props: { binder: BinderOut }) {
                       </div>
                     )}
                   </For>
-                  <div class="grid grid-cols-[120px_minmax(0,1fr)] gap-x-4 pt-1 max-sm:grid-cols-1">
-                    <dt class="text-muted">Fingerprint</dt>
-                    <dd class="font-code text-[12px] text-muted">{v.fingerprint}</dd>
-                  </div>
                 </dl>
               </Accordion.ItemContent>
             </Accordion.Item>
@@ -284,7 +281,10 @@ export default function BinderPage() {
                                   {e.country} · {dateShort(e.enteredOn)} · <span class="font-code">{e.code}</span>
                                 </span>
                               </span>
-                              <span class="font-code text-[13.5px]">{money(e.dutyPaid)}</span>
+                              <span class="text-right">
+                                <span class="block font-code text-[13.5px]">{money(e.dutyPaid)}</span>
+                                <span class="text-[11.5px] text-muted">duty paid</span>
+                              </span>
                             </li>
                           )}
                         </For>
@@ -301,28 +301,31 @@ export default function BinderPage() {
                         </dd>
                       </div>
                       <div class={row}>
-                        <dt class="text-muted">Events</dt>
-                        <dd>{b().record.events}</dd>
-                      </div>
-                      <div class={row}>
-                        <dt class="text-muted">Fingerprint</dt>
-                        <dd class="font-code text-[12.5px]">{b().record.fingerprint}</dd>
+                        <dt class="text-muted">Recorded actions</dt>
+                        <dd title={`Fingerprint ${b().record.fingerprint}`}>{b().record.events}</dd>
                       </div>
                       <div class={row}>
                         <dt class="text-muted">Opened</dt>
                         <dd>{dateShort(b().openedOn)}</dd>
                       </div>
-                      <div class={`${row} items-start`}>
+                      <div class={row}>
                         <dt class="text-muted">Kept until</dt>
-                        <dd class="max-w-[440px] text-right">
+                        <dd class="flex items-center gap-1.5">
                           {dateShort(b().keptUntil)}
-                          <span class="mt-0.5 block text-[12.5px] text-muted">{retention(b().retentionNote)}</span>
+                          <Tip label={retention(b().retentionNote)}>
+                            <InfoIcon size={13} class="text-muted" />
+                          </Tip>
                         </dd>
                       </div>
                       <Show when={b().advanceRuling}>
-                        <div class={`${row} items-start`}>
-                          <dt class="text-muted">Canada</dt>
-                          <dd class="max-w-[440px] text-right text-[13.5px]">{b().advanceRuling}</dd>
+                        <div class={row}>
+                          <dt class="text-muted">Canada advance ruling</dt>
+                          <dd class="flex items-center gap-1.5">
+                            Ready to draft
+                            <Tip label={b().advanceRuling!}>
+                              <InfoIcon size={13} class="text-muted" />
+                            </Tip>
+                          </dd>
                         </div>
                       </Show>
                     </dl>

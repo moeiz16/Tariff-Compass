@@ -33,6 +33,7 @@ export function RoundsStrip(props: { lab: LabOut; current: number }) {
                 title={r.note}
               >
                 <span class="font-[600]">Round {r.n}</span>
+                <Show when={r.status === "live" || r.status === "waiting_signoff"}>
                 <span
                   class="text-[12px]"
                   classList={{
@@ -44,6 +45,7 @@ export function RoundsStrip(props: { lab: LabOut; current: number }) {
                 >
                   {r.statusLabel}
                 </span>
+                </Show>
               </A>
             </Steps.Item>
           )}
@@ -137,6 +139,15 @@ function ChapterTable(props: { rows: ChapterRow[] }) {
   );
 }
 
+/** "0.2481" against "0.3609" → "25 in 100 · needs 36"; "-0.1739" against "-0.03" → "-17 points · limit -3". */
+export function checkValue(value: string, threshold: string): string {
+  const v = Number(value);
+  const t = Number(threshold);
+  if (!Number.isFinite(v) || !Number.isFinite(t) || Math.abs(v) > 1 || Math.abs(t) > 1) return `${value} (${threshold})`;
+  const pct = (x: number) => Math.round(x * 100);
+  return t < 0 || v < 0 ? `${pct(v)} points · limit ${pct(t)}` : `${pct(v)} in 100 · needs ${pct(t)}`;
+}
+
 function highlightLede(lede: string) {
   const m = lede.match(/(\d+ in 100)/);
   if (!m) return <>{lede}</>;
@@ -187,7 +198,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
       <section class={card({ class: "mt-4 p-6 max-sm:p-5" })} aria-label={`Round ${r().n}`}>
         <p class="max-w-[720px] text-[19px] font-[550] leading-[1.45] tracking-[-0.01em]">{highlightLede(r().lede)}</p>
         <p class="mt-2 text-[12.5px] text-muted">
-          {r().testCount.toLocaleString("en-US")} rulings it hasn't seen · {dateShort(r().testFrom)} – {dateShort(r().testTo)} · snapshot <span class="font-code">{r().snapshot}</span>
+          {r().testCount.toLocaleString("en-US")} rulings it hasn't seen · {dateShort(r().testFrom)} – {dateShort(r().testTo)}
         </p>
       </section>
 
@@ -219,7 +230,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
           <div class={card({ class: "grid grid-cols-2 gap-10 p-6 max-lg:grid-cols-1 max-sm:p-4" })}>
             <Show when={r().confidence.strong}>{(c) => <FrequencyGrid cell={c()} label="Strong match" filledMeans="right" restMeans="wrong" />}</Show>
             <Show when={r().confidence.broker}>
-              {(c) => <FrequencyGrid cell={c()} label="Needs a broker" filledMeans="first guess wrong, broker needed" restMeans="first guess right" />}
+              {(c) => <FrequencyGrid cell={c()} filled={100 - c().per100} label="Needs a broker" filledMeans="first guess right" restMeans="first guess wrong" />}
             </Show>
           </div>
         </Tabs.Content>
@@ -255,9 +266,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
                       {c.passed ? "Passed" : "Not passed"}
                     </span>
                     <span class="flex-1">{c.label}</span>
-                    <span class="font-code text-[12.5px] text-muted">
-                      {c.value} ({c.threshold})
-                    </span>
+                    <span class="font-code text-[12.5px] text-muted">{checkValue(c.value, c.threshold)}</span>
                   </li>
                 )}
               </For>
@@ -275,7 +284,11 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
                           <div class="mt-3">
                             <Show
                               when={r().signOff.canSign && i === r().signOff.signatures.length}
-                              fallback={<p class="text-[13.5px] text-muted">{r().status === "waiting_signoff" ? "Waiting for a second person" : "Not needed"}</p>}
+                              fallback={
+                                <p class="text-[13.5px] text-muted">
+                                  {r().status === "waiting_signoff" ? "Waiting for a second person" : allPassed() ? "Not needed" : `Blocked: ${r().checks.filter((c) => !c.passed).length} checks failing`}
+                                </p>
+                              }
                             >
                               <button type="button" class={button({ size: "md" })} disabled={!allPassed()} onClick={() => setSigning(true)}>
                                 {r().signOff.willPromote ? `Sign and make round ${r().n} live` : `Sign round ${r().n}`}

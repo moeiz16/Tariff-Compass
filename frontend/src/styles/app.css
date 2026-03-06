@@ -100,11 +100,12 @@ body {
   color: var(--color-hi-ink);
 }
 
-/* Focus: a calm ink ring with an offset, visible on every interactive part. */
-:where(a, button, input, textarea, select, summary, [tabindex], [role="tab"], [role="option"], [role="button"]):focus-visible {
-  outline: 2px solid var(--color-ink);
-  outline-offset: 2px;
-  border-radius: 6px;
+/* Focus: a calm ink ring with an offset, visible on every interactive part (in the base layer, so a part can opt out). */
+@layer base {
+  :where(a, button, input, textarea, select, summary, [tabindex], [role="tab"], [role="option"], [role="button"]):focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
 }
 
 .sr-only-focusable:not(:focus) {
