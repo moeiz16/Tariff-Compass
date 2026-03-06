@@ -59,6 +59,8 @@ export function CitationChip(props: { n: number; ruling?: CitedRulingOut; state:
 
 /** The ruling drawer: one ruling, in layers. */
 export function RulingDrawer(props: {
+  /** Facts still to check: shown as such, never as a settled value. */
+  toCheck?: string[];
   rulings: CitedRulingOut[];
   state: CitationState;
   answerId?: string;
@@ -123,10 +125,16 @@ export function RulingDrawer(props: {
                       {(f) => (
                         <tr class="border-b border-rule align-top last:border-b-0">
                           <td class="py-2 pr-3 text-muted">{f.fact}</td>
-                          <td class="py-2 pr-3">{f.yours}</td>
+                          <td class="py-2 pr-3">
+                            <Show when={props.toCheck?.includes(f.fact)} fallback={f.yours}>
+                              <span class="text-warn">To check</span>
+                            </Show>
+                          </td>
                           <td class="py-2 pr-3">{f.theirs}</td>
                           <td class="py-2 text-right">
-                            <MatchMark match={f.match} label={f.matchLabel} />
+                            <Show when={!props.toCheck?.includes(f.fact)}>
+                              <MatchMark match={f.match} label={f.matchLabel} />
+                            </Show>
                           </td>
                         </tr>
                       )}

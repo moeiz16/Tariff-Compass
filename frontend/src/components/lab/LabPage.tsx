@@ -8,6 +8,7 @@ import { useSession } from "~/lib/session";
 import type { JobOut } from "~/lib/types";
 import { button, card } from "~/ui/recipes";
 import { Tip } from "~/ui/Tip";
+import { plain } from "~/lib/words";
 import { InfoIcon } from "~/ui/Icons";
 import { EmptyState, ErrorSlip, PageLoading } from "~/ui/States";
 import { notify } from "~/ui/Toast";
@@ -74,12 +75,12 @@ export function LabPage(props: { n?: number }) {
               <section class={card({ class: "mb-8 p-6 max-sm:p-5" })} aria-labelledby="inuse-h">
                 <p id="inuse-h" class="label flex items-center gap-1.5">
                   In use
-                  <Tip label={u().sentence}>
+                  <Tip label={plain(u().sentence)}>
                     <InfoIcon size={13} />
                   </Tip>
                 </p>
                 <div class="mt-2 flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
-                  <p class="text-[24px] font-[600] tracking-[-0.02em]">{u().label}</p>
+                  <p class="text-[24px] font-[600] tracking-[-0.02em]">{plain(u().label)}</p>
                   <dl class="flex gap-10">
                     <div>
                       <dt class="text-[12.5px] text-muted">Heading</dt>

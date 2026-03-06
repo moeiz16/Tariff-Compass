@@ -18,6 +18,7 @@ export default function AnswerPage() {
   const { can, me } = useSession();
   const navigate = useNavigate();
   const [asking, setAsking] = createSignal(false);
+  const [said, setSaid] = createSignal<string | undefined>();
   const broker = useBrokerName();
   const [override, setOverride] = createSignal<AnswerOut | null>(null);
 
@@ -26,6 +27,7 @@ export default function AnswerPage() {
     () => (me() ? { id: params.id, q: params.q, into: params.into, from: params.from, ev: params.ev } : null),
     async (k) => {
       setOverride(null);
+      setSaid(undefined);
       if (k.id) return answerCache.get(k.id) ?? (await answers.get(k.id));
       if (!k.q && !k.ev) return null;
       if (!can("classify:run")) return null; // the role reads answers but doesn't classify: no request
@@ -144,13 +146,15 @@ export default function AnswerPage() {
               answer={a}
               openCite={params.cite ? Number(params.cite.split(",")[0]) : undefined}
               caps={{ live: true, canConfirm: can("classify:run"), canSend: can("review:submit"), canFlag: can("review:decide"), brokerName: broker() }}
-              onAnswer={(next) => {
+              said={said()}
+              onAnswer={(next, what) => {
+                setSaid(what);
                 const before = a.us?.code ?? a.ca?.code;
                 const after = next.us?.code ?? next.ca?.code;
                 answerCache.put(next);
                 setOverride(next);
                 if (after && after !== before) notify(`Changed to ${after}`, "Your answer is recorded.");
-                else notify("Recorded", `The code stays ${after ?? ""}. ${broker()} can confirm it.`, "info");
+                else notify("Recorded", `The code stays ${after ?? ""}.`, "info");
               }}
               onSend={() => setSending(true)}
               actions={

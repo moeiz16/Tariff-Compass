@@ -15,6 +15,7 @@ import { FailIcon, OkIcon, PassIcon } from "~/ui/Icons";
 import { button, card, field, tabs } from "~/ui/recipes";
 import { Sheet } from "~/ui/Sheet";
 import { notify } from "~/ui/Toast";
+import { plain } from "~/lib/words";
 import { DepthPlot, FrequencyGrid } from "./Charts";
 
 export function RoundsStrip(props: { lab: LabOut; current: number }) {
@@ -196,7 +197,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
   return (
     <>
       <section class={card({ class: "mt-4 p-6 max-sm:p-5" })} aria-label={`Round ${r().n}`}>
-        <p class="max-w-[720px] text-[19px] font-[550] leading-[1.45] tracking-[-0.01em]">{highlightLede(r().lede)}</p>
+        <p class="max-w-[720px] text-[19px] font-[550] leading-[1.45] tracking-[-0.01em]">{highlightLede(plain(r().lede))}</p>
         <p class="mt-2 text-[12.5px] text-muted">
           {r().testCount.toLocaleString("en-US")} rulings it hasn't seen · {dateShort(r().testFrom)} – {dateShort(r().testTo)}
         </p>
@@ -228,16 +229,16 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
         </Tabs.Content>
         <Tabs.Content value="confidence" class="mt-4">
           <div class={card({ class: "grid grid-cols-2 gap-10 p-6 max-lg:grid-cols-1 max-sm:p-4" })}>
-            <Show when={r().confidence.strong}>{(c) => <FrequencyGrid cell={c()} label="Strong match" filledMeans="right" restMeans="wrong" />}</Show>
+            <Show when={r().confidence.strong}>{(c) => <FrequencyGrid cell={c()} label="Confident" filledMeans="right" restMeans="wrong" />}</Show>
             <Show when={r().confidence.broker}>
-              {(c) => <FrequencyGrid cell={c()} filled={100 - c().per100} label="Needs a broker" filledMeans="first guess right" restMeans="first guess wrong" />}
+              {(c) => <FrequencyGrid cell={c()} filled={100 - c().per100} headline={`first guess right ${100 - c().per100} times in 100`} label="Needs a broker" filledMeans="first guess right" restMeans="first guess wrong" />}
             </Show>
           </div>
         </Tabs.Content>
         <Tabs.Content value="chapters" class="mt-4">
           <ChapterTable rows={r().byChapter} />
           <Show when={r().drift.sentence}>
-            <p class="mt-3 max-w-[760px] text-[13px] text-muted">{String(r().drift.sentence ?? "")}</p>
+            <p class="mt-3 max-w-[760px] text-[13px] text-muted">{plain(String(r().drift.sentence ?? ""))}</p>
           </Show>
         </Tabs.Content>
         <Tabs.Content value="learned" class="mt-4">
@@ -246,7 +247,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
               {(l, i) => (
                 <li class="flex gap-3 px-5 py-3.5 text-[14.5px] leading-[1.55]">
                   <span class="font-code text-[12.5px] text-muted">{i() + 1}</span>
-                  {l}
+                  {plain(l)}
                 </li>
               )}
             </For>
@@ -265,7 +266,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
                       {c.passed ? <PassIcon size={15} /> : <FailIcon size={15} />}
                       {c.passed ? "Passed" : "Not passed"}
                     </span>
-                    <span class="flex-1">{c.label}</span>
+                    <span class="flex-1">{plain(c.label)}</span>
                     <span class="font-code text-[12.5px] text-muted">{checkValue(c.value, c.threshold)}</span>
                   </li>
                 )}
@@ -286,7 +287,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
                               when={r().signOff.canSign && i === r().signOff.signatures.length}
                               fallback={
                                 <p class="text-[13.5px] text-muted">
-                                  {r().status === "waiting_signoff" ? "Waiting for a second person" : allPassed() ? "Not needed" : `Blocked: ${r().checks.filter((c) => !c.passed).length} checks failing`}
+                                  {r().status === "waiting_signoff" ? "Waiting for a second person" : allPassed() ? "Not needed" : i === 0 ? `Blocked: ${r().checks.filter((c) => !c.passed).length} checks failing` : "–"}
                                 </p>
                               }
                             >
@@ -316,7 +317,7 @@ export function LabReport(props: { lab: LabOut; round: RoundOut; me: string; onS
             </div>
             <p class="flex items-center gap-1.5 border-t border-rule bg-paper-2/50 px-5 py-3 text-[12.5px] text-muted">
               <OkIcon size={13} />
-              {r().signOff.note}
+              {plain(r().signOff.note)}
             </p>
           </section>
         </Tabs.Content>

@@ -16,6 +16,7 @@ import { AskIcon, ChevronIcon, CopyIcon, DocIcon, ListIcon, OkIcon, PathIcon, Sc
 import { card, tag } from "~/ui/recipes";
 import { ErrorSlip, SkeletonLines } from "~/ui/States";
 import { Tip } from "~/ui/Tip";
+import { plain, withoutBrokerClause } from "~/lib/words";
 import { RulingDrawer } from "./Citations";
 import { CostLayer, useLandedCost } from "./Landed";
 import { Claim, DecidingQuestion, FactsLayer, LawLayer, RulingsLayer, WhyLayer } from "./Sections";
@@ -52,10 +53,10 @@ export function VerdictLine(props: { answer: AnswerOut }) {
   const strong = () => v().word === "strong";
   return (
     <div class="flex flex-wrap items-center gap-2.5">
-      <Tip label={v().sentence}>
+      <Tip label={plain(v().sentence)}>
         <span class={tag({ tone: strong() ? "ok" : "warn", class: "px-3 py-1 text-[13px]" })}>
           {strong() ? <OkIcon size={14} /> : <AskIcon size={14} />}
-          {v().wordLabel}
+          {plain(v().wordLabel)}
         </span>
       </Tip>
       <Show when={v().byDepth?.length}>
@@ -65,7 +66,7 @@ export function VerdictLine(props: { answer: AnswerOut }) {
               <div class="flex items-center gap-1">
                 <dt>{d.levelLabel}</dt>
                 <dd class="flex items-center" classList={{ "text-ok": d.word === "strong", "text-warn": d.word !== "strong" }}>
-                  {d.word === "strong" ? <OkIcon size={12} title={d.wordLabel} /> : <AskIcon size={12} title={d.wordLabel} />}
+                  {d.word === "strong" ? <OkIcon size={12} title={plain(d.wordLabel)} /> : <AskIcon size={12} title={d.wordLabel} />}
                 </dd>
               </div>
             )}
@@ -84,10 +85,13 @@ export function AnswerCard(props: {
   actions?: JSX.Element;
   label?: JSX.Element;
   lock?: boolean;
-  onAnswer?: (a: AnswerOut) => void;
+  /** What the person answered to the deciding question, shown once the answer is re-run. */
+  said?: string;
+  onAnswer?: (a: AnswerOut, said: string) => void;
   onSend?: () => void;
 }) {
   const a = () => props.answer;
+  const answered = () => props.said ?? (a().query.confirmedFacts?.length ? "answered" : "");
   const strong = () => a().verdict.word === "strong";
   const words = () => depthWords(a().verdict);
   const first = () => a().reason[0];
@@ -105,7 +109,7 @@ export function AnswerCard(props: {
         <Show when={a().ca}>{(c) => <CodeBlock code={c()} words={words()} lock={!!props.lock} />}</Show>
       </div>
       <p class="mt-5 max-w-[640px] text-[17px] leading-[1.55] text-ink">
-        <Show when={strong() && first()} fallback={a().verdict.sentence}>
+        <Show when={strong() && first()} fallback={plain(withoutBrokerClause(a().verdict.sentence))}>
           <Claim text={first()!.text} cites={first()!.cites} answer={a()} state={props.state} />
         </Show>
       </p>
@@ -117,14 +121,21 @@ export function AnswerCard(props: {
           </p>
         )}
       </Show>
-      <Show when={!strong() && props.caps}>
+      <Show when={answered()}>
+        <p class="mt-3 inline-flex items-center gap-2 rounded-full bg-paper-2 px-3 py-1 text-[13px] text-ink-2">
+          <OkIcon size={13} class="text-ok" />
+          {props.said ? `You said: ${props.said}` : "You answered the question"}
+          {!strong() && props.caps ? ` · ${props.caps.brokerName} to confirm` : ""}
+        </p>
+      </Show>
+      <Show when={!strong() && props.caps && !answered() && !a().sample}>
         <div class="mt-5">
           <DecidingQuestion
             answer={a()}
             canConfirm={props.caps!.canConfirm}
             canSend={props.caps!.canSend}
             brokerName={props.caps!.brokerName}
-            onAnswer={(x) => props.onAnswer?.(x)}
+            onAnswer={(x, said) => props.onAnswer?.(x, said)}
             onSend={() => props.onSend?.()}
           />
         </div>
@@ -163,7 +174,8 @@ export function AnswerView(props: {
   openCite?: number;
   /** Layers open on arrival (the landing opens none). */
   open?: string[];
-  onAnswer?: (a: AnswerOut) => void;
+  said?: string;
+  onAnswer?: (a: AnswerOut, said: string) => void;
   onSend?: () => void;
 }) {
   const state = createCitationState(untrack(() => props.openCite) ?? null);
@@ -179,7 +191,7 @@ export function AnswerView(props: {
   });
   return (
     <div ref={root} class="space-y-4">
-      <AnswerCard answer={a()} state={state} caps={props.caps} actions={props.actions} label={props.label} lock onAnswer={props.onAnswer} onSend={props.onSend} />
+      <AnswerCard answer={a()} state={state} caps={props.caps} actions={props.actions} label={props.label} said={props.said} lock onAnswer={props.onAnswer} onSend={props.onSend} />
       <section aria-label="Detail" class={card({ class: "overflow-hidden" })} data-rise>
         <Accordion.Root multiple collapsible lazyMount defaultValue={props.open ?? []}>
           <LayerRow value="why" icon={<PathIcon size={17} />} label="Why this code" summary={`${a().path.length} steps`}>
@@ -213,7 +225,10 @@ export function AnswerView(props: {
         </Accordion.Root>
       </section>
       <p class="px-1 text-[12.5px] text-muted">{a().snapshotLabel}</p>
-      <RulingDrawer rulings={a().rulings} state={state} answerId={a().sample ? undefined : a().id} canFlag={props.caps.canFlag} sample={a().sample} />
+      <RulingDrawer
+        toCheck={a().facts.filter((f) => f.decides && f.source !== "stated" && !props.said && !a().query.confirmedFacts?.length).map((f) => f.label)}
+        rulings={a().rulings}
+        state={state} answerId={a().sample ? undefined : a().id} canFlag={props.caps.canFlag} sample={a().sample} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 /** Status is never colour alone: every state is an icon shape plus a word. */
 import { Match, Switch, type JSX } from "solid-js";
 import type { MatchWord, RulingStatusOut, Verdict } from "~/lib/types";
+import { plain } from "~/lib/words";
 import { tag } from "./recipes";
 import { ApproxIcon, AskIcon, CloseIcon, ContrastIcon, InForceIcon, ModifiedIcon, OkIcon, RevokedIcon, SameIcon, WarnIcon } from "./Icons";
 
@@ -34,7 +35,7 @@ export function VerdictTag(props: { word: Verdict; label: string; size?: "sm" | 
   return (
     <span class={tag({ tone: props.word === "strong" ? "ok" : "warn", class: props.size === "lg" ? "text-[13.5px] px-3 py-1" : "" })}>
       {props.word === "strong" ? <OkIcon size={14} /> : <AskIcon size={14} />}
-      {props.label}
+      {plain(props.label)}
     </span>
   );
 }

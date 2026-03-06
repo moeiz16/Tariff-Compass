@@ -9,6 +9,7 @@ import { AskIcon, ChevronIcon } from "~/ui/Icons";
 import { button, tag } from "~/ui/recipes";
 import { RulingStatus } from "~/ui/Status";
 import { Tip } from "~/ui/Tip";
+import { plain } from "~/lib/words";
 import { CitationChip } from "./Citations";
 
 export function Chips(props: { cites: number[]; rulings: CitedRulingOut[]; state: CitationState }) {
@@ -23,7 +24,7 @@ export function Chips(props: { cites: number[]; rulings: CitedRulingOut[]; state
 export function Claim(props: { text: string; cites: number[]; answer: AnswerOut; state: CitationState }) {
   return (
     <>
-      {props.text}
+      {plain(props.text)}
       <Chips cites={props.cites} rulings={props.answer.rulings} state={props.state} />
     </>
   );
@@ -203,16 +204,23 @@ export function LawLayer(props: { answer: AnswerOut }) {
 }
 
 /** The one question that decides a needs-a-broker answer, with its answers. Answering re-runs the answer. */
-export function DecidingQuestion(props: { answer: AnswerOut; canConfirm: boolean; canSend: boolean; brokerName: string; onAnswer: (a: AnswerOut) => void; onSend: () => void }) {
+export function DecidingQuestion(props: {
+  answer: AnswerOut;
+  canConfirm: boolean;
+  canSend: boolean;
+  brokerName: string;
+  onAnswer: (a: AnswerOut, said: string) => void;
+  onSend: () => void;
+}) {
   const [busy, setBusy] = createSignal<string | null>(null);
   const [error, setError] = createSignal("");
   const q = () => props.answer.decidingQuestion;
   const softFact = () => props.answer.facts.find((f) => f.decides && (f.source === "read" || f.source === "assumed"));
-  const confirm = async (key: string, answer: string) => {
+  const confirm = async (key: string, answer: string, said: string) => {
     setBusy(answer);
     setError("");
     try {
-      props.onAnswer(await answers.confirmFact(props.answer.id, { key, answer }));
+      props.onAnswer(await answers.confirmFact(props.answer.id, { key, answer }), said);
     } catch (e) {
       setError(plainProblem(e).message);
     } finally {
@@ -224,7 +232,7 @@ export function DecidingQuestion(props: { answer: AnswerOut; canConfirm: boolean
       <div class="rounded-[var(--radius-box)] bg-warn-soft px-4 py-3.5">
         <p class="flex items-start gap-2 text-[15px] font-[600] text-ink">
           <AskIcon size={17} class="mt-0.5 shrink-0 text-warn" />
-          <span>{q()?.question ?? `Is it right that ${softFact()!.label.toLowerCase()}: ${softFact()!.value.toLowerCase()}?`}</span>
+          <span>{(q()?.question ?? `Is it right that ${softFact()!.label.toLowerCase()}: ${softFact()!.value.toLowerCase()}?`).replace(/\s*The description says:[^.?]*[.?]?\s*$/i, "")}</span>
         </p>
         <Show
           when={props.canConfirm && !props.answer.sample}
@@ -235,10 +243,10 @@ export function DecidingQuestion(props: { answer: AnswerOut; canConfirm: boolean
               when={q()}
               fallback={
                 <>
-                  <button type="button" class={button({ tone: "outline", size: "sm" })} disabled={!!busy()} onClick={() => void confirm(softFact()!.key, "confirmed")}>
+                  <button type="button" class={button({ tone: "outline", size: "sm" })} disabled={!!busy()} onClick={() => void confirm(softFact()!.key, "confirmed", "Yes")}>
                     Yes
                   </button>
-                  <button type="button" class={button({ tone: "outline", size: "sm" })} disabled={!!busy()} onClick={() => void confirm(softFact()!.key, "not_so")}>
+                  <button type="button" class={button({ tone: "outline", size: "sm" })} disabled={!!busy()} onClick={() => void confirm(softFact()!.key, "not_so", "No")}>
                     No
                   </button>
                 </>
@@ -251,12 +259,9 @@ export function DecidingQuestion(props: { answer: AnswerOut; canConfirm: boolean
                     title={o.label}
                     class={button({ tone: "outline", size: "sm", class: "h-auto min-h-9 max-w-full whitespace-normal py-1.5 text-left max-sm:w-full max-sm:justify-between" })}
                     disabled={!!busy()}
-                    onClick={() => void confirm(q()!.factKey, o.key)}
+                    onClick={() => void confirm(q()!.factKey, o.key, o.label)}
                   >
                     <span class="min-w-0">{busy() === o.key ? "Re-running…" : o.label.length > 56 ? `${o.label.slice(0, 54)}…` : o.label}</span>
-                    <Show when={o.leadsTo}>
-                      <span class="shrink-0 font-code text-[11.5px] text-muted">→ {o.leadsTo}</span>
-                    </Show>
                   </button>
                 )}
               </For>

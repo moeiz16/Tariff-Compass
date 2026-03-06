@@ -22,7 +22,7 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
     <figure>
       <figcaption class="flex flex-wrap gap-x-5 gap-y-1 text-[12.5px] text-muted">
         <span class="inline-flex items-center gap-2">
-          <span class="h-3 w-3 rounded-full border-[2px] border-ink" /> Word matching
+          <span class="h-3 w-3 rounded-full border-[2px] border-ink" /> Current method
         </span>
         <Show when={props.liveN}>
           <span class="inline-flex items-center gap-2">
@@ -95,7 +95,7 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
           <thead>
             <tr class="border-b border-rule text-[12px] text-muted">
               <th class="py-1.5 pr-3 font-[650]">Depth</th>
-              <th class="py-1.5 pr-3 text-right font-[650]">Word matching</th>
+              <th class="py-1.5 pr-3 text-right font-[650]">Current method</th>
               <th class="py-1.5 pr-3 text-right font-[650]">Before training</th>
               <th class="py-1.5 pr-3 text-right font-[650]">Round {props.liveN ?? "live"}</th>
               <th class="py-1.5 text-right font-[650]">Round {props.n}</th>
@@ -122,14 +122,14 @@ export function DepthPlot(props: { rows: DepthRow[]; liveN: number | null; n: nu
 }
 
 /** 100 dots: filled = the outcome named in the sentence, ringed in red = the rest. */
-export function FrequencyGrid(props: { cell: ConfidenceCell; label: string; filledMeans: string; restMeans: string; filled?: number }) {
+export function FrequencyGrid(props: { cell: ConfidenceCell; label: string; filledMeans: string; restMeans: string; filled?: number; headline?: string }) {
   const n = () => props.filled ?? props.cell.per100;
   return (
     <figure>
       <figcaption class="text-[13px] text-muted">
         When it said <b class="text-ink">{props.label}</b> ({props.cell.said.toLocaleString("en-US")} times)
       </figcaption>
-      <p class="mt-1 text-[18px] font-[600] tracking-[-0.01em]">{props.cell.sentence.split(": ").pop()}</p>
+      <p class="mt-1 text-[18px] font-[600] tracking-[-0.01em]">{props.headline ?? props.cell.sentence.split(": ").pop()}</p>
       <div class="mt-3 grid w-fit grid-cols-[repeat(20,10px)] gap-[5px]" role="img" aria-label={`${n()} of 100 ${props.filledMeans}; the rest ${props.restMeans}`}>
         <For each={Array.from({ length: 100 }, (_, i) => i)}>
           {(i) => <span class="h-[10px] w-[10px] rounded-full" classList={{ "bg-ink": i < n(), "border-[1.5px] border-bad": i >= n() }} />}
