@@ -95,7 +95,7 @@ export function WhyLayer(props: { answer: AnswerOut; state: CitationState; skipF
                                 {nn.code}
                               </s>
                               <span>
-                                {nn.reason.replace(/^Set aside:\s*/i, "")}
+                                {plain(nn.reason.replace(/^Set aside:\s*/i, ""))}
                                 <Show when={nn.cite}>
                                   <Chips cites={[nn.cite!]} rulings={props.answer.rulings} state={props.state} />
                                 </Show>
@@ -108,7 +108,7 @@ export function WhyLayer(props: { answer: AnswerOut; state: CitationState; skipF
                     <Show when={s.countryNote}>
                       <p class="flex items-baseline gap-2 text-ink-2">
                         <span class="rounded-[4px] bg-paper-2 px-1.5 font-code text-[11px] font-[600]">CA</span>
-                        {s.countryNote!.replace(/^Canada:\s*/i, "")}
+                        {plain(s.countryNote!.replace(/^Canada:\s*/i, ""))}
                       </p>
                     </Show>
                   </div>
