@@ -4,9 +4,9 @@
 
 **The tariff code for US and Canadian imports, with the customs rulings that back it and every duty it will carry.**
 
-Describe a product and Tariff Compass proposes its ten-digit US and Canadian tariff codes, explains why in the shape
-of a customs ruling letter, cites the real CBP rulings it relies on and lists every duty on the shipment with its
-source and date. When it isn't sure, it says so and sends the product to your broker. Nothing is ever filed for you.
+Describe a product and Tariff Compass proposes its ten-digit US and Canadian tariff codes with one line of why, and
+keeps the detail one click behind it: the classification path, the real CBP rulings it relies on, every duty on the
+shipment with its source and date, the facts and the law text. When it isn't sure, it says so and sends the product to your broker. Nothing is ever filed for you.
 
 [Problem statement](docs/PROBLEM_STATEMENT.md) · [Architecture](docs/ARCHITECTURE.md) · [API contract](docs/API_CONTRACT.md) · [Data](docs/DATA.md) · [Model card](docs/MODEL_CARD.md) · [Evaluation](eval/RESULTS.md) · [Decisions](docs/adr/) · [Design](frontend/DESIGN.md)
 
@@ -43,19 +43,19 @@ Every screen uses the sample organisations (Northbound Goods Co. and Driftwood C
 
 | | |
 |---|---|
-| ![The front page: one box, the 97 chapters of the tariff as the horizon, and three sample products to try without signing in.](docs/screenshots/01-landing.jpg) | ![The answer as a ruling memo, with citation 1 unfolded in place: the ruling's holding and a fact-by-fact comparison with the product.](docs/screenshots/02-answer-citation-drawer.jpg) |
-| **Front page.** One box, the 97 chapters of the tariff as the horizon, and three sample products to try without signing in. | **The answer.** A ruling-shaped memo; citation 1 unfolds in place with the ruling's holding and a fact-by-fact comparison. |
-| ![The landed-cost receipt: each duty layer with its rate, amount, Chapter 99 number, source and effective date; IEEPA lines marked as pending at the Supreme Court.](docs/screenshots/03-landed-cost.jpg) | ![Your product against HQ H303684 side by side: where the facts match and where they differ.](docs/screenshots/04-compare.jpg) |
+| ![The front page: one promise, one box, three sample products and a live sample answer below.](docs/screenshots/01-landing.jpg) | ![The answer with its first cited ruling open in a drawer: the holding and a fact-by-fact comparison with the product.](docs/screenshots/02-answer-citation-drawer.jpg) |
+| **Front page.** One box, three samples to try without signing in, and a live sample answer underneath. | **The answer.** Codes and one line of why first; a cited ruling opens in a drawer with its holding and a fact-by-fact comparison. |
+| ![The landed-cost layer: three totals, one stacked bar and each duty with its rate and amount; IEEPA lines marked as pending at the Supreme Court.](docs/screenshots/03-landed-cost.jpg) | ![Your product against HQ H303684 side by side: where the facts match and where they differ.](docs/screenshots/04-compare.jpg) |
 | **Landed cost.** Every layer with its source and date; the IEEPA lines are marked as pending at the Supreme Court. | **Compare.** Your product against a cited ruling, side by side, fact by fact. |
-| ![A broker corrects a power bank's code digit by digit, with a required reason and what the next training round will learn.](docs/screenshots/05-docket-correction.jpg) | ![The 20 oz tumbler's binder as a revision matrix: four versions, who decided each one and the rulings it relied on.](docs/screenshots/06-binder.jpg) |
-| **Broker docket.** A correction typed digit by digit, with a required reason and what the next round will learn. | **Product binder.** Every version of the code, who decided and on what authority, kept until 10 Feb 2032. |
-| ![The watch bulletin: the pending IEEPA case, 2026 HTSUS Revision 3 and other dated changes, with the products each one touches.](docs/screenshots/07-watch.jpg) | ![The Lab: word matching in use, training rounds 4 to 7 as challengers that didn't pass their checks.](docs/screenshots/08-lab.jpg) |
+| ![A broker corrects a power bank's code digit by digit in the decision drawer, with a required reason and what the next training round will learn.](docs/screenshots/05-docket-correction.jpg) | ![The 20 oz tumbler's binder: the current codes first, then four versions in its history, who decided each one and what changed.](docs/screenshots/06-binder.jpg) |
+| **Review.** A correction typed digit by digit in the decision drawer, with a required reason and what the next round will learn. | **Product binder.** The current code first; every version, who decided and what changed, behind it. |
+| ![Watch: the pending IEEPA case, 2026 HTSUS Revision 3 and other dated changes, with the products each one touches.](docs/screenshots/07-watch.jpg) | ![The Lab: word matching in use, training rounds 4 to 7 as challengers that didn't pass their checks.](docs/screenshots/08-lab.jpg) |
 | **Watch.** Dated changes and the products they touch, the pending IEEPA case first. | **Lab.** What is in use, and every training round measured against it on rulings it hasn't seen. |
 
 ## Features
 
 **Classify.** Type a description, paste a listing, drop a spec sheet (PDF) or a photo, choose *Into* (US, Canada or
-both) and *Made in*. The answer opens with a holding band: the US HTSUS and Canadian Customs Tariff ten-digit codes,
+both) and *Made in*. The answer opens with one card: the US HTSUS and Canadian Customs Tariff ten-digit codes,
 a confidence word (**Strong match** or **Needs a broker**, never a percentage), the one fact that would decide it
 when it is unsure ("Is there a vacuum between the walls, or only air?") and, where a neighbouring code is plausible,
 **Also possible** with the condition under which it would apply and the duty at stake ("US$4,350.00 more in US
@@ -63,12 +63,11 @@ duty and fees on this shipment" if the tumbler has only air between its walls). 
 "Strong match" is held to a strict statistical bar; today word matching never reaches it, so every answer says
 **Needs a broker** and a broker confirms each code.
 
-**The answer as a ruling letter.** Below the codes the memo follows the shape of a CBP ruling: ¶0 *In short*, ¶1
-*Facts* (each with where it came from: your words, the spec sheet, the photo), ¶2 *Issue*, ¶3 *Law and analysis*
-(Section → Chapter → Heading → Subheading → statistical suffix, the General Rule of Interpretation applied at each
-step and why each neighbour was set aside), ¶4 *Landed cost* and ¶5 *Authorities cited*. Every sentence carries
-numbered citations; each opens in place with the ruling's holding, status and a fact-by-fact comparison, and
-**Compare side by side** opens a two-pane view of your product against the letter.
+**The answer first, the detail behind it.** Under the card sit five rows you open as needed: *Why this code*
+(Section → Chapter → Heading → Subheading → statistical suffix, the General Rule of Interpretation at each step and
+why each neighbour was set aside), *Rulings*, *Landed cost*, *Facts* (each with where it came from: your words, the
+spec sheet, the photo) and *Law text*. Sentences carry numbered citations; each opens the ruling in a drawer with its
+holding, status and a fact-by-fact comparison, and **Compare side by side** opens your product against the letter.
 
 **Landed cost.** For each country and the shipment (value, quantity, transport): MFN, Section 301, Section 232 on
 steel and aluminium content, the IEEPA duties, the Merchandise Processing and Harbor Maintenance fees, and in Canada
@@ -82,13 +81,13 @@ holding, and read the US and Canadian tariff as an indented outline with rates b
 
 **Broker docket.** Driftwood's queue of 15 items in the order to work them: unsure answers, answers that differ from
 the last code, products whose ruling changed and always-review rules (lithium cells, steel or aluminium content,
-entries over $25,000). The open row unfolds into a decision record: **approve**, **correct** (type the ten digits
-into a pin input, pick the reason, write the lesson) or **ask the importer**. Keyboard: `J`/`K` move, `A` approve,
+entries over $25,000). A row opens a decision drawer with both proposed codes first: **approve**, **correct** (type
+the ten digits into a pin input, pick the reason, write the lesson) or **ask the importer**. Keyboard: `J`/`K` move, `A` approve,
 `C` correct, `Q` ask. Each correction shows "what the next training round will learn" and joins its training set.
 
-**Product binder.** Each product's history as a revision matrix (proposed → question answered → approved →
-re-checked), with the US and Canadian codes, the evidence, the rulings relied on and who decided, each version
-linked to its entry in the activity record. Download it as a PDF or a ZIP with the evidence. Retention runs five
+**Product binder.** The current US and Canadian codes first, then the history (proposed → question answered →
+approved → re-checked), each version showing who decided, why and only what changed, with the evidence, the entries
+and the tamper-evident record in their own tabs. Download it as a PDF or a ZIP with the evidence. Retention runs five
 years from the latest US entry or six from the latest Canadian import, whichever is longer (the 20 oz tumbler's
 binder is kept until 10 Feb 2032).
 
@@ -139,7 +138,7 @@ signed live. See [Accuracy](#accuracy-measured-on-rulings-it-hasnt-seen).
 ```mermaid
 flowchart LR
   subgraph Browser
-    W["SolidStart web app :3050<br/>front page · answer memo · docket · binder · watch · lab"]
+    W["SolidStart web app :3050<br/>front page · answer · review · binder · watch · lab"]
   end
   W -- "/api same-origin proxy<br/>(cookies, CSRF, SSE)" --> R
 
@@ -185,7 +184,7 @@ carries `X-Tariff-Compass-Now` from the one demo clock. Details and latency budg
 | AI core | **DSPy** 3.5 (five-module program) optimised with **GEPA** 0.1; a deterministic offline LM simulator; Groq, Gemini or OpenRouter free tiers when a key is set |
 | Classical ML | **scikit-learn** 1.9 (TF-IDF, logistic regression, linear SVM, temperature calibration), **LightGBM** 4.7, **Optuna** 5, **MLflow** (local tracking and registry), PSI drift |
 | Documents | pypdf (spec sheets), ReportLab (binder PDF) |
-| Web | **SolidStart** 1.5 (SolidJS, TypeScript), **Ark UI** 5.40 with Park UI-style recipes (`tailwind-variants`), **Tailwind CSS** 4.1, TanStack Table, GSAP Flip; Courier Prime (headings, codes and quoted law, set like a typed ruling letter) and Instrument Sans (reading text and controls), self-hosted |
+| Web | **SolidStart** 1.5 (SolidJS, TypeScript), **Ark UI** 5.40 with Park UI-style recipes (`tailwind-variants`), **Tailwind CSS** 4.1, TanStack Table; Plus Jakarta Sans (headings and text) and Reddit Mono (codes and amounts), self-hosted |
 | Quality | pytest, Ruff, mypy, `tsc`, Vitest, an evaluation harness with gates, GitHub Actions CI |
 
 Pinned versions and why each was chosen: [ADR 0001](docs/adr/0001-toolchain-and-feasibility.md).
@@ -378,7 +377,7 @@ backend/
   tests/
 frontend/src/
   routes/                front page, sign in, answer, rulings, tariff, products, review, watch, lab, settings, activity
-  components/ ui/        answer memo, landed cost, docket, lab report; Ark UI recipes
+  components/ ui/        answer and its layers, landed cost, review drawer, lab report; Ark UI recipes
 eval/                    run.py, gates.toml, hand-checked sets, RESULTS.md
 scripts/                 data fetchers, fixtures, toolchain smoke tests
 docs/                    problem statement, architecture, API contract, data, model card, ADRs, screenshots

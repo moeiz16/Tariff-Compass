@@ -21,18 +21,18 @@ menu holds Settings, Activity, Switch organisation and Sign out.
 
 | Route | Screen | Endpoints |
 |---|---|---|
-| `/` | Front page (public): wordmark, box, the 97, sample answers, why-now strip | `GET /meta`, `GET /tariff/sections`, `GET /auth/session`, `GET /public/samples`, `GET /public/samples/{key}`, `POST /public/classify` |
-| `/signin` | Stepped sign-in in the box (email → password → organisation) | `GET /auth/csrf`, `POST /auth/login`, `POST /auth/demo`, `POST /auth/switch-org` |
-| `/home` | Front page signed in: recent classifications + what changed | `GET /home`, `GET /scopes/counts` |
-| `/answer?q=…` | Holding band + memo ¶0–¶5, inline citation drawers, peek, deciding question | `POST /classify`, `GET /answers/{id}`, `POST /answers/{id}/facts`, `POST /evidence`, `POST /landed-cost`, `POST /answers/{id}/save`, `POST /answers/{id}/send-to-broker`, `POST /answers/{id}/citations/{n}/feedback` |
-| `/rulings` | Rulings vertical (status + holding per hit) | `GET /rulings` |
-| `/rulings/[id]` | Two-pane compare: fact alignment + your evidence vs the letter | `GET /rulings/{key}`, `GET /rulings/{key}/compare?answerId=&n=` |
-| `/tariff` | Tariff text as an outline (TreeView) | `GET /tariff/{country}/search`, `GET /tariff/{country}/lines/{code}`, `GET /tariff/sections` |
+| `/` | Front page (public): one box, sample chips, a live sample answer, three feature tiles | `GET /auth/session`, `GET /public/samples`, `GET /public/samples/{key}`, `POST /public/classify` |
+| `/signin` | Stepped sign-in (email → password → organisation), or try as a sample person | `GET /auth/csrf`, `POST /auth/login`, `POST /auth/demo`, `POST /auth/switch-org` |
+| `/home` | Signed-in home: the box, then Recent and Changes as tabs | `GET /home`, `GET /scopes/counts` |
+| `/answer?q=…` | Answer card (codes, word, one line of why, deciding question), then layers: why, rulings, landed cost, facts, law text; the ruling drawer | `POST /classify`, `GET /answers/{id}`, `POST /answers/{id}/facts`, `POST /evidence`, `POST /landed-cost`, `POST /answers/{id}/save`, `POST /answers/{id}/send-to-broker`, `POST /answers/{id}/citations/{n}/feedback` |
+| `/rulings` | Library: rulings (status + subject per hit) | `GET /rulings` |
+| `/rulings/[id]` | A ruling: holding, then tabs Compare (fact table, side by side) · Letter · Related | `GET /rulings/{key}`, `GET /rulings/{key}/compare?answerId=&n=` |
+| `/tariff` | Library: tariff text as an outline (TreeView) | `GET /tariff/{country}/search`, `GET /tariff/{country}/lines/{code}`, `GET /tariff/sections` |
 | `/products` | My products | `GET /products`, `POST /products` |
-| `/products/[sku]` | Binder: revision matrix, foot (evidence, entries, record), exports | `GET /products/{sku}`, `GET /products/{sku}/binder`, `POST /products/{sku}/evidence`, `POST /products/{sku}/binder/export` → job, `GET /exports/{id}/download` |
-| `/review`, `/review/[id]` | Docket; the open row unfolds into the decision record | `GET /review`, `GET /review/{id}`, `POST /review/{id}/lesson`, `POST /review/{id}/approve`, `POST /review/{id}/correct`, `POST /review/{id}/ask`, `POST /review/{id}/answer` |
-| `/watch` | Bulletin of dated changes | `GET /watch`, `GET /watch/{id}`, `POST /watch/scan` → job |
-| `/lab`, `/lab/rounds/[n]` | Rounds strip, report §1–§4, sign-off form + sheet | `GET /lab`, `GET /lab/rounds/{n}`, `POST /lab/rounds` → job, `POST /lab/rounds/{n}/sign` |
+| `/products/[sku]` | Binder: current codes, then tabs History · Evidence · Entries · Record; exports | `GET /products/{sku}`, `GET /products/{sku}/binder`, `POST /products/{sku}/evidence`, `POST /products/{sku}/binder/export` → job, `GET /exports/{id}/download` |
+| `/review`, `/review/[id]` | Review queue; a row opens the decision drawer | `GET /review`, `GET /review/{id}`, `POST /review/{id}/lesson`, `POST /review/{id}/approve`, `POST /review/{id}/correct`, `POST /review/{id}/ask`, `POST /review/{id}/answer` |
+| `/watch` | Dated changes; each opens to what is known and the products it touches | `GET /watch`, `GET /watch/{id}`, `POST /watch/scan` → job |
+| `/lab`, `/lab/rounds/[n]` | In use, rounds, then tabs Accuracy · Confidence · Chapters · Learned · Sign-off | `GET /lab`, `GET /lab/rounds/{n}`, `POST /lab/rounds` → job, `POST /lab/rounds/{n}/sign` |
 | `/settings/*` | Defaults, people and roles, your broker, records, always-review rules | `GET/PATCH /settings`, `GET /org/members`, `PATCH/DELETE /org/members/{id}`, `GET/POST /org/invitations`, `DELETE /org/invitations/{id}`, `GET /roles`, `GET /org/brokers`, `GET/POST /rules`, `PATCH/DELETE /rules/{id}` |
 | `/activity` | Activity record with chain verification | `GET /audit`, `GET /audit/verify`, `GET /audit/export.csv` |
 | (any) | Job progress (training round, export, scan) | `GET /jobs/{id}`, SSE `GET /jobs/{id}/events` |
@@ -222,7 +222,7 @@ EvidenceOut = { id, kind: spec_sheet|photo|listing|supplier_email|other, kindLab
 
 AnswerOut = {
   id, query: ClassifyIn, madeInLabel, createdAt, createdBy, tariffsAsOf, snapshotLabel, sample,
-  us: CodeOut|null, ca: CodeOut|null,                                    # holding band code cards
+  us: CodeOut|null, ca: CodeOut|null,                                    # answer card codes
   verdict: { word: strong|broker, wordLabel: "Strong match"|"Needs a broker", sentence,
              agreeing, cited, inForce, agreementBar: { n, kind: same|contrast|differs }[],
              byDepth: { level: heading|full_code, levelLabel, word, wordLabel }[] },   # word = the full-code word

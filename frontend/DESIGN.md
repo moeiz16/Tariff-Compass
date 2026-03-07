@@ -70,7 +70,7 @@ The compass stays as the mark and the loading state: the needle seeks while it r
 ### 5.1 The answer (`/answer`, and the landing's preview)
 - **Question line** (the page title): the question in one line at 22 px, with "Into US + Canada · From China" as small chips; **Edit** reveals the box in place. A new question is asked from the box, which also sits in the Classify page when there is no answer.
 - **Answer card** (white, radius 12, 28 px padding):
-  - Row 1: the verdict badge (● Strong match in green, ◇ Needs a broker in amber; hover lists the word at each depth and the verdict sentence) and the compass (24 px, settles or wavers). Right: the date.
+  - Row 1: the verdict badge (● Confident in green, ◇ Needs a broker in amber; hover lists the word at each depth and the verdict sentence) and the compass (24 px, settles or wavers). Right: the date.
   - Row 2: two code columns, "United States" and "Canada", each a label (13 px) and the code in Reddit Mono 36 px. The four heading digits are ink on a soft highlighter band; the rest are ink-2. A leaning code drops the highlighter and gets a dashed amber underline. A copy button appears on hover/focus.
   - Row 3: the one-line reason (strong: the first reason sentence with its citation numbers; needs a broker: the verdict sentence), 17 px.
   - Needs a broker only: **"Also possible"** one line, and the **deciding question** as a soft amber panel with its answer buttons and "Not sure: send to Driftwood".
@@ -159,7 +159,7 @@ Quiet and short: fades and 4–8 px rises at 160–220 ms (`cubic-bezier(.2,.8,.
 
 ## 10. Copy
 
-Second person to importers, colleague-to-colleague to brokers. No jargon on the surface: "the classifier", "word matching", "training round", "rulings it hasn't seen". Forbidden words from STANDARDS §4 still apply. No percentages for confidence on an answer. Dates come from the server's demo clock.
+Second person to importers, colleague-to-colleague to brokers. No jargon on the surface. The API's words are mapped before display (`lib/words.ts`): "Strong match" reads **Confident**, "word matching" reads **the current method**; hashes and fingerprints sit behind hovers; "Verify the chain" is **Check record**. An answered question shows "You said: …", and option buttons never promise a code. Forbidden words from STANDARDS §4 still apply. No percentages for confidence on an answer. Dates come from the server's demo clock.
 
 ## 11. What did not change (data rules)
 
