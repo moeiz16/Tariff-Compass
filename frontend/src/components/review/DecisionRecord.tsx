@@ -177,7 +177,7 @@ export function DecisionRecordView(props: {
               </p>
             )}
           </Show>
-          <Show when={r().rule}>
+          <Show when={r().rule && !props.detail?.toLowerCase().includes(r().rule!.toLowerCase())}>
             <p class="mt-3 text-[14px] text-ink-2">Always reviewed: {r().rule}</p>
           </Show>
           <Show when={r().questions.length}>

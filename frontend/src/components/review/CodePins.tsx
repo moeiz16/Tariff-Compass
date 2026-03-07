@@ -8,6 +8,7 @@ import { digitsOf, redline } from "~/lib/format";
 import { pin } from "~/ui/recipes";
 
 const GROUP_END = new Set([3, 5, 7]);
+const INDEXES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export function CodePins(props: { proposed: string; value: string[]; onChange: (v: string[]) => void; invalid?: boolean; describedBy?: string; ref?: (el: HTMLInputElement) => void }) {
   const p = pin();
@@ -42,9 +43,9 @@ export function CodePins(props: { proposed: string; value: string[]; onChange: (
         type="numeric"
         otp={false}
         placeholder=""
-        selectOnFocus
         value={props.value}
-        onValueChange={(d) => props.onChange(d.value)}
+        // Only real changes: echoing the same value back makes the pin input refocus its cell and hold the focus.
+        onValueChange={(d) => d.value.join("|") !== props.value.join("|") && props.onChange(d.value)}
         invalid={props.invalid}
         class="flex items-center gap-3 max-sm:flex-col max-sm:items-start max-sm:gap-1"
       >
@@ -61,17 +62,18 @@ export function CodePins(props: { proposed: string; value: string[]; onChange: (
             }
           }}
         >
-          <For each={cells()}>
-            {(c) => (
+          {/* Stable cells by index: re-creating them on each change would drop the focus. */}
+          <For each={INDEXES}>
+            {(i) => (
               <>
                 <PinInput.Input
-                  index={c.index}
-                  ref={c.index === 0 ? props.ref : undefined}
+                  index={i}
+                  ref={i === 0 ? props.ref : undefined}
                   class={p.cell()}
-                  data-changed={c.changed ? "true" : "false"}
-                  aria-label={`Digit ${c.index + 1} of your code`}
+                  data-changed={cells()[i]?.changed ? "true" : "false"}
+                  aria-label={`Digit ${i + 1} of your code`}
                 />
-                <Show when={GROUP_END.has(c.index)}>
+                <Show when={GROUP_END.has(i)}>
                   <span class={p.dot()} aria-hidden="true">
                     .
                   </span>
